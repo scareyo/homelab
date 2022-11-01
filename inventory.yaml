@@ -1,0 +1,15 @@
+---
+all:
+  children:
+    hypervisors:
+      hosts:
+        nami:
+          idrac_ip: 10.0.10.50
+    vms:
+      hosts:
+        nas:
+          ansible_host: 10.0.20.50
+        ipa:
+          ansible_host: 10.0.20.51
+        sso:
+          ansible_host: 10.0.20.52
