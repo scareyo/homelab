@@ -4,12 +4,9 @@
   gather_facts: False
 
   tasks:
-  - name: Get firmware info
-    dellemc.openmanage.idrac_firmware_info:
-      idrac_ip:  "{{ idrac_ip }}"
-      idrac_user:  "{{ idrac_user }}"
-      idrac_password:  "{{ idrac_password }}"
-      validate_certs: False
-
-  - debug: var=firmware_info
-  - debug: var=msg
+    - name: Get firmware info
+      dellemc.openmanage.idrac_firmware_info:
+        idrac_ip:  "{{ idrac_ip }}"
+        idrac_user:  "{{ idrac_user }}"
+        idrac_password:  "{{ idrac_password }}"
+        validate_certs: False

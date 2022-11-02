@@ -4,7 +4,7 @@ all:
     hypervisors:
       hosts:
         nami:
-          idrac_ip: 10.0.10.50
+          ansible_host: 10.0.20.10
     vms:
       hosts:
         nas:
