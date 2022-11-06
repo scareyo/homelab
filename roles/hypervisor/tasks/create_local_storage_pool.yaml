@@ -1,0 +1,20 @@
+- name: Define the local storage pool
+  community.libvirt.virt_pool:
+    command: define
+    name: local
+    xml: '{{ lookup("template", "storage/local.xml.j2") }}'
+
+- name: Create the local storage pool
+  community.libvirt.virt_pool:
+    command: build
+    name: local
+
+- name: Start the local storage pool
+  community.libvirt.virt_pool:
+    command: create
+    name: local
+
+- name: Autostart the local storage pool
+  community.libvirt.virt_pool:
+    autostart: yes
+    name: local

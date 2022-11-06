@@ -1,0 +1,6 @@
+---
+- name: Setup hypervisors
+  hosts: hypervisors
+  remote_user: root
+  roles:
+    - hypervisor
