@@ -5,9 +5,32 @@
 - debug:
     var: ansible_libvirt_pools
 
+- name: Create a network bridge
+  community.general.nmcli:
+    type: bridge
+    conn_name: br0
+    ifname: br0
+    ip4: "10.0.20.10/24"
+    gw4: "10.0.20.1"
+    state: present
+
+- name: Create bridge slave on eno1
+  community.general.nmcli:
+    type: bridge-slave
+    conn_name: eno1
+    ifname: eno1
+    master: br0
+    hairpin: no
+    state: present
+
 - name: Create the local storage pool 
   import_tasks: create_local_storage_pool.yaml
   when: ansible_libvirt_pools["local"] is not defined
 
 - name: Provision the NAS VM
-  import_tasks: create_local_storage_pool.yaml
+  community.libvirt.virt:
+    command: define
+    xml: "{{ lookup('template', 'qemu/vm.xml.j2') }}"
+    autostart: yes
+  loop: "{{ nas_vm }}"
+  debugger: on_failed

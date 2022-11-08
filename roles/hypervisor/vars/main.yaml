@@ -1,9 +1,12 @@
 nas_vm:
   - name: nas
-    autostart: true
-    memory: 4096
-    host_devices:
+    memory: "4096"
+    pci_devices:
       # Broadcom / LSI SAS2308 PCI-Express Fusion-MPT SAS-2 (storage controller)
-      - bus: 0x03
-        slot: 0x00
-        function: 0x0
+      - source:
+          bus: "0x03"
+          slot: "0x00"
+          function: "0x0"
+        bus: "0x07"
+        slot: "0x00"
+        function: "0x0"
