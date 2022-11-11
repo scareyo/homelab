@@ -27,6 +27,12 @@
   import_tasks: create_local_storage_pool.yaml
   when: ansible_libvirt_pools["local"] is not defined
 
+- name: Get list of VMs
+  community.libvirt.virt:
+    command: list_vms
+  register: vm_list
+  changed_when: no
+
 - name: Provision the NAS VM
   community.libvirt.virt:
     command: define

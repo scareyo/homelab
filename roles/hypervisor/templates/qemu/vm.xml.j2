@@ -14,8 +14,8 @@
   </metadata>
   <memory unit='MiB'>{{ item.memory }}</memory>
   <currentMemory unit='MiB'>{{ item.memory }}</currentMemory>
-  <vcpu placement='static'>2</vcpu>
-  <os>
+  <vcpu placement='static'>{{ item.vcpus }}</vcpu>
+  <os firmware='efi'>
     <type arch='x86_64' machine='pc-q35-rhel9.0.0'>hvm</type>
     <kernel>/var/lib/libvirt/boot/virtinst-lyzo6l2i-vmlinuz</kernel>
     <initrd>/var/lib/libvirt/boot/virtinst-nz_bea5d-initrd.img</initrd>
@@ -43,7 +43,7 @@
     <emulator>/usr/libexec/qemu-kvm</emulator>
     <disk type='file' device='disk'>
       <driver name='qemu' type='qcow2' discard='unmap'/>
-      <source file='/var/lib/libvirt/images/{{ item.name }}.qcow2'/>
+      <source file='{{ item.storage_pool }}/{{ item.name }}.qcow2'/>
       <target dev='vda' bus='virtio'/>
       <address type='pci' domain='0x0000' bus='0x04' slot='0x00' function='0x0'/>
     </disk>
