@@ -40,6 +40,7 @@
             vcpus: "4"
             path: "/var/lib/libvirt/images"
             pci_devices:        
+              # Broadcom / LSI SAS2308 PCI-Express Fusion-MPT SAS-2 (storage controller)
               - source:
                   bus: "0x03"
                   slot: "0x00"
