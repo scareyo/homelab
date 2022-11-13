@@ -2,10 +2,6 @@
   community.libvirt.virt_pool:
     command: facts
 
-- debug:
-    var: ansible_libvirt_pools
-
-
 - name: New storage pool
   block:    
     - name: Define the local storage pool
