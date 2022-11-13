@@ -1,0 +1,50 @@
+- name: Gather facts about storage pools
+  community.libvirt.virt_pool:
+    command: facts
+
+- debug:
+    var: ansible_libvirt_pools
+
+
+- name: New storage pool
+  block:    
+    - name: Define the local storage pool
+      community.libvirt.virt_pool:
+        command: define
+        name: local
+        xml: '{{ lookup("template", "storage/local.xml.j2") }}'
+
+    - name: Create the local storage pool
+      community.libvirt.virt_pool:
+        command: build
+        name: local
+
+    - name: Start the local storage pool
+      community.libvirt.virt_pool:
+        command: create
+        name: local
+
+    - name: Autostart the local storage pool
+      community.libvirt.virt_pool:
+        autostart: yes
+        name: local
+  when: 
+    - command == "new-pool"
+    - ansible_libvirt_pools["local"] is not defined
+
+- name: New virtual machine
+  block:    
+    - name: Get list of VMs
+      community.libvirt.virt:
+        command: list_vms
+      register: vm_list
+      changed_when: no
+
+    - name: Provision the NAS VM
+      community.libvirt.virt:
+        command: define
+        xml: "{{ lookup('template', 'qemu/vm.xml.j2') }}"
+        autostart: yes
+      loop: "{{ vms }}"
+  when: command == "new-vm"
+

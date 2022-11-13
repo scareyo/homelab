@@ -2,5 +2,53 @@
 - name: Setup hypervisors
   hosts: hypervisors
   remote_user: root
+
+  pre_tasks:
+    - name: Create a network bridge
+      community.general.nmcli:
+        type: bridge
+        conn_name: br0
+        ifname: br0
+        ip4: "10.0.20.10/24"
+        gw4: "10.0.20.1"
+        state: present
+
+    - name: Create bridge slave on eno1
+      community.general.nmcli:
+        type: bridge-slave
+        conn_name: eno1
+        ifname: eno1
+        master: br0
+        hairpin: no
+        state: present
+
   roles:
-    - hypervisor
+    - role: libvirt
+      vars:
+        command: new-pool
+        pools:
+          - name: local
+            type: dir
+            path: "/var/lib/libvirt/images"
+
+    - role: libvirt
+      vars:
+        command: new-vm
+        vms:
+          - name: nas
+            memory: "4096"
+            vcpus: "4"
+            path: "/var/lib/libvirt/images"
+            pci_devices:        
+              - source:
+                  bus: "0x03"
+                  slot: "0x00"
+                  function: "0x0"
+                bus: "0x07"
+                slot: "0x00"
+                function: "0x0"
+
+#- name: Setup NAS
+#  hosts: nas
+#  remote_user: root
+#  role: nas
