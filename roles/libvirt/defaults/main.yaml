@@ -1,0 +1,9 @@
+base_image_name: "CentOS-Stream-GenericCloud-9-20221101.0.x86_64.qcow2"
+base_image_url: "https://cloud.centos.org/centos/9-stream/x86_64/images/{{ base_image_name }}"
+base_image_sha: "99d0519ebe8475bb39ac5bd6eac87a1a19b77934b79c33bccbfe6be3b1d91ba9" 
+vms:
+  - name: default 
+    memory: "2048"
+    vcpus: 2
+    path: "/var/lib/libvirt/images"
+    pci_devices: []

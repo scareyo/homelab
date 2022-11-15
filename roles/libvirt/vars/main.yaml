@@ -1,6 +1,0 @@
-vms:
-  - base_image_url: "https://cloud.centos.org/centos/9-stream/x86_64/images/CentOS-Stream-GenericCloud-9-20221101.0.x86_64.qcow2"
-    base_image_sha: "99d0519ebe8475bb39ac5bd6eac87a1a19b77934b79c33bccbfe6be3b1d91ba9" 
-    storage_pool: "/var/lib/libvirt/images"
-    vcpus: 2
-    memory: "2048"
