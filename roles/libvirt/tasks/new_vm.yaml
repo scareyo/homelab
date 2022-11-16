@@ -13,9 +13,6 @@
   register: vm_list
   changed_when: no
 
-- debug:
-   var: item
-
 - block:
     - name: Download base image
       get_url:
@@ -25,25 +22,34 @@
 
     - name: Copy base image to storage pool
       copy:
-        dest: "{{ item.path }}/{{ item.name }}.qcow2"
+        dest: "{{ item.path }}/{{ item.name }}.qcow2.tmp"
         src: "/tmp/{{ base_image_name }}"
         force: no
         remote_src: yes
         mode: 0660
       register: copy_results
+    
+    - name: Create the VM image
+      command: |
+        qemu-img create -f qcow2 -o preallocation=metadata "{{ item.path }}/{{ item.name }}.qcow2" 32G
 
-        #    - name: Resize the image
-        #      command: |
-        #        virt-resize 
-        #
-        #    - name: Configure the image
-        #      command: |
-        #        virt-customize -a {{ libvirt_pool_dir }}/{{ vm_name }}.qcow2 \
-        #        --hostname {{ vm_name }} \
-        #        --root-password password:{{ vm_root_pass }} \
-        #        --ssh-inject 'root:file:{{ ssh_key }}' \
-        #        --uninstall cloud-init --selinux-relabel
-        #      when: copy_results is changed
+    - name: Resize the temporary image
+      command: |
+        virt-resize --expand /dev/sda1 {{ item.path }}/{{ item.name }}.qcow2.tmp {{ item.path }}/{{ item.name }}.qcow2
+
+    - name: Remove the temporary image
+      ansible.builtin.file:
+        path: "{{ item.path }}/{{ item.name }}.qcow2.tmp"
+        state: absent
+  
+    - name: Configure the image
+      command: |
+        virt-customize -a {{ item.path }}/{{ item.name }}.qcow2 \
+        --hostname {{ item.name }} \
+        --root-password password:changeme \
+        --ssh-inject 'root:string:{{ ssh_key }}' \
+        --uninstall cloud-init --selinux-relabel
+      when: copy_results is changed
 
     - name: Provision the NAS VM
       community.libvirt.virt:

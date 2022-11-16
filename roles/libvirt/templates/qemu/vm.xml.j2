@@ -11,9 +11,6 @@
   <vcpu placement='static'>{{ item.vcpus }}</vcpu>
   <os firmware='efi'>
     <type arch='x86_64' machine='pc-q35-rhel9.0.0'>hvm</type>
-    <kernel>/var/lib/libvirt/boot/virtinst-lyzo6l2i-vmlinuz</kernel>
-    <initrd>/var/lib/libvirt/boot/virtinst-nz_bea5d-initrd.img</initrd>
-    <cmdline>inst.repo=http://mirror.stream.centos.org/9-stream/BaseOS/x86_64/os/</cmdline>
     <boot dev='hd'/>
   </os>
   <features>

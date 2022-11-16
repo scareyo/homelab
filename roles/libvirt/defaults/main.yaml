@@ -1,6 +1,7 @@
 base_image_name: "CentOS-Stream-GenericCloud-9-20221101.0.x86_64.qcow2"
 base_image_url: "https://cloud.centos.org/centos/9-stream/x86_64/images/{{ base_image_name }}"
 base_image_sha: "99d0519ebe8475bb39ac5bd6eac87a1a19b77934b79c33bccbfe6be3b1d91ba9" 
+ssh_key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDBOrEq7/SJyOg55e0gylt+wlJi1gK0jbcyGYFd4aFO20xz2hqaS1FtmJGo2DMEaQiqyufiWM/jfCSz1V+8dzM+wZhhS1xGRQ33vFTpxe5YCo6AQ1TrVdNima3fQUv7oxYxuu7lfZp/VMI7GRUzC/aFOP1z0OYx/ifBihu0RAz3l6kIw6wqU3chTMw0kT2he0Ox5FuUcCbGineriLk86m220MC5+hbF02m61kln3JY7/r0uo/XsD+XU8wV2ybC8eZA9RhnAbdg+z2vsB1t/tM7eWCN3r0jREhw/oaXE/9i76rVYS3vc4EY48m33ho78GgIjDSVYaTX7+7ck1bm/UMc6O5BrVKJQchKTR7qmJG1vdKbMmeLfmp4ggvE3hsyqXS9JvM0xQbdjoOXflZpHvOee6qgk6nmpT6bmjPClA+ahF196VXdW+Yg8l0K5hpEoMaj/gDlW8vPRZwlsfPRhjIwvVuIP9F+ANLZXZTZIna4GpBGt57X3Q8mSc0U1JFi97JM= scarey@vegapunk.local"
 vms:
   - name: default 
     memory: "2048"
