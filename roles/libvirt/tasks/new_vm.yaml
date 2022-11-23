@@ -2,7 +2,6 @@
 - name: Ensure requirements in place
   package:
     name:
-      - guestfs-tools
       - python3-libvirt
     state: present
   become: yes
@@ -13,46 +12,56 @@
   register: vm_list
   changed_when: no
 
-- block:
+- name: Refresh libvirt storage pool
+  community.libvirt.virt_pool:
+    command: refresh
+    name: "{{ item.pool }}"
+
+- name: Get list of storage pools
+  community.libvirt.virt_pool:
+    command: facts
+
+- vars:
+    image_path: "{{ ansible_libvirt_pools[item.pool].path }}"
+    image_file: "{{ item.name }}.qcow2"
+  block:
     - name: Download base image
       get_url:
         url: "{{ base_image_url }}"
-        dest: "/tmp/{{ base_image_name }}"
+        dest: "{{ image_path }}/{{ base_image_name }}"
         checksum: "sha256:{{ base_image_sha }}"
 
-    - name: Copy base image to storage pool
-      copy:
-        dest: "{{ item.path }}/{{ item.name }}.qcow2.tmp"
-        src: "/tmp/{{ base_image_name }}"
-        force: no
-        remote_src: yes
-        mode: 0660
-      register: copy_results
-    
     - name: Create the VM image
       command: |
-        qemu-img create -f qcow2 -o preallocation=metadata "{{ item.path }}/{{ item.name }}.qcow2" 32G
+        qemu-img create -b {{ image_path }}/{{ base_image_name }} -f qcow2 -F qcow2 {{ image_path }}/{{ image_file }} 32G
+      when: image_file not in ansible_libvirt_pools[item.pool].volumes
 
-    - name: Resize the temporary image
+    - name: Copy cloud-init user data to host
+      ansible.builtin.template:
+        src: cloud-init/user-data.yaml.j2
+        dest: /tmp/user-data.yaml
+        owner: qemu
+        group: qemu
+        mode: '0644'
+
+    - name: Install the VM
       command: |
-        virt-resize --expand /dev/sda1 {{ item.path }}/{{ item.name }}.qcow2.tmp {{ item.path }}/{{ item.name }}.qcow2
+        virt-install \
+          --name "{{ item.name }}" \
+          --memory "{{ item.memory }}" \
+          --vcpus "{{ item.vcpus }}" \
+          --import \
+          --cloud-init "user-data='/tmp/user-data.yaml'" \
+          --os-variant almalinux9 \
+          --disk "{{ image_path }}/{{ image_file }}" \
+          --network network=default,model=virtio \
+          --graphics vnc \
+          --virt-type kvm \
+          {% for dev in item.pci_devices %}
+            --hostdev {{ dev }} \
+          {% endfor %}
+          --noautoconsole
 
-    - name: Remove the temporary image
-      ansible.builtin.file:
-        path: "{{ item.path }}/{{ item.name }}.qcow2.tmp"
-        state: absent
-  
-    - name: Configure the image
-      command: |
-        virt-customize -a {{ item.path }}/{{ item.name }}.qcow2 \
-        --hostname {{ item.name }} \
-        --root-password password:changeme \
-        --ssh-inject 'root:string:{{ ssh_key }}' \
-        --uninstall cloud-init --selinux-relabel
-      when: copy_results is changed
-
-    - name: Provision the NAS VM
-      community.libvirt.virt:
-        command: define
-        xml: "{{ lookup('template', 'qemu/vm.xml.j2') }}"
-        autostart: yes
+  when: 
+    - ansible_libvirt_pools[item.pool] is defined
+    - vm_list[item.name] is not defined

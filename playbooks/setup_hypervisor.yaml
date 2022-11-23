@@ -4,6 +4,16 @@
   remote_user: root
 
   pre_tasks:
+    - name: Enable IOMMU
+      lineinfile:
+        path: /etc/default/grub
+        backrefs: true
+        regexp: '^(GRUB_CMDLINE_LINUX=(?!.*intel_iommu=on)\"[^\"]+)(\")'
+        line: '\1 intel_iommu=on\2'
+      notify:
+        - Regenerate GRUB config
+        - Restart
+
     - name: Create a network bridge
       community.general.nmcli:
         type: bridge
@@ -38,18 +48,12 @@
           - name: nas
             memory: "4096"
             vcpus: "4"
-            path: "/var/lib/libvirt/images"
-            pci_devices:        
+            pool: "local"
+            pci_devices:
               # Broadcom / LSI SAS2308 PCI-Express Fusion-MPT SAS-2 (storage controller)
-              - source:
-                  bus: "0x03"
-                  slot: "0x00"
-                  function: "0x0"
-                bus: "0x07"
-                slot: "0x00"
-                function: "0x0"
+              - "03:00.0"
 
-#- name: Setup NAS
-#  hosts: nas
-#  remote_user: root
-#  role: nas
+# - name: Setup NAS
+#   hosts: nas
+#   remote_user: root
+#   role: nas

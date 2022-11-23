@@ -1,0 +1,8 @@
+---
+- name: Regenerate GRUB config
+  command: grub2-mkconfig -o /boot/efi/EFI/{{ ansible_facts['distribution'] | lower }}/grub.cfg
+
+- name: Restart
+  reboot:
+    reboot_timeout: 3600
+
