@@ -60,6 +60,7 @@
           {% for dev in item.pci_devices %}
             --hostdev {{ dev }} \
           {% endfor %}
+          --boot uefi \
           --noautoconsole
 
   when: 
