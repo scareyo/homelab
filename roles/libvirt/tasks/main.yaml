@@ -1,4 +1,12 @@
 ---
+- name: Ensure requirements in place
+  package:
+    name:
+      - cockpit-machines
+      - python3-libvirt
+    state: present
+  become: yes
+
 - name: Gather facts about storage pools
   community.libvirt.virt_pool:
     command: facts

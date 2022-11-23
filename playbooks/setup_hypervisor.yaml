@@ -4,6 +4,12 @@
   remote_user: root
 
   pre_tasks:
+    - name: Start and enable Cockpit
+      ansible.builtin.systemd:
+        enabled: yes
+        state: started
+        name: cockpit.socket
+
     - name: Enable IOMMU
       lineinfile:
         path: /etc/default/grub

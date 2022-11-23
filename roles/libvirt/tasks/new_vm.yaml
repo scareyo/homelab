@@ -1,11 +1,4 @@
 ---
-- name: Ensure requirements in place
-  package:
-    name:
-      - python3-libvirt
-    state: present
-  become: yes
-
 - name: Get list of VMs
   community.libvirt.virt:
     command: list_vms
