@@ -2,22 +2,14 @@
 - name: Ensure requirements in place
   package:
     name:
-      - cockpit-machines
       - python3-libvirt
     state: present
   become: yes
 
-- name: Gather facts about storage pools
-  community.libvirt.virt_pool:
-    command: facts
-
 - name: New storage pool
   include_tasks: new_pool.yaml
-  vars:
-    pools: "{{ pools }}"
-  when: 
-    - command == "new-pool"
-    - ansible_libvirt_pools["local"] is not defined
+  loop: "{{ pools }}"
+  when: command == "new-pool"
 
 - name: New virtual machine
   include_tasks: new_vm.yaml

@@ -1,21 +1,28 @@
 ---
-- name: Define the local storage pool
+- name: Gather facts about storage pools
   community.libvirt.virt_pool:
-    command: define
-    name: local
-    xml: '{{ lookup("template", "storage/local.xml.j2") }}'
+    command: facts
 
-- name: Create the local storage pool
-  community.libvirt.virt_pool:
-    command: build
-    name: local
+- block:
+  - name: Define the local storage pool
+    community.libvirt.virt_pool:
+      command: define
+      name: local
+      xml: '{{ lookup("template", "storage/pool.xml.j2") }}'
 
-- name: Start the local storage pool
-  community.libvirt.virt_pool:
-    command: create
-    name: local
+  - name: Create the local storage pool
+    community.libvirt.virt_pool:
+      command: build
+      name: local
 
-- name: Autostart the local storage pool
-  community.libvirt.virt_pool:
-    autostart: yes
-    name: local
+  - name: Start the local storage pool
+    community.libvirt.virt_pool:
+      command: create
+      name: local
+
+  - name: Autostart the local storage pool
+    community.libvirt.virt_pool:
+      autostart: yes
+      name: local
+
+  when: ansible_libvirt_pools[item.name] is not defined

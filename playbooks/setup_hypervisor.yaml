@@ -4,6 +4,13 @@
   remote_user: root
 
   pre_tasks:
+    - name: Ensure requirements in place
+      package:
+        name:
+          - cockpit-machines
+          - dnf-automatic
+        state: present
+
     - name: Start and enable Cockpit
       ansible.builtin.systemd:
         enabled: yes
