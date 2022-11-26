@@ -18,6 +18,12 @@
         state: started
         name: cockpit.socket
 
+    - name: Start and enable pmlogger
+      ansible.builtin.systemd:
+        enabled: yes
+        state: started
+        name: pmlogger.service
+
     - name: Enable IOMMU
       lineinfile:
         path: /etc/default/grub
@@ -69,7 +75,9 @@
               # Broadcom / LSI SAS2308 PCI-Express Fusion-MPT SAS-2 (storage controller)
               - "03:00.0"
 
-# - name: Setup NAS
-#   hosts: nas
-#   remote_user: root
-#   role: nas
+- name: Setup NAS
+  hosts: nas
+  remote_user: almalinux
+  become: yes
+  roles: 
+    - role: nas

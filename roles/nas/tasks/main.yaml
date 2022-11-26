@@ -1,0 +1,20 @@
+- name: Ensure requirements in place
+  package:
+    name:
+      - cockpit-packagekit
+      - cockpit-pcp
+      - cockpit-storaged
+      - dnf-automatic
+    state: present
+
+- name: Start and enable Cockpit
+  ansible.builtin.systemd:
+    enabled: yes
+    state: started
+    name: cockpit.socket
+
+- name: Start and enable pmlogger
+  ansible.builtin.systemd:
+    enabled: yes
+    state: started
+    name: pmlogger.service
