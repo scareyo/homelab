@@ -46,6 +46,7 @@
         state: present
 
   roles:
+
     - role: libvirt
       vars:
         command: new-pool

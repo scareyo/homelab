@@ -58,4 +58,4 @@
 
   when: 
     - ansible_libvirt_pools[item.pool] is defined
-    - vm_list[item.name] is not defined
+    - item.name not in vm_list.list_vms
