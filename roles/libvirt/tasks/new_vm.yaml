@@ -47,13 +47,12 @@
           --cloud-init "user-data='/tmp/user-data.yaml'" \
           --os-variant almalinux9 \
           --disk "{{ image_path }}/{{ image_file }}" \
-          --network network=default,model=virtio \
+          --network bridge=br0,model=virtio,{% if item.mac_address is defined %}mac={{ item.mac_address }}{% endif %} \
           --graphics vnc \
           --virt-type kvm \
           {% for dev in item.pci_devices %}
             --hostdev {{ dev }} \
           {% endfor %}
-          --boot uefi \
           --noautoconsole
 
   when: 
