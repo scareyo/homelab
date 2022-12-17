@@ -1,0 +1,28 @@
+---
+- name: Setup workstations
+  hosts: workstations
+  connection: local
+  remote_user: root
+
+  roles:
+    - role: libvirt
+      vars:
+        command: new-pool
+        pools:
+          - name: local
+            type: dir
+            path: "/var/lib/libvirt/images"
+
+    - role: libvirt
+      vars:
+        command: new-vm
+        vms:
+          - name: win11-tmp
+            mac_address: "52:54:00:d7:e7:20"
+            memory: "4096"
+            vcpus: "4"
+            pool: "local"
+            pci_devices:
+              # RTX 3080
+              - "02:00.0"
+              - "02:00.1"

@@ -13,3 +13,7 @@ all:
           ansible_host: 10.0.20.51
         sso:
           ansible_host: 10.0.20.52
+    workstations:
+      hosts:
+        teseuka:
+          ansible_host: 10.0.30.10
