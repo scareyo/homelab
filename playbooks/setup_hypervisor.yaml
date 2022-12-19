@@ -100,3 +100,19 @@
           - /dev/sdf1
           - /dev/sdg1
           - /dev/sdh1
+      nfs:
+        - "/mnt/nami/system/vm *(rw,sync,no_root_squash)"
+        
+- name: Add NFS storage pool to libvirt
+  hosts: hypervisors
+  remote_user: root
+  roles:
+    - role: libvirt
+      vars:
+        command: new-pool
+        pools:
+          - name: default
+            type: netfs
+            nfs_host: 10.0.20.50
+            nfs_path: "/mnt/nami/system/vm"
+            path: "/mnt/nami/system/vm"

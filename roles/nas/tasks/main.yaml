@@ -36,3 +36,7 @@
     state: mounted
 
 - name: Create NFS shares
+  include_role:
+    name: geerlingguy.nfs
+  vars:
+    nfs_exports: "{{ nfs }}"
