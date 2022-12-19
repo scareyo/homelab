@@ -18,3 +18,21 @@
     enabled: yes
     state: started
     name: pmlogger.service
+
+- name: Check for existing RAID device
+  stat:
+    path: "{{ raid_device }}"
+  register: stat_raid_device
+
+- name: Assemble the RAID device
+  shell: mdadm --assemble {{ raid_device }} {% for disk in disks %}{{ disk }} {% endfor %}
+  when: not stat_raid_device.stat.exists
+
+- name: Mount RAID storage device
+  ansible.posix.mount:
+    path: /mnt/nami
+    src: /dev/md/nami1
+    fstype: xfs
+    state: mounted
+
+- name: Create NFS shares
