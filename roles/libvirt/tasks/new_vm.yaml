@@ -53,7 +53,8 @@
           {% for dev in item.pci_devices %}
             --hostdev {{ dev }} \
           {% endfor %}
-          --noautoconsole
+          --noautoconsole \
+          --autostart
 
   when: 
     - ansible_libvirt_pools[item.pool] is defined
