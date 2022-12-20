@@ -75,7 +75,7 @@
         command: new-vm
         vms:
           - name: nas
-            mac_address: "52:54:00:d7:e7:2c"
+            mac_address: "52:54:00:d7:20:50"
             memory: "4096"
             vcpus: "4"
             pool: "local"

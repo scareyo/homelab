@@ -1,3 +1,6 @@
 ---
+collections:
+  - name: freeipa.ansible_freeipa
+
 roles:
   - name: geerlingguy.nfs

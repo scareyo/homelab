@@ -1,4 +1,5 @@
 #cloud-config
+fqdn: "{{ item.name }}.{{ base_domain }}"
 ssh_authorized_keys:
   {% for key in ssh_authorized_keys %}
     - "{{ key }}"

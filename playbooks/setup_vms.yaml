@@ -1,0 +1,9 @@
+---
+- name: Setup FreeIPA
+  hosts: ipaserver
+  remote_user: almalinux
+  become: true
+  roles:
+    - role: freeipa.ansible_freeipa.ipaserver
+      state: present
+

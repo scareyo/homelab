@@ -1,0 +1,11 @@
+ipaadmin_password: changeme
+ipadm_password: changeme
+ipaserver_domain: int.scarey.me
+ipaserver_realm: INT.SCAREY.ME
+
+ipaserver_setup_dns: yes
+ipaserver_no_forwarders: yes
+
+ipaserver_subject_base: O=int.scarey.me,L=Everett,ST=Massachusetts,C=US
+ipaserver_ca_subject: CN=Internal CA,O=int.scarey.me,L=Everett,ST=Massachusetts,C=US
+

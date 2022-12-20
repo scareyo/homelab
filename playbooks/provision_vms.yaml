@@ -1,0 +1,15 @@
+---
+- name: Provision virtual machines
+  hosts: hypervisors
+  remote_user: root
+  roles:
+    - role: libvirt
+      vars:
+        command: new-vm
+        vms:
+          - name: idm
+            mac_address: "52:54:00:d7:20:51"
+            memory: "2048"
+            vcpus: "2"
+            pool: "default"
+            pci_devices: []
