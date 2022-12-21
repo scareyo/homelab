@@ -3,7 +3,17 @@
   hosts: ipaserver
   remote_user: almalinux
   become: true
+
   roles:
     - role: freeipa.ansible_freeipa.ipaserver
       state: present
 
+  tasks:
+    - freeipa.ansible_freeipa.ipauser:
+        ipaadmin_password: "{{ vault_ipaadmin_password }}"
+        name: scarey
+        first: Sam
+        last: Carey
+        email: sam@scarey.me
+        password: "{{ vault_scarey_password }}"
+        update_password: on_create

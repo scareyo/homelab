@@ -1,5 +1,5 @@
-ipaadmin_password: changeme
-ipadm_password: changeme
+ipaadmin_password: "{{ vault_ipaadmin_password }}"
+ipadm_password: "{{ vault_ipadm_password }}"
 ipaserver_domain: int.scarey.me
 ipaserver_realm: INT.SCAREY.ME
 
