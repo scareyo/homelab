@@ -9,19 +9,17 @@
     path: "{{ raid_device }}"
   register: stat_raid_device
 
-- name: Assemble the RAID device
-  shell: mdadm --assemble {{ raid_device }} {% for disk in disks %}{{ disk }} {% endfor %}
-  when: not stat_raid_device.stat.exists
-
 - name: Mount RAID storage device
   ansible.posix.mount:
     path: /mnt/nami
-    src: /dev/md/nami1
+    src: "{{ raid_device }}"
     fstype: xfs
     state: mounted
+  when: not stat_raid_device.stat.exists
 
 - name: Create NFS shares
   include_role:
     name: geerlingguy.nfs
   vars:
-    nfs_exports: "{{ nfs }}"
+    nfs_exports: "{{ exports }}"
+  when: not stat_raid_device.stat.exists

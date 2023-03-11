@@ -59,16 +59,7 @@
     - role: nas
       vars:
         raid_device: /dev/md/nami
-        disks:
-          - /dev/disk/by-partuuid/22c80b47-9a62-46c1-80d7-d7c38b0de051
-          - /dev/disk/by-partuuid/047ca121-f16f-430b-9cb3-16b6241f900a
-          - /dev/disk/by-partuuid/5a15b503-19f8-451a-9900-09c68e5fb77e
-          - /dev/disk/by-partuuid/e87b0190-9617-48d6-baee-0ec4f603590e
-          - /dev/disk/by-partuuid/55a11832-ba43-4807-aa44-b9ffcf513c3f
-          - /dev/disk/by-partuuid/7224833f-2615-4aaa-b2d8-630a2f8ee11c
-          - /dev/disk/by-partuuid/aeede774-70fd-4798-b827-f7c601695e12
-          - /dev/disk/by-partuuid/1f2ae49e-4a22-4835-9da6-2d09fb6680eb
-      nfs: []
+        exports: []
 
     - role: libvirt
       vars:

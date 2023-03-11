@@ -4,9 +4,10 @@ I use these playbooks to setup and maintain my homelab. The playbooks are very s
 
 ## Initial steps
 
-1. Install OS on Dell R720
-2. Configure SSH public key login
-3. Download Ansible requirements:
+1. Install OS on Dell R720 (nami)
+2. Configure RAID device /dev/md/nami
+3. Configure SSH public key login
+4. Download Ansible requirements:
 ```ansible-galaxy install -r requirements.yaml```
 
 ## Hypervisor setup
