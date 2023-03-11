@@ -23,6 +23,7 @@
         url: "{{ base_image_url }}"
         dest: "{{ image_path }}/{{ base_image_name }}"
         checksum: "sha256:{{ base_image_sha }}"
+      when: base_image_url | length > 0
 
     - name: Create the VM image
       command: |

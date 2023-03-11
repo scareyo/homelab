@@ -6,9 +6,12 @@
     - role: libvirt
       vars:
         command: new-vm
+        base_image_name: "rhel-baseos-9.1-x86_64-kvm.qcow2"
+        base_image_url: ""
+        base_image_sha: "" 
         vms:
           - name: idm
-            mac_address: "52:54:00:d7:20:51"
+            mac_address: "52:54:00:d7:20:50"
             memory: "2048"
             vcpus: "2"
             pool: "default"
