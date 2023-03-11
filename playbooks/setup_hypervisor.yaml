@@ -37,16 +37,6 @@
         state: started
         name: pmlogger.service
 
-    - name: Enable IOMMU
-      lineinfile:
-        path: /etc/default/grub
-        backrefs: true
-        regexp: '^(GRUB_CMDLINE_LINUX=(?!.*intel_iommu=on)\"[^\"]+)(\")'
-        line: '\1 intel_iommu=on\2'
-      notify:
-        - Regenerate GRUB config
-        - Restart
-
     - name: Create a network bridge
       community.general.nmcli:
         type: bridge
