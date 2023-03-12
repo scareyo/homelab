@@ -7,17 +7,25 @@ all:
           ansible_host: 10.0.20.10
     vms:
       hosts:
-        nas:
-          ansible_host: 10.0.20.50
         idm:
+          ansible_host: 10.0.20.50
+        sso:
           ansible_host: 10.0.20.51
+        vpn:
+          ansible_host: 10.0.20.52
     workstations:
       hosts:
         teseuka:
           ansible_host: 10.0.30.10
 
     # FreeIPA
-    ipaserver:
-      hosts:
-        idm:
-          ansible_host: 10.0.20.51
+    ipa:
+      children:
+        ipaserver:
+          hosts:
+            idm:
+              ansible_host: 10.0.20.50
+        ipaclients:
+          hosts:
+            sso:
+              ansible_host: 10.0.20.51

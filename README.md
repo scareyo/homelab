@@ -10,6 +10,11 @@ I use these playbooks to setup and maintain my homelab. The playbooks are very s
 4. Download Ansible requirements:
 ```ansible-galaxy install -r requirements.yaml```
 
+## Vault secrets
+
+```ansible-vault create group_vars/ipaserver/vault```
+```ansible-vault create group_vars/vms/vault```
+
 ## Hypervisor setup
 
 ```ansible-playbook -i inventory.yaml playbooks/setup_hypervisor.yaml```
@@ -18,4 +23,4 @@ I use these playbooks to setup and maintain my homelab. The playbooks are very s
 
 ```ansible-playbook -i inventory.yaml playbooks/provision_vms.yaml```
 
-```ansible-playbook -i inventory.yaml playbooks/setup_vms.yaml```
+```ansible-playbook -i inventory.yaml playbooks/setup_vms.yaml --ask-vault-pass --ask-become-pass```

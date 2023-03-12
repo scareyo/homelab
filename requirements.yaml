@@ -1,6 +1,8 @@
 ---
 collections:
   - name: freeipa.ansible_freeipa
+  - name: middleware_automation.keycloak
 
 roles:
   - name: geerlingguy.nfs
+  - name: linux-system-roles.certificate
