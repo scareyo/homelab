@@ -50,20 +50,47 @@
         ca: ipa
 
     keycloak_quarkus_version: "21.0.1"
-    keycloak_quarkus_admin_pass: "remembertochangeme"
-    #keycloak_quarkus_frontend_url: "https://sso.int.scarey.me/auth"
-    #keycloak_quarkus_http_enabled: True
-    keycloak_quarkus_host: "sso.int.scarey.me"
+    keycloak_quarkus_admin_pass: "{{ vault_keycloak_admin_pass }}"
     keycloak_quarkus_https_enabled: True
-    keycloak_quarkus_http_port: "80"
-    keycloak_quarkus_https_port: "443"
     keycloak_quarkus_key_file: /etc/pki/tls/private/sso.key
     keycloak_quarkus_cert_file: /etc/pki/tls/certs/sso.crt
+    keycloak_quarkus_jvm_package: java-17-openjdk-headless
+
+    # TODO:
+    # Role doesn't currently support hostname-url option. I need this to run
+    # without a proxy.
+    # hostname-url=https://sso.int.scarey.me"
+    #
+    # To workaroud this, I will overwrite keycloak.conf
+    #
+    # For a more permanent solution I should open a PR to add the option: 
+    #  https://github.com/ansible-middleware/keycloak
+    #
   pre_tasks:
+    - name: Redirect port 443 to 8443
+      ansible.posix.firewalld:
+        rich_rule: rule family=ipv4 forward-port port=443 protocol=tcp to-port=8443
+        zone: public
+        permanent: true
+        immediate: true
+        state: enabled
+
+    - name: Change sso.key ownership
+      file:
+        path: /etc/pki/tls/private/sso.key
+        owner: "{{ keycloak_quarkus_service_user }}"
+        group: "{{ keycloak_quarkus_service_group }}"
+
+    - name: Change sso.crt ownership
+      file:
+        path: /etc/pki/tls/certs/sso.crt
+        owner: "{{ keycloak_quarkus_service_user }}"
+        group: "{{ keycloak_quarkus_service_group }}"
+
     - name: Ensure requirements in place
       package:
         name:
-          - java-1.8.0-openjdk-headless
+          - java-17-openjdk-headless
         state: present
   roles:
     - linux-system-roles.certificate
