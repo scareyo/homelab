@@ -8,12 +8,14 @@ I use these playbooks to setup and maintain my homelab. The playbooks are very s
 2. Configure RAID device /dev/md/nami
 3. Configure SSH public key login
 4. Download Ansible requirements:
+
 ```ansible-galaxy install -r requirements.yaml```
 
 ## Vault secrets
 
-```ansible-vault create group_vars/ipaserver/vault```
-```ansible-vault create group_vars/vms/vault```
+```ansible-vault create group_vars/ipaserver/vault.yaml```
+
+```ansible-vault create group_vars/vms/vault.yaml```
 
 ## Hypervisor setup
 
