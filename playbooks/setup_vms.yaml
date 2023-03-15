@@ -38,7 +38,7 @@
     - role: freeipa.ansible_freeipa.ipaclient
       state: present
 
-- name: Setup Keycloak
+- name: Request Keycloak certificate
   hosts: sso
   remote_user: cloud-user
   become: true
@@ -48,6 +48,15 @@
         dns: sso.int.scarey.me
         principal: HTTP/sso.int.scarey.me@INT.SCAREY.ME
         ca: ipa
+  roles:
+    - linux-system-roles.certificate
+
+
+- name: Setup Keycloak
+  hosts: sso
+  remote_user: cloud-user
+  become: true
+  vars:
 
     keycloak_quarkus_version: "21.0.1"
     keycloak_quarkus_admin_pass: "{{ vault_keycloak_admin_pass }}"
@@ -66,7 +75,14 @@
     # For a more permanent solution I should open a PR to add the option: 
     #  https://github.com/ansible-middleware/keycloak
     #
+
   pre_tasks:
+    - name: Ensure requirements in place
+      package:
+        name:
+          - java-17-openjdk-headless
+        state: present
+
     - name: Redirect port 443 to 8443
       ansible.posix.firewalld:
         rich_rule: rule family=ipv4 forward-port port=443 protocol=tcp to-port=8443
@@ -87,11 +103,5 @@
         owner: "{{ keycloak_quarkus_service_user }}"
         group: "{{ keycloak_quarkus_service_group }}"
 
-    - name: Ensure requirements in place
-      package:
-        name:
-          - java-17-openjdk-headless
-        state: present
   roles:
-    - linux-system-roles.certificate
     - middleware_automation.keycloak.keycloak_quarkus
