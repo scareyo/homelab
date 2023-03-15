@@ -7,8 +7,8 @@
     - name: Register as user and auto-subscribe to available content
       redhat_subscription:
         state: present
-        username: "{{ vault_redhat_username }}"
-        password: "{{ vault_redhat_password }}"
+        username: "{{ vault_vms_redhat_username }}"
+        password: "{{ vault_vms_redhat_password }}"
         autosubscribe: true
 
 - name: Setup FreeIPA server
@@ -22,12 +22,12 @@
 
   tasks:
     - freeipa.ansible_freeipa.ipauser:
-        ipaadmin_password: "{{ vault_ipaadmin_password }}"
+        ipaadmin_password: "{{ vault_ipa_admin_password }}"
         name: scarey
         first: Sam
         last: Carey
         email: sam@scarey.me
-        password: "{{ vault_scarey_password }}"
+        password: "{{ vault_ipa_scarey_password }}"
         update_password: on_create
 
 - name: Setup FreeIPA clients
@@ -38,70 +38,12 @@
     - role: freeipa.ansible_freeipa.ipaclient
       state: present
 
-- name: Request Keycloak certificate
-  hosts: sso
-  remote_user: cloud-user
-  become: true
-  vars:
-    certificate_requests:
-      - name: sso
-        dns: sso.int.scarey.me
-        principal: HTTP/sso.int.scarey.me@INT.SCAREY.ME
-        ca: ipa
-  roles:
-    - linux-system-roles.certificate
-
-
 - name: Setup Keycloak
   hosts: sso
   remote_user: cloud-user
   become: true
   vars:
-
     keycloak_quarkus_version: "21.0.1"
-    keycloak_quarkus_admin_pass: "{{ vault_keycloak_admin_pass }}"
-    keycloak_quarkus_https_enabled: True
-    keycloak_quarkus_key_file: /etc/pki/tls/private/sso.key
-    keycloak_quarkus_cert_file: /etc/pki/tls/certs/sso.crt
-    keycloak_quarkus_jvm_package: java-17-openjdk-headless
-
-    # TODO:
-    # Role doesn't currently support hostname-url option. I need this to run
-    # without a proxy.
-    # hostname-url=https://sso.int.scarey.me"
-    #
-    # To workaroud this, I will overwrite keycloak.conf
-    #
-    # For a more permanent solution I should open a PR to add the option: 
-    #  https://github.com/ansible-middleware/keycloak
-    #
-
-  pre_tasks:
-    - name: Ensure requirements in place
-      package:
-        name:
-          - java-17-openjdk-headless
-        state: present
-
-    - name: Redirect port 443 to 8443
-      ansible.posix.firewalld:
-        rich_rule: rule family=ipv4 forward-port port=443 protocol=tcp to-port=8443
-        zone: public
-        permanent: true
-        immediate: true
-        state: enabled
-
-    - name: Change sso.key ownership
-      file:
-        path: /etc/pki/tls/private/sso.key
-        owner: "{{ keycloak_quarkus_service_user }}"
-        group: "{{ keycloak_quarkus_service_group }}"
-
-    - name: Change sso.crt ownership
-      file:
-        path: /etc/pki/tls/certs/sso.crt
-        owner: "{{ keycloak_quarkus_service_user }}"
-        group: "{{ keycloak_quarkus_service_group }}"
-
+    keycloak_quarkus_admin_pass: "{{ vault_sso_admin_pass }}"
   roles:
-    - middleware_automation.keycloak.keycloak_quarkus
+    - role: sso

@@ -1,0 +1,7 @@
+---
+dependencies:
+  - role: middleware_automation.keycloak.keycloak_quarkus
+    keycloak_quarkus_https_enabled: True
+    keycloak_quarkus_key_file: /etc/pki/tls/private/sso.key
+    keycloak_quarkus_cert_file: /etc/pki/tls/certs/sso.crt
+    keycloak_quarkus_jvm_package: java-17-openjdk-headless
