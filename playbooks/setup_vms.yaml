@@ -45,5 +45,6 @@
   vars:
     keycloak_quarkus_version: "21.0.1"
     keycloak_quarkus_admin_pass: "{{ vault_sso_admin_pass }}"
+    ipa_admin_password: "{{ vault_ipa_admin_password }}"
   roles:
     - role: sso

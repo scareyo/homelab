@@ -60,3 +60,6 @@
     state: restarted
     name: keycloak
     daemon_reload: true
+
+- name: Add FreeIPA user federation
+  include_tasks: add_freeipa.yaml

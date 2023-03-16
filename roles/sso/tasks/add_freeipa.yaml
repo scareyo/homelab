@@ -1,0 +1,48 @@
+- name: Create FreeIPA user federation
+  include_role:
+    name: middleware_automation.keycloak.keycloak_realm
+  vars:
+    keycloak_realm: master
+    keycloak_admin_password: "{{ keycloak_quarkus_admin_pass }}"
+    keycloak_url: "https://sso.int.scarey.me:8443"
+    keycloak_context: ""
+    keycloak_no_log: False
+    keycloak_user_federation:
+      - auth_keycloak_url: https://sso.int.scarey.me
+        auth_realm: master
+        auth_username: admin
+        auth_password: "{{ keycloak_quarkus_admin_pass }}"
+        realm: master
+        name: idm
+        state: present
+        provider_id: ldap
+        provider_type: org.keycloak.storage.UserStorageProvider
+        config:
+          editMode: READ_ONLY
+          vendor: rhds
+          usernameLDAPAttribute: uid
+          rdnLDAPAttribute: uid
+          uuidLDAPAttribute: ipaUniqueID
+          userObjectClasses: inetOrgPerson, organizationalPerson
+          connectionUrl: ldaps://idm.int.scarey.me:636
+          usersDn: cn=users,cn=accounts,dc=int,dc=scarey,dc=me
+          authType: simple
+          bindDn: uid=admin,cn=users,cn=accounts,dc=int,dc=scarey,dc=me
+          bindCredential: "{{ ipa_admin_password }}"
+          debug: false
+        mappers:
+          - name: "full name"
+            providerId: "full-name-ldap-mapper"
+            providerType: "org.keycloak.storage.ldap.mappers.LDAPStorageMapper"
+            config:
+              ldap.full.name.attribute: cn
+              read.only: true
+              write.only: false
+          - name: "first name"
+            providerId: "user-attribute-ldap-mapper"
+            providerType: "org.keycloak.storage.ldap.mappers.LDAPStorageMapper"
+            config:
+              user.model.attribute: firstName
+              ldap.attribute: givenName
+              read.only: true
+              write.only: false
