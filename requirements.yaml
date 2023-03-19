@@ -5,4 +5,5 @@ collections:
 
 roles:
   - name: geerlingguy.nfs
+  - name: githubixx.ansible_role_wireguard
   - name: linux-system-roles.certificate
