@@ -40,7 +40,7 @@
         vms:
           - name: vpn
             mac_address: "52:54:00:d7:20:52"
-            memory: "2048"
-            vcpus: "2"
+            memory: "4096"
+            vcpus: "4"
             pool: "default"
             pci_devices: []

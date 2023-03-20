@@ -29,3 +29,5 @@ all:
           hosts:
             sso:
               ansible_host: 10.0.20.51
+            vpn:
+              ansible_host: 10.0.20.52

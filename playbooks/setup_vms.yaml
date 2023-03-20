@@ -51,7 +51,6 @@
 
 - hosts: vpn
   remote_user: cloud-user
-  become: true
   roles:
-    - githubixx.ansible_role_wireguard
+    - firezone
   tags: vpn
