@@ -28,71 +28,78 @@
       when: firezone_ssl_key is defined
   become: true
 
-- name: Create firezone directory
-  ansible.builtin.file:
-    path: "/home/{{ ansible_ssh_user }}/firezone"
-    state: directory
-    mode: '0755'
+- name: Check if container exists
+  community.docker.docker_container_info:
+    name: firezone-firezone-1
+  register: result
 
-- name: Download docker-compose.yml
-  ansible.builtin.get_url:
-    url: https://raw.githubusercontent.com/firezone/firezone/master/docker-compose.prod.yml
-    dest: "/home/{{ ansible_ssh_user }}/firezone/docker-compose.yml"
-    mode: '0660'
+- block:
+    - name: Create firezone directory
+      ansible.builtin.file:
+        path: "/home/{{ ansible_ssh_user }}/firezone"
+        state: directory
+        mode: '0755'
 
-- name: Generate required firezone secrets
-  docker_container:
-    name: gen-env
-    image: firezone/firezone
-    command: "/bin/sh -c 'bin/gen-env > /tmp/.env'"
-    volumes:
-      - "/home/{{ ansible_ssh_user }}/firezone:/tmp"
+    - name: Download docker-compose.yml
+      ansible.builtin.get_url:
+        url: https://raw.githubusercontent.com/firezone/firezone/master/docker-compose.prod.yml
+        dest: "/home/{{ ansible_ssh_user }}/firezone/docker-compose.yml"
+        mode: '0660'
 
-- name: Set external URL
-  community.general.ini_file:
-    path: "/home/{{ ansible_ssh_user }}/firezone/.env"
-    section: null
-    option: EXTERNAL_URL
-    value: "https://vpn.int.scarey.me"
-    mode: '0600'
-    no_extra_spaces: true
-    backup: true
+    - name: Generate required firezone secrets
+      docker_container:
+        name: gen-env
+        image: firezone/firezone
+        command: "/bin/sh -c 'bin/gen-env > /tmp/.env'"
+        volumes:
+          - "/home/{{ ansible_ssh_user }}/firezone:/tmp"
 
-- name: Set admin email
-  community.general.ini_file:
-    path: "/home/{{ ansible_ssh_user }}/firezone/.env"
-    section: null
-    option: DEFAULT_ADMIN_EMAIL
-    value: "sam@scarey.me"
-    mode: '0600'
-    no_extra_spaces: true
-    backup: true
+    - name: Set external URL
+      community.general.ini_file:
+        path: "/home/{{ ansible_ssh_user }}/firezone/.env"
+        section: null
+        option: EXTERNAL_URL
+        value: "https://vpn.int.scarey.me"
+        mode: '0600'
+        no_extra_spaces: true
+        backup: true
 
-- name: Enable custom certificates
-  community.general.ini_file:
-    path: "/home/{{ ansible_ssh_user }}/firezone/.env"
-    section: null
-    option: TLS_OPTS
-    value: | 
-      "tls internal {
-         on_demand
-       }"
-    mode: '0600'
-    no_extra_spaces: true
-    backup: true
+    - name: Set admin email
+      community.general.ini_file:
+        path: "/home/{{ ansible_ssh_user }}/firezone/.env"
+        section: null
+        option: DEFAULT_ADMIN_EMAIL
+        value: "sam@scarey.me"
+        mode: '0600'
+        no_extra_spaces: true
+        backup: true
 
-# TODO: Add a check before performing the next 3 docker compose run steps
-- name: Migrate database
-  ansible.builtin.command: docker compose run --rm firezone bin/migrate
-  args:
-    chdir: "/home/{{ ansible_ssh_user }}/firezone"
+    - name: Enable custom certificates
+      community.general.ini_file:
+        path: "/home/{{ ansible_ssh_user }}/firezone/.env"
+        section: null
+        option: TLS_OPTS
+        value: | 
+          "tls internal {
+             on_demand
+           }"
+        mode: '0600'
+        no_extra_spaces: true
+        backup: true
 
-- name: Create admin account
-  ansible.builtin.command: docker compose run --rm firezone bin/create-or-reset-admin
-  args:
-    chdir: "/home/{{ ansible_ssh_user }}/firezone"
+    # TODO: Add a check before performing the next 3 docker compose run steps
+    - name: Migrate database
+      ansible.builtin.command: docker compose run --rm firezone bin/migrate
+      args:
+        chdir: "/home/{{ ansible_ssh_user }}/firezone"
 
-- name: Docker compose up
-  ansible.builtin.command: docker compose up -d
-  args:
-    chdir: "/home/{{ ansible_ssh_user }}/firezone"
+    - name: Create admin account
+      ansible.builtin.command: docker compose run --rm firezone bin/create-or-reset-admin
+      args:
+        chdir: "/home/{{ ansible_ssh_user }}/firezone"
+
+    - name: Docker compose up
+      ansible.builtin.command: docker compose up -d
+      args:
+        chdir: "/home/{{ ansible_ssh_user }}/firezone"
+  when: not result.exists
