@@ -51,6 +51,23 @@
 
 - hosts: vpn
   remote_user: cloud-user
+  become: true
+  tasks:
+    - name: Request firezone certificate
+      include_role:
+        name: linux-system-roles.certificate
+      vars:
+        certificate_requests:
+          - name: vpn
+            dns: vpn.int.scarey.me
+            principal: HTTP/vpn.int.scarey.me@INT.SCAREY.ME
+            ca: ipa
+
+- hosts: vpn
+  remote_user: cloud-user
+  vars:
+    firezone_ssl_crt: /etc/pki/tls/certs/vpn.crt
+    firezone_ssl_key: /etc/pki/tls/private/vpn.key
   roles:
     - firezone
   tags: vpn

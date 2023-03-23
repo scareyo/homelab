@@ -1,42 +1,31 @@
 ---
 - block:
-  - name: Install Docker
-    include_role:
-      name: geerlingguy.docker
-    vars:
-      docker_users:
-        - cloud-user # TODO: configure this and replace occurences of ansible_ssh_user
+    - name: Install Docker
+      include_role:
+        name: geerlingguy.docker
+      vars:
+        docker_users:
+          - cloud-user # TODO: configure this and replace occurences of ansible_ssh_user
+   
+    - name: Copy certificate to caddy directory
+      ansible.builtin.copy:
+        remote_src: true
+        src: "{{ firezone_ssl_crt }}"
+        dest: /home/cloud-user/firezone/caddy/certificates/local/vpn.int.scarey.me/vpn.int.scarey.me.crt
+        owner: root
+        group: root
+        mode: '0600'
+      when: firezone_ssl_crt is defined
 
-  # TODO: Certificate request is not general enough to put here. Move this
-  #       stuff into the playbook. I'd like to make this role generic for
-  #       reuse.
-  - name: Request firezone certificate
-    include_role:
-      name: linux-system-roles.certificate
-    vars:
-      certificate_requests:
-        - name: vpn
-          dns: vpn.int.scarey.me
-          principal: HTTP/vpn.int.scarey.me@INT.SCAREY.ME
-          ca: ipa
-    
-  - name: Copy certificate to caddy directory
-    ansible.builtin.copy:
-      remote_src: true
-      src: /etc/pki/tls/certs/vpn.crt
-      dest: /home/cloud-user/firezone/caddy/certificates/local/vpn.int.scarey.me/vpn.int.scarey.me.crt
-      owner: root
-      group: root
-      mode: '0600'
-
-  - name: Copy key to caddy directory
-    ansible.builtin.copy:
-      remote_src: true
-      src: /etc/pki/tls/private/vpn.key
-      dest: /home/cloud-user/firezone/caddy/certificates/local/vpn.int.scarey.me/vpn.int.scarey.me.key
-      owner: root
-      group: root
-      mode: '0600'
+    - name: Copy key to caddy directory
+      ansible.builtin.copy:
+        remote_src: true
+        src: "{{ firezone_ssl_key }}"
+        dest: /home/cloud-user/firezone/caddy/certificates/local/vpn.int.scarey.me/vpn.int.scarey.me.key
+        owner: root
+        group: root
+        mode: '0600'
+      when: firezone_ssl_key is defined
   become: true
 
 - name: Create firezone directory
