@@ -16,15 +16,6 @@
           - virt-viewer
         state: present
 
-    - name: Generate an SSH key for root user
-      community.crypto.openssh_keypair:
-        path: /root/.ssh/id_rsa
-      register: root_id_rsa
-
-    - name: Add root user public key to ssh_authorized_keys
-      set_fact:
-        ssh_authorized_keys: "{{ ssh_authorized_keys + ['{{ root_id_rsa.public_key }}'] }}"
-
     - name: Start and enable Cockpit
       ansible.builtin.systemd:
         enabled: yes
@@ -51,6 +42,7 @@
         type: bridge-slave
         conn_name: eno1
         ifname: eno1
+        slave_type: bridge
         master: br0
         hairpin: no
         state: present
