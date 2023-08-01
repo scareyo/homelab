@@ -1,11 +1,11 @@
 - name: Ensure requirements in place
-  package:
+  ansible.builtin.package:
     name:
       - cockpit-storaged
     state: present
 
 - name: Check for existing RAID device
-  stat:
+  ansible.builtin.stat:
     path: "{{ raid_device }}"
   register: stat_raid_device
 
@@ -18,7 +18,7 @@
   when: not stat_raid_device.stat.exists
 
 - name: Create NFS shares
-  include_role:
+  ansible.builtin.include_role:
     name: geerlingguy.nfs
   vars:
     nfs_exports: "{{ exports }}"

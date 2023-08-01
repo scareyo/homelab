@@ -5,7 +5,7 @@
 
   pre_tasks:
     - name: Ensure requirements in place
-      package:
+      ansible.builtin.package:
         name:
           - cockpit-machines
           - cockpit-pcp
@@ -18,13 +18,13 @@
 
     - name: Start and enable Cockpit
       ansible.builtin.systemd:
-        enabled: yes
+        enabled: true
         state: started
         name: cockpit.socket
 
     - name: Start and enable pmlogger
       ansible.builtin.systemd:
-        enabled: yes
+        enabled: true
         state: started
         name: pmlogger.service
 
@@ -44,7 +44,7 @@
         ifname: eno1
         slave_type: bridge
         master: br0
-        hairpin: no
+        hairpin: false
         state: present
 
   roles:

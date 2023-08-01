@@ -1,17 +1,17 @@
 ---
 - name: Ensure requirements in place
-  package:
+  ansible.builtin.package:
     name:
       - python3-libvirt
     state: present
-  become: yes
+  become: true
 
 - name: New storage pool
-  include_tasks: new_pool.yaml
+  ansible.builtin.include_tasks: new_pool.yaml
   loop: "{{ pools }}"
   when: command == "new-pool"
 
 - name: New virtual machine
-  include_tasks: new_vm.yaml
+  ansible.builtin.include_tasks: new_vm.yaml
   loop: "{{ vms }}"
   when: command == "new-vm"

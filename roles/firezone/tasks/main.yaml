@@ -1,12 +1,13 @@
 ---
-- block:
+- name: Install firezone requirements
+  block:
     - name: Install Docker
-      include_role:
+      ansible.builtin.include_role:
         name: geerlingguy.docker
       vars:
         docker_users:
           - cloud-user # TODO: configure this and replace occurences of ansible_ssh_user
-   
+
     - name: Copy certificate to caddy directory
       ansible.builtin.copy:
         remote_src: true
@@ -25,15 +26,17 @@
         owner: root
         group: root
         mode: '0600'
+      become: true
       when: firezone_ssl_key is defined
-  become: true
 
 - name: Check if container exists
   community.docker.docker_container_info:
     name: firezone-firezone-1
   register: result
 
-- block:
+- name: Install firezone
+  when: not result.exists
+  block:
     - name: Create firezone directory
       ansible.builtin.file:
         path: "/home/{{ ansible_ssh_user }}/firezone"
@@ -47,7 +50,7 @@
         mode: '0660'
 
     - name: Generate required firezone secrets
-      docker_container:
+      community.docker.docker_container:
         name: gen-env
         image: firezone/firezone
         command: "/bin/sh -c 'bin/gen-env > /tmp/.env'"
@@ -79,7 +82,7 @@
         path: "/home/{{ ansible_ssh_user }}/firezone/.env"
         section: null
         option: TLS_OPTS
-        value: | 
+        value: |
           "tls internal {
              on_demand
            }"
@@ -102,4 +105,3 @@
       ansible.builtin.command: docker compose up -d
       args:
         chdir: "/home/{{ ansible_ssh_user }}/firezone"
-  when: not result.exists

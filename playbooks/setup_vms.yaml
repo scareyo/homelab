@@ -5,7 +5,7 @@
   become: true
   tasks:
     - name: Register as user and auto-subscribe to available content
-      redhat_subscription:
+      community.general.redhat_subscription:
         state: present
         username: "{{ vault_vms_redhat_username }}"
         password: "{{ vault_vms_redhat_password }}"
@@ -21,7 +21,8 @@
       state: present
 
   tasks:
-    - freeipa.ansible_freeipa.ipauser:
+    - name: Create scarey admin user
+      freeipa.ansible_freeipa.ipauser:
         ipaadmin_password: "{{ vault_ipa_admin_password }}"
         name: scarey
         first: Sam
@@ -47,14 +48,15 @@
     keycloak_quarkus_admin_pass: "{{ vault_sso_admin_pass }}"
     ipa_admin_password: "{{ vault_ipa_admin_password }}"
   roles:
-    - role: sso
+    - role: keycloak
 
-- hosts: vpn
+- name: Setup firezone VPN certificates
+  hosts: vpn
   remote_user: cloud-user
   become: true
   tasks:
     - name: Request firezone certificate
-      include_role:
+      ansible.builtin.include_role:
         name: linux-system-roles.certificate
       vars:
         certificate_requests:
@@ -63,7 +65,8 @@
             principal: HTTP/vpn.int.scarey.me@INT.SCAREY.ME
             ca: ipa
 
-- hosts: vpn
+- name: Setup firezone VPN
+  hosts: vpn
   remote_user: cloud-user
   vars:
     firezone_ssl_crt: /etc/pki/tls/certs/vpn.crt

@@ -1,12 +1,12 @@
 - name: Create FreeIPA user federation
-  include_role:
+  ansible.builtin.include_role:
     name: middleware_automation.keycloak.keycloak_realm
   vars:
     keycloak_realm: master
     keycloak_admin_password: "{{ keycloak_quarkus_admin_pass }}"
     keycloak_url: "https://sso.int.scarey.me:8443"
     keycloak_context: ""
-    keycloak_no_log: False
+    keycloak_no_log: false
     keycloak_user_federation:
       - auth_keycloak_url: https://sso.int.scarey.me
         auth_realm: master

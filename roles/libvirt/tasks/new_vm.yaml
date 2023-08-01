@@ -3,7 +3,7 @@
   community.libvirt.virt:
     command: list_vms
   register: vm_list
-  changed_when: no
+  changed_when: false
 
 - name: Refresh libvirt storage pool
   community.libvirt.virt_pool:
@@ -14,19 +14,23 @@
   community.libvirt.virt_pool:
     command: facts
 
-- vars:
+- name: Create the VM
+  vars:
     image_path: "{{ ansible_libvirt_pools[item.pool].path }}"
     image_file: "{{ item.name }}.qcow2"
+  when:
+    - ansible_libvirt_pools[item.pool] is defined
+    - item.name not in vm_list.list_vms
   block:
     - name: Download base image
-      get_url:
+      ansible.builtin.get_url:
         url: "{{ base_image_url }}"
         dest: "{{ image_path }}/{{ base_image_name }}"
         checksum: "sha256:{{ base_image_sha }}"
       when: base_image_url | length > 0
 
     - name: Create the VM image
-      command: |
+      ansible.builtin.command: |
         qemu-img create -b {{ image_path }}/{{ base_image_name }} -f qcow2 -F qcow2 {{ image_path }}/{{ image_file }} 32G
       when: image_file not in ansible_libvirt_pools[item.pool].volumes
 
@@ -39,7 +43,7 @@
         mode: '0644'
 
     - name: Install the VM
-      command: |
+      ansible.builtin.command: |
         virt-install \
           --name "{{ item.name }}" \
           --memory "{{ item.memory }}" \
@@ -56,7 +60,3 @@
           {% endfor %}
           --noautoconsole \
           --autostart
-
-  when: 
-    - ansible_libvirt_pools[item.pool] is defined
-    - item.name not in vm_list.list_vms

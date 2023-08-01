@@ -1,12 +1,12 @@
 ---
 - name: Ensure requirements in place
-  package:
+  ansible.builtin.package:
     name:
       - java-17-openjdk-headless
     state: present
 
 - name: Request Keycloak certificate
-  include_role:
+  ansible.builtin.include_role:
     name: linux-system-roles.certificate
   vars:
     certificate_requests:
@@ -16,13 +16,13 @@
         ca: ipa
 
 - name: Change sso.key ownership
-  file:
+  ansible.builtin.file:
     path: /etc/pki/tls/private/sso.key
     owner: "{{ keycloak_quarkus_service_user }}"
     group: "{{ keycloak_quarkus_service_group }}"
 
 - name: Change sso.crt ownership
-  file:
+  ansible.builtin.file:
     path: /etc/pki/tls/certs/sso.crt
     owner: "{{ keycloak_quarkus_service_user }}"
     group: "{{ keycloak_quarkus_service_group }}"
@@ -42,7 +42,7 @@
 #
 # To workaroud this, I will overwrite the keycloak systemd service
 #
-# For a more permanent solution I should open a PR to add the option: 
+# For a more permanent solution I should open a PR to add the option:
 #  https://github.com/ansible-middleware/keycloak
 #
 #  Or maybe I'll just configure a proxy
@@ -62,4 +62,4 @@
     daemon_reload: true
 
 - name: Add FreeIPA user federation
-  include_tasks: add_freeipa.yaml
+  ansible.builtin.include_tasks: add_freeipa.yaml
