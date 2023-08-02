@@ -7,28 +7,26 @@
     - name: Register as user and auto-subscribe to available content
       community.general.redhat_subscription:
         state: present
-        username: "{{ vault_vms_redhat_username }}"
-        password: "{{ vault_vms_redhat_password }}"
-        autosubscribe: true
+        username: "{{ lookup('scareyo.infisical.infisical', 'redhat_username') }}"
+        password: "{{ lookup('scareyo.infisical.infisical', 'redhat_password') }}"
+        auto_attach: true
 
 - name: Setup FreeIPA server
   hosts: ipaserver
   remote_user: cloud-user
   become: true
-
   roles:
     - role: freeipa.ansible_freeipa.ipaserver
       state: present
-
   tasks:
     - name: Create scarey admin user
       freeipa.ansible_freeipa.ipauser:
-        ipaadmin_password: "{{ vault_ipa_admin_password }}"
+        ipaadmin_password: "{{ lookup('scareyo.infisical.infisical', 'ipa_admin_password') }}"
         name: scarey
         first: Sam
         last: Carey
         email: sam@scarey.me
-        password: "{{ vault_ipa_scarey_password }}"
+        password: "{{ lookup('scareyo.infisical.infisical', 'ipa_scarey_password') }}"
         update_password: on_create
 
 - name: Setup FreeIPA clients
@@ -45,8 +43,8 @@
   become: true
   vars:
     keycloak_quarkus_version: "21.0.1"
-    keycloak_quarkus_admin_pass: "{{ vault_sso_admin_pass }}"
-    ipa_admin_password: "{{ vault_ipa_admin_password }}"
+    keycloak_quarkus_admin_pass: "{{ lookup('scareyo.infisical.infisical', 'sso_admin_password') }}"
+    ipa_admin_password: "{{ lookup('scareyo.infisical.infisical', 'ipa_admin_password') }}"
   roles:
     - role: keycloak
 

@@ -1,5 +1,5 @@
-ipaadmin_password: "{{ vault_ipa_admin_password }}"
-ipadm_password: "{{ vault_ipa_dm_password }}"
+ipaadmin_password: "{{ lookup('scareyo.infisical.infisical', 'ipa_admin_password') }}"
+ipadm_password: "{{ lookup('scareyo.infisical.infisical', 'ipa_dm_password') }}"
 ipaserver_domain: int.scarey.me
 ipaserver_realm: INT.SCAREY.ME
 
