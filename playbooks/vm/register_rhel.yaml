@@ -1,0 +1,12 @@
+---
+- name: Register RHEL systems
+  hosts: vms
+  remote_user: cloud-user
+  become: true
+  tasks:
+    - name: Register as user and auto-subscribe to available content
+      community.general.redhat_subscription:
+        state: present
+        username: "{{ vms_redhat_username }}"
+        password: "{{ vms_redhat_password }}"
+        auto_attach: true

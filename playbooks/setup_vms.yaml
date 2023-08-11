@@ -1,15 +1,6 @@
 ---
 - name: Register RHEL systems
-  hosts: vms
-  remote_user: cloud-user
-  become: true
-  tasks:
-    - name: Register as user and auto-subscribe to available content
-      community.general.redhat_subscription:
-        state: present
-        username: "{{ vms_redhat_username }}"
-        password: "{{ vms_redhat_password }}"
-        auto_attach: true
+  ansible.builtin.import_playbook: vm/register_rhel.yaml
 
 - name: Setup identity management
   ansible.builtin.import_playbook: vm/ipa.yaml
