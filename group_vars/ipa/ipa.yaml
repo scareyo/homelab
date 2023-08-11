@@ -1,3 +1,4 @@
+---
 ipaadmin_password: "{{ lookup('scareyo.infisical.infisical', 'ipa_admin_password') }}"
 ipadm_password: "{{ lookup('scareyo.infisical.infisical', 'ipa_dm_password') }}"
 ipaserver_domain: int.scarey.me
@@ -8,3 +9,11 @@ ipaserver_no_forwarders: true
 
 ipaserver_subject_base: O=int.scarey.me,L=Everett,ST=Massachusetts,C=US
 ipaserver_ca_subject: CN=Internal CA,O=int.scarey.me,L=Everett,ST=Massachusetts,C=US
+
+# Users
+ipa_users:
+  - username: "scarey"
+    first_name: "Sam"
+    last_name: "Carey"
+    email: "sam@scarey.me"
+    password: "{{ lookup('scareyo.infisical.infisical', 'ipa_scarey_password') }}"

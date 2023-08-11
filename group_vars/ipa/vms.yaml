@@ -1,0 +1,3 @@
+---
+vms_redhat_username: "{{ lookup('scareyo.infisical.infisical', 'redhat_username') }}"
+vms_redhat_password: "{{ lookup('scareyo.infisical.infisical', 'redhat_password') }}"

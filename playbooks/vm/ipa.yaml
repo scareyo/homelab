@@ -1,0 +1,29 @@
+---
+- name: Setup FreeIPA server
+  hosts: ipaserver
+  remote_user: cloud-user
+  become: true
+  roles:
+    - role: freeipa.ansible_freeipa.ipaserver
+      state: present
+  tasks:
+    - name: Create FreeIPA users
+      freeipa.ansible_freeipa.ipauser:
+        ipaadmin_password: "{{ ipaadmin_password }}"
+        name: "{{ item.username }}"
+        first: "{{ item.first_name }}"
+        last: "{{ item.last_name }}"
+        email: "{{ item.email }}"
+        password: "{{ item.password }}"
+        update_password: on_create
+      with_items:
+        - "{{ ipa_users }}"
+      no_log: true
+
+- name: Setup FreeIPA clients
+  hosts: ipaclients
+  remote_user: cloud-user
+  become: true
+  roles:
+    - role: freeipa.ansible_freeipa.ipaclient
+      state: present

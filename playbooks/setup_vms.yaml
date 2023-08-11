@@ -7,68 +7,15 @@
     - name: Register as user and auto-subscribe to available content
       community.general.redhat_subscription:
         state: present
-        username: "{{ lookup('scareyo.infisical.infisical', 'redhat_username') }}"
-        password: "{{ lookup('scareyo.infisical.infisical', 'redhat_password') }}"
+        username: "{{ vms_redhat_username }}"
+        password: "{{ vms_redhat_password }}"
         auto_attach: true
 
-- name: Setup FreeIPA server
-  hosts: ipaserver
-  remote_user: cloud-user
-  become: true
-  roles:
-    - role: freeipa.ansible_freeipa.ipaserver
-      state: present
-  tasks:
-    - name: Create scarey admin user
-      freeipa.ansible_freeipa.ipauser:
-        ipaadmin_password: "{{ lookup('scareyo.infisical.infisical', 'ipa_admin_password') }}"
-        name: scarey
-        first: Sam
-        last: Carey
-        email: sam@scarey.me
-        password: "{{ lookup('scareyo.infisical.infisical', 'ipa_scarey_password') }}"
-        update_password: on_create
+- name: Setup identity management
+  ansible.builtin.import_playbook: vm/ipa.yaml
 
-- name: Setup FreeIPA clients
-  hosts: ipaclients
-  remote_user: cloud-user
-  become: true
-  roles:
-    - role: freeipa.ansible_freeipa.ipaclient
-      state: present
+- name: Setup single sign-on
+  ansible.builtin.import_playbook: vm/sso.yaml
 
-- name: Setup Keycloak
-  hosts: sso
-  remote_user: cloud-user
-  become: true
-  vars:
-    keycloak_quarkus_version: "21.0.1"
-    keycloak_quarkus_admin_pass: "{{ lookup('scareyo.infisical.infisical', 'sso_admin_password') }}"
-    ipa_admin_password: "{{ lookup('scareyo.infisical.infisical', 'ipa_admin_password') }}"
-  roles:
-    - role: keycloak
-
-- name: Setup firezone VPN certificates
-  hosts: vpn
-  remote_user: cloud-user
-  become: true
-  tasks:
-    - name: Request firezone certificate
-      ansible.builtin.include_role:
-        name: linux-system-roles.certificate
-      vars:
-        certificate_requests:
-          - name: vpn
-            dns: vpn.int.scarey.me
-            principal: HTTP/vpn.int.scarey.me@INT.SCAREY.ME
-            ca: ipa
-
-- name: Setup firezone VPN
-  hosts: vpn
-  remote_user: cloud-user
-  vars:
-    firezone_ssl_crt: /etc/pki/tls/certs/vpn.crt
-    firezone_ssl_key: /etc/pki/tls/private/vpn.key
-  roles:
-    - firezone
-  tags: vpn
+- name: Setup virtual private network
+  ansible.builtin.import_playbook: vm/vpn.yaml
