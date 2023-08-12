@@ -1,6 +1,6 @@
 ---
-- name: Register RHEL systems
-  ansible.builtin.import_playbook: vm/register_rhel.yaml
+- name: Common VM setup
+  ansible.builtin.import_playbook: vm/common.yaml
 
 - name: Setup identity management
   ansible.builtin.import_playbook: vm/ipa.yaml
