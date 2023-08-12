@@ -2,9 +2,5 @@
 - name: Setup Keycloak
   hosts: sso
   remote_user: cloud-user
-  vars:
-    keycloak_quarkus_version: "22.0.1"
-    keycloak_quarkus_admin_pass: "{{ sso_admin_password }}"
-    ipa_admin_password: "{{ ipaadmin_password }}"
   roles:
     - role: keycloak

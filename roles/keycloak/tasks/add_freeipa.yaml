@@ -1,18 +1,19 @@
 - name: Create FreeIPA user federation
+  no_log: true
   ansible.builtin.include_role:
     name: middleware_automation.keycloak.keycloak_realm
   vars:
-    keycloak_realm: master
+    keycloak_realm: internal
     keycloak_admin_password: "{{ keycloak_quarkus_admin_pass }}"
-    keycloak_url: "https://sso.int.scarey.me:8443"
+    keycloak_url: "https://sso.int.scarey.me"
     keycloak_context: ""
     keycloak_no_log: false
     keycloak_user_federation:
       - auth_keycloak_url: https://sso.int.scarey.me
-        auth_realm: master
+        auth_realm: internal
         auth_username: admin
         auth_password: "{{ keycloak_quarkus_admin_pass }}"
-        realm: master
+        realm: internal
         name: idm
         state: present
         provider_id: ldap
@@ -28,7 +29,7 @@
           usersDn: cn=users,cn=accounts,dc=int,dc=scarey,dc=me
           authType: simple
           bindDn: uid=admin,cn=users,cn=accounts,dc=int,dc=scarey,dc=me
-          bindCredential: "{{ ipa_admin_password }}"
+          bindCredential: "{{ ipaadmin_password }}"
           debug: false
         mappers:
           - name: "full name"

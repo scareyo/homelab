@@ -6,15 +6,7 @@
       ansible.builtin.package:
         name:
           - java-17-openjdk-headless
-          - firewalld
-          - python3-firewall
         state: present
-
-    - name: Start and enable firewalld
-      ansible.builtin.systemd:
-        enabled: true
-        state: started
-        name: firewalld
 
     - name: Check if sso certificate exists
       ansible.builtin.stat:
@@ -37,62 +29,37 @@
             ca: ipa
       when: not cert_result.stat.exists or not key_result.stat.exists
 
+    - name: Add the user www-data
+      ansible.builtin.user:
+        name: www-data
+
     - name: Set sso.key ownership
       ansible.builtin.file:
         path: /etc/pki/tls/private/sso.key
-        owner: "{{ keycloak_quarkus_service_user }}"
-        group: "{{ keycloak_quarkus_service_group }}"
+        owner: "www-data"
+        group: "www-data"
 
     - name: Set sso.crt ownership
       ansible.builtin.file:
         path: /etc/pki/tls/certs/sso.crt
-        owner: "{{ keycloak_quarkus_service_user }}"
-        group: "{{ keycloak_quarkus_service_group }}"
+        owner: "www-data"
+        group: "www-data"
 
-    - name: Redirect port 443 to 8443
-      ansible.posix.firewalld:
-        rich_rule: rule family=ipv4 forward-port port=443 protocol=tcp to-port=8443
-        zone: public
-        permanent: true
-        immediate: true
-        state: enabled
-
-# TODO:
-# Role doesn't currently support hostname-url option. I need this to run
-# without a proxy.
-# hostname-url=https://sso.int.scarey.me"
-#
-# To workaroud this, I will overwrite the keycloak systemd service
-#
-# For a more permanent solution I should open a PR to add the option:
-#  https://github.com/ansible-middleware/keycloak
-#
-#  Or maybe I'll just configure a proxy
-#
+    - name: Setup Caddy
+      ansible.builtin.include_role:
+        name: caddy_ansible.caddy_ansible
+      vars:
+        caddy_systemd_capabilities_enabled: true
+        caddy_config: |
+          sso.int.scarey.me
+          tls /etc/pki/tls/certs/sso.crt /etc/pki/tls/private/sso.key
+          reverse_proxy http://localhost:8080
 
 - name: Keycloak Quarkus
-  ansible.builtin.include_role: 
+  ansible.builtin.include_role:
     name: middleware_automation.keycloak.keycloak_quarkus
   vars:
-    keycloak_quarkus_https_enabled: true
-    keycloak_quarkus_key_file: /etc/pki/tls/private/sso.key
-    keycloak_quarkus_cert_file: /etc/pki/tls/certs/sso.crt
     keycloak_quarkus_jvm_package: java-17-openjdk-headless
-
-- name: Modify service
-  community.general.ini_file:
-    path: /etc/systemd/system/keycloak.service
-    section: Service
-    option: ExecStart
-    value: "/opt/keycloak/keycloak-{{ keycloak_quarkus_version }}/bin/kc.sh start --auto-build --log=file --hostname='' --hostname-url='https://sso.int.scarey.me'"
-  become: true
-
-- name: Restart Keycloak
-  ansible.builtin.systemd:
-    state: restarted
-    name: keycloak
-    daemon_reload: true
-  become: true
 
 - name: Add FreeIPA user federation
   ansible.builtin.include_tasks: add_freeipa.yaml
