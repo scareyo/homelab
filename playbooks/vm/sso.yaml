@@ -2,10 +2,9 @@
 - name: Setup Keycloak
   hosts: sso
   remote_user: cloud-user
-  become: true
   vars:
-    keycloak_quarkus_version: "21.0.1"
-    keycloak_quarkus_admin_pass: "{{ lookup('scareyo.infisical.infisical', 'sso_admin_password') }}"
-    ipa_admin_password: "{{ lookup('scareyo.infisical.infisical', 'ipa_admin_password') }}"
+    keycloak_quarkus_version: "22.0.1"
+    keycloak_quarkus_admin_pass: "{{ sso_admin_password }}"
+    ipa_admin_password: "{{ ipaadmin_password }}"
   roles:
     - role: keycloak

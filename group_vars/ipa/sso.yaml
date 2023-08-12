@@ -1,0 +1,4 @@
+sso_admin_password: "{{ lookup('scareyo.infisical.infisical', 'sso_admin_password') }}"
+
+keycloak_quarkus_service_user: keycloak
+keycloak_quarkus_service_group: keycloak
