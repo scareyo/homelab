@@ -1,6 +1,6 @@
 ---
-ipaadmin_password: "{{ lookup('scareyo.infisical.infisical', 'ipa_admin_password') }}"
-ipadm_password: "{{ lookup('scareyo.infisical.infisical', 'ipa_dm_password') }}"
+ipaadmin_password: "{{ lookup('scareyo.infisical.infisical', 'ipa_admin_password', env='prod') }}"
+ipadm_password: "{{ lookup('scareyo.infisical.infisical', 'ipa_dm_password', env='prod') }}"
 ipaserver_domain: int.scarey.me
 ipaserver_realm: INT.SCAREY.ME
 
@@ -16,4 +16,4 @@ ipa_users:
     first_name: "Sam"
     last_name: "Carey"
     email: "sam@scarey.me"
-    password: "{{ lookup('scareyo.infisical.infisical', 'ipa_scarey_password') }}"
+    password: "{{ lookup('scareyo.infisical.infisical', 'ipa_scarey_password', env='prod') }}"

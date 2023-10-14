@@ -3,4 +3,4 @@ keycloak_quarkus_version: "22.0.1"
 keycloak_quarkus_http_relative_path: ""
 keycloak_quarkus_host: sso.int.scarey.me
 
-keycloak_quarkus_admin_pass: "{{ lookup('scareyo.infisical.infisical', 'sso_admin_password') }}"
+keycloak_quarkus_admin_pass: "{{ lookup('scareyo.infisical.infisical', 'sso_admin_password', env='prod') }}"
