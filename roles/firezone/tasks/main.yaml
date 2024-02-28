@@ -1,5 +1,6 @@
 ---
 - name: Install firezone requirements
+  become: true
   block:
     - name: Install Docker
       ansible.builtin.include_role:
@@ -7,6 +8,14 @@
       vars:
         docker_users:
           - cloud-user # TODO: configure this and replace occurences of ansible_ssh_user
+
+    - name: Create caddy certificate directory
+      ansible.builtin.file:
+        path: /home/cloud-user/firezone/caddy/certificates/local/vpn.int.scarey.me
+        state: directory
+        owner: cloud-user
+        group: cloud-user
+        mode: '0755'
 
     - name: Copy certificate to caddy directory
       ansible.builtin.copy:
@@ -26,7 +35,6 @@
         owner: root
         group: root
         mode: '0600'
-      become: true
       when: firezone_ssl_key is defined
 
 - name: Check if container exists
@@ -85,7 +93,7 @@
         value: |
           "tls internal {
              on_demand
-           }"
+          }"
         mode: '0600'
         no_extra_spaces: true
         backup: true

@@ -2,8 +2,11 @@
 collections:
   - name: freeipa.ansible_freeipa
   - name: middleware_automation.keycloak
+  - source: ../ansible-collection-infisical/
+    type: dir
 
 roles:
+  - name: caddy_ansible.caddy_ansible
   - name: geerlingguy.docker
   - name: geerlingguy.nfs
   - name: linux-system-roles.certificate
