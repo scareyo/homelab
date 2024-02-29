@@ -5,11 +5,11 @@
   roles:
     - role: libvirt
       vars:
-        command: new-vm
-        base_image_name: "rhel-baseos-9.1-x86_64-kvm.qcow2"
-        base_image_url: ""
-        base_image_sha: ""
-        vms:
+        libvirt_command: new-vm
+        libvirt_base_image_name: "rhel-baseos-9.1-x86_64-kvm.qcow2"
+        libvirt_base_image_url: ""
+        libvirt_base_image_sha: ""
+        libvirt_vms:
           - name: idm
             mac_address: "52:54:00:d7:20:50"
             memory: "4096"
@@ -19,11 +19,11 @@
 
     - role: libvirt
       vars:
-        command: new-vm
-        base_image_name: "rhel-baseos-9.1-x86_64-kvm.qcow2"
-        base_image_url: ""
-        base_image_sha: ""
-        vms:
+        libvirt_command: new-vm
+        libvirt_base_image_name: "rhel-baseos-9.1-x86_64-kvm.qcow2"
+        libvirt_base_image_url: ""
+        libvirt_base_image_sha: ""
+        libvirt_vms:
           - name: sso
             mac_address: "52:54:00:d7:20:51"
             memory: "2048"
@@ -33,11 +33,11 @@
 
     - role: libvirt
       vars:
-        command: new-vm
-        base_image_name: "rhel-baseos-9.1-x86_64-kvm.qcow2"
-        base_image_url: ""
-        base_image_sha: ""
-        vms:
+        libvirt_command: new-vm
+        libvirt_base_image_name: "rhel-baseos-9.1-x86_64-kvm.qcow2"
+        libvirt_base_image_url: ""
+        libvirt_base_image_sha: ""
+        libvirt_vms:
           - name: vpn
             mac_address: "52:54:00:d7:20:52"
             memory: "4096"

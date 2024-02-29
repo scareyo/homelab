@@ -50,13 +50,13 @@
   roles:
     - role: nas
       vars:
-        raid_device: /dev/md/nami
-        exports: []
+        nas_raid_device: /dev/md/nami
+        nas_exports: []
 
     - role: libvirt
       vars:
-        command: new-pool
-        pools:
+        libvirt_command: new-pool
+        libvirt_pools:
           - name: default
             type: dir
             path: "/mnt/nami/system/vm"

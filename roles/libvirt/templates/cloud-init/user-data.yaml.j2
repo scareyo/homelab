@@ -1,6 +1,6 @@
 #cloud-config
-fqdn: "{{ item.name }}.{{ base_domain }}"
-ssh_authorized_keys:
-  {% for key in ssh_authorized_keys %}
+fqdn: "{{ item.name }}.{{ libvirt_base_domain }}"
+libvirt_ssh_authorized_keys:
+  {% for key in libvirt_ssh_authorized_keys %}
     - "{{ key }}"
   {% endfor %}

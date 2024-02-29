@@ -8,10 +8,10 @@
 
 - name: New storage pool
   ansible.builtin.include_tasks: new_pool.yaml
-  loop: "{{ pools }}"
+  loop: "{{ libvirt_pools }}"
   when: command == "new-pool"
 
 - name: New virtual machine
   ansible.builtin.include_tasks: new_vm.yaml
-  loop: "{{ vms }}"
+  loop: "{{ libvirt_vms }}"
   when: command == "new-vm"

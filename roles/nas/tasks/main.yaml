@@ -6,13 +6,13 @@
 
 - name: Check for existing RAID device
   ansible.builtin.stat:
-    path: "{{ raid_device }}"
+    path: "{{ nas_raid_device }}"
   register: stat_raid_device
 
 - name: Mount RAID storage device
   ansible.posix.mount:
     path: /mnt/nami
-    src: "{{ raid_device }}"
+    src: "{{ nas_raid_device }}"
     fstype: xfs
     state: mounted
   when: not stat_raid_device.stat.exists
@@ -21,5 +21,5 @@
   ansible.builtin.include_role:
     name: geerlingguy.nfs
   vars:
-    nfs_exports: "{{ exports }}"
+    nfs_exports: "{{ nas_exports }}"
   when: not stat_raid_device.stat.exists

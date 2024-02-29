@@ -24,14 +24,14 @@
   block:
     - name: Download base image
       ansible.builtin.get_url:
-        url: "{{ base_image_url }}"
-        dest: "{{ image_path }}/{{ base_image_name }}"
-        checksum: "sha256:{{ base_image_sha }}"
-      when: base_image_url | length > 0
+        url: "{{ libvirt_base_image_url }}"
+        dest: "{{ image_path }}/{{ libvirt_base_image_name }}"
+        checksum: "sha256:{{ libvirt_base_image_sha }}"
+      when: libvirt_base_image_url | length > 0
 
     - name: Create the VM image
       ansible.builtin.command: |
-        qemu-img create -b {{ image_path }}/{{ base_image_name }} -f qcow2 -F qcow2 {{ image_path }}/{{ image_file }} 32G
+        qemu-img create -b {{ image_path }}/{{ libvirt_base_image_name }} -f qcow2 -F qcow2 {{ image_path }}/{{ image_file }} 32G
       when: image_file not in ansible_libvirt_pools[item.pool].volumes
 
     - name: Copy cloud-init user data to host

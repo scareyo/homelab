@@ -5,7 +5,7 @@
   become: true
   roles:
     - role: freeipa.ansible_freeipa.ipaserver
-      state: present
+      state: present # noqa: var-naming[no-role-prefix]
   tasks:
     - name: Create FreeIPA users
       freeipa.ansible_freeipa.ipauser:
@@ -26,4 +26,4 @@
   become: true
   roles:
     - role: freeipa.ansible_freeipa.ipaclient
-      state: present
+      state: present # noqa: var-naming[no-role-prefix]

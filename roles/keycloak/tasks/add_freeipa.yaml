@@ -3,7 +3,7 @@
   ansible.builtin.include_role:
     name: middleware_automation.keycloak.keycloak_realm
   vars:
-    keycloak_realm: internal
+    keycloak_realm: internal # noqa: var-naming[no-role-prefix]
     keycloak_admin_password: "{{ keycloak_quarkus_admin_pass }}"
     keycloak_url: "https://sso.int.scarey.me"
     keycloak_context: ""

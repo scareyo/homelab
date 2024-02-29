@@ -49,7 +49,7 @@
       ansible.builtin.include_role:
         name: caddy_ansible.caddy_ansible
       vars:
-        caddy_systemd_capabilities_enabled: true
+        caddy_systemd_capabilities_enabled: true # noqa: var-naming[no-role-prefix]
         caddy_config: |
           sso.int.scarey.me
           tls /etc/pki/tls/certs/sso.crt /etc/pki/tls/private/sso.key
