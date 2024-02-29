@@ -27,6 +27,7 @@
         url: "{{ libvirt_base_image_url }}"
         dest: "{{ image_path }}/{{ libvirt_base_image_name }}"
         checksum: "sha256:{{ libvirt_base_image_sha }}"
+        mode: '0644'
       when: libvirt_base_image_url | length > 0
 
     - name: Create the VM image
