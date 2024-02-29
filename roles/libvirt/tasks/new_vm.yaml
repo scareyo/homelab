@@ -33,6 +33,8 @@
     - name: Create the VM image
       ansible.builtin.command: |
         qemu-img create -b {{ image_path }}/{{ libvirt_base_image_name }} -f qcow2 -F qcow2 {{ image_path }}/{{ image_file }} 32G
+      register: command_output
+      changed_when: command_output.rc != 0
       when: image_file not in ansible_libvirt_pools[item.pool].volumes
 
     - name: Copy cloud-init user data to host
@@ -61,3 +63,5 @@
           {% endfor %}
           --noautoconsole \
           --autostart
+      register: command_output
+      changed_when: command_output.rc != 0

@@ -101,15 +101,21 @@
     # TODO: Add a check before performing the next 3 docker compose run steps
     - name: Migrate database
       ansible.builtin.command: docker compose run --rm firezone bin/migrate
+      register: command_output
+      changed_when: command_output.rc != 0
       args:
         chdir: "/home/{{ ansible_ssh_user }}/firezone"
 
     - name: Create admin account
       ansible.builtin.command: docker compose run --rm firezone bin/create-or-reset-admin
+      register: command_output
+      changed_when: command_output.rc != 0
       args:
         chdir: "/home/{{ ansible_ssh_user }}/firezone"
 
     - name: Docker compose up
       ansible.builtin.command: docker compose up -d
+      register: command_output
+      changed_when: command_output.rc != 0
       args:
         chdir: "/home/{{ ansible_ssh_user }}/firezone"
