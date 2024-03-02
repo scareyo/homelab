@@ -1,9 +1,0 @@
----
-- name: Regenerate GRUB config
-  ansible.builtin.command: grub2-mkconfig -o /boot/efi/EFI/{{ ansible_facts['distribution'] | lower }}/grub.cfg
-  register: command_output
-  changed_when: command_output.rc != 0
-
-- name: Restart
-  ansible.builtin.reboot:
-    reboot_timeout: 3600

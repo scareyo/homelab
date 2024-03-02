@@ -3,44 +3,28 @@
   hosts: hypervisors
   remote_user: root
   roles:
-    - role: libvirt
+    - role: vm
       vars:
-        libvirt_command: new-vm
-        libvirt_base_image_name: "rhel-baseos-9.1-x86_64-kvm.qcow2"
-        libvirt_base_image_url: ""
-        libvirt_base_image_sha: ""
-        libvirt_vms:
-          - name: idm
+        vm_storage_pool:
+          type: "dir"
+          name: "default"
+          path: "/mnt/nami/system/vm"
+        vm_os: "rhel9.1"
+        vm_base_image_name: "rhel-baseos-9.1-x86_64-kvm.qcow2"
+        vm_base_domain: "int.scarey.me"
+        vm_ssh_authorized_keys:
+          - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMa4l6jwZ4PPQKX73YS3m1zch4h2a7C6Y40JW76KGHNZ scarey@vegapunk.local"
+          - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINLKXlIRUzYqAgG6XPjWN9sc1lWpiPX7kMbjppUzKXsO scarey@teseuka"
+        vm_list:
+          - name: "idm"
             mac_address: "52:54:00:d7:20:50"
-            memory: "4096"
-            vcpus: "2"
-            pool: "default"
-            pci_devices: []
-
-    - role: libvirt
-      vars:
-        libvirt_command: new-vm
-        libvirt_base_image_name: "rhel-baseos-9.1-x86_64-kvm.qcow2"
-        libvirt_base_image_url: ""
-        libvirt_base_image_sha: ""
-        libvirt_vms:
-          - name: sso
+            memory: 4096
+            vcpus: 2
+          - name: "sso"
             mac_address: "52:54:00:d7:20:51"
-            memory: "2048"
-            vcpus: "2"
-            pool: "default"
-            pci_devices: []
-
-    - role: libvirt
-      vars:
-        libvirt_command: new-vm
-        libvirt_base_image_name: "rhel-baseos-9.1-x86_64-kvm.qcow2"
-        libvirt_base_image_url: ""
-        libvirt_base_image_sha: ""
-        libvirt_vms:
-          - name: vpn
+            memory: 2048
+            vcpus: 2
+          - name: "vpn"
             mac_address: "52:54:00:d7:20:52"
-            memory: "4096"
-            vcpus: "4"
-            pool: "default"
-            pci_devices: []
+            memory: 2048
+            vcpus: 2

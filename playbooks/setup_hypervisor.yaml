@@ -52,11 +52,3 @@
       vars:
         nas_raid_device: /dev/md/nami
         nas_exports: []
-
-    - role: libvirt
-      vars:
-        libvirt_command: new-pool
-        libvirt_pools:
-          - name: default
-            type: dir
-            path: "/mnt/nami/system/vm"

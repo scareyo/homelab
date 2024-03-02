@@ -4,25 +4,25 @@
     command: facts
 
 - name: Check if libvirt pool is defined
-  when: ansible_libvirt_pools[item.name] is not defined
+  when: ansible_libvirt_pools[vm_storage_pool.name] is not defined
   block:
     - name: Define the storage pool
       community.libvirt.virt_pool:
         command: define
-        name: "{{ item.name }}"
+        name: "{{ vm_storage_pool.name }}"
         xml: '{{ lookup("template", "storage/pool.xml.j2") }}'
 
     - name: Create the storage pool
       community.libvirt.virt_pool:
         command: build
-        name: "{{ item.name }}"
+        name: "{{ vm_storage_pool.name }}"
 
     - name: Start the storage pool
       community.libvirt.virt_pool:
         command: create
-        name: "{{ item.name }}"
+        name: "{{ vm_storage_pool.name }}"
 
     - name: Autostart the storage pool
       community.libvirt.virt_pool:
         autostart: true
-        name: "{{ item.name }}"
+        name: "{{ vm_storage_pool.name }}"

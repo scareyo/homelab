@@ -1,0 +1,6 @@
+#cloud-config
+fqdn: "{{ item.name }}.{{ vm_base_domain }}"
+ssh_authorized_keys:
+  {% for key in vm_ssh_authorized_keys %}
+    - "{{ key }}"
+  {% endfor %}

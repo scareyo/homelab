@@ -1,0 +1,91 @@
+---
+argument_specs:
+  main:
+    short_description: Define a set of virtual machines
+    options:
+      vm_storage_pool:
+        type: "dict"
+        required: true
+        description: "The storage pool definition"
+        options:
+          type:
+            type: "str"
+            required: true
+            description: "The type of storage pool"
+            choices:
+              - "dir"
+              - "netfs"
+          name:
+            type: "str"
+            required: true
+            description: "The storage pool name"
+          path:
+            type: "str"
+            required: true
+            description: "The storage pool path"
+          nfs_host:
+            type: "str"
+            required: false
+            description:
+              - "The storage pool NFS host"
+              - "Only used for netfs type"
+          nfs_path:
+            type: "str"
+            required: false
+            description:
+              - "The storage pool NFS path"
+              - "Only used for netfs type"
+      vm_os:
+        type: "str"
+        required: true
+        description:
+          - "The operating system of the virtual machine"
+          - "See 'virt-install --os-variant list' for a list of options"
+      vm_base_image_name:
+        type: "str"
+        required: true
+        description: "The name of the virtual machine base image"
+      vm_base_image_url:
+        type: "str"
+        required: false
+        description: "The URL to download the virtual machine base image"
+      vm_base_image_sha:
+        type: "str"
+        required: false
+        description: "The SHA hash to verify the virtual machine base image"
+      vm_base_domain:
+        type: "str"
+        required: true
+        description: "The base domain used in the virtual machine's hostname"
+      vm_ssh_authorized_keys:
+        type: "list"
+        elements: "str"
+        required: true
+        description: "The SSH public keys authorized to log into the default user"
+      vm_list:
+        type: "list"
+        elements: "dict"
+        required: true
+        description: "A list of virtual machines to create"
+        options:
+          name:
+            type: "str"
+            required: true
+            description: "The name of the virtual machine"
+          mac_address:
+            type: "str"
+            required: false
+            description: "The MAC address of the virtual machine"
+          memory:
+            type: "int"
+            required: true
+            description: "The amount of memory to allocate to the virtual machine"
+          vcpus:
+            type: "int"
+            required: true
+            description: "The amount of virtual CPUs to allocate to the virtual machine"
+          pci_devices:
+            type: "list"
+            elements: "str"
+            required: false
+            description: "A list of host PCI devices to attach to the virtual machine"

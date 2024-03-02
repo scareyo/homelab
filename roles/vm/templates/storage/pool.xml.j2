@@ -1,0 +1,15 @@
+<pool type='{{ vm_storage_pool.type }}'>
+  <name>{{ vm_storage_pool.name }}</name>
+
+  {% if item.type == 'netfs' %}
+    <source>
+      <host name="{{ vm_storage_pool.nfs_host }}"/>
+      <dir path="{{ vm_storage_pool.nfs_path }}"/>
+      <format type='nfs'/>
+    </source>
+  {% endif %}
+
+  <target>
+    <path>{{ vm_storage_pool.path }}</path>
+  </target>
+</pool>

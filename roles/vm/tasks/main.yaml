@@ -1,0 +1,14 @@
+---
+- name: Ensure requirements in place
+  ansible.builtin.package:
+    name:
+      - python3-libvirt
+    state: present
+  become: true
+
+- name: Create storage pool
+  ansible.builtin.include_tasks: pool.yaml
+
+- name: Create virtual machines
+  ansible.builtin.include_tasks: vm.yaml
+  loop: "{{ vm_list }}"
