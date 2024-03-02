@@ -21,13 +21,20 @@
     - ansible_libvirt_pools[vm_storage_pool.name] is defined
     - item.name not in libvirt.list_vms
   block:
+    - name: Check if the base image already exists
+      ansible.builtin.stat:
+        path: "{{ image_path }}/{{ vm_base_image_name }}"
+      register: stat_result
+
     - name: Download base image
       ansible.builtin.get_url:
         url: "{{ vm_base_image_url }}"
         dest: "{{ image_path }}/{{ vm_base_image_name }}"
         checksum: "sha256:{{ vm_base_image_sha }}"
         mode: '0644'
-      when: vm_base_image_url is defined
+      when:
+        - vm_base_image_url is defined
+        - not stat_result.stat.exists
 
     - name: Create the VM image
       ansible.builtin.command: |
