@@ -11,11 +11,9 @@ I use these playbooks to setup and maintain my homelab. The playbooks are very s
 
 ```ansible-galaxy install -r requirements.yaml```
 
-## Vault secrets
+## Secrets
 
-```ansible-vault create group_vars/ipaserver/vault.yaml```
-
-```ansible-vault create group_vars/vms/vault.yaml```
+Set the environment variable `INFISICAL_SERVICE_TOKEN`.
 
 ## Hypervisor setup
 
