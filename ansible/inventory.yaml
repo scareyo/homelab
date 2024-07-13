@@ -1,0 +1,11 @@
+---
+nodes:
+  hosts:
+    s-snake:
+      ansible_host: 10.10.20.11
+    s-hawk:
+      ansible_host: 10.10.20.12
+    s-bear:
+      ansible_host: 10.10.20.13
+    s-shark:
+      ansible_host: 10.10.20.14

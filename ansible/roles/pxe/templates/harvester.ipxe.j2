@@ -1,0 +1,11 @@
+{% set ip = ansible_all_ipv4_addresses | ansible.utils.ipaddr('10.10.20.0/24') | first -%}
+{% set vmlinuz = "http://" + ip + "/harvester-vmlinuz" -%}
+{% set initrd = "http://" + ip + "/harvester-initrd" -%}
+{% set rootfs = "http://" + ip + "/harvester-rootfs" -%}
+{% set config = "http://" + ip + "/harvester-config.${net3/ip}.yaml" -%}
+
+#!ipxe
+ifconf -c dhcp net3
+kernel {{ vmlinuz }} ip=dhcp net.ifnames=1 rd.cos.disable rd.noverifyssl console=tty1 root=live:{{ rootfs }} harvester.install.automatic=true harvester.install.config_url={{ config }}
+initrd {{ initrd }}
+boot

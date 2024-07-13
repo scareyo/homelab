@@ -1,0 +1,73 @@
+---
+- name: 'Check mandatory variables are defined'
+  ansible.builtin.assert:
+    that:
+      - pxe_os is defined
+      - pxe_supported_systems[pxe_os] is defined
+
+- name: Create HTTP data directory
+  ansible.builtin.file:
+    path: "{{ pxe_http_path }}"
+    state: directory
+
+- name: Create iPXE data directory
+  ansible.builtin.file:
+    path: "{{ pxe_ipxe_path }}"
+    state: directory
+
+- name: Create dnsmasq data directory
+  ansible.builtin.file:
+    path: "{{ pxe_dnsmasq_path }}"
+    state: directory
+
+- include_tasks: "{{ pxe_supported_systems[pxe_os] }}"
+
+- name: Build iPXE image
+  containers.podman.podman_image:
+    name: localhost/ipxe
+    path: "{{ role_path }}/files"
+    build:
+      file: "Containerfile.ipxe"
+    force: true
+    state: build
+
+- name: Build iPXE
+  containers.podman.podman_container:
+    name: ipxe
+    image: localhost/ipxe
+    arch: amd64
+    detach: false
+    recreate: true
+    state: started
+
+- name: Copy iPXE build output
+  containers.podman.podman_container_copy:
+    src: /ipxe/src/bin-x86_64-efi/ipxe.efi
+    dest: "{{ pxe_ipxe_path }}/ipxe.efi"
+    container: ipxe
+    from_container: true
+
+- name: Generate dnsmasq config
+  ansible.builtin.template:
+    src: dnsmasq.conf.j2
+    dest: "{{ pxe_dnsmasq_path }}/dnsmasq.conf"
+    mode: "0644"
+
+- name: Run dnsmasq
+  become: true
+  async: 1200
+  poll: 0
+  ansible.builtin.command: "dnsmasq -k -C {{ pxe_dnsmasq_path }}/dnsmasq.conf --user"
+
+- name: Run nginx container
+  containers.podman.podman_container:
+    name: nginx
+    image: nginx
+    ports:
+      - "80:80/tcp"
+    volumes:
+      - "{{ pxe_http_path }}:/usr/share/nginx/html"
+    recreate: true
+    timeout: 1200
+    rm: true
+    state: started

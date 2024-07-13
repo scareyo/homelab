@@ -1,0 +1,33 @@
+scheme_version: 1
+
+{% if item.mode == "join" %}
+server_url: {{ pxe_harvester_vip }}
+{% endif %}
+
+token: {{ pxe_harvester_token }}
+os:
+  hostname: {{ item.hostname }}
+  sshauthorizedkeys:
+    - github:scareyo
+  password: {{ pxe_harvester_password }}
+  ntp_servers:
+    - 0.suse.pool.ntp.org
+    - 1.suse.pool.ntp.org
+install:
+  mode: {{ item.mode }}
+  skipchecks: true
+  management_interface:
+    interfaces:
+      - name: {{ item.mgmt_interface }}
+    default_route: true
+    method: dhcp
+    bond_options:
+      mode: balance-tlb
+      miimon: 100
+  device: {{ item.osdisk }}
+  data_disk: {{ item.datadisk }}
+  iso_url: "http://{{ ansible_all_ipv4_addresses | ansible.utils.ipaddr('10.10.20.0/24') | first }}/harvester.iso"
+
+  vip: {{ pxe_harvester_vip }}
+  vip_mode: dhcp
+  vip_hw_addr: {{ pxe_harvester_vip_mac }}

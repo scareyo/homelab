@@ -1,0 +1,55 @@
+---
+- name: 'Check mandatory variables are defined'
+  ansible.builtin.assert:
+    that:
+      - pxe_harvester_token
+      - pxe_harvester_password
+      - pxe_harvester_version is defined
+      - pxe_harvester_vip is defined
+      - pxe_harvester_vip_mac is defined
+      - pxe_harvester_nodes is defined
+
+- name: Download Harvester ISO
+  ansible.builtin.get_url:
+    url: "{{ pxe_harvester_iso_url }}"
+    dest: "{{ pxe_http_path }}/harvester.iso"
+    checksum: "{{ pxe_harvester_iso_checksum }}"
+    mode: "0644"
+  register: harvester_iso
+
+- name: Download Harvester kernel
+  ansible.builtin.get_url:
+    url: "{{ pxe_harvester_kernel_url }}"
+    dest: "{{ pxe_http_path }}/harvester-vmlinuz"
+    checksum: "{{ pxe_harvester_kernel_checksum }}"
+    mode: "0644"
+  register: harvester_kernel
+
+- name: Download Harvester initrd
+  ansible.builtin.get_url:
+    url: "{{ pxe_harvester_initrd_url }}"
+    dest: "{{ pxe_http_path }}/harvester-initrd"
+    checksum: "{{ pxe_harvester_initrd_checksum }}"
+    mode: "0644"
+  register: harvester_initrd
+
+- name: Download Harvester rootfs
+  ansible.builtin.get_url:
+    url: "{{ pxe_harvester_rootfs_url }}"
+    dest: "{{ pxe_http_path }}/harvester-rootfs"
+    checksum: "{{ pxe_harvester_rootfs_checksum }}"
+    mode: "0644"
+  register: harvester_initrd
+
+- name: Generate Harvester config
+  ansible.builtin.template:
+    src: harvester.yaml.j2
+    dest: "{{ pxe_http_path }}/harvester-config.{{ item.ip }}.yaml"
+    mode: "0644"
+  loop: "{{ pxe_harvester_nodes }}"
+
+- name: Generate Harvester iPXE script
+  ansible.builtin.template:
+    src: harvester.ipxe.j2
+    dest: "{{ pxe_ipxe_path }}/boot.ipxe"
+    mode: "0644"
