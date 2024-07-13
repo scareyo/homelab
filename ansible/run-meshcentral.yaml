@@ -1,0 +1,13 @@
+- name: Run MeshCentral
+  hosts: seraphim
+  connection: local
+  vars:
+    secrets: "{{ lookup('file','secrets.json') | from_json }}"
+  roles:
+    - role: meshcentral
+      vars:
+        meshcentral_amt_username: "{{ secrets.amt.username }}"
+        meshcentral_amt_password: "{{ secrets.amt.password }}"
+        meshcentral_username: "{{ secrets.meshcentral.username }}"
+        meshcentral_password: "{{ secrets.meshcentral.password }}"
+        meshcentral_group: "Seraphim"

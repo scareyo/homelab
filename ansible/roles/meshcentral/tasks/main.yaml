@@ -1,0 +1,97 @@
+---
+- name: 'Check mandatory variables are defined'
+  ansible.builtin.assert:
+    that:
+      - meshcentral_amt_username is defined
+      - meshcentral_amt_password is defined
+      - meshcentral_username is defined
+      - meshcentral_password is defined
+      - meshcentral_group is defined
+
+- name: Start MeshCentral container
+  containers.podman.podman_container:
+    name: meshcentral
+    image: "ghcr.io/ylianst/meshcentral:latest"
+    ports:
+      - "0.0.0.0:8086:443"
+    volumes:
+      - "meshcentral-data:/opt/meshcentral/meshcentral-data"
+    state: started
+  run_once: true
+
+- name: Get MeshCentral user list
+  containers.podman.podman_container_exec:
+    name: meshcentral
+    command: "node meshcentral/meshctrl ListUsers --loginuser {{ meshcentral_username }} --loginpass {{ meshcentral_password }}"
+  retries: 5
+  delay: 5
+  register: user_list
+  until: user_list.stdout_lines is not contains("Unable to connect to wss://localhost/control.ashx")
+
+- name: Add MeshCentral admin user
+  when: user_list.stdout_lines is contains("Invalid login.")
+  block:
+    - name: Create MeshCentral admin account
+      containers.podman.podman_container_exec:
+        name: meshcentral
+        command: "node meshcentral/meshcentral --createaccount {{ meshcentral_username }} --pass {{ meshcentral_password }}"
+      run_once: true
+
+    - name: Elevate MeshCentral admin account
+      containers.podman.podman_container_exec:
+        name: meshcentral
+        command: "node meshcentral/meshcentral --adminaccount {{ meshcentral_username }}"
+      run_once: true
+
+    - name: Restart MeshCentral
+      containers.podman.podman_container:
+        name: meshcentral
+        image: "ghcr.io/ylianst/meshcentral:latest"
+        ports:
+          - "8086:443"
+        volumes:
+          - "meshcentral-data:/opt/meshcentral/meshcentral-data"
+        rm: true
+        restart: true
+        state: started
+      run_once: true
+
+- name: Get MeshCentral device group list
+  containers.podman.podman_container_exec:
+    name: meshcentral
+    command: "node meshcentral/meshctrl ListDeviceGroups --loginuser {{ meshcentral_username }} --loginpass {{ meshcentral_password }}"
+  register: device_group_list
+  run_once: true
+
+- name: Add MeshCentral devices
+  when: device_group_list.stdout_lines | select('search', meshcentral_group) | list | length == 0
+  block:
+    - name: Add MeshCentral device group
+      containers.podman.podman_container_exec:
+        name: meshcentral
+        command: >
+          node meshcentral/meshctrl AddDeviceGroup --amtonly
+            --name {{ meshcentral_group }}
+            --loginuser {{ meshcentral_username }}
+            --loginpass {{ meshcentral_password }}
+      register: add_device_group
+      run_once: true
+
+    - name: Parse MeshCentral device group ID
+      ansible.builtin.set_fact:
+        device_group_id: "{{ add_device_group.stdout_lines[0] | replace('ok mesh//', '') }}"
+
+    - name: Add MeshCentral AMT device
+      containers.podman.podman_container_exec:
+        name: meshcentral
+        command: >
+          node meshcentral/meshctrl AddAmtDevice
+            --name {{ meshcentral_group }}
+            --id {{ device_group_id }}
+            --devicename {{ inventory_hostname }}
+            --hostname {{ ansible_host }}
+            --user {{ meshcentral_amt_username }}
+            --pass {{ meshcentral_amt_password }}
+            --loginuser {{ meshcentral_username }}
+            --loginpass {{ meshcentral_password }}
+      register: add_device
