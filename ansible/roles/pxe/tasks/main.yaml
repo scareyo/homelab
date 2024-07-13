@@ -1,0 +1,116 @@
+---
+- name: 'Check mandatory variables are defined'
+  ansible.builtin.assert:
+    that:
+      - pxe_harvester_version is defined
+      - pxe_harvester_mgmt_interface is defined
+      - pxe_harvester_vip is defined
+      - pxe_harvester_vip_mac is defined
+      - pxe_harvester_osdisk is defined
+      - pxe_harvester_datadisk is defined
+
+- name: Download Harvester ISO
+  ansible.builtin.get_url:
+    url: "{{ pxe_iso_url }}"
+    dest: "{{ role_path }}/files/data/harvester.iso"
+    checksum: "{{ pxe_iso_checksum }}"
+    mode: "0644"
+  register: harvester_iso
+
+- name: Download Harvester kernel
+  ansible.builtin.get_url:
+    url: "{{ pxe_kernel_url }}"
+    dest: "{{ role_path }}/files/data/harvester-vmlinuz"
+    checksum: "{{ pxe_kernel_checksum }}"
+    mode: "0644"
+  register: harvester_kernel
+
+- name: Download Harvester initrd
+  ansible.builtin.get_url:
+    url: "{{ pxe_initrd_url }}"
+    dest: "{{ role_path }}/files/data/harvester-initrd"
+    checksum: "{{ pxe_initrd_checksum }}"
+    mode: "0644"
+  register: harvester_initrd
+
+- name: Download Harvester rootfs
+  ansible.builtin.get_url:
+    url: "{{ pxe_rootfs_url }}"
+    dest: "{{ role_path }}/files/data/harvester-rootfs"
+    checksum: "{{ pxe_rootfs_checksum }}"
+    mode: "0644"
+  register: harvester_initrd
+
+- name: Clone iPXE
+  ansible.builtin.git:
+    repo: "https://github.com/ipxe/ipxe.git"
+    dest: "{{ role_path }}/files/data/ipxe"
+    single_branch: true
+    version: master
+
+- name: Generate Harvester iPXE script
+  ansible.builtin.template:
+    src: harvester.ipxe.j2
+    dest: "{{ role_path }}/files/data/ipxe/src/harvester.ipxe"
+    mode: "0644"
+
+- name: Build iPXE
+  community.general.make:
+    chdir: "{{ role_path }}/files/data/ipxe/src"
+    target: bin/undionly.kpxe
+    params:
+      -j:
+      EMBED: harvester.ipxe
+
+- name: Generate Harvester config
+  ansible.builtin.template:
+    src: harvester.yaml.j2
+    dest: "{{ role_path }}/files/data/harvester-config.yaml"
+    mode: "0644"
+
+- name: Generate dnsmasq config
+  ansible.builtin.template:
+    src: dnsmasq.conf.j2
+    dest: "{{ role_path }}/files/data/dnsmasq.conf"
+    mode: "0644"
+
+- name: Build dnsmasq image
+  become: true
+  containers.podman.podman_image:
+    name: dnsmasq
+    path: "{{ role_path }}/files/dnsmasq"
+
+- name: Run dnsmasq container
+  become: true
+  containers.podman.podman_container:
+    name: dnsmasq
+    image: dnsmasq
+    network: host
+    ports:
+      - "67:67/udp"
+    volumes:
+      - "{{ role_path }}/files/data/dnsmasq.conf:/etc/dnsmasq.conf"
+      - "{{ role_path }}/files/data/ipxe/src/bin/undionly.kpxe:/srv/tftp/undionly.kpxe"
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    timeout: 1200
+    rm: true
+    state: started
+
+- name: Run nginx container
+  become: true
+  containers.podman.podman_container:
+    name: nginx
+    image: nginx
+    ports:
+      - "80:80/tcp"
+    volumes:
+      - "{{ role_path }}/files/data/harvester.iso:/usr/share/nginx/html/harvester.iso"
+      - "{{ role_path }}/files/data/harvester-vmlinuz:/usr/share/nginx/html/harvester-vmlinuz"
+      - "{{ role_path }}/files/data/harvester-initrd:/usr/share/nginx/html/harvester-initrd"
+      - "{{ role_path }}/files/data/harvester-rootfs:/usr/share/nginx/html/harvester-rootfs"
+      - "{{ role_path }}/files/data/harvester-config.yaml:/usr/share/nginx/html/harvester-config.yaml"
+    timeout: 1200
+    rm: true
+    state: started

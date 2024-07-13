@@ -1,0 +1,12 @@
+---
+pxe_iso_url: "https://releases.rancher.com/harvester/{{ pxe_harvester_version }}/harvester-{{ pxe_harvester_version }}-amd64.iso"
+pxe_iso_checksum: "sha512:0b688ae3a7a722ad249fcee0930c754590d3da6e18f4a46732d1411db3be05516e19a13c79d787e1203f2ca9ce3d81e157ca3703f31ce7912138a50712b7ca66"
+
+pxe_kernel_url: "https://releases.rancher.com/harvester/{{ pxe_harvester_version }}/harvester-{{ pxe_harvester_version }}-vmlinuz-amd64"
+pxe_kernel_checksum: "sha512:c0ec3333e09abe60521d893d04fa24d27215332574eddbde495422a3ad1fe543f6475adea32206b4b42416c70093bd03cd5d57128c344208487be1b84e25b6ba"
+
+pxe_initrd_url: "https://releases.rancher.com/harvester/{{ pxe_harvester_version }}/harvester-{{ pxe_harvester_version }}-initrd-amd64"
+pxe_initrd_checksum: "sha512:cfe56cb9796f0468d36998b39a69c2d66650ffadef3b4f3098cf59b47708c9bfeea7be1f32dc7e496bdf60e416bf06f6301ec3a2e3234e41ab2543161f4d2505"
+
+pxe_rootfs_url: "https://releases.rancher.com/harvester/{{ pxe_harvester_version }}/harvester-{{ pxe_harvester_version }}-rootfs-amd64.squashfs"
+pxe_rootfs_checksum: "sha512:537488611ba463eee00b986799d5aaf08d1e8825f4a31ee507fab452447d0dc15d9f3cd1d4fb0f4f19a5b4caf6c33f276d8ee69a357e0ed6a21f82715fe39bed"

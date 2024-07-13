@@ -1,0 +1,5 @@
+---
+nodes:
+  hosts:
+    nami:
+      ansible_host: 10.0.20.10
