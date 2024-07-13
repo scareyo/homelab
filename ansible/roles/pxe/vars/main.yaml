@@ -1,0 +1,7 @@
+---
+pxe_supported_systems:
+  harvester: harvester.yaml
+
+pxe_http_path: "{{ role_path }}/files/data/http/{{ pxe_os }}"
+pxe_ipxe_path: "{{ role_path }}/files/data/ipxe"
+pxe_dnsmasq_path: "{{ role_path }}/files/data/dnsmasq"

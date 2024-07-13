@@ -1,0 +1,33 @@
+---
+- name: Deploy Seraphim cluster
+  hosts: localhost
+  vars:
+    secrets: "{{ lookup('file','secrets.json') | from_json }}"
+  roles:
+    - role: pxe
+      vars:
+        pxe_os: "harvester"
+        pxe_harvester_token: "{{ secrets.harvester.token }}"
+        pxe_harvester_password: "{{ secrets.harvester.password }}"
+        pxe_harvester_version: "v1.3.1"
+        pxe_harvester_vip: "10.10.20.11"
+        pxe_harvester_vip_mac: "58:47:ca:78:ea:6d"
+        pxe_harvester_nodes:
+          - hostname: "s-snake"
+            ip: "10.10.20.11"
+            mode: "create"
+            mgmt_interface: "enp89s0"
+            osdisk: "/dev/disk/by-path/pci-0000:02:00.0-nvme-1"
+            datadisk: "/dev/disk/by-path/pci-0000:01:00.0-nvme-1"
+          - hostname: "s-hawk"
+            ip: "10.10.20.12"
+            mode: "join"
+            mgmt_interface: "enp89s0"
+            osdisk: "/dev/disk/by-path/pci-0000:02:00.0-nvme-1"
+            datadisk: "/dev/disk/by-path/pci-0000:01:00.0-nvme-1"
+          - hostname: "s-shark"
+            ip: "10.10.20.14"
+            mode: "join"
+            mgmt_interface: "enp89s0"
+            osdisk: "/dev/disk/by-path/pci-0000:02:00.0-nvme-1"
+            datadisk: "/dev/disk/by-path/pci-0000:01:00.0-nvme-1"
