@@ -21,10 +21,13 @@
           packages = with pkgs; [
             dnsmasq
             git-crypt
+            meshcentral
             podman
             qemu
             xz
           ];
+
+          processes.meshcentral.exec = "podman run -p 8086:443 -v meshcentral-data:/opt/meshcentral/meshcentral-data ghcr.io/ylianst/meshcentral:latest";
 
           languages = {
             ansible.enable = true;

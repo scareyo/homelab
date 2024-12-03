@@ -5,22 +5,52 @@
       - pxe_os is defined
       - pxe_supported_systems[pxe_os] is defined
 
+      #- name: Start MeshCentral
+      #  containers.podman.podman_container:
+      #    name: meshcentral
+      #    image: "ghcr.io/ylianst/meshcentral:latest"
+      #    ports:
+      #      - "8086:443"
+      #    volumes:
+      #      - "meshcentral-data:/opt/meshcentral/meshcentral-data"
+      #    rm: true
+      #    state: started
+      #
+      #- name: Add MeshCentral devices
+      #  containers.podman.podman_container_exec:
+      #    name: meshcentral
+      #    command: ""
+      #    workdir: /etc
+      #- name: Execute AMT command
+      #  containers.podman.podman_container:
+      #    name: 
+      #    image: "ghcr.io/ylianst/meshcentral:latest"
+      #    ports:
+      #      - "8086:443"
+      #    volumes:
+      #      - "meshcentral-data:/opt/meshcentral/meshcentral-data"
+      #    rm: true
+      #    state: started
+
 - name: Create HTTP data directory
   ansible.builtin.file:
     path: "{{ pxe_http_path }}"
     state: directory
+  run_once: true
 
 - name: Create iPXE data directory
   ansible.builtin.file:
     path: "{{ pxe_ipxe_path }}"
     state: directory
+  run_once: true
 
 - name: Create dnsmasq data directory
   ansible.builtin.file:
     path: "{{ pxe_dnsmasq_path }}"
     state: directory
+  run_once: true
 
-- include_tasks: "{{ pxe_supported_systems[pxe_os] }}"
+- include_tasks: "./systems/{{ pxe_supported_systems[pxe_os] }}"
 
 - name: Build iPXE image
   containers.podman.podman_image:
@@ -30,6 +60,7 @@
       file: "Containerfile.ipxe"
     force: true
     state: build
+  run_once: true
 
 - name: Build iPXE
   containers.podman.podman_container:
@@ -39,6 +70,7 @@
     detach: false
     recreate: true
     state: started
+  run_once: true
 
 - name: Copy iPXE build output
   containers.podman.podman_container_copy:
@@ -46,18 +78,21 @@
     dest: "{{ pxe_ipxe_path }}/ipxe.efi"
     container: ipxe
     from_container: true
+  run_once: true
 
 - name: Generate dnsmasq config
   ansible.builtin.template:
     src: dnsmasq.conf.j2
     dest: "{{ pxe_dnsmasq_path }}/dnsmasq.conf"
     mode: "0644"
+  run_once: true
 
 - name: Run dnsmasq
   become: true
   async: 1200
   poll: 0
   ansible.builtin.command: "dnsmasq -k -C {{ pxe_dnsmasq_path }}/dnsmasq.conf --user"
+  run_once: true
 
 - name: Run nginx container
   containers.podman.podman_container:
@@ -71,3 +106,4 @@
     timeout: 1200
     rm: true
     state: started
+  run_once: true
