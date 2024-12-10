@@ -17,8 +17,8 @@ just init
 Seraphim cluster (4-node Minisforum MS-01) will be booted and Harvester will be installed via PXE boot
 
 - `s-snake`
-- `s-bear`
 - `s-hawk`
+- `s-bear`
 - `s-shark`
 
 #### Requirements
@@ -42,7 +42,7 @@ just play run-meshcentral
 
 #### Deploy
 
-Ansible will spin up a PXE server, and each node will be booted to PXE. With a 1GbE connection, this process takes about 30 minutes.
+Ansible will spin up a PXE server, and each node will be booted to PXE. With a 1GbE connection, this process takes about 15 minutes.
 
 ```
 just play deploy-seraphim
