@@ -1,6 +1,6 @@
 ---
 - name: Deploy Seraphim cluster
-  hosts: seraphim-join
+  hosts: seraphim
   connection: local
   vars:
     secrets: "{{ lookup('file','secrets.json') | from_json }}"
@@ -9,7 +9,7 @@
       vars:
         pxe_os: "harvester"
         pxe_harvester_token: "{{ secrets.harvester.token }}"
-        pxe_harvester_password: "{{ secrets.harvester.password }}"
+        pxe_harvester_ssh_authorized_key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIChdQW4k6/5G12/6y68bH0QBeuvL9tb2uVAi/ILzfxCH"
         pxe_harvester_version: "v1.4.0"
         pxe_harvester_vip: "10.10.20.20"
         pxe_harvester_vip_mac: "0a:00:10:10:20:20"

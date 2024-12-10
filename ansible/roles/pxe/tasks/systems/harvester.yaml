@@ -3,7 +3,6 @@
   ansible.builtin.assert:
     that:
       - pxe_harvester_token
-      - pxe_harvester_password
       - pxe_harvester_version is defined
       - pxe_harvester_vip is defined
       - pxe_harvester_vip_mac is defined
