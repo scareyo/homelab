@@ -1,0 +1,7 @@
+---
+- name: Configure Seraphim cluster
+  hosts: localhost
+  vars:
+    secrets: "{{ lookup('file','../secrets.json') | from_json }}"
+  roles:
+    - role: harvester

@@ -1,27 +1,26 @@
 terraform {
   required_providers {
-    harvester = {
-      source = "harvester/harvester"
-      version = "0.6.4"
-    }
     kubernetes = {
       source = "hashicorp/kubernetes"
-      version = "2.31.0"
+      version = "2.35.0"
     }
-    rancher2 = {
-      source = "rancher/rancher2"
-      version = "4.2.0"
+    harvester = {
+      source = "harvester/harvester"
+      version = "0.6.6"
     }
   }
 }
 
-
 provider "kubernetes" {
-  config_path = "~/.kube/config"
+  config_path = "${path.root}/../.kube/harvester.yaml"
 }
 
 provider "harvester" {
-  kubeconfig = "~/.kube/config"
+  kubeconfig = "${path.root}/../.kube/harvester.yaml"
+}
+
+data "harvester_storageclass" "harvester-longhorn" {
+  name = "harvester-longhorn"
 }
 
 resource "kubernetes_namespace" "infrastructure" {
@@ -29,4 +28,3 @@ resource "kubernetes_namespace" "infrastructure" {
     name = var.namespace
   }
 }
-

@@ -26,3 +26,12 @@ destroy-meshcentral:
   podman stop meshcentral
   podman rm meshcentral
   podman volume rm meshcentral-data
+
+get-harvesterconfig:
+  mkdir -p $(pwd)/.kube
+  rsync --rsync-path="sudo rsync" rancher@harvester.int.scarey.me:/etc/rancher/rke2/rke2.yaml $(pwd)/.kube/harvester.yaml
+  sed -i -e 's/127.0.0.1/10.10.20.20/g' $(pwd)/.kube/harvester.yaml
+  chmod 600 $(pwd)/.kube/harvester.yaml
+
+get-kubeconfig cluster:
+  curl -s -X POST -H "Authorization: Bearer $(jq .harvester.token $SECRETS) https://rancher.int.scarey.me/v3/clusters?name={{ cluster }}?action=generateKubeconfig | jq -r ".config"

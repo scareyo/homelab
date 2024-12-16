@@ -7,11 +7,11 @@
         "nixpkgs": "nixpkgs_4"
       },
       "locked": {
-        "lastModified": 1733636584,
-        "narHash": "sha256-ro7LjKxTsyo23q0Qv00hDVsWRemhx51iAilraGuEOlk=",
+        "lastModified": 1734406056,
+        "narHash": "sha256-HLK18U4vr7povryP9CWQx+JBk7EXFk+8xzBsVu9IuNo=",
         "owner": "scareyo",
         "repo": "amtcli",
-        "rev": "43abecd937473ab0ab94402ede4e5bc2914f9cb7",
+        "rev": "0bda8f698001f7c3be551ad93ba77a12a33162a9",
         "type": "github"
       },
       "original": {
@@ -345,11 +345,11 @@
     },
     "nixpkgs_5": {
       "locked": {
-        "lastModified": 1733581040,
-        "narHash": "sha256-Qn3nPMSopRQJgmvHzVqPcE3I03zJyl8cSbgnnltfFDY=",
+        "lastModified": 1734119587,
+        "narHash": "sha256-AKU6qqskl0yf2+JdRdD0cfxX4b9x3KKV5RqA6wijmPM=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "22c3f2cf41a0e70184334a958e6b124fb0ce3e01",
+        "rev": "3566ab7246670a43abd2ffa913cc62dad9cdf7d5",
         "type": "github"
       },
       "original": {

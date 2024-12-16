@@ -22,10 +22,14 @@
             ansible
             ansible-lint
 
+            # Kubernetes
+            kubectl
+            kubernetes-helm
+            istioctl
+
             # Podman
             podman
             qemu
-            virtiofsd
 
             # Terraform
             opentofu

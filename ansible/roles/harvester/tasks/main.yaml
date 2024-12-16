@@ -1,0 +1,11 @@
+  - name: Copy kubeconfig to local machine
+    ansible.builtin.command:
+      cmd: "rsync --rsync-path='sudo rsync' rancher@10.10.20.11:/etc/rancher/rke2/rke2.yaml {{ role_path }}/files/data/kubeconfig"
+
+  - name: Create infrastructure namespace
+    kubernetes.core.k8s:
+      name: infrastructure
+      kubeconfig: "{{ role_path }}/files/data/kubeconfig"
+      api_version: v1
+      kind: Namespace
+      state: present

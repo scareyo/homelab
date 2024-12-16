@@ -47,3 +47,9 @@ Ansible will spin up a PXE server, and each node will be booted to PXE. With a 1
 ```
 just play deploy-seraphim
 ```
+
+Terraform will apply a base set of resources to Harvester. It will then spin up a Rancher virtual machine and deploy an RKE2 cluster.
+
+```
+just tf
+```

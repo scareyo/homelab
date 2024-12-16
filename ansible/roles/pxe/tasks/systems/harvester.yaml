@@ -4,6 +4,7 @@
     that:
       - pxe_harvester_token
       - pxe_harvester_version is defined
+      - pxe_harvester_url is defined
       - pxe_harvester_vip is defined
       - pxe_harvester_vip_mac is defined
 
