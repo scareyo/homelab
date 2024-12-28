@@ -27,9 +27,6 @@
             qemu
             virtiofsd
 
-            # Terraform
-            opentofu
-
             amtcli.packages.${system}.default
           ];
         };
