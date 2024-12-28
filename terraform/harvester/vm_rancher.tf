@@ -47,7 +47,7 @@ resource "harvester_virtualmachine" "rancher" {
         - "helm repo add jetstack https://charts.jetstack.io"
         - "helm repo update"
         - "helm install cert-manager jetstack/cert-manager --namespace cert-manager --create-namespace"
-        - "helm install rancher rancher-latest/rancher --namespace cattle-system --set hostname=${var.rancher_hostname} --set replicas=1 --set bootstrapPassword=${var.rancher_password}"
+        - "helm install rancher rancher-latest/rancher --namespace cattle-system --set hostname=${var.rancher_hostname} --set replicas=1 --set bootstrapPassword=${local.secrets.rancher.password}"
       ssh_authorized_keys:
         - ${var.ssh_authorized_key}
       EOF

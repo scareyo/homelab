@@ -35,3 +35,6 @@ get-harvesterconfig:
 
 get-kubeconfig cluster:
   curl -s -X POST -H "Authorization: Bearer $(jq .harvester.token $SECRETS) https://rancher.int.scarey.me/v3/clusters?name={{ cluster }}?action=generateKubeconfig | jq -r ".config"
+
+terraform-import:
+  tofu import module.base.kubernetes_manifest.cluster-registration-url "apiVersion=harvesterhci.io/v1beta1,kind=Setting,name=cluster-registration-url"

@@ -14,12 +14,6 @@ variable "rancher_hostname" {
   type = string
 }
 
-variable "rancher_password" {
-  description = "Rancher admin password"
-  type = string
-  sensitive = true
-}
-
 variable "rancher_k3s_version" {
   description = "Rancher K3s version"
   type = string

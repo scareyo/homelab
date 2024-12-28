@@ -1,0 +1,17 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  namespace: {{ .Values.namespace }}
+  annotations:
+    harvesterhci.io/imageId: infrastructure/leap-156
+  name: rancher
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: longhorn-leap-156
+  volumeName: ''
+  resources:
+    requests:
+      storage: 32Gi
+  volumeMode: Block

@@ -1,0 +1,6 @@
+apiVersion: v2
+name: rancher
+description: A Helm chart to bootstrap Rancher and deploy an RKE2 cluster on Harvester
+type: application
+version: 0.1.0
+appVersion: "1.0.0"

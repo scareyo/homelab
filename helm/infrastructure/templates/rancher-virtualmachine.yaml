@@ -1,0 +1,91 @@
+---
+apiVersion: kubevirt.io/v1
+kind: VirtualMachine
+metadata:
+  name: rancher
+  namespace: {{ .Values.namespace }}
+  annotations:
+    harvesterhci.io/volumeClaimTemplates: >-
+      [{"metadata":{"name":"-disk-0-usy4t","annotations":{"harvesterhci.io/imageId":"infrastructure/leap-156"}},"spec":{"accessModes":["ReadWriteMany"],"resources":{"requests":{"storage":"32Gi"}},"volumeMode":"Block","storageClassName":"longhorn-leap-156"}}]
+    network.harvesterhci.io/ips: '[]'
+  labels:
+    harvesterhci.io/creator: harvester
+    harvesterhci.io/os: openSUSE
+spec:
+  runStrategy: RerunOnFailure
+  template:
+    metadata:
+      annotations:
+        harvesterhci.io/sshNames: '[]'
+      labels: {}
+    spec:
+      domain:
+        machine:
+          type: ''
+        cpu:
+          cores: 4
+          sockets: 1
+          threads: 1
+        devices:
+          inputs:
+            - bus: usb
+              name: tablet
+              type: tablet
+          interfaces:
+            - bridge: {}
+              macAddress: "0a:00:10:10:20:50"
+              model: virtio
+              name: default
+          disks:
+            - name: disk-0
+              disk:
+                bus: virtio
+              bootOrder: 1
+            - name: cloudinitdisk
+              disk:
+                bus: virtio
+        resources:
+          limits:
+            memory: 4Gi
+            cpu: '4'
+        features:
+          acpi:
+            enabled: true
+      evictionStrategy: LiveMigrateIfPossible
+      networks:
+        - name: default
+          multus:
+            networkName: infrastructure/mgmt
+      volumes:
+        - name: disk-0
+          persistentVolumeClaim:
+            claimName: rancher
+        - name: cloudinitdisk
+          cloudInitNoCloud:
+            userData: |-
+              #cloud-config
+              ssh_pwauth: false
+              package_update: true
+              packages:
+                - helm
+                - kubernetes1.28-client
+              runcmd:
+                - "systemctl enable --now qemu-guest-agent"
+                - "curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION={{ .Values.k3sVersion }} sh -s - server --cluster-init"
+                - "mkdir ~/.kube"
+                - "sudo cat /etc/rancher/k3s/k3s.yaml > ~/.kube/config"
+                - "chmod 600 ~/.kube/config"
+                - "export KUBECONFIG=~/.kube/config"
+                - "helm repo add rancher-latest https://releases.rancher.com/server-charts/latest"
+                - "kubectl create namespace cattle-system"
+                - "kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/{{ .Values.certmanagerVersion }}/cert-manager.crds.yaml"
+                - "helm repo add jetstack https://charts.jetstack.io"
+                - "helm repo update"
+                - "helm install cert-manager jetstack/cert-manager --namespace cert-manager --create-namespace"
+                - "helm install rancher rancher-latest/rancher --namespace cattle-system --set hostname={{ .Values.rancherHostname }} --set replicas=1 --set bootstrapPassword={{ .Values.rancher.password }}"
+              ssh_authorized_keys:
+                - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIChdQW4k6/5G12/6y68bH0QBeuvL9tb2uVAi/ILzfxCH
+
+      affinity: {}
+      terminationGracePeriodSeconds: 120
+      accessCredentials: []

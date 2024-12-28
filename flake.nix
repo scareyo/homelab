@@ -21,6 +21,7 @@
             # Ansible
             ansible
             ansible-lint
+            python311
 
             # Kubernetes
             kubectl
@@ -31,11 +32,12 @@
             podman
             qemu
 
-            # Terraform
-            opentofu
-
             amtcli.packages.${system}.default
           ];
+
+          shellHook = ''
+            export PYTHONPATH="${pkgs.python311}/bin"
+          '';
         };
       };
     };

@@ -1,0 +1,7 @@
+---
+namespace: infrastructure
+
+rancherHostname: rancher.int.scarey.me
+
+certmanagerVersion: "v1.16.1"
+k3sVersion: "v1.31.3+k3s1"

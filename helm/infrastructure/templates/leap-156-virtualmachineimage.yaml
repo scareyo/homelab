@@ -1,0 +1,16 @@
+---
+apiVersion: harvesterhci.io/v1beta1
+kind: VirtualMachineImage
+metadata:
+  name: leap-156
+  annotations:
+    harvesterhci.io/storageClassName: harvester-longhorn
+  labels:
+    harvesterhci.io/image-type: raw_qcow2
+    harvesterhci.io/os-type: openSUSE
+  namespace: {{ .Values.namespace }}
+spec:
+  displayName: opensuse-leap-15.6.x86_64-nocloud.qcow2
+  sourceType: download
+  url: >-
+    https://ftp.gwdg.de/pub/opensuse/repositories/Cloud:/Images:/Leap_15.6/images/openSUSE-Leap-15.6.x86_64-NoCloud.qcow2

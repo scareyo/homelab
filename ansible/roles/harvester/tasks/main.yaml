@@ -9,3 +9,56 @@
       api_version: v1
       kind: Namespace
       state: present
+
+  - name: Create management network
+    kubernetes.core.k8s:
+      name: management
+      namespace: "{{ harvester_namespace }}"
+      kubeconfig: "{{ role_path }}/files/data/kubeconfig"
+      api_version: k8s.cni.cncf.io/v1
+      kind: NetworkAttachmentDefinition
+      definition:
+        spec:
+          config: >-
+            {"cniVersion":"0.3.1","name":"mgmt","type":"bridge","bridge":"mgmt-br","promiscMode":true,"ipam":{}}
+      state: present
+
+  - name: Create Rancher virtual machine image
+    kubernetes.core.k8s:
+      name: leap-156
+      kubeconfig: "{{ role_path }}/files/data/kubeconfig"
+      api_version: harvesterhci.io/v1beta1
+      kind: VirtualMachineImage
+      definition:
+        spec:
+          displayName: opensuse-leap-15.6.x86_64-nocloud.qcow2
+          sourceType: download
+          url: >-
+            https://ftp.gwdg.de/pub/opensuse/repositories/Cloud:/Images:/Leap_15.6/images/openSUSE-Leap-15.6.x86_64-NoCloud.qcow2
+      state: present
+
+  - name: Create Rancher virtual machine storage
+    kubernetes.core.k8s:
+      name: rancher
+      kubeconfig: "{{ role_path }}/files/data/kubeconfig"
+      api_version: v1
+      kind: Namespace
+      definition:
+        kind: PersistentVolumeClaim
+        metadata:
+          annotations:
+            harvesterhci.io/imageId: infrastructure/leap-156
+        spec:
+          accessModes:
+            - ReadWriteMany
+          storageClassName: longhorn-leap-156
+          volumeName: ''
+          resources:
+            requests:
+              storage: 32Gi
+          volumeMode: Block
+      state: present
+
+  - name: Create Rancher virtual machine
+    debug:
+      msg: test
