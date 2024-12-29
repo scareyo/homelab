@@ -3,30 +3,38 @@
   hosts: seraphim
   connection: local
   vars:
-    secrets: "{{ lookup('file','secrets.json') | from_json }}"
+    secrets: "{{ lookup('file','../secrets/secrets.json') | from_json }}"
   roles:
     - role: pxe
       vars:
-        pxe_os: "harvester"
-        pxe_harvester_token: "{{ secrets.harvester.token }}"
-        pxe_harvester_ssh_authorized_key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIChdQW4k6/5G12/6y68bH0QBeuvL9tb2uVAi/ILzfxCH"
-        pxe_harvester_version: "v1.4.0"
-        pxe_harvester_vip: "10.10.20.20"
-        pxe_harvester_vip_mac: "0a:00:10:10:20:20"
-        pxe_harvester_mode: "{{ mode }}"
-        pxe_harvester_osdisk: "{{ osdisk }}"
-        pxe_harvester_datadisk: "{{ datadisk }}"
-        pxe_harvester_subnet: "10.10.20.0/24"
-
+        pxe_os: "talos"
+        pxe_subnet: "10.10.20.0/24"
+        pxe_config:
+          harvester:
+            version: "v1.4.0"
+            mode: "{{ harvester_mode }}"
+            token: "{{ secrets.harvester.token }}"
+            ssh_authorized_key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIChdQW4k6/5G12/6y68bH0QBeuvL9tb2uVAi/ILzfxCH"
+            vip: "10.10.20.20"
+            vip_mac: "0a:00:10:10:20:20"
+            osdisk: "{{ osdisk }}"
+            datadisk: "{{ datadisk }}"
+          talos:
+            config: "{{ talos_config }}"
+            cluster_name: "seraphim"
+            cluster_endpoint: "https://seraphim.int.scarey.me:6443"
+            osdisk: "{{ osdisk }}"
+            secrets: "{{ playbook_dir }}/../secrets/talos.yaml"
   tasks:
     - name: Set hosts to boot from PXE
       ansible.builtin.command: "amtcli boot pxe {{ ansible_host }} --username {{ secrets.amt.username }} --password {{ secrets.amt.password }}"
-      retries: 3
+      retries: 10
       delay: 10
       changed_when: true
 
     - name: Start hosts
       ansible.builtin.command: "amtcli on {{ ansible_host }} --username {{ secrets.amt.username }} --password {{ secrets.amt.password }}"
-      retries: 3
+      retries: 10
       delay: 10
       changed_when: true
+

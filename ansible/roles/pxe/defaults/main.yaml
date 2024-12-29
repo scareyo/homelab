@@ -1,22 +1,26 @@
 ---
-
-# Harvester
 pxe_harvester_iso_url: >
-  https://releases.rancher.com/harvester/{{ pxe_harvester_version }}/harvester-{{ pxe_harvester_version }}-amd64.iso
+  https://releases.rancher.com/harvester/{{ pxe_config["harvester"].version }}/harvester-{{ pxe_config["harvester"].version }}-amd64.iso
 pxe_harvester_iso_checksum: >
   sha512:f076630dee44dcf7105ff3bf5f98d671d42d474228007f6133c12d3795c3c747a34eb8f3bb9f18f58e6083fcc1df3bcf2b25da1a117d59657c746fda4f2df085
-
 pxe_harvester_kernel_url: >
-  https://releases.rancher.com/harvester/{{ pxe_harvester_version }}/harvester-{{ pxe_harvester_version }}-vmlinuz-amd64
+  https://releases.rancher.com/harvester/{{ pxe_config["harvester"].version }}/harvester-{{ pxe_config["harvester"].version }}-vmlinuz-amd64
 pxe_harvester_kernel_checksum: >
   sha512:ec76548b47fe75a4f3cff8061b04eac1bf45f77823ff1b96822f5afa3e7a6901e56d3548d4b859c70f7da4b8036dc6fa4e7417545f633e5e3dbf09e26e923f3a
-
 pxe_harvester_initrd_url: >
-  https://releases.rancher.com/harvester/{{ pxe_harvester_version }}/harvester-{{ pxe_harvester_version }}-initrd-amd64
+  https://releases.rancher.com/harvester/{{ pxe_config["harvester"].version }}/harvester-{{ pxe_config["harvester"].version }}-initrd-amd64
 pxe_harvester_initrd_checksum: >
   sha512:a009f21de7c9e7640d5b58a1339eb55a5aafc9d06f7554066608d36c15407077e6900825c7468952c0269bc4dd25bd3758b5afd2f287f92396b267ff23f9f411
-
 pxe_harvester_rootfs_url: >
-  https://releases.rancher.com/harvester/{{ pxe_harvester_version }}/harvester-{{ pxe_harvester_version }}-rootfs-amd64.squashfs
+  https://releases.rancher.com/harvester/{{ pxe_config["harvester"].version }}/harvester-{{ pxe_config["harvester"].version }}-rootfs-amd64.squashfs
 pxe_harvester_rootfs_checksum: >
   sha512:12145d8ab3257bdc85db2ecee66da93d058769bc9c0be8af2d0586391eb8e69d112c8d9e0e4050433f4a31edf08ca1dd92ef55cfc10ffa9d0feae40c086536f4
+
+pxe_talos_kernel_url: >
+  https://factory.talos.dev/image/064d2c892ac9a3a7da7fa550dbdd1516908bd9dfe355ad345ff4e9d8f8b34930/v1.9.1/kernel-amd64
+pxe_talos_kernel_checksum: >
+  sha512:https://github.com/siderolabs/talos/releases/download/v1.9.1/sha512sum.txt
+pxe_talos_initrd_url: >
+  https://factory.talos.dev/image/064d2c892ac9a3a7da7fa550dbdd1516908bd9dfe355ad345ff4e9d8f8b34930/v1.9.1/initramfs-amd64.xz
+pxe_talos_initrd_checksum: >
+  sha512:https://github.com/siderolabs/talos/releases/download/v1.9.1/sha512sum.txt

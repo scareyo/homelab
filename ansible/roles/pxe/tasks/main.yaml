@@ -3,7 +3,7 @@
   ansible.builtin.assert:
     that:
       - pxe_os is defined
-      - pxe_supported_systems[pxe_os] is defined
+      - pxe_system_tasks[pxe_os] is defined
 
 - name: Create HTTP data directory
   ansible.builtin.file:
@@ -27,7 +27,14 @@
   run_once: true
 
 - name: Set up system data
-  ansible.builtin.include_tasks: "./systems/{{ pxe_supported_systems[pxe_os] }}"
+  ansible.builtin.include_tasks: "./systems/{{ pxe_system_tasks[pxe_os] }}"
+
+- name: Generate iPXE script
+  ansible.builtin.template:
+    src: boot.ipxe.j2
+    dest: "{{ pxe_ipxe_path }}/boot.ipxe"
+    mode: "0644"
+  run_once: true
 
 - name: Build iPXE image
   containers.podman.podman_image:

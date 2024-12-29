@@ -1,0 +1,14 @@
+machine:
+  install:
+    # siderolabs/i915
+    # siderolabs/mei
+    image: factory.talos.dev/installer/064d2c892ac9a3a7da7fa550dbdd1516908bd9dfe355ad345ff4e9d8f8b34930:v1.9.1
+    extraKernelArgs:
+      - talos.platform=metal
+      - talos.network.interface.ignore=enp88s0
+      - talos.network.interface.ignore=enp3s0f0np0
+      - talos.network.interface.ignore=enp3s0f1np1
+  network:
+    hostname: {{ inventory_hostname }}
+cluster:
+  allowSchedulingOnControlPlanes: true
