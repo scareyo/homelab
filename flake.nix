@@ -22,10 +22,16 @@
             ansible
             ansible-lint
 
+            # Kubernetes
+            kubectl
+
             # Podman
             podman
             qemu
             virtiofsd
+
+            # Talos
+            talosctl
 
             amtcli.packages.${system}.default
           ];

@@ -1,8 +1,8 @@
 # Disable DNS Server.
 port=0
 
-dhcp-range={{ ansible_all_ipv4_addresses | ansible.utils.ipaddr(pxe_harvester_subnet) | first }},proxy
-dhcp-boot=ipxe.efi,,{{ ansible_all_ipv4_addresses | ansible.utils.ipaddr(pxe_harvester_subnet) | first }}
+dhcp-range={{ ansible_all_ipv4_addresses | ansible.utils.ipaddr(pxe_subnet) | first }},proxy
+dhcp-boot=ipxe.efi,,{{ ansible_all_ipv4_addresses | ansible.utils.ipaddr(pxe_subnet) | first }}
 
 pxe-prompt="Booting homelab", 1
 
