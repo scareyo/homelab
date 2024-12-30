@@ -26,8 +26,8 @@
   ansible.builtin.command:
     chdir: "{{ pxe_http_path }}"
     cmd: >
-      talosctl gen config {{ pxe_config['talos'].cluster_name }} {{ pxe_config['talos'].cluster_endpoint }} \
-        --with-secrets {{ pxe_config['talos'].secrets }} \
+      talosctl gen config {{ pxe_config['talos'].cluster_name }} {{ pxe_config['talos'].cluster_endpoint }}
+        --with-secrets {{ pxe_config['talos'].secrets }}
         --install-disk {{ pxe_config['talos'].osdisk }} --force
   run_once: true
   changed_when: true
@@ -42,8 +42,8 @@
   ansible.builtin.command:
     chdir: "{{ pxe_http_path }}"
     cmd: >
-      talosctl machineconfig patch {{ pxe_http_path }}/controlplane.yaml \
-        --patch @{{ pxe_http_path }}/{{ mac_address }}.patch \
+      talosctl machineconfig patch {{ pxe_http_path }}/controlplane.yaml
+        --patch @{{ pxe_http_path }}/{{ mac_address }}.patch
         --output {{ pxe_http_path }}/config.{{ mac_address }}.yaml
   changed_when: true
   when: pxe_config["talos"].config == "control"
@@ -52,8 +52,8 @@
   ansible.builtin.command:
     chdir: "{{ pxe_http_path }}"
     cmd: >
-      talosctl machineconfig patch {{ pxe_http_path }}/worker.yaml \
-        --patch @{{ pxe_http_path }}/{{ mac_address }}.patch \
+      talosctl machineconfig patch {{ pxe_http_path }}/worker.yaml
+        --patch @{{ pxe_http_path }}/{{ mac_address }}.patch
         --output {{ pxe_http_path }}/config.{{ mac_address }}.yaml
   changed_when: true
   when: pxe_config["talos"].config == "worker"
