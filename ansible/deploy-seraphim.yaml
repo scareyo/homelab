@@ -1,53 +1,6 @@
 ---
-- name: Deploy Seraphim cluster
-  hosts: seraphim
-  connection: local
-  vars:
-    secrets: "{{ lookup('file','../secrets/credentials.yaml') | from_yaml }}"
-  roles:
-    - role: pxe
-      vars:
-        pxe_os: "talos"
-        pxe_subnet: "10.10.20.0/24"
-        pxe_config:
-          harvester:
-            version: "v1.4.0"
-            mode: "{{ harvester_mode }}"
-            token: "{{ secrets.harvester.token }}"
-            ssh_authorized_key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIChdQW4k6/5G12/6y68bH0QBeuvL9tb2uVAi/ILzfxCH"
-            vip: "10.10.20.20"
-            vip_mac: "0a:00:10:10:20:20"
-            osdisk: "{{ osdisk }}"
-            datadisk: "{{ datadisk }}"
-          talos:
-            config: "{{ talos_config }}"
-            cluster_name: "seraphim"
-            cluster_endpoint: "https://seraphim.int.scarey.me:6443"
-            osdisk: "{{ osdisk }}"
-            secrets: "{{ playbook_dir }}/../secrets/talos.yaml"
-  tasks:
-    - name: Set hosts to boot from PXE
-      ansible.builtin.command: "amtcli boot pxe {{ ansible_host }} --username {{ secrets.amt.username }} --password {{ secrets.amt.password }}"
-      retries: 10
-      delay: 10
-      changed_when: true
+- name: Deploy seraphim cluster
+  import_playbook: ./playbooks/1-seraphim-metal.yaml
 
-    - name: Start hosts
-      ansible.builtin.command: "amtcli on {{ ansible_host }} --username {{ secrets.amt.username }} --password {{ secrets.amt.password }}"
-      retries: 10
-      delay: 10
-      changed_when: true
-
-- name: Bootstrap Talos
-  hosts: bootstrap
-  connection: local
-  tasks:
-    - name: Bootstrap cluster
-      ansible.builtin.command: "talosctl --nodes {{ ansible_host }} --endpoints {{ ansible_host }} bootstrap"
-      retries: 30
-      delay: 10
-      changed_when: true
-
-    - name: Wait for healthy cluster
-      ansible.builtin.command: "talosctl --nodes {{ ansible_host }} --endpoints {{ ansible_host }} health"
-      changed_when: true
+- name: Configure seraphim cluster
+  import_playbook: ./playbooks/2-seraphim-configure.yaml

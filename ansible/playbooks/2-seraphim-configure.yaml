@@ -1,0 +1,12 @@
+---
+- name: Configure seraphim cluster
+  hosts: bootstrap
+  connection: local
+  tasks:
+    - name: Wait for healthy cluster
+      ansible.builtin.command: "talosctl --nodes {{ ansible_host }} --endpoints {{ ansible_host }} health"
+      changed_when: true
+
+    - name: Download admin kubeconfig
+      ansible.builtin.command: "talosctl --nodes {{ ansible_host }} --endpoints {{ ansible_host }} kubeconfig --force"
+      changed_when: true
