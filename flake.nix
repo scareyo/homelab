@@ -21,17 +21,19 @@
             # Ansible
             ansible
             ansible-lint
+            python312Packages.kubernetes
 
             # Kubernetes
+            argocd
+            istioctl
             kubectl
+            kubernetes-helm
+            talosctl
 
             # Podman
             podman
             qemu
             virtiofsd
-
-            # Talos
-            talosctl
 
             amtcli.packages.${system}.default
           ];

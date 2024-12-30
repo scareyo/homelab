@@ -1,0 +1,38 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: apps
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+    - git:
+        repoURL: "https://github.com/scareyo/homelab.git"
+        revision: develop-talos
+        directories:
+          - path: apps/*
+          - path: apps/metallb
+            exclude: true
+          - path: apps/argocd
+            exclude: true
+          - path: apps/argocd-apps
+            exclude: true
+  template:
+    metadata:
+      name: '{{`{{.path.basename}}`}}'
+    spec:
+      project: "default"
+      source:
+        repoURL: "https://github.com/scareyo/homelab.git"
+        targetRevision: develop-talos
+        path: '{{`{{.path.path}}`}}'
+      destination:
+        server: "https://kubernetes.default.svc"
+        namespace: '{{`{{.path.basename}}`}}'
+      syncPolicy:
+        automated:
+          prune: true
+        syncOptions:
+          - CreateNamespace=true

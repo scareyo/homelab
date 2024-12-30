@@ -1,4 +1,5 @@
 .devenv
 .direnv
+.kube
 
 Session.vim
