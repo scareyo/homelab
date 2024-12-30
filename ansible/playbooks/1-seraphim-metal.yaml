@@ -5,7 +5,7 @@
   vars:
     secrets: "{{ lookup('file','../../secrets/credentials.yaml') | from_yaml }}"
   roles:
-    - role: ../roles/pxe
+    - role: pxe
       vars:
         pxe_os: "talos"
         pxe_subnet: "10.10.20.0/24"
