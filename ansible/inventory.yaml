@@ -14,6 +14,10 @@ seraphim:
       ansible_host: 10.10.20.14
       mac_address: "58:47:ca:78:dc:b5"
 
+bootstrap:
+  hosts:
+    s-snake:
+
 seraphim-control:
   hosts:
     s-snake:

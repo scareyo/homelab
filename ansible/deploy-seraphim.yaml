@@ -38,3 +38,16 @@
       delay: 10
       changed_when: true
 
+- name: Bootstrap Talos
+  hosts: bootstrap
+  connection: local
+  tasks:
+    - name: Bootstrap cluster
+      ansible.builtin.command: "talosctl --nodes {{ ansible_host }} --endpoints {{ ansible_host }} bootstrap"
+      retries: 30
+      delay: 10
+      changed_when: true
+
+    - name: Wait for healthy cluster
+      ansible.builtin.command: "talosctl --nodes {{ ansible_host }} --endpoints {{ ansible_host }} health"
+      changed_when: true

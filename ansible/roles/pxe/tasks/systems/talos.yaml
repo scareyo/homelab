@@ -45,3 +45,9 @@
     chdir: "{{ pxe_http_path }}"
     cmd: "talosctl machineconfig patch {{ pxe_http_path }}/worker.yaml --patch @{{ pxe_http_path }}/{{ mac_address }}.patch --output {{ pxe_http_path }}/config.{{ mac_address}}.yaml"
   when: pxe_config["talos"].config == "worker"
+
+- name: Merge default config
+  ansible.builtin.command:
+    chdir: "{{ pxe_http_path }}"
+    cmd: "talosctl config merge ./talosconfig"
+  run_once: true
