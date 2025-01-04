@@ -1,2 +1,2 @@
 # Encrypted files
-ansible/secrets.json filter=git-crypt diff=git-crypt
+secrets/* filter=git-crypt diff=git-crypt
