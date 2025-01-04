@@ -33,53 +33,23 @@
   tasks:
     - name: Wait for running nodes
       ansible.builtin.command: "talosctl --nodes {{ ansible_host }} --endpoints {{ ansible_host }} get nodestatus -o json"
-      changed_when: true
+      changed_when: false
+      retries: 30
+      delay: 5
       register: cmd
-      until: (cmd.stdout | from_json).metadata.phase == "running"
+      until: cmd.stdout != "" and (cmd.stdout | from_json).metadata.phase == "running"
 
 - name: Deploy initial services
   hosts: bootstrap
   connection: local
   tasks:
-    # TODO: Manage with helm
-    - name: Deploy Cilium
-      kubernetes.core.helm:
-        name: cilium
-        namespace: kube-system
-        chart_ref: cilium
-        chart_version: 1.16.5
-        chart_repo_url: "https://helm.cilium.io"
-        values:
-          ipam:
-            mode: kubernetes
-          kubeProxyReplacement: true
-          securityContext:
-            capabilities:
-              ciliumAgent: [CHOWN, KILL, NET_ADMIN, NET_RAW, IPC_LOCK, SYS_ADMIN, SYS_RESOURCE, DAC_OVERRIDE, FOWNER, SETGID, SETUID]
-              cleanCiliumState: [NET_ADMIN, SYS_ADMIN, SYS_RESOURCE]
-          cgroup:
-            autoMount:
-              enabled: false
-            hostRoot: /sys/fs/cgroup
-          k8sServiceHost: localhost
-          k8sServicePort: 7445
-          k8sClientRateLimit:
-            qps: 10
-            burst: 20
-          l2announcements:
-            enabled: true
-          gatewayAPI:
-            enabled: true
-          externalIPs:
-            enabled: true
-
-    # TODO: Move this step to the talos node configuration
-    - name: Install Gateway API CRDs
+    - name: Bootstrap Cilium
       kubernetes.core.k8s:
-        definition: >
-          {{ lookup('ansible.builtin.url', 'https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.2.0/standard-install.yaml', split_lines=False)
-            | from_yaml_all | list }}
-        state: present
+        definition: "{{ lookup('kubernetes.core.kustomize', dir='{{ inventory_dir }}/../apps/cilium', enable_helm=True) }}"
+
+    - name: Wait for healthy cluster
+      ansible.builtin.command: "talosctl --nodes {{ ansible_host }} --endpoints {{ ansible_host }} health"
+      changed_when: false
 
     - name: Bootstrap Argo CD
       kubernetes.core.k8s:

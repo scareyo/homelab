@@ -10,9 +10,11 @@ spec:
   generators:
     - git:
         repoURL: "https://github.com/scareyo/homelab.git"
-        revision: develop-talos
+        revision: develop
         directories:
           - path: apps/*
+          - path: apps/cilium
+            exclude: true
   template:
     metadata:
       name: "{{.path.basename}}"
@@ -20,7 +22,7 @@ spec:
       project: "default"
       source:
         repoURL: "https://github.com/scareyo/homelab.git"
-        targetRevision: develop-talos
+        targetRevision: develop
         path: "{{.path.path}}"
       destination:
         server: "https://kubernetes.default.svc"
