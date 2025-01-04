@@ -2,7 +2,7 @@
 apiVersion: cilium.io/v2alpha1
 kind: CiliumL2AnnouncementPolicy
 metadata:
-  name: gateway
+  name: default
   namespace: kube-system
 spec:
   externalIPs: true
