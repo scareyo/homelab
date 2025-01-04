@@ -81,18 +81,6 @@
             | from_yaml_all | list }}
         state: present
 
-    - name: Deploy Argo CD
-      kubernetes.core.helm:
-        name: argocd
-        namespace: argocd
-        chart_ref: argo-cd
-        chart_version: 7.7.11
-        chart_repo_url: "https://argoproj.github.io/argo-helm"
-        create_namespace: true
-
-    - name: Deploy Argo CD apps
-      kubernetes.core.helm:
-        name: argocd
-        chart_ref: ../../apps/argocd
-        release_namespace: argocd
-        dependency_update: true
+    - name: Bootstrap Argo CD
+      kubernetes.core.k8s:
+        definition: "{{ lookup('kubernetes.core.kustomize', dir='{{ inventory_dir }}/../apps/argocd', enable_helm=True) }}"

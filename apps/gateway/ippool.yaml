@@ -1,8 +1,9 @@
 ---
-apiVersion: "cilium.io/v2alpha1"
+apiVersion: cilium.io/v2alpha1
 kind: CiliumLoadBalancerIPPool
 metadata:
-  name: "pool"
+  name: gateway
+  namespace: kube-system
 spec:
   blocks:
   - start: "10.10.20.50"
