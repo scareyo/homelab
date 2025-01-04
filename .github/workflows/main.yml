@@ -1,0 +1,17 @@
+name: checks
+on:
+  pull_request:
+    branches: main
+jobs:
+  ansible-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: run-ansible-lint
+        uses: ansible/ansible-lint@v24.12.2
+        with:
+          working_directory: ${{ github.workspace }}/ansible
+          requirements_file: ${{ github.workspace }}/ansible/requirements.yaml
