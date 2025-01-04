@@ -15,18 +15,16 @@ spec:
           - path: apps/*
   template:
     metadata:
-      name: '{{`{{.path.basename}}`}}'
+      name: "{{.path.basename}}"
     spec:
       project: "default"
       source:
         repoURL: "https://github.com/scareyo/homelab.git"
         targetRevision: develop-talos
-        path: '{{`{{.path.path}}`}}'
+        path: "{{.path.path}}"
       destination:
         server: "https://kubernetes.default.svc"
-        namespace: '{{`{{.path.basename}}`}}'
+        namespace: "{{.path.basename}}"
       syncPolicy:
         automated:
           prune: true
-        syncOptions:
-          - CreateNamespace=true
