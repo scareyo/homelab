@@ -1,4 +1,6 @@
 .devenv
 .direnv
+.kube
+.talos
 
 Session.vim
