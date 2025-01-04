@@ -3,8 +3,13 @@
   hosts: bootstrap
   connection: local
   tasks:
-    - name: Wait for healthy cluster
-      ansible.builtin.command: "talosctl --nodes {{ ansible_host }} --endpoints {{ ansible_host }} health"
+    - name: Generate talosconfig
+      ansible.builtin.command: >
+        talosctl gen config seraphim https://seraphim.int.scarey.me:6443
+          --with-secrets {{ inventory_dir }}/../secrets/talos.yaml
+          --output-types talosconfig
+          --output {{ inventory_dir }}/../.talos/config
+          --force
       changed_when: true
 
     - name: Download admin kubeconfig
@@ -12,94 +17,82 @@
         talosctl --nodes {{ ansible_host }} --endpoints {{ ansible_host }} kubeconfig {{ inventory_dir }}/../.kube/config --force
       changed_when: true
 
+    - name: Change talosconfig permissions
+      ansible.builtin.file:
+        path: "{{ inventory_dir }}/../.talos/config"
+        mode: '0600'
+
     - name: Change kubeconfig permissions
       ansible.builtin.file:
         path: "{{ inventory_dir }}/../.kube/config"
         mode: '0600'
-    
-    - name: Deploy ArgoCD
+
+- name: Wait for running nodes
+  hosts: seraphim
+  connection: local
+  tasks:
+    - name: Wait for running nodes
+      ansible.builtin.command: "talosctl --nodes {{ ansible_host }} --endpoints {{ ansible_host }} get nodestatus -o json"
+      changed_when: true
+      register: cmd
+      until: (cmd.stdout | from_json).metadata.phase == "running"
+
+- name: Deploy initial services
+  hosts: bootstrap
+  connection: local
+  tasks:
+    # TODO: Manage with helm
+    - name: Deploy Cilium
+      kubernetes.core.helm:
+        name: cilium
+        namespace: kube-system
+        chart_ref: cilium
+        chart_version: 1.16.5
+        chart_repo_url: "https://helm.cilium.io"
+        values:
+          ipam:
+            mode: kubernetes
+          kubeProxyReplacement: true
+          securityContext:
+            capabilities:
+              ciliumAgent: [CHOWN, KILL, NET_ADMIN, NET_RAW, IPC_LOCK, SYS_ADMIN, SYS_RESOURCE, DAC_OVERRIDE, FOWNER, SETGID, SETUID]
+              cleanCiliumState: [NET_ADMIN, SYS_ADMIN, SYS_RESOURCE]
+          cgroup:
+            autoMount:
+              enabled: false
+            hostRoot: /sys/fs/cgroup
+          k8sServiceHost: localhost
+          k8sServicePort: 7445
+          k8sClientRateLimit:
+            qps: 10
+            burst: 20
+          l2announcements:
+            enabled: true
+          gatewayAPI:
+            enabled: true
+          externalIPs:
+            enabled: true
+
+    # TODO: Move this step to the talos node configuration
+    - name: Install Gateway API CRDs
+      kubernetes.core.k8s:
+        definition: >
+          {{ lookup('ansible.builtin.url', 'https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.2.0/standard-install.yaml', split_lines=False)
+            | from_yaml_all | list }}
+        state: present
+
+    - name: Deploy Argo CD
       kubernetes.core.helm:
         name: argocd
-        chart_ref: "../../apps/argocd"
-        dependency_update: true
-        release_namespace: argocd
+        namespace: argocd
+        chart_ref: argo-cd
+        chart_version: 7.7.11
+        chart_repo_url: "https://argoproj.github.io/argo-helm"
         create_namespace: true
 
-    - name: Deploy ArgoCD apps
+    - name: Deploy Argo CD apps
       kubernetes.core.helm:
-        name: argocd-apps
-        chart_ref: "../../apps/argocd-apps"
+        name: argocd
+        chart_ref: ../../apps/argocd
         release_namespace: argocd
-        create_namespace: true
-
-        #    - name: Install ArgoCD
-        #      kubernetes.core.k8s:
-        #        namespace: argocd
-        #        definition: >
-        #          {{ lookup('ansible.builtin.url', 'https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml', split_lines=False)
-        #            | from_yaml_all | list }}
-        #        state: present
-        #
-        #    - name: Create MetalLB application
-        #      kubernetes.core.k8s:
-        #        name: metallb
-        #        namespace: argocd
-        #        api_version: argoproj.io/v1alpha1
-        #        kind: Application
-        #        definition:
-        #          spec:
-        #            project: "default"
-        #            source:
-        #              repoURL: "https://github.com/scareyo/homelab.git"
-        #              targetRevision: develop-talos
-        #              path: 'apps/metallb'
-        #            destination:
-        #              server: https://kubernetes.default.svc
-        #              namespace: 'metallb'
-        #            syncPolicy:
-        #              automated:
-        #                prune: true
-        #              managedNamespaceMetadata:
-        #                labels:
-        #                  pod-security.kubernetes.io/enforce: privileged
-        #                  pod-security.kubernetes.io/audit: privileged
-        #                  pod-security.kubernetes.io/warn: privileged
-        #              syncOptions:
-        #                - CreateNamespace=true
-        #
-        #    - name: Create ArgoCD ApplicationSet
-        #      kubernetes.core.k8s:
-        #        name: apps
-        #        namespace: argocd
-        #        api_version: argoproj.io/v1alpha1
-        #        kind: ApplicationSet
-        #        definition:
-        #          spec:
-        #            goTemplate: true
-        #            goTemplateOptions: ["missingkey=error"]
-        #            generators:
-        #              - git:
-        #                  repoURL: "https://github.com/scareyo/homelab.git"
-        #                  revision: develop-talos
-        #                  directories:
-        #                    - path: apps/*
-        #                    - path: apps/metallb
-        #                      exclude: true
-        #            template:
-        #              metadata:
-        #                name: '{% raw %}{{.path.basename}}{% endraw %}'
-        #              spec:
-        #                project: "default"
-        #                source:
-        #                  repoURL: "https://github.com/scareyo/homelab.git"
-        #                  targetRevision: develop-talos
-        #                  path: '{% raw %}{{.path.path}}{% endraw %}'
-        #                destination:
-        #                  server: "https://kubernetes.default.svc"
-        #                  namespace: '{% raw %}{{.path.basename}}{% endraw %}'
-        #                syncPolicy:
-        #                  automated:
-        #                    prune: true
-        #                  syncOptions:
-        #                    - CreateNamespace=true
-        #        state: present
+        dependency_update: true

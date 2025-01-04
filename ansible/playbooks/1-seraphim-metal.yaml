@@ -28,15 +28,16 @@
   tasks:
     - name: Set hosts to boot from PXE
       ansible.builtin.command: "amtcli boot pxe {{ ansible_host }} --username {{ secrets.amt.username }} --password {{ secrets.amt.password }}"
-      retries: 10
-      delay: 10
       changed_when: true
+      register: cmd
+      retries: 5
+      until: cmd.rc == 0
 
     - name: Start hosts
       ansible.builtin.command: "amtcli on {{ ansible_host }} --username {{ secrets.amt.username }} --password {{ secrets.amt.password }}"
-      retries: 10
-      delay: 10
       changed_when: true
+      register: cmd
+      until: cmd.rc == 0
 
 - name: Bootstrap Talos
   hosts: bootstrap

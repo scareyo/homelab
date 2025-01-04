@@ -6,10 +6,10 @@ metadata:
   namespace: argocd
 spec:
   parentRefs:
-    - name: internal
+    - name: gateway
       namespace: gateway
   hostnames:
-    - "argocd.int.scarey.me"
+    - "argocd.apps.int.scarey.me"
   rules:
     - matches:
         - path:

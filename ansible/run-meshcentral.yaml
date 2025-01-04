@@ -2,7 +2,7 @@
   hosts: seraphim
   connection: local
   vars:
-    secrets: "{{ lookup('file','../secrets/secrets.json') | from_json }}"
+    secrets: "{{ lookup('file','../secrets/credentials.yaml') | from_yaml }}"
   roles:
     - role: meshcentral
       vars:

@@ -13,12 +13,6 @@ spec:
         revision: develop-talos
         directories:
           - path: apps/*
-          - path: apps/metallb
-            exclude: true
-          - path: apps/argocd
-            exclude: true
-          - path: apps/argocd-apps
-            exclude: true
   template:
     metadata:
       name: '{{`{{.path.basename}}`}}'

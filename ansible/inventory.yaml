@@ -18,12 +18,12 @@ bootstrap:
   hosts:
     s-snake:
 
-seraphim-control:
+seraphim_control:
   hosts:
     s-snake:
     s-hawk:
     s-bear:
 
-seraphim-worker:
+seraphim_worker:
   hosts:
     s-shark:

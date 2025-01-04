@@ -28,4 +28,4 @@ destroy-meshcentral:
   podman volume rm meshcentral-data
 
 destroy-talos:
-  talosctl --nodes 10.10.20.11,10.10.20.12,10.10.20.13,10.10.20.14 --endpoints 10.10.20.11 --talosconfig ./ansible/roles/pxe/files/data/http/talos/talosconfig reset --graceful=false
+  talosctl --nodes 10.10.20.11,10.10.20.12,10.10.20.13,10.10.20.14 --endpoints 10.10.20.11 --talosconfig .talos/config reset --graceful=false
