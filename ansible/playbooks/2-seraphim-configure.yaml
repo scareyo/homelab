@@ -34,13 +34,53 @@
     - name: Wait for running nodes
       ansible.builtin.command: "talosctl --nodes {{ ansible_host }} --endpoints {{ ansible_host }} get nodestatus -o json"
       changed_when: true
+      retries: 30
+      delay: 5
       register: cmd
-      until: (cmd.stdout | from_json).metadata.phase == "running"
+      until: cmd.stdout != "" and (cmd.stdout | from_json).metadata.phase == "running"
 
 - name: Deploy initial services
   hosts: bootstrap
   connection: local
   tasks:
+    # TODO: Move this step to the talos node configuration
+    - name: Install Gateway API CRDs
+      kubernetes.core.k8s:
+        definition: >
+          {{ lookup('ansible.builtin.url', 'https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.1.0/config/crd/standard/gateway.networking.k8s.io_gatewayclasses.yaml', split_lines=False)
+            | from_yaml_all | list }}
+        state: present
+    - name: Install Gateway API CRDs
+      kubernetes.core.k8s:
+        definition: >
+          {{ lookup('ansible.builtin.url', 'https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.1.0/config/crd/standard/gateway.networking.k8s.io_gateways.yaml', split_lines=False)
+            | from_yaml_all | list }}
+        state: present
+    - name: Install Gateway API CRDs
+      kubernetes.core.k8s:
+        definition: >
+          {{ lookup('ansible.builtin.url', 'https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.1.0/config/crd/standard/gateway.networking.k8s.io_httproutes.yaml', split_lines=False)
+            | from_yaml_all | list }}
+        state: present
+    - name: Install Gateway API CRDs
+      kubernetes.core.k8s:
+        definition: >
+          {{ lookup('ansible.builtin.url', 'https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.1.0/config/crd/standard/gateway.networking.k8s.io_referencegrants.yaml', split_lines=False)
+            | from_yaml_all | list }}
+        state: present
+    - name: Install Gateway API CRDs
+      kubernetes.core.k8s:
+        definition: >
+          {{ lookup('ansible.builtin.url', 'https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.1.0/config/crd/standard/gateway.networking.k8s.io_grpcroutes.yaml', split_lines=False)
+            | from_yaml_all | list }}
+        state: present
+    - name: Install Gateway API CRDs
+      kubernetes.core.k8s:
+        definition: >
+          {{ lookup('ansible.builtin.url', 'https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.1.0/config/crd/experimental/gateway.networking.k8s.io_tlsroutes.yaml', split_lines=False)
+            | from_yaml_all | list }}
+        state: present
+
     # TODO: Manage with helm
     - name: Deploy Cilium
       kubernetes.core.helm:
@@ -70,16 +110,10 @@
             enabled: true
           gatewayAPI:
             enabled: true
+            gatewayClass:
+              create: "true"
           externalIPs:
             enabled: true
-
-    # TODO: Move this step to the talos node configuration
-    - name: Install Gateway API CRDs
-      kubernetes.core.k8s:
-        definition: >
-          {{ lookup('ansible.builtin.url', 'https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.2.0/standard-install.yaml', split_lines=False)
-            | from_yaml_all | list }}
-        state: present
 
     - name: Deploy Argo CD
       kubernetes.core.helm:

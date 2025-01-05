@@ -25,9 +25,11 @@
 
             # Kubernetes
             argocd
+            cilium-cli
             istioctl
             kubectl
             kubernetes-helm
+            kubernetes-helmPlugins.helm-diff
             talosctl
 
             # Podman

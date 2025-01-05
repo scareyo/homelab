@@ -2,7 +2,7 @@
 apiVersion: "cilium.io/v2alpha1"
 kind: CiliumLoadBalancerIPPool
 metadata:
-  name: "pool"
+  name: "gateway"
 spec:
   blocks:
   - start: "10.10.20.50"
