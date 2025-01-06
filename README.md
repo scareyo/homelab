@@ -46,7 +46,7 @@ just play run-meshcentral
 2. Each node boots to PXE
 3. Talos is installed and bootstrapped
 4. Cilium is deployed to the cluster
-5. Argo CD is deployed to the cluster, along with its managed services
+5. Argo CD is deployed to the cluster, along with its managed applications
 
 ```
 just play deploy-seraphim
