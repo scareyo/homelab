@@ -3,7 +3,6 @@ apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
   name: apps
-  namespace: argocd
 spec:
   goTemplate: true
   goTemplateOptions: ["missingkey=error"]
@@ -15,18 +14,22 @@ spec:
           - path: apps/*
           - path: apps/cilium
             exclude: true
+          - path: apps/rook
+            exclude: true
   template:
     metadata:
-      name: "{{.path.basename}}"
+      name: "{{`{{.path.basename}}`}}"
     spec:
       project: "default"
       source:
         repoURL: "https://github.com/scareyo/homelab.git"
         targetRevision: develop
-        path: "{{.path.path}}"
+        path: "{{`{{.path.path}}`}}"
       destination:
         server: "https://kubernetes.default.svc"
-        namespace: "{{.path.basename}}"
+        namespace: "{{`{{.path.basename}}`}}"
       syncPolicy:
         automated:
           prune: true
+        syncOptions:
+          - CreateNamespace=true
