@@ -3,4 +3,6 @@
 .kube
 .talos
 
+apps/**/charts/*
+
 Session.vim
