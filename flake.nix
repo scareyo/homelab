@@ -25,6 +25,7 @@
 
             # Kubernetes
             argocd
+            cilium-cli
             istioctl
             kubectl
             kubernetes-helm
