@@ -5,7 +5,7 @@ metadata:
   name: argocd
 spec:
   parentRefs:
-    - name: gateway
+    - name: internal
       namespace: gateway
   hostnames:
     - "argocd.apps.int.scarey.me"

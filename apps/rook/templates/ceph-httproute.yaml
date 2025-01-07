@@ -5,7 +5,7 @@ metadata:
   name: ceph
 spec:
   parentRefs:
-    - name: gateway
+    - name: internal
       namespace: gateway
   hostnames:
     - "ceph.apps.int.scarey.me"

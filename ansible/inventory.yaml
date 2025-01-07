@@ -1,4 +1,7 @@
 ---
+# ---------------------------------------------------------------------------- #
+# Seraphim - Talos Linux cluster
+# ---------------------------------------------------------------------------- #
 seraphim:
   hosts:
     s-snake:
@@ -27,3 +30,12 @@ seraphim_control:
 seraphim_worker:
   hosts:
     s-shark:
+
+# ---------------------------------------------------------------------------- #
+# zeus - External gateway hosted on Hetzner
+# ---------------------------------------------------------------------------- #
+gateway:
+  hosts:
+    zeus:
+      ansible_host: 178.156.140.63
+      ansible_python_interpreter: "/usr/bin/python3"
