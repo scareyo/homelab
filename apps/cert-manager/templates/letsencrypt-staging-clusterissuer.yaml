@@ -10,9 +10,8 @@ spec:
     privateKeySecretRef:
       name: letsencrypt-staging
     solvers:
-      - http01:
-          gatewayHTTPRoute:
-            parentRefs:
-              - name: internal
-                namespace: gateway
-                kind: Gateway
+      - dns01:
+          cloudflare:
+            apiTokenSecretRef:
+              name: cloudflare-api-token
+              key: api-token

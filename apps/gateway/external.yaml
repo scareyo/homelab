@@ -4,6 +4,8 @@ kind: Gateway
 metadata:
   name: external
   namespace: gateway
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-staging
 spec:
   gatewayClassName: cilium
   infrastructure:
@@ -17,3 +19,14 @@ spec:
       allowedRoutes:
         namespaces:
           from: All
+    - protocol: HTTPS
+      port: 443
+      name: https-gateway
+      hostname: "*.scarey.me"
+      allowedRoutes:
+        namespaces:
+          from: All
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: apps-scarey-me-tls
