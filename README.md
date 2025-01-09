@@ -59,3 +59,17 @@ This command is destructive. It will reset the Talos cluster and power down the 
 ```
 just destroy-talos
 ```
+
+### deploy-zeus
+
+Nginx server to establish access to Seraphim's external gateway
+
+#### Requirements
+
+1. `HCLOUD_TOKEN` environment variable must be set
+
+#### Deploy
+
+```
+just play deploy-zeus
+```

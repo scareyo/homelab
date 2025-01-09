@@ -1,0 +1,82 @@
+---
+- name: Provision zeus
+  hosts: localhost
+  connection: local
+  tasks:
+    - name: Create server
+      hetzner.hcloud.server:
+        name: zeus
+        server_type: cpx11
+        image: alma-9
+        location: ash
+        ipv4: zeus
+        user_data: |
+          #cloud-config
+          package_update: true
+          users:
+            - name: scarey
+              groups:
+                - wheel
+              shell: /bin/bash
+              sudo:
+                - ALL=(ALL) NOPASSWD:ALL
+              ssh_authorized_keys:
+                - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIChdQW4k6/5G12/6y68bH0QBeuvL9tb2uVAi/ILzfxCH
+          packages:
+            - dnf-automatic
+            - systemd-resolved
+          runcmd:
+            - [ systemctl, enable, --now, dnf-automatic.timer ]
+            - [ systemctl, enable, --now, systemd-resolved.service ]
+        state: started
+      register: zeus
+
+    - name: Wait for SSH to be available
+      ansible.builtin.wait_for:
+        port: 22
+        host: "{{ zeus.hcloud_server.ipv4_address }}"
+        delay: 5
+      connection: local
+
+- name: Configure zeus
+  hosts: zeus
+  become: true
+  roles:
+    - role: nginxinc.nginx
+    - role: githubixx.ansible_role_wireguard
+  tasks:
+    - name: Set DNS nameservers
+      ansible.builtin.blockinfile:
+        path: /etc/resolv.conf
+        block: |
+          nameserver {{ wireguard_dns }}
+
+    - name: Configure nginx
+      ansible.builtin.blockinfile:
+        path: /etc/nginx/conf.d/scarey.me.conf
+        create: true
+        mode: "0644"
+        block: |
+          server {
+            listen 80;
+            server_name scarey.me;
+            location / {
+              proxy_pass http://10.10.20.51/;
+              proxy_set_header Host $host;
+              proxy_http_version 1.1;
+            }
+          }
+          server {
+            listen 80;
+            server_name *.scarey.me;
+            location / {
+              proxy_pass http://10.10.20.51/;
+              proxy_set_header Host $host;
+              proxy_http_version 1.1;
+            }
+          }
+
+    - name: Reload nginx
+      ansible.builtin.service:
+        name: nginx
+        state: reloaded

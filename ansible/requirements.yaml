@@ -1,4 +1,9 @@
 ---
 collections:
   - name: containers.podman
+  - name: hetzner.hcloud
   - name: kubernetes.core
+
+roles:
+  - name: githubixx.ansible_role_wireguard
+  - name: nginxinc.nginx

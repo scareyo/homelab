@@ -1,0 +1,14 @@
+---
+wireguard_address: 10.10.22.2/32
+wireguard_dns: 10.10.22.1
+wireguard_public_key: "{{ (lookup('file', '../secrets/credentials.yaml') | from_yaml).zeus.wg_public_key }}"
+wireguard_private_key: "{{ (lookup('file', '../secrets/credentials.yaml') | from_yaml).zeus.wg_private_key }}"
+
+wireguard_unmanaged_peers:
+  scarey.me:
+    public_key: "{{ (lookup('file', '../secrets/credentials.yaml') | from_yaml).stella.wg_public_key }}"
+    allowed_ips: "10.10.22.1/32, 10.10.22.2/32, 10.10.20.0/24"
+    endpoint: "{{ (lookup('file', '../secrets/credentials.yaml') | from_yaml).zeus.wg_endpoint }}"
+
+wireguard_postup:
+  - "sudo ip rule add sport 22 table main priority 123"
