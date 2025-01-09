@@ -19,6 +19,10 @@ init:
 play playbook:
   ansible-playbook -i ./ansible/inventory.yaml ./ansible/{{ playbook }}.yaml --ask-become-pass
 
+[working-directory: 'ansible']
+ansible-lint:
+  ansible-lint --exclude ./roles.galaxy
+
 destroy-all:
   podman system prune --all --volumes --force
 
