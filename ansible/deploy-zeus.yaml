@@ -25,9 +25,11 @@
           packages:
             - dnf-automatic
             - systemd-resolved
+            - haproxy
           runcmd:
             - [ systemctl, enable, --now, dnf-automatic.timer ]
             - [ systemctl, enable, --now, systemd-resolved.service ]
+            - [ systemctl, enable, --now, haproxy.service ]
         state: started
       register: zeus
 
@@ -42,7 +44,6 @@
   hosts: zeus
   become: true
   roles:
-    - role: nginxinc.nginx
     - role: githubixx.ansible_role_wireguard
   tasks:
     - name: Set DNS nameservers
@@ -51,32 +52,55 @@
         block: |
           nameserver {{ wireguard_dns }}
 
-    - name: Configure nginx
-      ansible.builtin.blockinfile:
-        path: /etc/nginx/conf.d/scarey.me.conf
-        create: true
+    - name: Configure haproxy
+      ansible.builtin.copy:
+        dest: /etc/haproxy/haproxy.cfg
         mode: "0644"
-        block: |
-          server {
-            listen 80;
-            server_name scarey.me;
-            location / {
-              proxy_pass http://10.10.20.51/;
-              proxy_set_header Host $host;
-              proxy_http_version 1.1;
-            }
-          }
-          server {
-            listen 80;
-            server_name *.scarey.me;
-            location / {
-              proxy_pass http://10.10.20.51/;
-              proxy_set_header Host $host;
-              proxy_http_version 1.1;
-            }
-          }
+        content: |
+          global
+            log         127.0.0.1 local2
 
-    - name: Reload nginx
+            chroot      /var/lib/haproxy
+            pidfile     /var/run/haproxy.pid
+            maxconn     4000
+            user        haproxy
+            group       haproxy
+            daemon
+
+            stats socket /var/lib/haproxy/stats
+
+            ssl-default-bind-ciphers PROFILE=SYSTEM
+            ssl-default-server-ciphers PROFILE=SYSTEM
+
+          defaults
+            mode                    tcp
+            log                     global
+            option                  httplog
+            option                  dontlognull
+            option http-server-close
+            option forwardfor       except 127.0.0.0/8
+            option                  redispatch
+            option                  tcplog
+            retries                 3
+            timeout http-request    10s
+            timeout queue           1m
+            timeout connect         10s
+            timeout client          1m
+            timeout server          1m
+            timeout http-keep-alive 10s
+            timeout check           10s
+            maxconn                 3000
+
+          frontend main
+            bind *:443
+            mode tcp
+            default_backend seraphim
+
+          backend seraphim
+            mode tcp
+            server seraphim 10.10.20.51:443
+
+    - name: Reload haproxy
       ansible.builtin.service:
-        name: nginx
+        name: haproxy
         state: reloaded
