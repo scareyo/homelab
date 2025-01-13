@@ -9,6 +9,8 @@
         server_type: cpx11
         image: alma-9
         location: ash
+        ssh_keys:
+          - scarey
         ipv4: zeus
         user_data: |
           #cloud-config
