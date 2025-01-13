@@ -7,8 +7,9 @@ wireguard_private_key: "{{ (lookup('file', '../secrets/credentials.yaml') | from
 wireguard_unmanaged_peers:
   scarey.me:
     public_key: "{{ (lookup('file', '../secrets/credentials.yaml') | from_yaml).stella.wg_public_key }}"
-    allowed_ips: "10.10.22.1/32, 10.10.22.2/32, 10.10.20.0/24"
+    allowed_ips: "10.10.22.1/32, 10.10.22.2/32, 10.10.21.12/32"
     endpoint: "{{ (lookup('file', '../secrets/credentials.yaml') | from_yaml).zeus.wg_endpoint }}"
 
 wireguard_postup:
   - "sudo ip rule add sport 22 table main priority 123"
+  - "sudo ip route add 10.10.21.12 via 10.10.22.1"

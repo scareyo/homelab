@@ -16,7 +16,7 @@ cilium:
   k8sClientRateLimit:
     qps: 10
     burst: 20
-  l2announcements:
+  bgpControlPlane:
     enabled: true
   gatewayAPI:
     enabled: true
