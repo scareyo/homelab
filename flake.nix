@@ -15,8 +15,10 @@
       perSystem = { lib, pkgs, system, ... }: {
         devShells.default = pkgs.mkShell {
           packages = with pkgs; [
+            dig
             dnsmasq
             git-crypt
+            traceroute
             
             # Ansible
             ansible
@@ -27,6 +29,7 @@
             argocd
             cilium-cli
             istioctl
+            k9s
             kubectl
             kubernetes-helm
             talosctl
@@ -34,7 +37,10 @@
             # Podman
             podman
             qemu
-            virtiofsd
+          
+            (if (system == "x86_64-linux") then 
+              virtiofsd 
+            else null)
 
             amtcli.packages.${system}.default
           ];

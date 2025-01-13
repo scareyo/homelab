@@ -100,7 +100,7 @@
 
           backend seraphim
             mode tcp
-            server seraphim 10.10.20.51:443
+            server seraphim 10.10.21.12:443
 
     - name: Reload haproxy
       ansible.builtin.service:
