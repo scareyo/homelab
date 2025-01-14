@@ -22,3 +22,8 @@ cilium:
     enabled: true
   externalIPs:
     enabled: true
+  hubble:
+    relay:
+      enabled: true
+    ui:
+      enabled: true
