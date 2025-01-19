@@ -50,7 +50,7 @@
         chart_version: 1.16.5
         chart_repo_url: "https://helm.cilium.io"
         release_namespace: kube-system
-        release_values: "{{ (lookup('file', '{{ inventory_dir }}/../apps/cilium/values.yaml') | from_yaml)['cilium'] }}"
+        release_values: "{{ (lookup('file', '{{ inventory_dir }}/../seraphim/system/cilium/values.yaml') | from_yaml)['cilium'] }}"
 
     - name: Wait for healthy cluster
       ansible.builtin.command: "talosctl --nodes {{ ansible_host }} --endpoints {{ ansible_host }} health"
@@ -64,11 +64,11 @@
         chart_repo_url: "https://argoproj.github.io/argo-helm"
         release_namespace: argocd
         create_namespace: true
-        release_values: "{{ (lookup('file', '{{ inventory_dir }}/../apps/argocd/values.yaml') | from_yaml)['argo-cd'] }}"
+        release_values: "{{ (lookup('file', '{{ inventory_dir }}/../seraphim/system/argocd/values.yaml') | from_yaml)['argo-cd'] }}"
 
     - name: Bootstrap Argo CD
       kubernetes.core.helm:
         name: argocd
-        chart_ref: "{{ inventory_dir }}/../apps/argocd"
+        chart_ref: "{{ inventory_dir }}/../seraphim/system/argocd"
         release_namespace: argocd
         dependency_update: true

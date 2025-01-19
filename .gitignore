@@ -3,6 +3,6 @@
 .kube
 .talos
 
-apps/**/charts/*
+seraphim/**/charts/*
 
 Session.vim
