@@ -1,0 +1,27 @@
+velero:
+  initContainers:
+    - name: velero-plugin-for-aws
+      image: velero/velero-plugin-for-aws:v1.10.0
+      imagePullPolicy: IfNotPresent
+      volumeMounts:
+        - mountPath: /target
+          name: plugins
+  configuration: 
+    defaultBackupStorageLocation: default
+    backupStorageLocation:
+      - provider: aws
+        bucket: me-scarey-seraphim
+        credential:
+          name: bsl-credentials
+          key: aws
+        config:
+          region: us-east-005
+          s3Url: "https://s3.us-east-005.backblazeb2.com"
+          checksumAlgorithm: ""
+    volumeSnapshotLocation:
+      - provider: aws
+        credential:
+          name: bsl-credentials
+          key: aws
+        config:
+          region: us-east-005

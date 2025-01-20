@@ -33,6 +33,7 @@
             kubectl
             kubernetes-helm
             talosctl
+            velero
 
             # Podman
             podman
