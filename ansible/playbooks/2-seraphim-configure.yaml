@@ -39,11 +39,9 @@
       register: cmd
       until: cmd.stdout != "" and (cmd.stdout | from_json).metadata.phase == "running"
 
-    # TODO: Remove... unless you wanna lose all your data
     - name: Wipe storage disk
       ansible.builtin.command: "talosctl --nodes {{ talos_host }} --endpoints {{ talos_host }} wipe disk nvme0n1"
       changed_when: false
-
 
 - name: Deploy initial services
   hosts: bootstrap

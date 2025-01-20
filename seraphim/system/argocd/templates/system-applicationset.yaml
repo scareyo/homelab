@@ -16,8 +16,6 @@ spec:
             exclude: true
           - path: seraphim/system/rook
             exclude: true
-          - path: seraphim/system/longhorn
-            exclude: true
   template:
     metadata:
       name: "{{`{{.path.basename}}`}}"
