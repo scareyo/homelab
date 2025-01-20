@@ -35,7 +35,7 @@
 - name: Generate Talos patch file
   ansible.builtin.template:
     src: talos.patch.j2
-    dest: "{{ pxe_http_path }}/{{ mac_address }}.patch"
+    dest: "{{ pxe_http_path }}/{{ amt_mac_address }}.patch"
     mode: "0644"
 
 - name: Patch Talos control plane config
@@ -43,8 +43,8 @@
     chdir: "{{ pxe_http_path }}"
     cmd: >
       talosctl machineconfig patch {{ pxe_http_path }}/controlplane.yaml
-        --patch @{{ pxe_http_path }}/{{ mac_address }}.patch
-        --output {{ pxe_http_path }}/config.{{ mac_address }}.yaml
+        --patch @{{ pxe_http_path }}/{{ amt_mac_address }}.patch
+        --output {{ pxe_http_path }}/config.{{ amt_mac_address }}.yaml
   changed_when: true
   when: pxe_config["talos"].config == "control"
 
@@ -53,8 +53,8 @@
     chdir: "{{ pxe_http_path }}"
     cmd: >
       talosctl machineconfig patch {{ pxe_http_path }}/worker.yaml
-        --patch @{{ pxe_http_path }}/{{ mac_address }}.patch
-        --output {{ pxe_http_path }}/config.{{ mac_address }}.yaml
+        --patch @{{ pxe_http_path }}/{{ amt_mac_address }}.patch
+        --output {{ pxe_http_path }}/config.{{ amt_mac_address }}.yaml
   changed_when: true
   when: pxe_config["talos"].config == "worker"
 

@@ -89,7 +89,7 @@
             --name {{ meshcentral_group }}
             --id {{ device_group_id }}
             --devicename {{ inventory_hostname }}
-            --hostname {{ ansible_host }}
+            --hostname {{ amt_host }}
             --user {{ meshcentral_amt_username }}
             --pass {{ meshcentral_amt_password }}
             --loginuser {{ meshcentral_username }}

@@ -5,17 +5,25 @@
 seraphim:
   hosts:
     s-snake:
-      ansible_host: 10.10.20.11
-      mac_address: "58:47:ca:78:ea:6d"
+      amt_host: 10.10.10.31
+      amt_mac_address: "58:47:ca:78:ea:6d"
+      talos_host: 10.10.20.11
+      talos_mac_address: "58:47:ca:78:ea:6a"
     s-hawk:
-      ansible_host: 10.10.20.12
-      mac_address: "58:47:ca:78:df:35"
+      amt_host: 10.10.10.32
+      amt_mac_address: "58:47:ca:78:df:35"
+      talos_host: 10.10.20.12
+      talos_mac_address: "58:47:ca:78:df:32"
     s-bear:
-      ansible_host: 10.10.20.13
-      mac_address: "58:47:ca:78:e3:ad"
+      amt_host: 10.10.10.33
+      amt_mac_address: "58:47:ca:78:e3:ad"
+      talos_host: 10.10.20.13
+      talos_mac_address: "58:47:ca:78:e3:aa"
     s-shark:
-      ansible_host: 10.10.20.14
-      mac_address: "58:47:ca:78:dc:b5"
+      amt_host: 10.10.10.34
+      amt_mac_address: "58:47:ca:78:dc:b5"
+      talos_host: 10.10.20.14
+      talos_mac_address: "58:47:ca:78:dc:b2"
 
 bootstrap:
   hosts:

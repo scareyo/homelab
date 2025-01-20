@@ -14,7 +14,7 @@
 
     - name: Download admin kubeconfig
       ansible.builtin.command: >
-        talosctl --nodes {{ ansible_host }} --endpoints {{ ansible_host }} kubeconfig {{ inventory_dir }}/../.kube/config --force
+        talosctl --nodes {{ talos_host }} --endpoints {{ talos_host }} kubeconfig {{ inventory_dir }}/../.kube/config --force
       changed_when: true
 
     - name: Change talosconfig permissions
@@ -32,9 +32,9 @@
   connection: local
   tasks:
     - name: Wait for running nodes
-      ansible.builtin.command: "talosctl --nodes {{ ansible_host }} --endpoints {{ ansible_host }} get nodestatus -o json"
+      ansible.builtin.command: "talosctl --nodes {{ talos_host }} --endpoints {{ talos_host }} get nodestatus -o json"
       changed_when: false
-      retries: 30
+      retries: 60
       delay: 5
       register: cmd
       until: cmd.stdout != "" and (cmd.stdout | from_json).metadata.phase == "running"
@@ -53,7 +53,7 @@
         release_values: "{{ (lookup('file', '{{ inventory_dir }}/../seraphim/system/cilium/values.yaml') | from_yaml)['cilium'] }}"
 
     - name: Wait for healthy cluster
-      ansible.builtin.command: "talosctl --nodes {{ ansible_host }} --endpoints {{ ansible_host }} health"
+      ansible.builtin.command: "talosctl --nodes {{ talos_host }} --endpoints {{ talos_host }} health"
       changed_when: false
 
     - name: Install Argo CD

@@ -7,7 +7,7 @@
 {% if ("harvester" == pxe_os) -%}
   {% set kernel_params = "ip=dhcp net.ifnames=1 rd.cos.disable rd.noverifyssl console=tty1 root=live:{{ rootfs }} harvester.install.automatic=true harvester.install.config_url={{ config }}" -%}
 {% elif ("talos" == pxe_os) -%}
-  {% set kernel_params = "talos.config=" + config + " talos.platform=metal talos.network.interface.ignore=enp88s0 talos.network.interface.ignore=enp3s0f0np0 talos.network.interface.ignore=enp3s0f1np1 slab_nomerge pti=on" -%}
+  {% set kernel_params = "talos.config=" + config + " talos.platform=metal talos.network.interface.ignore=enp88s0 talos.network.interface.ignore=enp89s0 talos.network.interface.ignore=enp3s0f1np1 slab_nomerge pti=on" -%}
 {% endif -%}
 
 #!ipxe
