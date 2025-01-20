@@ -1,7 +1,7 @@
 {
   description = "A scarey homelab";
 
-  inputs.nixpkgs.url = "github:nixos/nixpkgs/release-24.11";
+  inputs.nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
   inputs.flake-parts.url = "github:hercules-ci/flake-parts";
   inputs.amtcli.url = "github:scareyo/amtcli";
 
