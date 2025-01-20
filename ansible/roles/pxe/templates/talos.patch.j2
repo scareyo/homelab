@@ -1,8 +1,14 @@
 machine:
   install:
-    # siderolabs/i915
-    # siderolabs/mei
-    image: factory.talos.dev/installer/064d2c892ac9a3a7da7fa550dbdd1516908bd9dfe355ad345ff4e9d8f8b34930:v1.9.1
+    #
+    # customization:
+    #   systemExtensions:
+    #     officialExtensions:
+    #       - siderolabs/i915
+    #       - siderolabs/iscsi-tools
+    #       - siderolabs/mei
+    #
+    image:  factory.talos.dev/installer/e8ab92ccc0f20246eac114b64d5bd7fc38c64c3504cfb40daf9c42d15eb681c5:v1.9.2
     extraKernelArgs:
       - talos.platform=metal
   network:
@@ -19,6 +25,10 @@ machine:
             gateway: 10.10.20.1
       - interface: enp3s0f1np1
         ignore: true
+  disks:
+    - device: /dev/nvme0n1
+      partitions:
+        - mountpoint: /var/mnt/data
 cluster:
   allowSchedulingOnControlPlanes: true
   network:

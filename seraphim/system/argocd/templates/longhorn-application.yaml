@@ -2,17 +2,22 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: cilium
+  name: longhorn
 spec:
   project: system
   source:
     repoURL: "https://github.com/scareyo/homelab.git"
     targetRevision: develop
-    path: "seraphim/system/cilium"
+    path: "seraphim/system/longhorn"
   destination:
     server: "https://kubernetes.default.svc"
-    namespace: kube-system
+    namespace: longhorn-system
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
+    managedNamespaceMetadata:
+      labels:
+        pod-security.kubernetes.io/enforce: privileged
+    syncOptions:
+      - CreateNamespace=true
