@@ -1,15 +1,15 @@
 ---
-wireguard_address: 10.10.22.2/32
-wireguard_dns: 10.10.22.1
-wireguard_public_key: "{{ (lookup('file', '../secrets/credentials.yaml') | from_yaml).zeus.wg_public_key }}"
-wireguard_private_key: "{{ (lookup('file', '../secrets/credentials.yaml') | from_yaml).zeus.wg_private_key }}"
+secrets: "{{ lookup('infisical.vault.read_secrets', env_slug='prod', project_id='64853e11f7a9ba1c4ac21cfd', path='/') | items2dict }}"
+wireguard_address: 10.10.100.2/32
+wireguard_dns: 10.10.100.1
+wireguard_public_key: "{{ secrets.ZEUS_WG_CLIENT_PUBLIC_KEY }}"
+wireguard_private_key: "{{ secrets.ZEUS_WG_CLIENT_PRIVATE_KEY }}"
 
 wireguard_unmanaged_peers:
   scarey.me:
-    public_key: "{{ (lookup('file', '../secrets/credentials.yaml') | from_yaml).stella.wg_public_key }}"
-    allowed_ips: "10.10.22.1/32, 10.10.22.2/32, 10.10.21.12/32"
-    endpoint: "{{ (lookup('file', '../secrets/credentials.yaml') | from_yaml).zeus.wg_endpoint }}"
+    public_key: "{{ secrets.ZEUS_WG_SERVER_PUBLIC_KEY }}"
+    allowed_ips: "10.10.100.1/32, 10.10.100.2/32, 10.10.21.12/32"
+    endpoint: "{{ secrets.ZEUS_WG_ENDPOINT }}"
 
 wireguard_postup:
-  - "sudo ip rule add sport 22 table main priority 123"
-  - "sudo ip route add 10.10.21.12 via 10.10.22.1"
+  - "sudo ip route replace 10.10.21.12 via 10.10.100.1"

@@ -2,12 +2,12 @@
   hosts: seraphim
   connection: local
   vars:
-    secrets: "{{ lookup('file','../secrets/credentials.yaml') | from_yaml }}"
+    secrets: "{{ lookup('infisical.vault.read_secrets', env_slug='prod', project_id='64853e11f7a9ba1c4ac21cfd', path='/') | items2dict }}"
   roles:
     - role: meshcentral
       vars:
-        meshcentral_amt_username: "{{ secrets.amt.username }}"
-        meshcentral_amt_password: "{{ secrets.amt.password }}"
-        meshcentral_username: "{{ secrets.meshcentral.username }}"
-        meshcentral_password: "{{ secrets.meshcentral.password }}"
+        meshcentral_amt_username: "{{ secrets.AMT_USERNAME }}"
+        meshcentral_amt_password: "{{ secrets.AMT_PASSWORD }}"
+        meshcentral_username: "{{ secrets.MESHCENTRAL_USERNAME }}"
+        meshcentral_password: "{{ secrets.MESHCENTRAL_PASSWORD }}"
         meshcentral_group: "Seraphim"

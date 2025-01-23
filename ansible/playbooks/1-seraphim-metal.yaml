@@ -3,22 +3,13 @@
   hosts: seraphim
   connection: local
   vars:
-    secrets: "{{ lookup('file','../../secrets/credentials.yaml') | from_yaml }}"
+    secrets: "{{ lookup('infisical.vault.read_secrets', env_slug='prod', project_id='64853e11f7a9ba1c4ac21cfd', path='/') | items2dict }}"
   roles:
     - role: pxe
       vars:
         pxe_os: "talos"
-        pxe_subnet: "10.10.10.0/24"
+        pxe_subnet: "10.10.22.0/24"
         pxe_config:
-          harvester:
-            version: "v1.4.0"
-            mode: "{{ harvester_mode }}"
-            token: "{{ secrets.harvester.token }}"
-            ssh_authorized_key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIChdQW4k6/5G12/6y68bH0QBeuvL9tb2uVAi/ILzfxCH"
-            vip: "10.10.20.20"
-            vip_mac: "0a:00:10:10:20:20"
-            osdisk: "{{ osdisk }}"
-            datadisk: "{{ datadisk }}"
           talos:
             config: "{{ talos_config }}"
             cluster_name: "seraphim"
@@ -27,14 +18,14 @@
             secrets: "{{ playbook_dir }}/../../secrets/talos.yaml"
   tasks:
     - name: Set hosts to boot from PXE
-      ansible.builtin.command: "amtcli boot pxe {{ amt_host }} --username {{ secrets.amt.username }} --password {{ secrets.amt.password }}"
+      ansible.builtin.command: "amtcli boot pxe {{ amt_host }} --username {{ secrets.AMT_USERNAME }} --password {{ secrets.AMT_PASSWORD }}"
       changed_when: true
       register: cmd
       retries: 5
       until: cmd.rc == 0
 
     - name: Start hosts
-      ansible.builtin.command: "amtcli on {{ amt_host }} --username {{ secrets.amt.username }} --password {{ secrets.amt.password }}"
+      ansible.builtin.command: "amtcli on {{ amt_host }} --username {{ secrets.AMT_USERNAME }} --password {{ secrets.AMT_PASSWORD }}"
       changed_when: true
       register: cmd
       until: cmd.rc == 0
@@ -48,3 +39,19 @@
       retries: 30
       delay: 10
       changed_when: true
+
+- name: Wait for running nodes
+  hosts: seraphim
+  connection: local
+  tasks:
+    - name: Wait for running nodes
+      ansible.builtin.command: "talosctl --nodes {{ talos_host }} --endpoints {{ talos_host }} get nodestatus -o json"
+      changed_when: false
+      retries: 60
+      delay: 5
+      register: cmd
+      until: cmd.stdout != "" and (cmd.stdout | from_json).metadata.phase == "running"
+
+    - name: Wipe storage disk
+      ansible.builtin.command: "talosctl --nodes {{ talos_host }} --endpoints {{ talos_host }} wipe disk nvme0n1"
+      changed_when: false

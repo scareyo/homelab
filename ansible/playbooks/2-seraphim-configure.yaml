@@ -27,25 +27,11 @@
         path: "{{ inventory_dir }}/../.kube/config"
         mode: '0600'
 
-- name: Wait for running nodes
-  hosts: seraphim
-  connection: local
-  tasks:
-    - name: Wait for running nodes
-      ansible.builtin.command: "talosctl --nodes {{ talos_host }} --endpoints {{ talos_host }} get nodestatus -o json"
-      changed_when: false
-      retries: 60
-      delay: 5
-      register: cmd
-      until: cmd.stdout != "" and (cmd.stdout | from_json).metadata.phase == "running"
-
-    - name: Wipe storage disk
-      ansible.builtin.command: "talosctl --nodes {{ talos_host }} --endpoints {{ talos_host }} wipe disk nvme0n1"
-      changed_when: false
-
 - name: Deploy initial services
   hosts: bootstrap
   connection: local
+  vars:
+    secrets: "{{ lookup('infisical.vault.read_secrets', env_slug='prod', project_id='64853e11f7a9ba1c4ac21cfd', path='/') | items2dict }}"
   tasks:
     - name: Install Cilium
       kubernetes.core.helm:
@@ -76,3 +62,16 @@
         chart_ref: "{{ inventory_dir }}/../seraphim/system/argocd"
         release_namespace: argocd
         dependency_update: true
+
+    - name: Create Infisical secret
+      kubernetes.core.k8s:
+        state: present
+        api_version: v1
+        kind: Secret
+        namespace: external-secrets
+        name: infisical-credentials
+        definition:
+          type: Opaque
+          stringData:
+            clientId: "{{ secrets.INFISICAL_CLIENT_ID }}"
+            clientSecret: "{{ secrets.INFISICAL_CLIENT_SECRET }}"

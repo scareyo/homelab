@@ -12,8 +12,8 @@ velero:
       - provider: aws
         bucket: me-scarey-seraphim
         credential:
-          name: bsl-credentials
-          key: aws
+          name: backblaze-access-key
+          key: key
         config:
           region: us-east-005
           s3Url: "https://s3.us-east-005.backblazeb2.com"
@@ -21,7 +21,7 @@ velero:
     volumeSnapshotLocation:
       - provider: aws
         credential:
-          name: bsl-credentials
-          key: aws
+          name: backblaze-access-key
+          key: key
         config:
           region: us-east-005

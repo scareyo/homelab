@@ -2,6 +2,7 @@
 collections:
   - name: containers.podman
   - name: hetzner.hcloud
+  - name: infisical.vault
   - name: kubernetes.core
 
 roles:

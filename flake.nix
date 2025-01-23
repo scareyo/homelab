@@ -18,12 +18,15 @@
             dig
             dnsmasq
             git-crypt
-            traceroute
             
             # Ansible
             ansible
             ansible-lint
             python312Packages.kubernetes
+            
+            (callPackage ./nix/infisical-python {
+              buildPythonPackage = python312Packages.buildPythonPackage;
+            })
 
             # Kubernetes
             argocd
@@ -40,7 +43,10 @@
             qemu
           
             (if (system == "x86_64-linux") then 
-              virtiofsd 
+              [
+                traceroute
+                virtiofsd
+              ]
             else null)
 
             amtcli.packages.${system}.default

@@ -11,20 +11,11 @@ machine:
     image: factory.talos.dev/installer/039535a70c3bd1667c355eca78571267704e55c8a24785033d183b8f26e39d82:v1.9.2
     extraKernelArgs:
       - talos.platform=metal
+      - talos.network.interface.ignore=enp88s0
+      - talos.network.interface.ignore=enp89s0
+      - talos.network.interface.ignore=enp3s0f1np1
   network:
     hostname: {{ inventory_hostname }}
-    interfaces:
-      - interface: enp88s0
-        ignore: true
-      - interface: enp89s0
-        ignore: true
-      - interface: enp3s0f0np0
-        dhcp: true
-        routes:
-          - network: 0.0.0.0/0
-            gateway: 10.10.20.1
-      - interface: enp3s0f1np1
-        ignore: true
 cluster:
   allowSchedulingOnControlPlanes: true
   network:
