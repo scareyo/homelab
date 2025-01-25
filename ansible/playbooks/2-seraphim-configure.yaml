@@ -46,6 +46,12 @@
       ansible.builtin.command: "talosctl --nodes {{ talos_host }} --endpoints {{ talos_host }} health"
       changed_when: false
 
+    - name: Check if a namespace exists in Kubernetes
+      kubernetes.core.k8s_info:
+        kind: Namespace
+        name: argocd
+      register: argocd_namespace
+
     - name: Install Argo CD
       kubernetes.core.helm:
         name: argocd
@@ -55,6 +61,7 @@
         release_namespace: argocd
         create_namespace: true
         release_values: "{{ (lookup('file', '{{ inventory_dir }}/../seraphim/system/argocd/values.yaml') | from_yaml)['argo-cd'] }}"
+      when: (argocd_namespace | length) == 0
 
     - name: Bootstrap Argo CD
       kubernetes.core.helm:
@@ -62,6 +69,13 @@
         chart_ref: "{{ inventory_dir }}/../seraphim/system/argocd"
         release_namespace: argocd
         dependency_update: true
+
+    - name: Create external-secrets namespace
+      kubernetes.core.k8s:
+        name: external-secrets
+        api_version: v1
+        kind: Namespace
+        state: present
 
     - name: Create Infisical secret
       kubernetes.core.k8s:
