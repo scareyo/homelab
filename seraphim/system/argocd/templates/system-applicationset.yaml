@@ -16,6 +16,8 @@ spec:
             exclude: true
           - path: seraphim/system/rook
             exclude: true
+          - path: seraphim/system/cnpg
+            exclude: true
   template:
     metadata:
       name: "{{`{{.path.basename}}`}}"
