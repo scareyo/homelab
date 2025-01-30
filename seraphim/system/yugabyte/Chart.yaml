@@ -1,9 +1,0 @@
-apiVersion: v2
-name: yugabyte
-type: application
-version: 0.1.0
-appVersion: 0.1.0
-dependencies:
-  - name: yugabyte
-    version: 2.25.0
-    repository: "https://charts.yugabyte.com"
