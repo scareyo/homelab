@@ -1,5 +1,16 @@
 ---
 argo-cd:
   configs:
+    cm:
+      url: "https://argocd.apps.int.scarey.me"
+      oidc.config: |
+        name: Keycloak
+        issuer: https://sso.scarey.me/realms/internal
+        clientID: argocd
+        clientSecret: $oidc.keycloak.clientSecret
+        requestedScopes: ["openid", "profile", "email", "groups"]
+    rbac:
+      policy.csv: |
+        g, admin, role:admin
     params:
       server.insecure: true
