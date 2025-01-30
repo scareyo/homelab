@@ -61,7 +61,17 @@
         release_namespace: argocd
         create_namespace: true
         release_values: "{{ (lookup('file', '{{ inventory_dir }}/../seraphim/system/argocd/values.yaml') | from_yaml)['argo-cd'] }}"
-      when: (argocd_namespace | length) == 0
+      when: (argocd_namespace.resources | length) == 0
+
+    - name: Install External Secrets
+      kubernetes.core.helm:
+        name: external-secrets
+        chart_ref: external-secrets
+        chart_version: 0.13.0
+        chart_repo_url: "https://charts.external-secrets.io"
+        release_namespace: external-secrets
+        create_namespace: true
+      when: (argocd_namespace.resources | length) == 0
 
     - name: Bootstrap Argo CD
       kubernetes.core.helm:
