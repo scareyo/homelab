@@ -8,6 +8,7 @@ velero:
           name: plugins
   configuration: 
     defaultBackupStorageLocation: default
+    backupSyncPeriod: 1h
     backupStorageLocation:
       - provider: aws
         bucket: me-scarey-seraphim
