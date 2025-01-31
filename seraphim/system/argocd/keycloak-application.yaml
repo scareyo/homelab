@@ -2,20 +2,20 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: cnpg
+  name: keycloak
+  namespace: argocd
 spec:
   project: system
-  source:
-    repoURL: "https://github.com/scareyo/homelab.git"
-    targetRevision: develop
-    path: "seraphim/system/cnpg"
+  sources:
+    - repoURL: "https://github.com/scareyo/homelab.git"
+      targetRevision: develop
+      path: "seraphim/system/keycloak"
   destination:
     server: "https://kubernetes.default.svc"
-    namespace: cnpg-system
+    namespace: keycloak
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
-      - ServerSideApply=true

@@ -2,18 +2,19 @@
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
-  name: ceph
+  name: argocd
+  namespace: argocd
 spec:
   parentRefs:
     - name: internal
       namespace: gateway
   hostnames:
-    - "ceph.apps.int.scarey.me"
+    - "argocd.apps.int.scarey.me"
   rules:
     - matches:
         - path:
             type: PathPrefix
             value: /
       backendRefs:
-        - name: rook-ceph-mgr-dashboard
-          port: 7000
+        - name: argocd-server
+          port: 80
