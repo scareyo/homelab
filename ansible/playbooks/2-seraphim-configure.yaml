@@ -40,17 +40,11 @@
         chart_version: 1.16.5
         chart_repo_url: "https://helm.cilium.io"
         release_namespace: kube-system
-        release_values: "{{ (lookup('file', '{{ inventory_dir }}/../seraphim/system/cilium/values.yaml') | from_yaml)['cilium'] }}"
+        release_values: "{{ (lookup('file', '{{ inventory_dir }}/../seraphim/system/cilium/values.yaml') | from_yaml) }}"
 
     - name: Wait for healthy cluster
       ansible.builtin.command: "talosctl --nodes {{ talos_host }} --endpoints {{ talos_host }} health"
       changed_when: false
-
-    - name: Check if a namespace exists in Kubernetes
-      kubernetes.core.k8s_info:
-        kind: Namespace
-        name: argocd
-      register: argocd_namespace
 
     - name: Install Argo CD
       kubernetes.core.helm:
@@ -60,25 +54,17 @@
         chart_repo_url: "https://argoproj.github.io/argo-helm"
         release_namespace: argocd
         create_namespace: true
-        release_values: "{{ (lookup('file', '{{ inventory_dir }}/../seraphim/system/argocd/values.yaml') | from_yaml)['argo-cd'] }}"
-      when: (argocd_namespace.resources | length) == 0
+        release_values: "{{ (lookup('file', '{{ inventory_dir }}/../seraphim/system/argocd/values.yaml') | from_yaml) }}"
 
-    - name: Install External Secrets
-      kubernetes.core.helm:
-        name: external-secrets
-        chart_ref: external-secrets
-        chart_version: 0.13.0
-        chart_repo_url: "https://charts.external-secrets.io"
-        release_namespace: external-secrets
-        create_namespace: true
-      when: (argocd_namespace.resources | length) == 0
+    - name: Apply Argo CD system application project
+      kubernetes.core.k8s:
+        state: present
+        definition: "{{ (lookup('file', '{{ inventory_dir }}/../seraphim/system/argocd/system-appproject.yaml') | from_yaml) }}"
 
     - name: Bootstrap Argo CD
-      kubernetes.core.helm:
-        name: argocd
-        chart_ref: "{{ inventory_dir }}/../seraphim/system/argocd"
-        release_namespace: argocd
-        dependency_update: true
+      kubernetes.core.k8s:
+        state: present
+        definition: "{{ (lookup('file', '{{ inventory_dir }}/../seraphim/system/argocd/argocd-application.yaml') | from_yaml) }}"
 
     - name: Create external-secrets namespace
       kubernetes.core.k8s:

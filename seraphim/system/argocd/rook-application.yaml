@@ -1,0 +1,34 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: rook
+  namespace: argocd
+spec:
+  project: system
+  sources:
+    - chart: rook-ceph
+      repoURL: "https://charts.rook.io/release"
+      targetRevision: 1.16.1
+    - chart: rook-ceph-cluster
+      repoURL: "https://charts.rook.io/release"
+      targetRevision: 1.16.1
+      helm:
+        valueFiles:
+          - $repo/seraphim/system/rook/values.yaml
+    - repoURL: "https://github.com/scareyo/homelab.git"
+      targetRevision: develop
+      path: "seraphim/system/rook"
+      ref: repo
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: rook-ceph
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    managedNamespaceMetadata:
+      labels:
+        pod-security.kubernetes.io/enforce: privileged
+    syncOptions:
+      - CreateNamespace=true
