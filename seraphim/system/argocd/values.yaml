@@ -4,12 +4,12 @@ configs:
     url: "https://argocd.apps.int.scarey.me"
     oidc.config: |
       name: Keycloak
-      issuer: https://sso.scarey.me/realms/internal
+      issuer: https://sso.scarey.me/realms/external
       clientID: argocd
       clientSecret: $oidc.keycloak.clientSecret
       requestedScopes: ["openid", "profile", "email", "groups"]
   rbac:
     policy.csv: |
-      g, admin, role:admin
+      g, argocd_admin, role:admin
   params:
     server.insecure: true

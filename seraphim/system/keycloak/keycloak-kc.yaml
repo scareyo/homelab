@@ -17,8 +17,8 @@ spec:
   http:
     httpEnabled: true
   hostname:
-    hostname: "https://sso.scarey.me"
-    admin: "https://sso.apps.int.scarey.me"
+    hostname: "https://sso.apps.int.scarey.me"
+    strict: true
   ingress:
     enabled: false
   bootstrapAdmin:

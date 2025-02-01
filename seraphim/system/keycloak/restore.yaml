@@ -1,0 +1,14 @@
+---
+apiVersion: velero.io/v1
+kind: Restore
+metadata:
+  name: restore-keycloak
+  namespace: velero
+  annotations:
+    #argocd.argoproj.io/hook-delete-policy: HookSucceeded
+    argocd.argoproj.io/sync-wave: "-1"
+spec:
+  backupName: keycloak
+  restorePVs: true
+  includedResources:
+    - pvc

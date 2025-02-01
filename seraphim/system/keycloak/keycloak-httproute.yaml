@@ -13,7 +13,7 @@ spec:
     - matches:
         - path:
             type: PathPrefix
-            value: /realms
+            value: /realms/external
         - path:
             type: PathPrefix
             value: /resources
