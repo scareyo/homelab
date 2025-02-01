@@ -17,6 +17,8 @@ spec:
       targetRevision: develop
       path: "seraphim/system/argocd"
       ref: repo
+      directory:
+        recurse: true
   destination:
     server: "https://kubernetes.default.svc"
     namespace: argocd

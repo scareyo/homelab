@@ -64,7 +64,7 @@
     - name: Bootstrap Argo CD
       kubernetes.core.k8s:
         state: present
-        definition: "{{ (lookup('file', '{{ inventory_dir }}/../seraphim/system/argocd/argocd-application.yaml') | from_yaml) }}"
+        definition: "{{ (lookup('file', '{{ inventory_dir }}/../seraphim/system/argocd/applications/argocd.yaml') | from_yaml) }}"
 
     - name: Create external-secrets namespace
       kubernetes.core.k8s:
