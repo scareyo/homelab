@@ -8,17 +8,17 @@ spec:
   project: system
   sources:
     - chart: cilium
-      repoURL: "https://helm.cilium.io"
+      repoURL: https://helm.cilium.io
       targetRevision: 1.16.5
       helm:
         valueFiles:
           - $repo/seraphim/system/cilium/values.yaml
-    - repoURL: "https://github.com/scareyo/homelab.git"
+    - repoURL: https://github.com/scareyo/homelab.git
       targetRevision: develop
-      path: "seraphim/system/cilium"
+      path: seraphim/system/cilium
       ref: repo
   destination:
-    server: "https://kubernetes.default.svc"
+    server: https://kubernetes.default.svc
     namespace: kube-system
   syncPolicy:
     automated:

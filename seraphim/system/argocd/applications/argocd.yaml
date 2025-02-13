@@ -8,19 +8,19 @@ spec:
   project: system
   sources:
     - chart: argo-cd
-      repoURL: "https://argoproj.github.io/argo-helm"
+      repoURL: https://argoproj.github.io/argo-helm
       targetRevision: 7.7.13
       helm:
         valueFiles:
           - $repo/seraphim/system/argocd/values.yaml
-    - repoURL: "https://github.com/scareyo/homelab.git"
+    - repoURL: https://github.com/scareyo/homelab.git
       targetRevision: develop
-      path: "seraphim/system/argocd"
+      path: seraphim/system/argocd
       ref: repo
       directory:
         recurse: true
   destination:
-    server: "https://kubernetes.default.svc"
+    server: https://kubernetes.default.svc
     namespace: argocd
   syncPolicy:
     automated:

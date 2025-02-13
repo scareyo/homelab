@@ -8,17 +8,17 @@ spec:
   project: system
   sources:
     - chart: velero
-      repoURL: "https://vmware-tanzu.github.io/helm-charts"
+      repoURL: https://vmware-tanzu.github.io/helm-charts
       targetRevision: 8.3.0
       helm:
         valueFiles:
           - $repo/seraphim/system/velero/values.yaml
-    - repoURL: "https://github.com/scareyo/homelab.git"
+    - repoURL: https://github.com/scareyo/homelab.git
       targetRevision: develop
-      path: "seraphim/system/velero"
+      path: seraphim/system/velero
       ref: repo
   destination:
-    server: "https://kubernetes.default.svc"
+    server: https://kubernetes.default.svc
     namespace: velero
   syncPolicy:
     automated:

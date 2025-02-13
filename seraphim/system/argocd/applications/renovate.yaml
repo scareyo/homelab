@@ -2,20 +2,17 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: external-secrets
+  name: renovate
   namespace: argocd
 spec:
   project: system
   sources:
-    - chart: external-secrets
-      repoURL: https://charts.external-secrets.io
-      targetRevision: 0.13.0
     - repoURL: https://github.com/scareyo/homelab.git
       targetRevision: develop
-      path: seraphim/system/external-secrets
+      path: seraphim/system/renovate
   destination:
     server: https://kubernetes.default.svc
-    namespace: external-secrets
+    namespace: renovate
   syncPolicy:
     automated:
       prune: true

@@ -8,17 +8,17 @@ spec:
   project: system
   sources:
     - chart: cert-manager
-      repoURL: "https://charts.jetstack.io"
+      repoURL: https://charts.jetstack.io
       targetRevision: 1.16.2
       helm:
         valueFiles:
           - $repo/seraphim/system/cert-manager/values.yaml
-    - repoURL: "https://github.com/scareyo/homelab.git"
+    - repoURL: https://github.com/scareyo/homelab.git
       targetRevision: develop
-      path: "seraphim/system/cert-manager"
+      path: seraphim/system/cert-manager
       ref: repo
   destination:
-    server: "https://kubernetes.default.svc"
+    server: https://kubernetes.default.svc
     namespace: cert-manager
   syncPolicy:
     automated:

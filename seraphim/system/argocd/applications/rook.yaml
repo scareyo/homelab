@@ -8,20 +8,20 @@ spec:
   project: system
   sources:
     - chart: rook-ceph
-      repoURL: "https://charts.rook.io/release"
+      repoURL: https://charts.rook.io/release
       targetRevision: 1.16.1
     - chart: rook-ceph-cluster
-      repoURL: "https://charts.rook.io/release"
+      repoURL: https://charts.rook.io/release
       targetRevision: 1.16.1
       helm:
         valueFiles:
           - $repo/seraphim/system/rook/values.yaml
-    - repoURL: "https://github.com/scareyo/homelab.git"
+    - repoURL: https://github.com/scareyo/homelab.git
       targetRevision: develop
-      path: "seraphim/system/rook"
+      path: seraphim/system/rook
       ref: repo
   destination:
-    server: "https://kubernetes.default.svc"
+    server: https://kubernetes.default.svc
     namespace: rook-ceph
   syncPolicy:
     automated:

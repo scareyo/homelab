@@ -7,11 +7,11 @@ metadata:
 spec:
   project: system
   sources:
-    - repoURL: "https://github.com/scareyo/homelab.git"
+    - repoURL: https://github.com/scareyo/homelab.git
       targetRevision: develop
-      path: "seraphim/system/gateway"
+      path: seraphim/system/gateway
   destination:
-    server: "https://kubernetes.default.svc"
+    server: https://kubernetes.default.svc
     namespace: gateway
   syncPolicy:
     automated:
