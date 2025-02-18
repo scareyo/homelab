@@ -8,7 +8,7 @@ spec:
   project: system
   sources:
     - repoURL: https://github.com/scareyo/homelab.git
-      targetRevision: develop
+      targetRevision: main
       path: seraphim/system/keycloak
   destination:
     server: https://kubernetes.default.svc

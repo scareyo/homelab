@@ -14,7 +14,7 @@ spec:
         valueFiles:
           - $repo/seraphim/system/cert-manager/values.yaml
     - repoURL: https://github.com/scareyo/homelab.git
-      targetRevision: develop
+      targetRevision: main
       path: seraphim/system/cert-manager
       ref: repo
   destination:

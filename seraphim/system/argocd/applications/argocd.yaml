@@ -14,7 +14,7 @@ spec:
         valueFiles:
           - $repo/seraphim/system/argocd/values.yaml
     - repoURL: https://github.com/scareyo/homelab.git
-      targetRevision: develop
+      targetRevision: main
       path: seraphim/system/argocd
       ref: repo
       directory:

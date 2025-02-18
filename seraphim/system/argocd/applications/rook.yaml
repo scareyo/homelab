@@ -17,7 +17,7 @@ spec:
         valueFiles:
           - $repo/seraphim/system/rook/values.yaml
     - repoURL: https://github.com/scareyo/homelab.git
-      targetRevision: develop
+      targetRevision: main
       path: seraphim/system/rook
       ref: repo
   destination:

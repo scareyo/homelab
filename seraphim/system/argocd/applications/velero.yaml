@@ -14,7 +14,7 @@ spec:
         valueFiles:
           - $repo/seraphim/system/velero/values.yaml
     - repoURL: https://github.com/scareyo/homelab.git
-      targetRevision: develop
+      targetRevision: main
       path: seraphim/system/velero
       ref: repo
   destination:
