@@ -1,5 +1,14 @@
 {
-  "argocd": {
-    "fileMatch": ["seraphim/system/argocd/applications/.+\\.yaml$"]
-  }
+  "customManagers": [
+    {
+      "customType": "jsonata",
+      "fileFormat": "yaml",
+      "fileMatch": [
+        "app.yaml"
+      ],
+      "matchStrings": [
+        "sources.{'depName': chart, 'registryUrl': repoURL, 'currentValue': targetRevision, 'datasource': 'helm'}"
+      ]
+    }
+  ]
 }

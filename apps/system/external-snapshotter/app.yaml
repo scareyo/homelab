@@ -1,0 +1,13 @@
+---
+name: external-snapshotter
+namespace: kube-system
+sources:
+  - repoURL: https://github.com/kubernetes-csi/external-snapshotter.git
+    path: client/config/crd
+    targetRevision: release-8.2
+  - repoURL: https://github.com/kubernetes-csi/external-snapshotter.git
+    path: deploy/kubernetes/snapshot-controller
+    targetRevision: release-8.2
+  - repoURL: https://github.com/kubernetes-csi/external-snapshotter.git
+    path: deploy/kubernetes/csi-snapshotter
+    targetRevision: release-8.2

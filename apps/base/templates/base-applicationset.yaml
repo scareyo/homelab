@@ -1,0 +1,51 @@
+{{- range $index, $set := .Values.sets }}
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: {{ $set.name }}
+  namespace: argocd
+spec:
+  goTemplate: true
+  generators:
+    - git:
+        repoURL: https://github.com/scareyo/homelab
+        revision: main
+        files:
+          - path: apps/{{ $set.name }}/**/app.yaml
+  template:
+    metadata:
+      name: '{{`{{ .name }}`}}'
+    spec:
+      project: "{{ $set.name }}"
+      destination:
+        name: in-cluster
+        namespace: '{{`{{ .namespace }}`}}'
+  templatePatch: |
+    spec:
+      sources:
+    {{`{{- range $source := .sources }}`}}
+        - chart: '{{`{{ $source.chart }}`}}'
+          repoURL: '{{`{{ $source.repoURL }}`}}'
+          targetRevision: '{{`{{ $source.targetRevision }}`}}'
+          helm:
+            valueFiles:
+              - $repo/apps/{{ $set.name }}/{{`{{ $.name }}`}}/values.yaml
+            ignoreMissingValueFiles: true
+    {{`{{- end }}`}}
+        - repoURL: https://github.com/scareyo/homelab.git
+          targetRevision: main
+          path: apps/{{ $set.name }}/{{`{{ .name }}`}}
+          ref: repo
+      syncPolicy:
+        syncOptions:
+          - CreateNamespace=true
+    {{`{{- range $syncOption := .syncOptions }}`}}
+          - '{{`{{ $syncOption }}`}}'    
+    {{`{{- end }}`}}
+        managedNamespaceMetadata:
+          labels:
+    {{`{{- if .enforce }}`}}
+            pod-security.kubernetes.io/enforce: '{{`{{ .enforce }}`}}'
+    {{`{{- end }}`}}
+{{- end }}

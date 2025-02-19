@@ -1,0 +1,11 @@
+---
+name: rook
+namespace: rook-ceph
+enforce: privileged
+sources:
+  - chart: rook-ceph
+    repoURL: https://charts.rook.io/release
+    targetRevision: v1.16.3
+  - chart: rook-ceph-cluster
+    repoURL: https://charts.rook.io/release
+    targetRevision: v1.16.3
