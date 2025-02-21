@@ -10,5 +10,6 @@
         "sources.{'depName': chart, 'registryUrl': repoURL, 'currentValue': targetRevision, 'datasource': 'helm'}"
       ]
     }
-  ]
+  ],
+  "prHourlyLimit": 16
 }
