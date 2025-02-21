@@ -1,0 +1,7 @@
+---
+name: valkey
+namespace: valkey
+sources:
+  - chart: valkey-cluster
+    repoURL: registry-1.docker.io/bitnamicharts
+    targetRevision: 2.1.2
