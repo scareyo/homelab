@@ -7,7 +7,7 @@
         "app.yaml"
       ],
       "matchStrings": [
-        "sources.{'depName': chart, 'registryUrl': repoURL, 'currentValue': targetRevision, 'datasource': 'helm'}"
+        "sources.{'depName': $contains(repoURL, 'https://') ? chart : repoURL & '/' & chart, 'registryUrl': repoURL, 'currentValue': targetRevision, 'datasource': $contains(repoURL, 'https://') ? 'helm' : 'docker'}"
       ]
     }
   ],
