@@ -1,5 +1,4 @@
 ---
 osdisk: "/dev/disk/by-path/pci-0000:02:00.0-nvme-1"
 datadisk: "/dev/disk/by-path/pci-0000:01:00.0-nvme-1"
-harvester_mode: "join"
 talos_config: "control"
