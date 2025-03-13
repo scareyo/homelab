@@ -1,3 +1,4 @@
 ---
 sets:
+  - name: platform
   - name: system
