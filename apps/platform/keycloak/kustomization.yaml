@@ -6,6 +6,7 @@ resources:
   - "https://raw.githubusercontent.com/keycloak/keycloak-k8s-resources/26.1.0/kubernetes/keycloakrealmimports.k8s.keycloak.org-v1.yml"
   - "https://raw.githubusercontent.com/keycloak/keycloak-k8s-resources/26.1.0/kubernetes/kubernetes.yml"
   - restore.yaml
+  - backup.yaml
   - postgres-cluster.yaml
   - keycloak-database.yaml
   - keycloak-kc.yaml

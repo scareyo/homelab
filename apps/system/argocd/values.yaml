@@ -8,6 +8,13 @@ configs:
       clientID: argocd
       clientSecret: $oidc.keycloak.clientSecret
       requestedScopes: ["openid", "profile", "email", "groups"]
+    resource.exclusions: |
+      - apiGroups:
+        - "velero.io"
+        kinds:
+        - Backup
+        clusters:
+        - "*"
   rbac:
     policy.csv: |
       g, argocd_admin, role:admin

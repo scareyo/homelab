@@ -9,6 +9,6 @@ metadata:
     argocd.argoproj.io/hook-delete-policy: HookSucceeded
     argocd.argoproj.io/sync-wave: "-1"
 spec:
-  backupName: gateway
+  scheduleName: gateway
   includedResources:
     - secrets

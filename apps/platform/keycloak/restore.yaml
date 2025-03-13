@@ -8,7 +8,7 @@ metadata:
     #argocd.argoproj.io/hook-delete-policy: HookSucceeded
     argocd.argoproj.io/sync-wave: "-1"
 spec:
-  backupName: keycloak
+  scheduleName: keycloak
   restorePVs: true
   includedResources:
     - pvc
