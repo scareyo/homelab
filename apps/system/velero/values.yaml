@@ -26,4 +26,5 @@ configuration:
         key: key
       config:
         region: us-east-005
+  restoreOnlyMode: true
 deployNodeAgent: true
