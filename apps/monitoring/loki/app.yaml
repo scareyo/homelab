@@ -1,0 +1,7 @@
+---
+name: loki
+namespace: monitoring
+sources:
+  - chart: loki
+    repoURL: https://grafana.github.io/helm-charts
+    targetRevision: 6.28.0

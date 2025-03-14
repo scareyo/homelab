@@ -1,4 +1,5 @@
 ---
 sets:
+  - name: monitoring
   - name: platform
   - name: system
