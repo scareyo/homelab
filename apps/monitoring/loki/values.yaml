@@ -30,7 +30,3 @@
 
   minio:
     enabled: true
-
-  gateway:
-    service:
-      type: ClusterIP

@@ -1,2 +1,5 @@
+server:
+  extraArgs:
+    web.enable-remote-write-receiver:
 prometheus-node-exporter:
   enabled: false

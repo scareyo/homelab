@@ -20,3 +20,14 @@ extraSecretMounts:
     defaultMode: 0440
     mountPath: /etc/secrets/keycloak
     readOnly: true
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+      - name: Prometheus
+        type: prometheus
+        url: http://prometheus-server.monitoring.svc.cluster.local
+        isDefault: true
+      - name: Loki
+        type: loki
+        url: http://loki-gateway.monitoring.svc.cluster.local

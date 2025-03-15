@@ -2,10 +2,11 @@ cluster:
   name: seraphim
 clusterMetrics:
   enabled: true
-  node-exporter:
-    metricsTuning:
-      useIntegrationAllowList: true
 clusterEvents:
+  enabled: true
+podLogs:
+  enabled: true
+alloy-logs:
   enabled: true
 alloy-metrics:
   enabled: true
@@ -14,7 +15,7 @@ alloy-singleton:
 destinations:
   - name: prometheus
     type: prometheus
-    url: http://prometheus-server.monitoring.svc.cluster.local:9090
+    url: http://prometheus-server.monitoring.svc.cluster.local/api/v1/write
   - name: loki
     type: loki
-    url: http://loki-gateway.monitoring.svc.cluster.local
+    url: http://loki-gateway.monitoring.svc.cluster.local/loki/api/v1/push
