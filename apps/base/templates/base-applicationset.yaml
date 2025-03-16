@@ -25,13 +25,17 @@ spec:
     spec:
       sources:
     {{`{{- range $source := .sources }}`}}
-        - chart: '{{`{{ $source.chart }}`}}'
-          repoURL: '{{`{{ $source.repoURL }}`}}'
+        - repoURL: '{{`{{ $source.repoURL }}`}}'
           targetRevision: '{{`{{ $source.targetRevision }}`}}'
+      {{`{{- if not (hasSuffix ".git" $source.repoURL) }}`}}
+          chart: '{{`{{ $source.chart }}`}}'
           helm:
             valueFiles:
               - $repo/apps/{{ $set.name }}/{{`{{ $.name }}`}}/values.yaml
             ignoreMissingValueFiles: true
+      {{`{{- else }}`}}
+          path: '{{`{{ $source.path }}`}}'
+      {{`{{- end }}`}}
     {{`{{- end }}`}}
         - repoURL: https://github.com/scareyo/homelab.git
           targetRevision: main
