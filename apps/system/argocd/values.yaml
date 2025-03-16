@@ -20,3 +20,23 @@ configs:
       g, argocd_admin, role:admin
   params:
     server.insecure: true
+global:
+  addPrometheusAnnotations: true
+applicationSet:
+  metrics:
+    enabled: true
+controller:
+  metrics:
+    enabled: true
+dex:
+  metrics:
+    enabled: true
+notifications:
+  metrics:
+    enabled: true
+repoServer:
+  metrics:
+    enabled: true
+server:
+  metrics:
+    enabled: true
