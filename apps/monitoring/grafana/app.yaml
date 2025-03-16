@@ -5,3 +5,14 @@ sources:
   - chart: grafana
     repoURL: https://grafana.github.io/helm-charts
     targetRevision: 8.10.3
+ignoreDifferences:
+  - group: ''
+    kind: Secret
+    name: grafana
+    jsonPointers:
+      - /data
+  - group: apps
+    kind: Deployment
+    name: grafana
+    jsonPointers:
+      - /spec/template/metadata/annotations/checksum~1secret

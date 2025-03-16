@@ -5,3 +5,12 @@ sources:
   - chart: cilium
     repoURL: https://helm.cilium.io
     targetRevision: 1.17.2
+ignoreDifferences:
+  - group: ''
+    kind: Secret
+    name: ''
+    jsonPointers:
+      - /data/ca.crt
+      - /data/ca.key
+      - /data/tls.crt
+      - /data/tls.key

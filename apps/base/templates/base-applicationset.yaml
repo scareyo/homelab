@@ -48,4 +48,14 @@ spec:
     {{`{{- if .enforce }}`}}
             pod-security.kubernetes.io/enforce: '{{`{{ .enforce }}`}}'
     {{`{{- end }}`}}
+      ignoreDifferences:
+    {{`{{- range $ignore := .ignoreDifferences }}`}}
+        - group: '{{`{{ $ignore.group }}`}}'
+          kind: '{{`{{ $ignore.kind }}`}}'
+          name: '{{`{{ $ignore.name }}`}}'
+          jsonPointers:
+      {{`{{- range $jsonPointer := .jsonPointers }}`}}
+            - '{{`{{ $jsonPointer }}`}}'
+      {{`{{- end }}`}}
+    {{`{{- end }}`}}
 {{- end }}
