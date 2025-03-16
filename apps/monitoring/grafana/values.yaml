@@ -20,6 +20,8 @@ extraSecretMounts:
     defaultMode: 0440
     mountPath: /etc/secrets/keycloak
     readOnly: true
+plugins:
+  - grafana-github-datasource
 datasources:
   datasources.yaml:
     apiVersion: 1
@@ -31,3 +33,20 @@ datasources:
       - name: Loki
         type: loki
         url: http://loki-gateway.monitoring.svc.cluster.local
+dashboardProviders:
+  dashboardproviders.yaml:
+    apiVersion: 1
+    providers:
+      - name: 'default'
+        orgId: 1
+        folder: ''
+        type: file
+        disableDeletion: false
+        editable: true
+        options:
+          path: /var/lib/grafana/dashboards/default
+dashboards:
+  default:
+    homelab:
+      url: https://raw.githubusercontent.com/scareyo/homelab/refs/heads/main/apps/monitoring/grafana/dashboards/homelab.json
+      token: ''
