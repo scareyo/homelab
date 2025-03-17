@@ -1,0 +1,13 @@
+gitea:
+  config:
+    server:
+      ROOT_URL: https://git.scarey.me
+    service:
+      DISABLE_REGISTRATION: true
+    oauth2_client:
+      ENABLE_AUTO_REGISTRATION: true
+  oauth:
+    - name: Keycloak
+      provider: openidConnect
+      existingSecret: keycloak
+      autoDiscoverUrl: https://sso.scarey.me/realms/external/.well-known/openid-configuration

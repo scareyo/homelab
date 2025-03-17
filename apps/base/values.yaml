@@ -1,5 +1,6 @@
 ---
 sets:
+  - name: development
   - name: monitoring
   - name: platform
   - name: system
