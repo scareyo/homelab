@@ -22,7 +22,18 @@ gatewayAPI:
 externalIPs:
   enabled: true
 hubble:
+  metrics:
+    enabled:
+      - dns:query;ignoreAAAA
+      - drop
+      - tcp
+      - flow
+      - icmp
+      - http:labelsContext=source_namespace,source_ip,source_pod,source_workload,source_app
+      - httpV2:exemplars=true;labelsContext=source_ip\,source_namespace\,source_workload\,destination_ip\,destination_namespace\,destination_workload\,traffic_direction
   relay:
     enabled: true
   ui:
     enabled: true
+prometheus:
+  enabled: true
