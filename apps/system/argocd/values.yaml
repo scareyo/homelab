@@ -15,9 +15,11 @@ configs:
         - Backup
         clusters:
         - "*"
+    accounts.readonly: apiKey
   rbac:
     policy.csv: |
       g, argocd_admin, role:admin
+      g, readonly, role:readonly
   params:
     server.insecure: true
 global:
