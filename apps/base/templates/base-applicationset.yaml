@@ -61,5 +61,9 @@ spec:
       {{`{{- range $jsonPointer := .jsonPointers }}`}}
             - '{{`{{ $jsonPointer }}`}}'
       {{`{{- end }}`}}
+          jqPathExpressions:
+      {{`{{- range $jqPath := .jqPathExpressions }}`}}
+            - '{{`{{ $jqPath }}`}}'
+      {{`{{- end }}`}}
     {{`{{- end }}`}}
 {{- end }}

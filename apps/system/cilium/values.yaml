@@ -24,16 +24,21 @@ externalIPs:
 hubble:
   metrics:
     enabled:
-      - dns:query;ignoreAAAA
-      - drop
-      - tcp
-      - flow
-      - icmp
-      - http:labelsContext=source_namespace,source_ip,source_pod,source_workload,source_app
-      - httpV2:exemplars=true;labelsContext=source_ip\,source_namespace\,source_workload\,destination_ip\,destination_namespace\,destination_workload\,traffic_direction
+    - "policy:sourceContext=workload-name|app|pod;destinationContext=workload-name|app|pod|dns;labelsContext=source_namespace,destination_namespace"
+    - "httpV2:labelsContext=source_ip,source_namespace,source_pod,destination_ip,destination_namespace,destination_pod,traffic_direction"
+    - "grpc:sourceContext=workload-name|app|pod;destinationContext=workload-name|app|pod|dns;labelsContext=source_namespace,destination_namespace"
+    enableOpenMetrics: true
+    serviceMonitor:
+      enabled: true
+      labels:
+        release: kube-prometheus-stack
   relay:
     enabled: true
   ui:
     enabled: true
 prometheus:
   enabled: true
+  serviceMonitor:
+    enabled: true
+    labels:
+      release: kube-prometheus-stack

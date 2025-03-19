@@ -1,0 +1,27 @@
+---
+name: kube-prometheus-stack
+namespace: monitoring
+enforce: privileged
+sources:
+  - chart: kube-prometheus-stack
+    repoURL: https://prometheus-community.github.io/helm-charts
+    targetRevision: 70.0.2
+syncOptions:
+  - ServerSideApply=true
+ignoreDifferences:
+  - group: external-secrets.io
+    kind: ExternalSecret
+    name: keycloak
+    jqPathExpressions:
+      - .spec.data[].remoteRef.conversionStrategy
+      - .spec.data[].remoteRef.decodingStrategy
+      - .spec.data[].remoteRef.metadataPolicy
+  - group: gateway.networking.k8s.io
+    kind: HTTPRoute
+    name: ""
+    jqPathExpressions:
+      - .spec.parentRefs[].group
+      - .spec.parentRefs[].kind
+      - .spec.rules[].backendRefs[].group
+      - .spec.rules[].backendRefs[].kind
+      - .spec.rules[].backendRefs[].weight
