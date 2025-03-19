@@ -34,8 +34,8 @@ config:
               type: prometheusmetric
               url: https://prometheus.apps.int.scarey.me
               metrics:
-                - label: Active Pods
-                  query: kubelet_active_pods{kubernetes_io_hostname='s-bear'}
+                - label: Running Pods
+                  query: sum(kubelet_running_pods{cluster="seraphim"})
         - Argo CD:
             icon: argo-cd
             description: Continuous deployment
@@ -88,7 +88,7 @@ config:
               type: prometheusmetric
               url: https://prometheus.apps.int.scarey.me
               metrics:
-                - label: s-bear
+                - label: HTTP Requests
                   query: sum(rate(hubble_http_requests_total[2m]))
                   format:
                     type: number
