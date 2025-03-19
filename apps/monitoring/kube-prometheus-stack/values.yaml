@@ -1,0 +1,72 @@
+grafana:
+  grafana.ini:
+    server:
+      root_url: https://grafana.apps.int.scarey.me
+    auth.generic_oauth:
+      enabled: true
+      client_id: $__file{/etc/secrets/keycloak/client_id}
+      client_secret: $__file{/etc/secrets/keycloak/client_secret}
+      scopes: openid email profile offline_access roles
+      email_attribute_path: email
+      login_attribute_path: username
+      name_attribute_path: full_name
+      auth_url: https://sso.scarey.me/realms/external/protocol/openid-connect/auth
+      token_url: https://sso.scarey.me/realms/external/protocol/openid-connect/token
+      api_url: https://sso.scarey.me/realms/external/protocol/openid-connect/userinfo
+      role_attribute_path: "contains(resource_access.grafana.roles[*], 'admin') && 'Admin' || contains(resource_access.grafana.roles[*], 'editor') && 'Editor' || 'Viewer'"
+      allow_assign_grafana_admin: true
+  extraSecretMounts:
+    - name: keycloak
+      secretName: keycloak
+      defaultMode: 0440
+      mountPath: /etc/secrets/keycloak
+      readOnly: true
+  route:
+    main:
+      enabled: true
+      hostnames:
+        - "grafana.apps.int.scarey.me"
+      parentRefs:
+        - name: internal
+          namespace: gateway
+      matches:
+        - path:
+            type: PathPrefix
+            value: /
+  additionalDataSources:
+   - name: loki
+     type: loki
+     url: http://loki-gateway.monitoring
+prometheus:
+  route:
+    main:
+      enabled: true
+      hostnames:
+        - "prometheus.apps.int.scarey.me"
+      parentRefs:
+        - name: internal
+          namespace: gateway
+      matches:
+        - path:
+            type: PathPrefix
+            value: /
+alertmanager:
+  route:
+    main:
+      enabled: true
+      hostnames:
+        - "alertmanager.apps.int.scarey.me"
+      parentRefs:
+        - name: internal
+          namespace: gateway
+      matches:
+        - path:
+            type: PathPrefix
+            value: /
+kubeControllerManager:
+  enabled: false
+kubeScheduler:
+  enabled: false
+defaultRules:
+  rules:
+    kubeProxy: false
