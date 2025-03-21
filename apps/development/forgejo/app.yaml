@@ -4,4 +4,4 @@ namespace: forgejo
 sources:
   - chart: forgejo
     repoURL: code.forgejo.org/forgejo-helm
-    targetRevision: 11.0.3
+    targetRevision: 11.0.4
