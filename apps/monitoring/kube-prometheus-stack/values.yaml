@@ -50,3 +50,23 @@ prometheus:
         - path:
             type: PathPrefix
             value: /
+alertmanager:
+  route:
+    main:
+      enabled: true
+      hostnames:
+        - "alertmanager.apps.int.scarey.me"
+      parentRefs:
+        - name: internal
+          namespace: gateway
+      matches:
+        - path:
+            type: PathPrefix
+            value: /
+kubeControllerManager:
+  enabled: false
+kubeScheduler:
+  enabled: false
+defaultRules:
+  rules:
+    kubeProxy: false

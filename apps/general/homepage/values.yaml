@@ -105,10 +105,26 @@ config:
         - Prometheus:
             icon: prometheus
             description: Homelab metrics
-            href: https://prometheus.apps.int.scarey.me
+            href: https://grafana.apps.int.scarey.me/goto/7NCYR32HR?orgId=1
             widget:
               type: prometheus
               url: https://prometheus.apps.int.scarey.me
+        - Alertmanager:
+            icon: alertmanager
+            description: Homelab alerts
+            href: https://grafana.apps.int.scarey.me/alerting/groups
+            widget:
+              type: prometheusmetric
+              url: https://prometheus.apps.int.scarey.me
+              metrics:
+                - label: Active
+                  query: alertmanager_alerts{state="active"}
+                  format:
+                    type: number
+                - label: Suppressed
+                  query: alertmanager_alerts{state="suppressed"}
+                  format:
+                    type: number
     - Public:
         - Forgejo:
             icon: forgejo

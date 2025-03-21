@@ -22,20 +22,17 @@ gatewayAPI:
 externalIPs:
   enabled: true
 hubble:
-  metrics:
-    enabled:
-    - "policy:sourceContext=workload-name|app|pod;destinationContext=workload-name|app|pod|dns;labelsContext=source_namespace,destination_namespace"
-    - "httpV2:labelsContext=source_ip,source_namespace,source_pod,destination_ip,destination_namespace,destination_pod,traffic_direction"
-    - "grpc:sourceContext=workload-name|app|pod;destinationContext=workload-name|app|pod|dns;labelsContext=source_namespace,destination_namespace"
-    enableOpenMetrics: true
-    serviceMonitor:
-      enabled: true
-      labels:
-        release: kube-prometheus-stack
   relay:
     enabled: true
   ui:
     enabled: true
+  metrics:
+    enabled:
+      - "httpV2:labelsContext=source_ip,source_namespace,source_pod,destination_ip,destination_namespace,destination_pod,traffic_direction"
+    serviceMonitor:
+      enabled: true
+      labels:
+        release: kube-prometheus-stack
 prometheus:
   enabled: true
   serviceMonitor:
