@@ -2,9 +2,9 @@
 apiVersion: postgresql.cnpg.io/v1
 kind: Database
 metadata:
-  name: keycloak
+  name: authentik
 spec:
-  name: keycloak
+  name: authentik
   owner: app
   cluster:
     name: postgres

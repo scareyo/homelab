@@ -2,13 +2,12 @@
 apiVersion: velero.io/v1
 kind: Restore
 metadata:
-  name: restore-keycloak
+  name: restore-authentik
   namespace: velero
   annotations:
-    #argocd.argoproj.io/hook-delete-policy: HookSucceeded
     argocd.argoproj.io/sync-wave: "-1"
 spec:
-  scheduleName: keycloak
+  scheduleName: authentik
   restorePVs: true
   includedResources:
     - pvc

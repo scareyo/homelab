@@ -1,0 +1,23 @@
+authentik:
+  secret_key: file:///authentik-secrets/secret_key
+  postgresql:
+    host: postgres-rw.authentik.svc.cluster.local
+    user: file:///postgres-secrets/username
+    password: file:///postgres-secrets/password
+    name: authentik
+redis:
+  enabled: true
+global:
+  volumeMounts:
+    - name: authentik-externalsecret
+      mountPath: /authentik-secrets
+    - name: postgres-app
+      mountPath: /postgres-secrets
+  volumes:
+    - name: authentik-externalsecret
+      secret:
+        secretName: authentik-externalsecret
+    - name: postgres-app
+      secret:
+        secretName: postgres-app
+

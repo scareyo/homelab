@@ -7,7 +7,9 @@ gitea:
     oauth2_client:
       ENABLE_AUTO_REGISTRATION: true
   oauth:
-    - name: Keycloak
+    - name: Authentik
       provider: openidConnect
-      existingSecret: keycloak
-      autoDiscoverUrl: https://sso.scarey.me/realms/external/.well-known/openid-configuration
+      existingSecret: oauth
+      autoDiscoverUrl: https://sso.scarey.me/application/o/forgejo/.well-known/openid-configuration
+      iconUrl: "https://goauthentik.io/img/icon.png"
+      scopes: "email profile"

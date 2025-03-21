@@ -93,10 +93,6 @@ config:
                   format:
                     type: number
                     suffix: " req/s"
-        - Keycloak:
-            icon: keycloak
-            description: Admin Console
-            href: https://sso.apps.int.scarey.me
     - Monitoring:
         - Grafana:
             icon: grafana
@@ -131,11 +127,11 @@ config:
             description: A painless, self-hosted Git service
             href: https://git.scarey.me
             siteMonitor: https://git.scarey.me
-        - Keycloak:
-            icon: keycloak
+        - Authentik:
+            icon: authentik
             description: Identity and access management
-            href: https://sso.scarey.me/realms/external/account
-            siteMonitor: https://sso.scarey.me/realms/external/account
+            href: https://sso.scarey.me
+            siteMonitor: https://sso.scarey.me
   widgets:
     - logo:
         icon: google

@@ -11,7 +11,7 @@ syncOptions:
 ignoreDifferences:
   - group: external-secrets.io
     kind: ExternalSecret
-    name: keycloak
+    name: oauth
     jqPathExpressions:
       - .spec.data[].remoteRef.conversionStrategy
       - .spec.data[].remoteRef.decodingStrategy
