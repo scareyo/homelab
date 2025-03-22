@@ -1,0 +1,9 @@
+server:
+  image:
+    tag: v1.3.0
+  storage:
+    main:
+      size: 32Gi
+      storageClassName: ceph-filesystem
+  service:
+    type: LoadBalancer

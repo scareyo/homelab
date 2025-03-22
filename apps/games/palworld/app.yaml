@@ -1,0 +1,7 @@
+---
+name: palworld
+namespace: palworld
+sources:
+  - chart: palworld
+    repoURL: https://twinki14.github.io/palworld-server-chart
+    targetRevision: 0.30.1

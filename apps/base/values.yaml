@@ -1,6 +1,7 @@
 ---
 sets:
   - name: development
+  - name: games
   - name: general
   - name: media
   - name: monitoring

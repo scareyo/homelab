@@ -8,5 +8,6 @@ metadata:
     bgp: default
 spec:
   blocks:
-    - cidr: 10.10.21.0/24
+    - start: 10.10.21.2
+      stop: 10.10.21.99
   allowFirstLastIPs: "No"
