@@ -1,0 +1,7 @@
+---
+name: plex
+namespace: plex
+sources:
+  - chart: plex-media-server
+    repoURL: https://plexinc.github.io/pms-docker
+    targetRevision: 0.9.1

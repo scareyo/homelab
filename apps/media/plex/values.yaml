@@ -1,0 +1,6 @@
+pms:
+  storageClassName: ceph-filesystem
+extraEnv:
+  HOSTNAME: "plex.apps.int.scarey.me"
+  ALLOWED_NETWORKS: 10.0.0.0/8
+  ADVERTISE_IP: https://plex.apps.int.scarey.me
