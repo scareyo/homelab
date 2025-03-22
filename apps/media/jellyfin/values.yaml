@@ -1,6 +1,9 @@
-#metrics:
-#  enabled: true
-#  serviceMonitor:
-#    enabled: true
-#    labels:
-#      release: kube-prometheus-stack
+metrics:
+  enabled: true
+  serviceMonitor:
+    enabled: true
+    labels:
+      release: kube-prometheus-stack
+persistence:
+  media:
+    storageClass: rclone

@@ -1,0 +1,8 @@
+---
+name: csi-rclone
+namespace: csi-rclone
+enforce: privileged
+sources:
+  - chart: csi-rclone
+    repoURL: https://storage.googleapis.com/charts.wdr.io
+    targetRevision: 1.0.0
