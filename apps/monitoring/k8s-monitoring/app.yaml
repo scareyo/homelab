@@ -5,4 +5,4 @@ enforce: privileged
 sources:
   - chart: k8s-monitoring
     repoURL: https://grafana.github.io/helm-charts
-    targetRevision: 2.0.19
+    targetRevision: 2.0.20
