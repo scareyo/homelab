@@ -1,0 +1,7 @@
+---
+name: palworld
+namespace: palworld
+sources:
+  - chart: palworld-server
+    repoURL: https://kriegalex.github.io/k8s-charts
+    targetRevision: 1.0.8
