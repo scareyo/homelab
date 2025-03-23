@@ -37,6 +37,9 @@ notifications:
   metrics:
     enabled: true
 repoServer:
+  extraArgs:
+    - --repo-cache-expiration
+    - 1m
   metrics:
     enabled: true
 server:
