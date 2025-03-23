@@ -1,0 +1,8 @@
+---
+name: prowlarr
+namespace: media
+enforce: privileged
+sources:
+  - chart: prowlarr
+    repoURL: https://charts.pree.dev
+    targetRevision: 1.40.0

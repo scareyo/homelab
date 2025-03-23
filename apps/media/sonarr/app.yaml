@@ -1,0 +1,7 @@
+---
+name: sonarr
+namespace: media
+sources:
+  - chart: sonarr
+    repoURL: https://charts.pree.dev
+    targetRevision: 1.9.0
