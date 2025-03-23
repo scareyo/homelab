@@ -1,0 +1,7 @@
+---
+name: radarr
+namespace: media
+sources:
+  - chart: radarr
+    repoURL: https://charts.pree.dev
+    targetRevision: 1.14.0

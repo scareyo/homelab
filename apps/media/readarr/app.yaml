@@ -1,0 +1,7 @@
+---
+name: readarr
+namespace: media
+sources:
+  - chart: readarr
+    repoURL: https://charts.pree.dev
+    targetRevision: 1.12.0

@@ -1,0 +1,33 @@
+image:
+  repository: ghcr.io/home-operations/prowlarr
+  tag: 1.33.0
+configMaps:
+  config:
+    enabled: true
+    data:
+      config.xml: |
+        <Config>
+          <AuthenticationMethod>External</AuthenticationMethod>
+        </Config>
+env:
+  PROWLARR_AuthenticationMethod: External
+persistence:
+  config:
+    enabled: true
+    storageClass: ceph-filesystem
+  prowlarr-config:
+    enabled: true
+    type: configMap
+    name: prowlarr-config
+    mountPath: /config/config.xml
+    #subPath: config.xml
+metrics:
+  enabled: true
+  serviceMonitor:
+    labels:
+      release: kube-prometheus-stack
+podSecurityContext:
+  runAsUser: 65534
+  runAsGroup: 65534
+  fsGroup: 65534
+  fsGroupChangePolicy: OnRootMismatch
