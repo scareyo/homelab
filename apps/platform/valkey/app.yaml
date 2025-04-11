@@ -4,7 +4,7 @@ namespace: valkey
 sources:
   - chart: valkey-cluster
     repoURL: registry-1.docker.io/bitnamicharts
-    targetRevision: 2.2.0
+    targetRevision: 2.2.1
 ignoreDifferences:
   - group: ''
     kind: Secret
