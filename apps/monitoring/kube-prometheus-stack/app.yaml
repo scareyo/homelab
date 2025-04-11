@@ -5,7 +5,7 @@ enforce: privileged
 sources:
   - chart: kube-prometheus-stack
     repoURL: https://prometheus-community.github.io/helm-charts
-    targetRevision: 70.1.1
+    targetRevision: 70.4.2
 syncOptions:
   - ServerSideApply=true
 ignoreDifferences:
