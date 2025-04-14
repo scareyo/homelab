@@ -4,7 +4,7 @@ namespace: kube-system
 sources:
   - chart: cilium
     repoURL: https://helm.cilium.io
-    targetRevision: 1.17.2
+    targetRevision: 1.17.3
 ignoreDifferences:
   - group: ''
     kind: Secret
