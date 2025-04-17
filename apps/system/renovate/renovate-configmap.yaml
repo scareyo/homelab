@@ -5,6 +5,7 @@ metadata:
   name: renovate
   namespace: renovate
 data:
+  RENOVATE_ALLOWED_COMMANDS: "install-tool,nix"
   RENOVATE_AUTODISCOVER: "false"
   RENOVATE_GIT_AUTHOR: "Renovate Bot <bot@renovateapp.com>"
   RENOVATE_PLATFORM: "github"
