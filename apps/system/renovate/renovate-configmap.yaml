@@ -5,6 +5,7 @@ metadata:
   name: renovate
   namespace: renovate
 data:
+  RENOVATE_ALLOWED_POST_UPGRADE_COMMANDS: "nix run --extra-experimental-features nix-command --extra-experimental-features flakes .#"
   RENOVATE_AUTODISCOVER: "false"
   RENOVATE_GIT_AUTHOR: "Renovate Bot <bot@renovateapp.com>"
   RENOVATE_PLATFORM: "github"
