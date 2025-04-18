@@ -1,0 +1,7 @@
+---
+name: vintagestory
+namespace: vintagestory
+sources:
+  - chart: vintagestory
+    repoURL: ghcr.io/scareyo
+    targetRevision: 0.2.0
