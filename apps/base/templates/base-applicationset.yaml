@@ -31,7 +31,7 @@ spec:
           chart: '{{`{{ $source.chart }}`}}'
           helm:
             valueFiles:
-              - $repo/apps/{{ $set.name }}/{{`{{ $.name }}`}}/values.yaml
+              - $repo/apps/{{ $set.name }}/{{`{{ $.name }}`}}/{{`{{ $source.values | default "values.yaml" }}`}}
             ignoreMissingValueFiles: true
       {{`{{- else }}`}}
           path: '{{`{{ $source.path }}`}}'
@@ -41,6 +41,8 @@ spec:
           targetRevision: main
           path: apps/{{ $set.name }}/{{`{{ .name }}`}}
           ref: repo
+          directory:
+            exclude: "*values.yaml"
       syncPolicy:
         syncOptions:
           - CreateNamespace=true

@@ -1,0 +1,22 @@
+controllers:
+  main:
+    containers:
+      main:
+        env:
+          PROWLARR__AUTH__METHOD: External
+
+persistence:
+  config:
+    enabled: true
+
+route:
+  main:
+    hostnames:
+      - prowlarr.apps.int.scarey.me
+    parentRefs:
+      - name: internal
+        namespace: gateway
+    rules:
+      - backendRefs:
+        - name: prowlarr-oauth2-proxy
+          port: 80
