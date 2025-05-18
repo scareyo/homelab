@@ -5,7 +5,18 @@
   inputs.flake-parts.url = "github:hercules-ci/flake-parts";
   inputs.amtcli.url = "github:scareyo/amtcli";
 
-  outputs = inputs@{ self, amtcli, flake-parts, nixpkgs }:
+  inputs.nixos-generators = {
+    url = "github:nix-community/nixos-generators";
+    inputs.nixpkgs.follows = "nixpkgs";
+  };
+
+  inputs.nixvirt =
+  {
+    url = "github:AshleyYakeley/NixVirt";
+    inputs.nixpkgs.follows = "nixpkgs";
+  };
+
+  outputs = inputs@{ self, amtcli, flake-parts, nixpkgs, nixos-generators, nixvirt }:
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = [
         "x86_64-linux"
@@ -24,7 +35,7 @@
             ansible-lint
             python312Packages.kubernetes
             
-            (callPackage ./nix/infisical-python {
+            (callPackage ./nix/pkg/infisical-python {
               buildPythonPackage = python312Packages.buildPythonPackage;
             })
 
@@ -51,6 +62,24 @@
 
             amtcli.packages.${system}.default
           ];
+        };
+      };
+        
+      flake = {
+        nixosConfigurations."nami" = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [ ./nix/hosts/nami ];
+          specialArgs = { inherit inputs nixos-generators; };
+        };
+        nixosConfigurations."authentik" = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [ ./nix/hosts/authentik ];
+          specialArgs = { inherit self; };
+        };
+        nixosConfigurations."omni" = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [ ./nix/hosts/omni ];
+          specialArgs = { inherit self; };
         };
       };
     };
