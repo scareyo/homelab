@@ -5,7 +5,28 @@
   inputs.flake-parts.url = "github:hercules-ci/flake-parts";
   inputs.amtcli.url = "github:scareyo/amtcli";
 
-  outputs = inputs@{ self, amtcli, flake-parts, nixpkgs }:
+  inputs.authentik = {
+    url = "github:nix-community/authentik-nix";
+    inputs.nixpkgs.follows = "nixpkgs";
+  };
+
+  inputs.nixos-generators = {
+    url = "github:nix-community/nixos-generators";
+    inputs.nixpkgs.follows = "nixpkgs";
+  };
+
+  inputs.nixvirt =
+  {
+    url = "github:AshleyYakeley/NixVirt";
+    inputs.nixpkgs.follows = "nixpkgs";
+  };
+
+  inputs.sops-nix = {
+    url = "github:Mic92/sops-nix";
+    inputs.nixpkgs.follows = "nixpkgs";
+  };
+
+  outputs = inputs@{ self, amtcli, authentik, flake-parts, nixos-generators, nixpkgs, nixvirt, sops-nix }:
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = [
         "x86_64-linux"
@@ -18,14 +39,15 @@
             dig
             dnsmasq
             git-crypt
+            sops
             
             # Ansible
             ansible
             ansible-lint
             python312Packages.kubernetes
             
-            (callPackage ./nix/infisical-python {
-              buildPythonPackage = python312Packages.buildPythonPackage;
+            (callPackage ./nix/pkg/infisical-python {
+              inherit buildPythonPackage;
             })
 
             # Kubernetes
@@ -51,6 +73,39 @@
 
             amtcli.packages.${system}.default
           ];
+        };
+      };
+        
+      flake = {
+        nixosConfigurations."nami" = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [
+            #nixvirt.nixosModules.default
+            #sops-nix.nixosModules.sops
+            ./nix/hosts/nami
+          ];
+          specialArgs = {
+            nixos-generators = inputs.nixos-generators;
+            nixvirt = inputs.nixvirt;
+            sops-nix = inputs.sops-nix;
+          };
+        };
+        nixosConfigurations."authentik" = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [ ./nix/hosts/authentik ];
+          specialArgs = { inherit inputs; };
+        };
+        nixosConfigurations."omni" = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [ ./nix/hosts/omni ];
+          specialArgs = { inherit inputs; };
+        };
+        nixosConfigurations."newt" = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [
+            ./nix/hosts/newt
+          ];
+          specialArgs = { inherit inputs; };
         };
       };
     };
