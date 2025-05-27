@@ -76,56 +76,37 @@
         };
       };
         
-      flake = let
-        mkGuestSystem = name: nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          modules = [ ./nix/hosts/${name} ];
-        };
-        mkGuestImage = name: nixos-generators.nixosGenerate {
-          system = "x86_64-linux";
-          format = "qcow-efi";
-          modules = [ ./nix/hosts/${name} ];
-          specialArgs = {
-            sops-nix = inputs.sops-nix;
-          };
-        };
-      in
-      {
+      flake = {
         nixosConfigurations."nami" = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           modules = [
+            #nixvirt.nixosModules.default
+            #sops-nix.nixosModules.sops
             ./nix/hosts/nami
           ];
           specialArgs = {
+            nixos-generators = inputs.nixos-generators;
             nixvirt = inputs.nixvirt;
-            guests = {
-              newt = self.packages.x86_64-linux.newt;
-            };
+            sops-nix = inputs.sops-nix;
           };
         };
-
-        nixosConfigurations."newt" = mkGuestSystem "newt";
-
-        packages.x86_64-linux = {
-          newt = mkGuestImage "newt";
+        nixosConfigurations."authentik" = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [ ./nix/hosts/authentik ];
+          specialArgs = { inherit inputs; };
         };
-        #nixosConfigurations."authentik" = nixpkgs.lib.nixosSystem {
-        #  system = "x86_64-linux";
-        #  modules = [ ./nix/hosts/authentik ];
-        #  specialArgs = { inherit inputs; };
-        #};
-        #nixosConfigurations."omni" = nixpkgs.lib.nixosSystem {
-        #  system = "x86_64-linux";
-        #  modules = [ ./nix/hosts/omni ];
-        #  specialArgs = { inherit inputs; };
-        #};
-        #nixosConfigurations."newt" = nixpkgs.lib.nixosSystem {
-        #  system = "x86_64-linux";
-        #  modules = [
-        #    ./nix/hosts/newt
-        #  ];
-        #  specialArgs = { inherit inputs; };
-        #};
+        nixosConfigurations."omni" = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [ ./nix/hosts/omni ];
+          specialArgs = { inherit inputs; };
+        };
+        nixosConfigurations."newt" = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [
+            ./nix/hosts/newt
+          ];
+          specialArgs = { inherit inputs; };
+        };
       };
     };
 }
