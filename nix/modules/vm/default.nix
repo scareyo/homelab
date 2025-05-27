@@ -1,4 +1,4 @@
-{ config, lib, nixos-generators, nixvirt, ... }:
+{ config, lib, nixos-generators, nixvirt, sops-nix, ... }:
 
 let
   vmTypes = import ./types.nix { inherit lib; };
@@ -28,15 +28,10 @@ in
           modules = [
             {
               virtualisation.diskSize = vm.diskSize * 1024;
-              networking.hostName = vm.name;
-              system.autoUpgrade = {
-                enable = true;
-                flake = "github:scareyo/homelab";
-              };
             }
-            #inputs.sops-nix.nixosModules.sops
-            #vm.config
+            vm.config
           ];
+          specialArgs = { inherit sops-nix; };
           format = "qcow-efi";
         };
       in

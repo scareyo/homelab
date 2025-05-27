@@ -11,6 +11,10 @@
   homelab.sops = {
     enable = true;
     file = ../../../sops/newt.json;
+    secrets = [
+      "newt_id"
+      "newt_secret"
+    ];
   };
 
   environment.systemPackages = with pkgs; [
