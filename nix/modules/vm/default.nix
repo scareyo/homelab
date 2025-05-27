@@ -1,4 +1,4 @@
-{ config, lib, nixos-generators, nixvirt, ... }:
+{ config, lib, nixvirt, guests, ... }:
 
 let
   vmTypes = import ./types.nix { inherit lib; };
@@ -23,22 +23,7 @@ in
     system.activationScripts = lib.listToAttrs (map (vm: {
       name = vm.name;
       value = let
-        image = nixos-generators.nixosGenerate {
-          system = "x86_64-linux";
-          modules = [
-            {
-              virtualisation.diskSize = vm.diskSize * 1024;
-              networking.hostName = vm.name;
-              system.autoUpgrade = {
-                enable = true;
-                flake = "github:scareyo/homelab";
-              };
-            }
-            #inputs.sops-nix.nixosModules.sops
-            #vm.config
-          ];
-          format = "qcow-efi";
-        };
+        image = guests.${vm.name};
       in
       {
         text = ''
