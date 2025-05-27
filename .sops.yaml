@@ -1,12 +1,12 @@
-keys:
+gpg_keys:
   - &scarey 733CC027A4F7D7D74B291D205B0D9896CB89E8D8
-  - &authentik age1w6sx6gte6l47f9jtxu3rv20w0g4m4tjwgvajkln660mu644np54qulpj2g
-  - &omni age1h9u7md4rzwu7wc74fgl8c839p6xkz30ku4e95nyuwzmy64n4kvqsk3sdzv
-  - &newt age1w83g57mqfu5kqjvdr50hk5dhfqxl3lx8fkckfajewwfhnahwss8qh5ayyp
+host_keys:
+  authentik: &authentik age1hpn2m4zu4gpl0pmrzzfde0ktuwzl53mtwypzt6unlqp3jmkz2ccspsu37f
+  newt: &newt age1nkzhh8q6h04zpwgpkvac8wvhnp7se245rwhxm4s0jeza5ehtggfq3s4uql
 creation_rules:
+  - path_regex: sops/authentik.env
+    pgp: *scarey
+    age: *authentik
   - path_regex: sops/newt.json
-    key_groups:
-      - pgp:
-        - *scarey
-      - age:
-        - *newt
+    pgp: *scarey
+    age: *newt

@@ -7,7 +7,6 @@
 
   inputs.authentik = {
     url = "github:nix-community/authentik-nix";
-    inputs.nixpkgs.follows = "nixpkgs";
   };
 
   inputs.nixos-generators = {
@@ -40,6 +39,7 @@
             dnsmasq
             git-crypt
             sops
+            yq-go
             
             # Ansible
             ansible
@@ -72,6 +72,19 @@
             else null)
 
             amtcli.packages.${system}.default
+
+            # Update .sops.yaml host keys
+            (pkgs.writeShellScriptBin "update-sops" ''
+              for ((i=0; i<$(yq '.host_keys | length' .sops.yaml); i++)); do
+                host=$(yq ".host_keys | to_entries[$i].key" .sops.yaml)
+                ssh-keyscan $host > /dev/null 2>&1
+                if [ $? -eq 0 ]; then
+                  newKey=$(ssh-keyscan $host | ${pkgs.ssh-to-age}/bin/ssh-to-age)
+                  yq -i ".host_keys.$host = \"$newKey\"" .sops.yaml
+                fi
+              done
+              sops updatekeys sops/*
+            '')
           ];
         };
       };
@@ -79,16 +92,8 @@
       flake = {
         nixosConfigurations."nami" = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
-          modules = [
-            #nixvirt.nixosModules.default
-            #sops-nix.nixosModules.sops
-            ./nix/hosts/nami
-          ];
-          specialArgs = {
-            nixos-generators = inputs.nixos-generators;
-            nixvirt = inputs.nixvirt;
-            sops-nix = inputs.sops-nix;
-          };
+          modules = [ ./nix/hosts/nami ];
+          specialArgs = { inherit inputs; };
         };
         nixosConfigurations."authentik" = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
@@ -102,9 +107,7 @@
         };
         nixosConfigurations."newt" = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
-          modules = [
-            ./nix/hosts/newt
-          ];
+          modules = [ ./nix/hosts/newt ];
           specialArgs = { inherit inputs; };
         };
       };

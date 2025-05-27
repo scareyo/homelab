@@ -48,6 +48,7 @@
     security.sudo.wheelNeedsPassword = false;
 
     environment.systemPackages = with pkgs; [
+      git
       vim
     ];
 
@@ -60,7 +61,6 @@
           type = "ed25519";
         }
       ];
-      settings.PasswordAuthentication = false;
       settings.PermitRootLogin = "no";
     };
 

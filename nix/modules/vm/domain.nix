@@ -1,6 +1,6 @@
-{ nixvirt, name, uuid, memory, vcpus, mac, disk }:
+{ inputs, name, uuid, memory, vcpus, mac, disk }:
 
-nixvirt.lib.domain.writeXML {
+inputs.nixvirt.lib.domain.writeXML {
   type = "kvm";
   name = name;
   uuid = uuid;

@@ -1,4 +1,4 @@
-{ config, lib, nixos-generators, nixvirt, ... }:
+{ config, inputs, lib, ... }:
 
 let
   vmTypes = import ./types.nix { inherit lib; };
@@ -7,7 +7,7 @@ let
 in
 {
   imports = [
-    nixvirt.nixosModules.default
+    inputs.nixvirt.nixosModules.default
   ];
 
   options = {
@@ -23,20 +23,15 @@ in
     system.activationScripts = lib.listToAttrs (map (vm: {
       name = vm.name;
       value = let
-        image = nixos-generators.nixosGenerate {
+        image = inputs.nixos-generators.nixosGenerate {
           system = "x86_64-linux";
           modules = [
             {
               virtualisation.diskSize = vm.diskSize * 1024;
-              networking.hostName = vm.name;
-              system.autoUpgrade = {
-                enable = true;
-                flake = "github:scareyo/homelab";
-              };
             }
-            #inputs.sops-nix.nixosModules.sops
-            #vm.config
+            vm.config
           ];
+          specialArgs = { inherit inputs; };
           format = "qcow-efi";
         };
       in
@@ -56,7 +51,7 @@ in
       connections."qemu:///system".domains = map (vm: {
         active = true;
         definition = import ./domain.nix {
-          inherit nixvirt;
+          inherit inputs;
           name = vm.name;
           uuid = vm.uuid;
           memory = vm.memory;

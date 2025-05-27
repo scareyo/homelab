@@ -32,15 +32,15 @@
         diskSize = 32;
         config = ../authentik;
       }
-      {
-        name = "omni";
-        uuid = "99a2210e-5a65-406d-8548-000000000002";
-        vcpus = 4;
-        memory = 8;
-        mac = "52:54:00:20:20:62";
-        diskSize = 32;
-        config = ../omni;
-      }
+      #{
+      #  name = "omni";
+      #  uuid = "99a2210e-5a65-406d-8548-000000000002";
+      #  vcpus = 4;
+      #  memory = 8;
+      #  mac = "52:54:00:20:20:62";
+      #  diskSize = 32;
+      #  config = ../omni;
+      #}
       {
         name = "newt";
         uuid = "99a2210e-5a65-406d-8548-000000000003";

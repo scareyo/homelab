@@ -1,15 +1,30 @@
-{ inputs, ... }:
+{ config, inputs, ... }:
 
 {
   imports = [
     ../../modules/system/guest.nix
-    #inputs.authentik.nixosModules.default
+    ../../modules/sops
+
+    inputs.authentik.nixosModules.default
   ];
 
   networking.hostName = "authentik";
 
-  #services.authentik = {
-  #};
+  homelab.sops = {
+    enable = true;
+    file = ../../../sops/authentik.env;
+    format = "dotenv";
+    owner = config.users.users.scarey.name;
+    group = config.users.users.scarey.group;
+    secrets = [
+      "authentik.env"
+    ];
+  };
+
+  services.authentik = {
+    enable = true;
+    environmentFile = "/run/secrets/authentik.env";
+  };
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
