@@ -90,22 +90,22 @@
             sops-nix = inputs.sops-nix;
           };
         };
-        nixosConfigurations."authentik" = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          modules = [ ./nix/hosts/authentik ];
-          specialArgs = { inherit inputs; };
-        };
-        nixosConfigurations."omni" = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          modules = [ ./nix/hosts/omni ];
-          specialArgs = { inherit inputs; };
-        };
+        #nixosConfigurations."authentik" = nixpkgs.lib.nixosSystem {
+        #  system = "x86_64-linux";
+        #  modules = [ ./nix/hosts/authentik ];
+        #};
+        #nixosConfigurations."omni" = nixpkgs.lib.nixosSystem {
+        #  system = "x86_64-linux";
+        #  modules = [ ./nix/hosts/omni ];
+        #};
         nixosConfigurations."newt" = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           modules = [
             ./nix/hosts/newt
           ];
-          specialArgs = { inherit inputs; };
+          specialArgs = {
+            sops-nix = inputs.sops-nix;
+          };
         };
       };
     };

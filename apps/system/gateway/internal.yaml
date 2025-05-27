@@ -12,6 +12,13 @@ spec:
     annotations:
       io.cilium/lb-ipam-ips: 10.10.21.11
   listeners:
+    - protocol: HTTP
+      port: 80
+      name: http-apps-gateway
+      hostname: "*.apps.int.scarey.me"
+      allowedRoutes:
+        namespaces:
+          from: All
     - protocol: HTTPS
       port: 443
       name: https-apps-gateway

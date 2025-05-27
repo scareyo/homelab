@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
 {
   imports = [
@@ -11,12 +11,13 @@
   homelab.sops = {
     enable = true;
     file = ../../../sops/newt.json;
+    owner = config.users.users.newt.name;
+    group = config.users.users.newt.group;
+    secrets = [
+      "newt_id"
+      "newt_secret"
+    ];
   };
-
-  environment.systemPackages = with pkgs; [
-    jq
-    newt-go
-  ];
 
   users.users.newt = {
     isSystemUser = true;
@@ -25,7 +26,7 @@
   };
 
   users.groups.newt = {};
-
+    
   systemd.services.newt = {
     wantedBy = [ "multi-user.target" ];
     after = [ "network.target" ];
@@ -33,7 +34,14 @@
     serviceConfig = {
       Type = "notify";
       User = "newt";
-      ExecStart = "newt --id $(jq -r .newt_id /run/secrets/host) --secret $(jq -r .newt_secret /run/secrets/host) --endpoint https://scarey.me";
+      ExecStart = ''
+        /bin/sh -c '${pkgs.newt-go}/bin/newt \
+          --log-level DEBUG \
+          --dns 10.10.20.1 \
+          --id $(cat /run/secrets/newt_id) \
+          --secret $(cat /run/secrets/newt_secret) \
+          --endpoint https://scarey.me'
+      '';
       Restart = "always";
     };
   };
