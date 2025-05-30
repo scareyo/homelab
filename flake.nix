@@ -5,18 +5,10 @@
   inputs.flake-parts.url = "github:hercules-ci/flake-parts";
   inputs.amtcli.url = "github:scareyo/amtcli";
 
-  inputs.authentik = {
-    url = "github:nix-community/authentik-nix";
-  };
+  inputs.quadlet-nix.url = "github:SEIAROTg/quadlet-nix";
 
-  inputs.nixos-generators = {
-    url = "github:nix-community/nixos-generators";
-    inputs.nixpkgs.follows = "nixpkgs";
-  };
-
-  inputs.nixvirt =
-  {
-    url = "github:AshleyYakeley/NixVirt";
+  inputs.home-manager = {
+    url = "github:nix-community/home-manager";
     inputs.nixpkgs.follows = "nixpkgs";
   };
 
@@ -25,7 +17,7 @@
     inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = inputs@{ self, amtcli, authentik, flake-parts, nixos-generators, nixpkgs, nixvirt, sops-nix }:
+  outputs = inputs@{ self, amtcli, flake-parts, home-manager, nixpkgs, quadlet-nix, sops-nix }:
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = [
         "x86_64-linux"
@@ -40,7 +32,7 @@
             git-crypt
             sops
             yq-go
-            
+
             # Ansible
             ansible
             ansible-lint
@@ -93,21 +85,6 @@
         nixosConfigurations."nami" = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           modules = [ ./nix/hosts/nami ];
-          specialArgs = { inherit inputs; };
-        };
-        nixosConfigurations."authentik" = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          modules = [ ./nix/hosts/authentik ];
-          specialArgs = { inherit inputs; };
-        };
-        nixosConfigurations."omni" = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          modules = [ ./nix/hosts/omni ];
-          specialArgs = { inherit inputs; };
-        };
-        nixosConfigurations."newt" = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          modules = [ ./nix/hosts/newt ];
           specialArgs = { inherit inputs; };
         };
       };
