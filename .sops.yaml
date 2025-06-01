@@ -1,0 +1,14 @@
+gpg_keys:
+  - &scarey 733CC027A4F7D7D74B291D205B0D9896CB89E8D8
+host_keys:
+  nami: &nami age1f2wkhtfgw2fklxx4ftv5muhq5ggfuht87zyljgwvevj4nufnvfqsv7q5sa
+creation_rules:
+  - path_regex: sops/authentik.env
+    pgp: *scarey
+    age: *nami
+  - path_regex: sops/newt.json
+    pgp: *scarey
+    age: *nami
+  - path_regex: sops/newt.env
+    pgp: *scarey
+    age: *nami
