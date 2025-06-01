@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ../../modules/system/hypervisor.nix
+    ../../modules/system
 
     ../../modules/authentik
     ../../modules/newt
@@ -11,32 +11,19 @@
     ./hardware-configuration.nix
   ]; 
 
-  networking = {
-    hostName = "nami";
-    useDHCP = false;
-    bridges = {
-      "br0" = {
-        interfaces = [ "eno1" ];
-      };
-    };
-    interfaces.br0.useDHCP = true;
-    interfaces.eno1.useDHCP = false;
+  networking.hostName = "nami";
+
+  virtualisation = {
+    containers.enable = true;
+    podman.enable = true;
   };
 
-  virtualisation.containers.enable = true;
-  virtualisation.podman.enable = true;
-
   users.users.podman = {
-    isSystemUser = true;
-    description = "Podman system user";
-    group = "podman";
-    home = "/home/podman";
-    shell = pkgs.bash;
-    createHome = true;
+    isNormalUser = true;
+    description = "Podman user";
     autoSubUidGidRange = true;
     linger = true;
   };
-  users.groups.podman = {};
 
   networking.firewall.allowedTCPPorts = [ 80 443 ];
 
@@ -49,11 +36,29 @@
 
   homelab.sops = {
     enable = true;
-    file = ../../../sops/newt.env;
-    format = "dotenv";
-    owner = config.users.users.podman.name;
-    group = config.users.users.podman.group;
-    secrets = [ "newt.env" ];
+    secrets = [
+      {
+        name = "newt.env";
+        file = ../../../sops/newt.env;
+        format = "dotenv";
+        owner = config.users.users.podman.name;
+        group = config.users.users.podman.group;
+      }
+      {
+        name = "authentik.env";
+        file = ../../../sops/authentik.env;
+        format = "dotenv";
+        owner = config.users.users.podman.name;
+        group = config.users.users.podman.group;
+      }
+      {
+        name = "restic.env";
+        file = ../../../sops/restic.env;
+        format = "dotenv";
+        owner = config.users.users.podman.name;
+        group = config.users.users.podman.group;
+      }
+    ];
   };
 
   homelab.authentik = {

@@ -45,6 +45,8 @@
       ];
     };
 
+    nix.settings.trusted-users = [ "@wheel" ];
+
     security.sudo.wheelNeedsPassword = false;
 
     environment.systemPackages = with pkgs; [
@@ -69,6 +71,7 @@
       enable = true;
       allowReboot = true;
       flake = "github:scareyo/homelab";
+      dates = "07:00 UTC";
     };
   };
 }
