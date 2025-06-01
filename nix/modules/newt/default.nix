@@ -1,4 +1,4 @@
-{ config, inputs, lib, pkgs, ... }:
+{ config, inputs, lib, ... }:
 
 {
   imports = [
@@ -32,6 +32,8 @@
       imports = [ inputs.quadlet-nix.homeManagerModules.quadlet ];
       systemd.user.startServices = "sd-switch";
 
+      virtualisation.quadlet.autoEscape = true;
+
       virtualisation.quadlet.containers = {
         newt = {
           autoStart = true;
@@ -41,7 +43,7 @@
           };
           containerConfig = {
             image = "docker.io/fosrl/newt";
-            userns = "auto";
+            userns = "keep-id";
             environments = {
               PANGOLIN_ENDPOINT = "https://pangolin.scarey.me";
             };

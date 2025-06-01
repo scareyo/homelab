@@ -69,6 +69,7 @@
       enable = true;
       allowReboot = true;
       flake = "github:scareyo/homelab";
+      dates = "07:00 UTC";
     };
   };
 }
