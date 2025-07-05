@@ -1,0 +1,87 @@
+---
+- name: Create a podman network
+  become_user: pangolin
+  containers.podman.podman_network:
+    name: pangolin
+
+- name: Create Pangolin Quadlet
+  become_user: pangolin
+  containers.podman.podman_pod:
+    name: pangolin
+    state: quadlet
+    network: pangolin
+    share: net
+    userns: auto
+    dns:
+      - 1.1.1.1
+    ports:
+      - 51820:51820/udp
+      - 443:443
+      - 80:80
+
+- name: Create Pangolin
+  become_user: pangolin
+  containers.podman.podman_container:
+    name: pangolin_pangolin
+    pod: pangolin.pod
+    hostname: pangolin
+    image: docker.io/fosrl/pangolin
+    state: quadlet
+    volumes:
+      - /home/pangolin/config:/app/config
+    healthcheck: curl -f http://localhost:3001/api/v1/
+    healthcheck_interval: 3s
+    healthcheck_timeout: 3s
+    healthcheck_retries: 15
+
+- name: Create Gerbil
+  become_user: pangolin
+  containers.podman.podman_container:
+    name: pangolin_gerbil
+    pod: pangolin.pod
+    hostname: gerbil
+    image: docker.io/fosrl/gerbil
+    state: quadlet
+    command:
+      - --reachableAt=http://gerbil:3003
+      - --generateAndSaveKeyTo=/var/config/key
+      - --remoteConfig=http://pangolin:3001/api/v1/gerbil/get-config
+      - --reportBandwidthTo=http://pangolin:3001/api/v1/gerbil/receive-bandwidth
+    volumes:
+      - /home/pangolin/config/:/var/config
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+
+- name: Create Traefik
+  become_user: pangolin
+  containers.podman.podman_container:
+    name: pangolin_traefik
+    pod: pangolin.pod
+    hostname: traefik
+    image: docker.io/traefik
+    state: quadlet
+    command:
+      - --configFile=/etc/traefik/traefik_config.yml
+    volumes:
+      - /home/pangolin/config/traefik:/etc/traefik:ro
+      - /home/pangolin/config/letsencrypt:/letsencrypt
+    healthcheck: curl -f http://localhost:3001/api/v1/
+    healthcheck_interval: 3s
+    healthcheck_timeout: 3s
+    healthcheck_retries: 15
+
+- name: 
+  getent:
+    database: passwd
+
+- name: Start Pangolin
+  become_user: pangolin
+  ansible.builtin.systemd_service:
+    name: pangolin-pod
+    scope: user
+    state: started
+    enabled: true
+    daemon_reload: true
+  environment:
+    XDG_RUNTIME_DIR: "/run/user/{{ getent_passwd['pangolin'].1 }}"

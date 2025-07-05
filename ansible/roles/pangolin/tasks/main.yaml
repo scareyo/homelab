@@ -1,0 +1,62 @@
+---
+- name: Check mandatory variables are defined
+  ansible.builtin.assert:
+    that:
+      - pangolin_email is defined
+      - pangolin_password is defined
+      - pangolin_secret
+      - pangolin_domain is defined
+
+- name: Install Podman
+  package:
+    name: podman
+    state: present
+
+- name: Decrease unprivileged port start
+  ansible.posix.sysctl:
+    name: net.ipv4.ip_unprivileged_port_start
+    value: "80"
+    state: present
+
+- name: Create Pangolin directory
+  ansible.builtin.file:
+    path: "/home/pangolin/config/traefik"
+    state: directory
+    owner: pangolin
+    group: pangolin
+    mode: "0755"
+
+- name: Create Let's Encrypt directory
+  ansible.builtin.file:
+    path: "/home/pangolin/config/letsencrypt"
+    state: directory
+    owner: pangolin
+    group: pangolin
+    mode: "0755"
+
+- name: Generate Pangolin config
+  ansible.builtin.template:
+    src: config.yml.j2
+    dest: /home/pangolin/config/config.yml
+    owner: pangolin
+    group: pangolin
+    mode: "0644"
+
+- name: Generate Traefik config
+  ansible.builtin.template:
+    src: traefik_config.yml.j2
+    dest: /home/pangolin/config/traefik/traefik_config.yml
+    owner: pangolin
+    group: pangolin
+    mode: "0644"
+
+- name: Generate Traefik config
+  ansible.builtin.template:
+    src: dynamic_config.yml.j2
+    dest: /home/pangolin/config/traefik/dynamic_config.yml
+    owner: pangolin
+    group: pangolin
+    mode: "0644"
+
+- name: Define containers
+  ansible.builtin.include_tasks: "./containers.yaml"

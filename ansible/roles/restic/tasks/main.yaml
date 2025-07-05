@@ -1,0 +1,16 @@
+---
+- name: Check mandatory variables are defined
+  ansible.builtin.assert:
+    that:
+      - restic_s3_key_id is defined
+      - restic_s3_key_secret is defined
+
+- name: Create user environment file
+  copy:
+    dest: /home/podman/.config/environment.d/secret.conf
+    content: |
+      AWS_ACCESS_KEY_ID={{ restic_s3_key_id }}
+      AWS_SECRET_ACCESS_KEY={{ restic_s3_key_secret }}
+    mode: '0600'
+    owner: podman
+    group: podman

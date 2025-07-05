@@ -1,0 +1,68 @@
+---
+- name: Create a podman network
+  containers.podman.podman_network:
+    name: pangolin
+
+- name: Create Pangolin
+  containers.podman.podman_container:
+    name: pangolin
+    hostname: pangolin
+    image: docker.io/fosrl/pangolin
+    state: started
+    restart_policy: unless-stopped
+    network: pangolin
+    volumes:
+      - /opt/pangolin/config:/app/config
+    healthcheck: curl -f http://localhost:3001/api/v1/
+    healthcheck_interval: 3s
+    healthcheck_timeout: 3s
+    healthcheck_retries: 15
+    generate_systemd:
+      path: /tmp/
+      restart_policy: always
+
+- name: Create Gerbil
+  containers.podman.podman_container:
+    name: gerbil
+    hostname: gerbil
+    image: docker.io/fosrl/gerbil
+    state: started
+    restart_policy: unless-stopped
+    network: pangolin
+    requires: pangolin
+    command:
+      - --reachableAt=http://gerbil:3003
+      - --generateAndSaveKeyTo=/var/config/key
+      - --remoteConfig=http://pangolin:3001/api/v1/gerbil/get-config
+      - --reportBandwidthTo=http://pangolin:3001/api/v1/gerbil/receive-bandwidth
+    volumes:
+      - /opt/pangolin/config/:/var/config
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    ports:
+      - 51820:51820/udp
+      - 443:443
+      - 80:80
+    generate_systemd:
+      path: /tmp/
+      restart_policy: always
+
+- name: Create Traefik
+  containers.podman.podman_container:
+    name: traefik
+    hostname: traefik
+    image: docker.io/traefik
+    state: started
+    restart_policy: unless-stopped
+    network: container:gerbil
+    requires: pangolin
+    command:
+      - --configFile=/etc/traefik/traefik_config.yml
+    volumes:
+      - /opt/pangolin/config/traefik:/etc/traefik:ro
+      - /opt/pangolin/config/letsencrypt:/letsencrypt
+    healthcheck: curl -f http://localhost:3001/api/v1/
+    healthcheck_interval: 3s
+    healthcheck_timeout: 3s
+    healthcheck_retries: 15
