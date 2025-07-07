@@ -1,4 +1,8 @@
 ---
-osdisk: "/dev/disk/by-path/pci-0000:02:00.0-nvme-1"
-datadisk: "/dev/disk/by-path/pci-0000:01:00.0-nvme-1"
 talos_config: "control"
+
+amt_host: 10.10.22.11
+amt_mac_address: "58:47:ca:78:ea:6d"
+
+talos_host: 10.10.20.11
+talos_mac_address: "58:47:ca:78:ea:6a"

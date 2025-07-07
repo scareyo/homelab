@@ -1,6 +1,109 @@
 ---
-- name: Deploy seraphim cluster
-  import_playbook: ./playbooks/1-seraphim-metal.yaml
+- name: Provision Cloud Machines
+  hosts: localhost
+  connection: local
+  tasks:
+    - name: Create Zeus
+      hetzner.hcloud.server:
+        name: zeus
+        server_type: cpx11
+        image: "249165353"
+        location: ash
+        ipv4: zeus
+        state: started
 
-- name: Configure seraphim cluster
-  import_playbook: ./playbooks/2-seraphim-configure.yaml
+- name: Get MS-01 machine status
+  hosts: ms01
+  connection: local
+  environment:
+    OMNI_ENDPOINT: "{{ lookup('bitwarden.secrets.lookup', '3ca32de6-bdf7-4537-a432-b314001bcee8') }}"
+    OMNI_SERVICE_ACCOUNT_KEY: "{{ lookup('bitwarden.secrets.lookup', '8c7f4e31-93f6-469c-aace-b314001c2546') }}"
+  tasks:
+    - name: Get machine status
+      ansible.builtin.shell: |
+        set -o pipefail
+        omnictl get machinestatus -o yaml | yq 'select(.spec.network.hostname == "{{ inventory_hostname | quote }}") | .metadata.phase'
+      changed_when: false
+      register: cmd
+
+    - name: Set machine status fact
+      ansible.builtin.set_fact:
+        omni_status: "{{ cmd.stdout }}"
+
+- name: Run PXE server
+  hosts: localhost
+  connection: local
+  vars:
+    omni_schematic_id: "{{ lookup('bitwarden.secrets.lookup', '51932804-7345-4f6b-8c2c-b31300180cc9') }}"
+    omni_kernel_params: "{{ lookup('bitwarden.secrets.lookup', '96f56098-ba09-4fbc-9240-b3130049ba2d') }}"
+    missing_machines: []
+  pre_tasks:
+    - name: Gather missing machines
+      ansible.builtin.set_fact:
+        missing_machines: "{{ missing_machines + [item] }}"
+      loop: "{{ groups['ms01'] }}"
+      when: hostvars[item]['omni_status'] == ''
+  roles:
+    - role: pxe
+      vars:
+        pxe_kernel_url: "https://pxe.factory.talos.dev/image/{{ omni_schematic_id }}/{{ talos_version }}/kernel-amd64"
+        pxe_initrd_url: "https://pxe.factory.talos.dev/image/{{ omni_schematic_id }}/{{ talos_version }}/initramfs-amd64.xz"
+        pxe_kernel_params: "{{ omni_kernel_params }}"
+        pxe_subnet: "10.10.22.0/24"
+      when: missing_machines | length > 0
+
+- name: Boot MS-01 machines to PXE
+  hosts: ms01
+  connection: local
+  vars:
+    amt_username: "{{ lookup('bitwarden.secrets.lookup', 'f797e58b-540d-43fa-8bac-b26b016c3aa3') }}"
+    amt_password: "{{ lookup('bitwarden.secrets.lookup', '06085706-dfba-486c-ad54-b26b016c544a') }}"
+  tasks:
+    - name: Set hosts to boot from PXE
+      ansible.builtin.command: "echo amtcli boot pxe {{ amt_host }} --username {{ amt_username }} --password {{ amt_password }}"
+      changed_when: true
+      register: cmd
+      retries: 5
+      until: cmd.rc == 0
+      when: omni_status == ''
+
+    - name: Start hosts
+      ansible.builtin.command: "echo amtcli on {{ amt_host }} --username {{ amt_username }} --password {{ amt_password }}"
+      changed_when: true
+      register: cmd
+      until: cmd.rc == 0
+      when: omni_status == ''
+
+- name: Wait for all machines to be running
+  hosts: seraphim
+  connection: local
+  environment:
+    OMNI_ENDPOINT: "{{ lookup('bitwarden.secrets.lookup', '3ca32de6-bdf7-4537-a432-b314001bcee8') }}"
+    OMNI_SERVICE_ACCOUNT_KEY: "{{ lookup('bitwarden.secrets.lookup', '8c7f4e31-93f6-469c-aace-b314001c2546') }}"
+  tasks:
+    - name: Check machine status
+      ansible.builtin.shell: |
+        set -o pipefail
+        STATUS=$(omnictl get machinestatus -o yaml | yq 'select(.spec.network.hostname == "{{ inventory_hostname | quote }}") | .metadata.phase')
+        if [ "$STATUS" == "running" ]; then
+          exit 0
+        fi
+        exit 1
+      changed_when: false
+      retries: 25
+      register: cmd
+      until: cmd.rc == 0
+
+- name: Configure Seraphim
+  hosts: localhost
+  connection: local
+  environment:
+    OMNI_ENDPOINT: "{{ lookup('bitwarden.secrets.lookup', '3ca32de6-bdf7-4537-a432-b314001bcee8') }}"
+    OMNI_SERVICE_ACCOUNT_KEY: "{{ lookup('bitwarden.secrets.lookup', '8c7f4e31-93f6-469c-aace-b314001c2546') }}"
+  roles:
+    - role: omni
+      vars:
+        omni_talos_version: "{{ talos_version }}"
+        omni_kubernetes_version: "{{ kubernetes_version }}"
+        omni_cluster_name: "seraphim"
+        omni_bws_access_token: "{{ lookup('bitwarden.secrets.lookup', '89f060d5-dbf4-47d3-b1d7-b31d016fc277') }}"

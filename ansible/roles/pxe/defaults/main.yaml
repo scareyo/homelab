@@ -1,9 +1,6 @@
 ---
-pxe_talos_kernel_url: >
-  https://factory.talos.dev/image/064d2c892ac9a3a7da7fa550dbdd1516908bd9dfe355ad345ff4e9d8f8b34930/v1.9.1/kernel-amd64
-pxe_talos_kernel_checksum: >
-  sha512:https://github.com/siderolabs/talos/releases/download/v1.9.1/sha512sum.txt
-pxe_talos_initrd_url: >
-  https://factory.talos.dev/image/064d2c892ac9a3a7da7fa550dbdd1516908bd9dfe355ad345ff4e9d8f8b34930/v1.9.1/initramfs-amd64.xz
-pxe_talos_initrd_checksum: >
-  sha512:https://github.com/siderolabs/talos/releases/download/v1.9.1/sha512sum.txt
+pxe_kernel_params: ""
+
+pxe_dnsmasq_path: "{{ role_path }}/files/data/dnsmasq"
+pxe_http_path: "{{ role_path }}/files/data/http"
+pxe_ipxe_path: "{{ role_path }}/files/data/ipxe"

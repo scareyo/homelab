@@ -1,10 +1,5 @@
 ---
 collections:
-  - name: containers.podman
+  - name: bitwarden.secrets
   - name: hetzner.hcloud
-  - name: infisical.vault
   - name: kubernetes.core
-
-roles:
-  - name: githubixx.ansible_role_wireguard
-  - name: nginxinc.nginx

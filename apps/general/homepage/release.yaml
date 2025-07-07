@@ -1,0 +1,167 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: homepage
+  namespace: homepage
+spec:
+  chart:
+    spec:
+      chart: homepage
+      version: 2.1.0
+      sourceRef:
+        kind: HelmRepository
+        name: homepage
+  releaseName: homepage
+  interval: 10m
+  values:
+    enableRbac: true
+    serviceAccount:
+      create: true
+    env:
+      HOMEPAGE_ALLOWED_HOSTS: home.apps.int.scarey.me
+    config:
+      kubernetes:
+        mode: cluster
+      settingsString: |
+        title: Homepage
+        headerStyle: clean
+        theme: dark
+        layout:
+          System:
+            style: row
+            columns: 3
+      bookmarks:
+        - Developer:
+            - scareyo/homelab:
+                - icon: github
+                  description: My k8s homelab infrastructure
+                  href: https://github.com/scareyo/homelab
+      services:
+        - System:
+            - Seraphim:
+                icon: kubernetes
+                description: Cluster statistics
+                widget:
+                  type: prometheusmetric
+                  url: https://prometheus.apps.int.scarey.me
+                  metrics:
+                    - label: Running Pods
+                      query: sum(kubelet_running_pods{cluster="seraphim"})
+            - Backblaze:
+                icon: backblaze
+                description: External cluster backups
+                href: https://secure.backblaze.com/user_signin.htm
+                widget:
+                  type: prometheusmetric
+                  url: https://prometheus.apps.int.scarey.me
+                  metrics:
+                    - label: Backup Size
+                      query: sum(velero_backup_tarball_size_bytes)
+                      format:
+                        type: bytes
+            - Ceph:
+                icon: ceph
+                description: Storage management dashboard
+                href: https://ceph.apps.int.scarey.me
+                widget:
+                  type: prometheusmetric
+                  url: https://prometheus.apps.int.scarey.me
+                  metrics:
+                    - label: s-bear
+                      query: ceph_bluefs_db_used_bytes{node_name='s-bear'} / ceph_bluefs_db_total_bytes{node_name='s-bear'} * 100
+                      format:
+                        type: percent
+                    - label: s-hawk
+                      query: ceph_bluefs_db_used_bytes{node_name='s-hawk'} / ceph_bluefs_db_total_bytes{node_name='s-hawk'} * 100
+                      format:
+                        type: percent
+                    - label: s-shark
+                      query: ceph_bluefs_db_used_bytes{node_name='s-shark'} / ceph_bluefs_db_total_bytes{node_name='s-shark'} * 100
+                      format:
+                        type: percent
+                    - label: s-snake
+                      query: ceph_bluefs_db_used_bytes{node_name='s-snake'} / ceph_bluefs_db_total_bytes{node_name='s-snake'} * 100
+                      format:
+                        type: percent
+            - Hubble:
+                icon: cilium
+                description: Network observability
+                href: https://hubble.apps.int.scarey.me
+                widget:
+                  type: prometheusmetric
+                  url: https://prometheus.apps.int.scarey.me
+                  metrics:
+                    - label: HTTP Requests
+                      query: sum(rate(hubble_http_requests_total[2m]))
+                      format:
+                        type: number
+                        suffix: " req/s"
+        - Monitoring:
+            - Grafana:
+                icon: grafana
+                description: Homelab visualizations
+                href: https://grafana.apps.int.scarey.me
+            - Prometheus:
+                icon: prometheus
+                description: Homelab metrics
+                href: https://grafana.apps.int.scarey.me/goto/7NCYR32HR?orgId=1
+                widget:
+                  type: prometheus
+                  url: https://prometheus.apps.int.scarey.me
+            - Alertmanager:
+                icon: alertmanager
+                description: Homelab alerts
+                href: https://grafana.apps.int.scarey.me/alerting/groups
+                widget:
+                  type: prometheusmetric
+                  url: https://prometheus.apps.int.scarey.me
+                  metrics:
+                    - label: Active
+                      query: alertmanager_alerts{state="active"}
+                      format:
+                        type: number
+                    - label: Suppressed
+                      query: alertmanager_alerts{state="suppressed"}
+                      format:
+                        type: number
+        - Public:
+            - Forgejo:
+                icon: forgejo
+                description: A painless, self-hosted Git service
+                href: https://git.scarey.me
+                siteMonitor: https://git.scarey.me
+            - Authentik:
+                icon: authentik
+                description: Identity and access management
+                href: https://sso.scarey.me
+                siteMonitor: https://sso.scarey.me
+      widgets:
+        - logo:
+            icon: google
+        - kubernetes:
+            cluster:
+              show: true
+              cpu: true
+              memory: true
+              showLabel: true
+              label: "cluster"
+            nodes:
+              show: true
+              cpu: true
+              memory: true
+              showLabel: true
+        - openmeteo:
+            label: Boston
+            latitude: 42.361145
+            longitude: -71.057083
+            timezone: America/New_York
+            units: imperial
+            cache: 5
+            format:
+              maximumFractionDigits: 0
+        - datetime:
+            text_size: xl
+            format:
+              timeStyle: short
+              hourCycle: h23

@@ -1,0 +1,69 @@
+---
+kind: Cluster
+name: {{ omni_cluster_name }}
+labels:
+  cluster: {{ omni_cluster_name }}
+kubernetes:
+  version: v{{ omni_kubernetes_version }}
+talos:
+  version: v{{ omni_talos_version }}
+patches:
+  - name: config
+    inline:
+      cluster:
+        allowSchedulingOnControlPlanes: true
+        network:
+          cni:
+            name: none
+        proxy:
+          disabled: true
+      machine:
+        network:
+          kubespan:
+            enabled: true
+          interfaces:
+            - interface: enp3s0f0np0
+              dhcp: true
+            - interface: enp89s0
+              dhcp: false
+              routes: []
+systemExtensions:
+  - siderolabs/i915
+  - siderolabs/intel-ucode
+  - siderolabs/mei
+
+---
+kind: ControlPlane
+machines:
+{% for machine in machines | selectattr("groups", "contains", "control") %}
+  - {{ machine.id }}
+{% endfor %}
+
+---
+kind: Workers
+machines:
+{% for machine in machines | selectattr("groups", "contains", "worker") %}
+  - {{ machine.id }}
+{% endfor %}
+
+{% for machine in machines %}
+---
+kind: Machine
+name: {{ machine.id }}
+{% if machine.disk != "" %}
+install:
+  disk: {{ machine.disk }}
+{% endif %}
+patches:
+{% if "control" in machine.groups %}
+  - name: cilium 
+    file: {{ role_path }}/files/cilium-install.yaml
+{% endif %}
+{% if machine.platform == "hcloud" %}
+  - name: hcloud
+    inline:
+      cluster:
+        externalCloudProvider:
+          enabled: true
+{% endif %}
+{% endfor %}

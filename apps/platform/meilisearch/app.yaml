@@ -1,7 +1,0 @@
----
-name: meilisearch
-namespace: meilisearch
-sources:
-  - chart: meilisearch
-    repoURL: https://meilisearch.github.io/meilisearch-kubernetes
-    targetRevision: 0.12.0

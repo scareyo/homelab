@@ -1,9 +1,0 @@
-FROM --platform=linux/amd64 gcc:latest AS build
-RUN git clone https://github.com/ipxe/ipxe \
-    && cd ipxe/src \
-    && make -j$(nproc --all) bin-x86_64-efi/ipxe.efi
-
-FROM build AS embed
-WORKDIR /ipxe/src
-COPY ./data/ipxe/boot.ipxe /ipxe/src/boot.ipxe
-ENTRYPOINT [ "/bin/make", "bin-x86_64-efi/ipxe.efi", "EMBED=boot.ipxe" ]

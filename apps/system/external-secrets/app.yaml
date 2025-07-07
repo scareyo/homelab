@@ -1,7 +1,0 @@
----
-name: external-secrets
-namespace: external-secrets
-sources:
-  - chart: external-secrets
-    repoURL: https://charts.external-secrets.io
-    targetRevision: 0.16.1

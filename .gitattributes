@@ -1,2 +1,0 @@
-# Encrypted files
-secrets/** filter=git-crypt diff=git-crypt

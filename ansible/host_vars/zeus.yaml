@@ -1,17 +1,2 @@
 ---
-
-secrets_authentik: "{{ lookup('infisical.vault.read_secrets', env_slug='prod', project_id='64853e11f7a9ba1c4ac21cfd', path='/authentik') | items2dict }}"
-secrets_backblaze: "{{ lookup('infisical.vault.read_secrets', env_slug='prod', project_id='64853e11f7a9ba1c4ac21cfd', path='/backblaze/zeus') | items2dict }}"
-secrets_pangolin: "{{ lookup('infisical.vault.read_secrets', env_slug='prod', project_id='64853e11f7a9ba1c4ac21cfd', path='/pangolin') | items2dict }}"
-
-# Authentik
-
-# Restic
-restic_s3_key_id: "{{ secrets_backblaze.BACKBLAZE_KEY_ID }}"
-restic_s3_key_secret: "{{ secrets_backblaze.BACKBLAZE_KEY_SECRET }}"
-
-# Pangolin
-pangolin_email: sam@scarey.me
-pangolin_password: "{{ secrets_pangolin.PANGOLIN_PASSWORD }}"
-pangolin_secret: "{{ secrets_pangolin.PANGOLIN_SECRET }}"
-pangolin_domain: "scarey.me"
+talos_config: "worker"

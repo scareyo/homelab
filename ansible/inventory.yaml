@@ -1,49 +1,32 @@
 ---
 # ---------------------------------------------------------------------------- #
-# Seraphim - Talos Linux cluster
+# MS-01 Mini PCs
 # ---------------------------------------------------------------------------- #
-seraphim:
-  hosts:
-    s-snake:
-      amt_host: 10.10.22.11
-      amt_mac_address: "58:47:ca:78:ea:6d"
-      talos_host: 10.10.20.11
-      talos_mac_address: "58:47:ca:78:ea:6a"
-    s-hawk:
-      amt_host: 10.10.22.12
-      amt_mac_address: "58:47:ca:78:df:35"
-      talos_host: 10.10.20.12
-      talos_mac_address: "58:47:ca:78:df:32"
-    s-bear:
-      amt_host: 10.10.22.13
-      amt_mac_address: "58:47:ca:78:e3:ad"
-      talos_host: 10.10.20.13
-      talos_mac_address: "58:47:ca:78:e3:aa"
-    s-shark:
-      amt_host: 10.10.22.14
-      amt_mac_address: "58:47:ca:78:dc:b5"
-      talos_host: 10.10.20.14
-      talos_mac_address: "58:47:ca:78:dc:b2"
-
-bootstrap:
-  hosts:
-    s-snake:
-
-seraphim_control:
+ms01:
   hosts:
     s-snake:
     s-hawk:
     s-bear:
-
-seraphim_worker:
-  hosts:
     s-shark:
 
 # ---------------------------------------------------------------------------- #
-# zeus - External gateway hosted on Hetzner
+# Hetzner Cloud VMs
 # ---------------------------------------------------------------------------- #
-gateway:
+cloud:
   hosts:
     zeus:
-      ansible_host: 178.156.140.63
-      ansible_python_interpreter: "/usr/bin/python3"
+
+# ---------------------------------------------------------------------------- #
+# Seraphim Cluster
+# ---------------------------------------------------------------------------- #
+seraphim:
+  children:
+    control:
+      hosts:
+        s-snake:
+        s-hawk:
+        s-bear:
+    worker:
+      hosts:
+        s-shark:
+        zeus:
