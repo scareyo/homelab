@@ -1,0 +1,53 @@
+---
+apiVersion: fluxcd.controlplane.io/v1
+kind: ResourceSet
+metadata:
+  name: seraphim
+  namespace: flux-system
+spec:
+  inputs:
+    - app: "hcloud"
+      path: "./apps/system/hcloud"
+      dependsOn: "backend"
+  resourcesTemplate: |
+    ---
+    apiVersion: kustomize.toolkit.fluxcd.io/v1
+    kind: Kustomization
+    metadata:
+      name: << inputs.app >>-helm
+      namespace: flux-system
+    spec:
+      << if inputs.dependsOn >>
+      dependsOn:
+        - name: << inputs.dependsOn >>
+      << end >>
+      path: "<< inputs.path >>/helm"
+      interval: 30m
+      retryInterval: 5m
+      prune: true
+      wait: true
+      timeout: 5m
+      sourceRef:
+        kind: GitRepository
+        name: flux
+    ---
+    apiVersion: kustomize.toolkit.fluxcd.io/v1
+    kind: Kustomization
+    metadata:
+      name: << inputs.app >>
+      namespace: flux-system
+    spec:
+      dependsOn:
+        - name: << inputs.app >>-helm
+      << if inputs.dependsOn >>
+        - name: << inputs.dependsOn >>
+      << end >>
+      path: "<< inputs.path >>"
+      interval: 30m
+      retryInterval: 5m
+      prune: true
+      wait: true
+      timeout: 5m
+      sourceRef:
+        kind: GitRepository
+        name: flux
