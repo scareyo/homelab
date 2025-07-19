@@ -1,0 +1,14 @@
+cluster:
+  name: seraphim
+clusterEvents:
+  enabled: true
+podLogs:
+  enabled: true
+alloy-logs:
+  enabled: true
+alloy-singleton:
+  enabled: true
+destinations:
+  - name: loki
+    type: loki
+    url: http://loki-gateway.monitoring.svc.cluster.local/loki/api/v1/push

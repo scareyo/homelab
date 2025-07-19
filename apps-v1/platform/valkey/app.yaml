@@ -1,0 +1,18 @@
+---
+name: valkey
+namespace: valkey
+sources:
+  - chart: valkey-cluster
+    repoURL: registry-1.docker.io/bitnamicharts
+    targetRevision: 3.0.2
+ignoreDifferences:
+  - group: ''
+    kind: Secret
+    name: valkey-valkey-cluster
+    jsonPointers:
+      - /data/valkey-password
+  - group: apps
+    kind: StatefulSet
+    name: valkey-valkey-cluster
+    jsonPointers:
+      - /spec/template/metadata/annotations/checksum~1secret

@@ -1,0 +1,15 @@
+gitea:
+  config:
+    server:
+      ROOT_URL: https://git.scarey.me
+    service:
+      DISABLE_REGISTRATION: true
+    oauth2_client:
+      ENABLE_AUTO_REGISTRATION: true
+  oauth:
+    - name: Authentik
+      provider: openidConnect
+      existingSecret: oauth
+      autoDiscoverUrl: https://sso.scarey.me/application/o/forgejo/.well-known/openid-configuration
+      iconUrl: "https://goauthentik.io/img/icon.png"
+      scopes: "email profile"

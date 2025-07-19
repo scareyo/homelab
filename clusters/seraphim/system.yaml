@@ -1,0 +1,40 @@
+---
+apiVersion: fluxcd.controlplane.io/v1
+kind: ResourceSetInputProvider
+metadata:
+  name: system
+  namespace: flux-system
+spec:
+  type: Static
+  defaultValues:
+    apps:
+      - name: cilium
+        path: apps/system/cilium
+        dependsOn: []
+      
+      - name: external-secrets-controller
+        path: apps/system/external-secrets/controller
+        dependsOn: []
+
+      - name: external-secrets-config
+        path: apps/system/external-secrets/config
+        dependsOn:
+          - external-secrets-controller
+
+      - name: flux-controller
+        path: apps/system/flux/controller
+        dependsOn: []
+
+      - name: flux-config
+        path: apps/system/flux/config
+        dependsOn:
+          - flux-controller
+
+      - name: hcloud-controller
+        path: apps/system/hcloud/controller
+        dependsOn: []
+
+      - name: hcloud-config
+        path: apps/system/hcloud/config
+        dependsOn:
+          - hcloud-controller

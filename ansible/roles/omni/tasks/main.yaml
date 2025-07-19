@@ -55,6 +55,7 @@
     name: external-secrets
     api_version: v1
     kind: Namespace
+    kubeconfig: "{{ role_path }}/files/data/kubeconfig"
     state: present
 
 - name: Add Bitwarden Secrets token
@@ -66,6 +67,7 @@
     definition:
       stringData:
         token: "{{ omni_bws_access_token }}"
+    kubeconfig: "{{ role_path }}/files/data/kubeconfig"
     state: present
 
 - name: Install Flux Operator
@@ -79,5 +81,5 @@
 - name: Bootstrap Flux
   kubernetes.core.k8s:
     state: present
-    src: https://raw.githubusercontent.com/scareyo/homelab/refs/heads/main/infrastructure/configs/flux.yaml
+    src: https://raw.githubusercontent.com/scareyo/homelab/refs/heads/main/apps/system/flux/config/instance.yaml
     kubeconfig: "{{ role_path }}/files/data/kubeconfig"

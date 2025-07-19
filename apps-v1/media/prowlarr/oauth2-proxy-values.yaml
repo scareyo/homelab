@@ -1,0 +1,45 @@
+config:
+  existingSecret: prowlarr-oauth2-proxy
+  configFile: |-
+    upstreams = [ "http://prowlarr.media.svc.cluster.local:9696" ]
+    email_domains = "*"
+    redirect_url = "https://prowlarr.apps.int.scarey.me/oauth2/callback"
+    provider = "oidc"
+    oidc_issuer_url = "https://sso.scarey.me/application/o/prowlarr/"
+    provider_display_name = "Authentik"
+    custom_sign_in_logo = "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/prowlarr.svg"
+    banner = "Prowlarr"
+extraObjects:
+  - apiVersion: external-secrets.io/v1beta1
+    kind: ExternalSecret
+    metadata:
+      name: "{{ .Release.Name }}-oauth2-proxy"
+    spec:
+      secretStoreRef:
+        kind: ClusterSecretStore
+        name: infisical
+      target:
+        name: "{{ .Release.Name }}-oauth2-proxy"
+      data:
+        - secretKey: client-id
+          remoteRef:
+            key: "{{ upper .Release.Name }}_OAUTH_CLIENT_ID"
+        - secretKey: client-secret
+          remoteRef:
+            key: "{{ upper .Release.Name }}_OAUTH_CLIENT_SECRET"
+      dataFrom:
+        - sourceRef:
+            generatorRef:
+              apiVersion: generators.external-secrets.io/v1alpha1
+              kind: Password
+              name: "{{ .Release.Name }}-cookie-secret"
+          rewrite:
+            - regexp:
+                source: password
+                target: cookie-secret
+  - apiVersion: generators.external-secrets.io/v1alpha1
+    kind: Password
+    metadata:
+      name: "{{ .Release.Name }}-cookie-secret"
+    spec:
+      length: 32

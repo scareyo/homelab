@@ -1,0 +1,9 @@
+---
+sets:
+  - name: development
+  - name: games
+  - name: general
+  - name: media
+  - name: monitoring
+  - name: platform
+  - name: system

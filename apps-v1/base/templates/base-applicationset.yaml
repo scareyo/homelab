@@ -1,0 +1,71 @@
+{{- range $index, $set := .Values.sets }}
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: {{ $set.name }}
+  namespace: argocd
+spec:
+  goTemplate: true
+  generators:
+    - git:
+        repoURL: https://github.com/scareyo/homelab
+        revision: main
+        files:
+          - path: apps/{{ $set.name }}/**/app.yaml
+  template:
+    metadata:
+      name: '{{`{{ .name }}`}}'
+    spec:
+      project: "{{ $set.name }}"
+      destination:
+        name: in-cluster
+        namespace: '{{`{{ .namespace }}`}}'
+  templatePatch: |
+    spec:
+      sources:
+    {{`{{- range $source := .sources }}`}}
+        - repoURL: '{{`{{ $source.repoURL }}`}}'
+          targetRevision: '{{`{{ $source.targetRevision }}`}}'
+      {{`{{- if not (hasSuffix ".git" $source.repoURL) }}`}}
+          chart: '{{`{{ $source.chart }}`}}'
+          helm:
+            valueFiles:
+              - $repo/apps/{{ $set.name }}/{{`{{ $.name }}`}}/{{`{{ $source.values | default "values.yaml" }}`}}
+            ignoreMissingValueFiles: true
+      {{`{{- else }}`}}
+          path: '{{`{{ $source.path }}`}}'
+      {{`{{- end }}`}}
+    {{`{{- end }}`}}
+        - repoURL: https://github.com/scareyo/homelab.git
+          targetRevision: main
+          path: apps/{{ $set.name }}/{{`{{ .name }}`}}
+          ref: repo
+          directory:
+            exclude: "*values.yaml"
+      syncPolicy:
+        syncOptions:
+          - CreateNamespace=true
+    {{`{{- range $syncOption := .syncOptions }}`}}
+          - '{{`{{ $syncOption }}`}}'    
+    {{`{{- end }}`}}
+        managedNamespaceMetadata:
+          labels:
+    {{`{{- if .enforce }}`}}
+            pod-security.kubernetes.io/enforce: '{{`{{ .enforce }}`}}'
+    {{`{{- end }}`}}
+      ignoreDifferences:
+    {{`{{- range $ignore := .ignoreDifferences }}`}}
+        - group: '{{`{{ $ignore.group }}`}}'
+          kind: '{{`{{ $ignore.kind }}`}}'
+          name: '{{`{{ $ignore.name }}`}}'
+          jsonPointers:
+      {{`{{- range $jsonPointer := .jsonPointers }}`}}
+            - '{{`{{ $jsonPointer }}`}}'
+      {{`{{- end }}`}}
+          jqPathExpressions:
+      {{`{{- range $jqPath := .jqPathExpressions }}`}}
+            - '{{`{{ $jqPath }}`}}'
+      {{`{{- end }}`}}
+    {{`{{- end }}`}}
+{{- end }}

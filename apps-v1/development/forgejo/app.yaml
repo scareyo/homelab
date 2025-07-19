@@ -1,0 +1,7 @@
+---
+name: forgejo
+namespace: forgejo
+sources:
+  - chart: forgejo
+    repoURL: code.forgejo.org/forgejo-helm
+    targetRevision: 12.0.0
