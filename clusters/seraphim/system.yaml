@@ -8,6 +8,15 @@ spec:
   type: Static
   defaultValues:
     apps:
+      - name: cert-manager-controller
+        path: apps/system/cert-manager/controller
+        dependsOn: []
+
+      - name: cert-manager-config
+        path: apps/system/cert-manager/config
+        dependsOn:
+          - cert-manager-controller
+
       - name: cilium
         path: apps/system/cilium
         dependsOn: []
@@ -30,11 +39,7 @@ spec:
         dependsOn:
           - flux-controller
 
-      - name: hcloud-controller
-        path: apps/system/hcloud/controller
-        dependsOn: []
-
-      - name: hcloud-config
-        path: apps/system/hcloud/config
+      - name: hcloud
+        path: apps/system/hcloud
         dependsOn:
-          - hcloud-controller
+          - external-secrets-config
