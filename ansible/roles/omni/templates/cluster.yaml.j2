@@ -65,5 +65,8 @@ patches:
       cluster:
         externalCloudProvider:
           enabled: true
+      machine:
+        nodeTaints:
+          hcloud: NoSchedule
 {% endif %}
 {% endfor %}

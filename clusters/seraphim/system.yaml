@@ -23,7 +23,8 @@ spec:
       
       - name: external-secrets-controller
         path: apps/system/external-secrets/controller
-        dependsOn: []
+        dependsOn:
+          - cert-manager-controller
 
       - name: external-secrets-config
         path: apps/system/external-secrets/config
