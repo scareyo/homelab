@@ -12,3 +12,7 @@ spec:
       - name: homepage
         path: apps/general/homepage
         dependsOn: []
+
+      - name: web
+        path: apps/general/web
+        dependsOn: []
