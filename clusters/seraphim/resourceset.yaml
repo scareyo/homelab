@@ -25,6 +25,9 @@ spec:
     spec:
       << if $app.dependsOn >>
       dependsOn:
+        << if inputs.dependsOn >>
+        - name: << inputs.dependsOn >>
+        <<- end >>
         <<- range $dep := $app.dependsOn >>
         - name: << $dep >>
         <<- end >>

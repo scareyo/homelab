@@ -7,6 +7,7 @@ metadata:
 spec:
   type: Static
   defaultValues:
+    dependsOn: ""
     apps:
       - name: cert-manager-controller
         path: apps/system/cert-manager/controller
@@ -39,6 +40,11 @@ spec:
         path: apps/system/flux/config
         dependsOn:
           - flux-controller
+
+      - name: gateway
+        path: apps/system/gateway
+        dependsOn:
+          - cert-manager-config
 
       - name: hcloud
         path: apps/system/hcloud
