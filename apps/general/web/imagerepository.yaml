@@ -1,9 +1,0 @@
----
-apiVersion: image.toolkit.fluxcd.io/v1beta2
-kind: ImageRepository
-metadata:
-  name: web
-  namespace: scarey
-spec:
-  image: ghcr.io/scareyo/web
-  interval: 5m

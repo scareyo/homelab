@@ -70,16 +70,23 @@
     kubeconfig: "{{ role_path }}/files/data/kubeconfig"
     state: present
 
-- name: Install Flux Operator
+- name: Install Argo CD
   kubernetes.core.helm:
-    name: flux-operator
-    chart_ref: oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator
-    release_namespace: flux-system
+    name: argo-cd
+    chart_ref: argo-cd
+    chart_version: 8.2.2
+    chart_repo_url: https://argoproj.github.io/argo-helm
+    release_namespace: argocd
     create_namespace: true
+    values_files:
+      - "{{ playbook_dir }}/../k8s/infrastructure/argocd/values.yaml"
     kubeconfig: "{{ role_path }}/files/data/kubeconfig"
 
-- name: Bootstrap Flux
-  kubernetes.core.k8s:
-    state: present
-    src: https://raw.githubusercontent.com/scareyo/homelab/refs/heads/main/apps/system/flux/config/instance.yaml
+- name: Bootstrap Argo CD
+  kubernetes.core.helm:
+    name: base
+    chart_ref: "{{ playbook_dir }}/../k8s/infrastructure/base"
+    release_namespace: argocd
+    values_files:
+      - "{{ playbook_dir }}/../k8s/infrastructure/base/values.yaml"
     kubeconfig: "{{ role_path }}/files/data/kubeconfig"

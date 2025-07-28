@@ -1,0 +1,5 @@
+---
+name: base
+namespace: argocd
+sources:
+  - type: dir

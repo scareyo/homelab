@@ -1,0 +1,11 @@
+---
+name: external-secrets
+namespace: external-secrets
+sources:
+  - type: helm
+    chart: external-secrets
+    repoURL: https://charts.external-secrets.io
+    targetRevision: 0.18.2
+
+  - type: dir
+    path: config

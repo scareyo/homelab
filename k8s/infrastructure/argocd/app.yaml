@@ -1,0 +1,11 @@
+---
+name: argocd
+namespace: argocd
+sources:
+  - type: helm
+    chart: argo-cd
+    repoURL: https://argoproj.github.io/argo-helm
+    targetRevision: 8.2.2
+
+  - type: dir
+    path: config

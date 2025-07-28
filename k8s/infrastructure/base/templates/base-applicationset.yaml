@@ -1,0 +1,76 @@
+{{- range $index, $project := .Values.projects }}
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: {{ $project.name }}
+  namespace: argocd
+spec:
+  goTemplate: true
+  generators:
+    - git:
+        repoURL: https://github.com/scareyo/homelab
+        revision: main
+        files:
+          - path: k8s/{{ $project.name }}/**/app.yaml
+  template:
+    metadata:
+      name: '{{`{{ .name }}`}}'
+    spec:
+      project: "{{ $project.name }}"
+      destination:
+        name: in-cluster
+        namespace: '{{`{{ .namespace }}`}}'
+  templatePatch: |
+    spec:
+      sources:
+    {{`{{- range $source := .sources }}`}}
+      {{`{{- if eq $source.type "helm" }}`}}
+        - repoURL: '{{`{{ $source.repoURL }}`}}'
+          targetRevision: '{{`{{ $source.targetRevision }}`}}'
+          chart: '{{`{{ $source.chart }}`}}'
+          helm:
+            valueFiles:
+              - '$values/{{`{{ $.path.path }}`}}/{{`{{ $source.values | default "values.yaml" }}`}}'
+            ignoreMissingValueFiles: true
+        - repoURL: https://github.com/scareyo/homelab
+          targetRevision: main
+          ref: values
+      {{`{{- else if eq $source.type "git" }}`}}
+        - repoURL: '{{`{{ $source.repoURL }}`}}'
+          targetRevision: '{{`{{ $source.targetRevision }}`}}'
+          path: '{{`{{ $source.path }}`}}'
+      {{`{{- else if eq $source.type "dir" }}`}}
+        - repoURL: https://github.com/scareyo/homelab.git
+          targetRevision: main
+          path: '{{`{{ $.path.path }}`}}/{{`{{ $source.path | default "" }}`}}'
+          ref: repo
+      {{`{{- else }}`}}
+      {{`{{- end }}`}}
+    {{`{{- end }}`}}
+      syncPolicy:
+        syncOptions:
+          - CreateNamespace=true
+    {{`{{- range $syncOption := .syncOptions }}`}}
+          - '{{`{{ $syncOption }}`}}'    
+    {{`{{- end }}`}}
+        managedNamespaceMetadata:
+          labels:
+    {{`{{- if .enforce }}`}}
+            pod-security.kubernetes.io/enforce: '{{`{{ .enforce }}`}}'
+    {{`{{- end }}`}}
+      ignoreDifferences:
+    {{`{{- range $ignore := .ignoreDifferences }}`}}
+        - group: '{{`{{ $ignore.group }}`}}'
+          kind: '{{`{{ $ignore.kind }}`}}'
+          name: '{{`{{ $ignore.name }}`}}'
+          jsonPointers:
+      {{`{{- range $jsonPointer := .jsonPointers }}`}}
+            - '{{`{{ $jsonPointer }}`}}'
+      {{`{{- end }}`}}
+          jqPathExpressions:
+      {{`{{- range $jqPath := .jqPathExpressions }}`}}
+            - '{{`{{ $jqPath }}`}}'
+      {{`{{- end }}`}}
+    {{`{{- end }}`}}
+{{- end }}

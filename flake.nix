@@ -38,8 +38,8 @@
             myPkgs.bitwarden-sdk 
 
             # Kubernetes
+            argocd
             cilium-cli
-            fluxcd
             k9s
             kubectl
             kubelogin-oidc

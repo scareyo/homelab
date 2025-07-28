@@ -1,0 +1,17 @@
+---
+name: cilium
+namespace: kube-system
+sources:
+  - type: helm
+    chart: cilium
+    repoURL: https://helm.cilium.io
+    targetRevision: 1.17.5
+ignoreDifferences:
+  - group: ''
+    kind: Secret
+    name: ''
+    jsonPointers:
+      - /data/ca.crt
+      - /data/ca.key
+      - /data/tls.crt
+      - /data/tls.key
