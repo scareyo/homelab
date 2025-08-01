@@ -5,7 +5,8 @@ commonAnnotations:
   argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
   argocd.argoproj.io/sync-wave: "5"
 resources:
-  - cloudflare-externalsecret.yaml
-  - internal-clusterissuer.yaml
-  - letsencrypt-production-clusterissuer.yaml
-  - letsencrypt-staging-clusterissuer.yaml
+  - default-bgpadvertisement.yaml
+  - default-bgpclusterconfig.yaml
+  - default-bgppeerconfig.yaml
+  - default-ippool.yaml
+  - hubble-httproute.yaml

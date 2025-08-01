@@ -1,0 +1,5 @@
+---
+name: gateway
+namespace: gateway
+sources:
+  - type: dir

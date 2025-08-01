@@ -5,7 +5,7 @@ sources:
   - type: helm
     chart: argo-cd
     repoURL: https://argoproj.github.io/argo-helm
-    targetRevision: 8.2.2
+    targetRevision: 8.2.4
 
   - type: dir
     path: config

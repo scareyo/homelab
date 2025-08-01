@@ -5,7 +5,11 @@ sources:
   - type: helm
     chart: cilium
     repoURL: https://helm.cilium.io
-    targetRevision: 1.17.5
+    targetRevision: 1.18.0
+
+  - type: dir
+    path: config
+
 ignoreDifferences:
   - group: ''
     kind: Secret
