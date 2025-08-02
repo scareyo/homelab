@@ -1,8 +1,0 @@
----
-name: infisical
-namespace: infisical
-sources:
-  - type: helm
-    chart: secrets-operator
-    repoURL: https://dl.cloudsmith.io/public/infisical/helm-charts/helm/charts
-    targetRevision: 0.9.4
