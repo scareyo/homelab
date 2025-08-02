@@ -1,11 +1,13 @@
 ---
 name: external-secrets
 namespace: external-secrets
+autosync: true
 sources:
   - type: helm
     chart: external-secrets
     repoURL: https://charts.external-secrets.io
     targetRevision: 0.18.2
+    syncWave: "-4"
 
   - type: dir
     path: config

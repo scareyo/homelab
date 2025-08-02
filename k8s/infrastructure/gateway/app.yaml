@@ -1,5 +1,6 @@
 ---
 name: gateway
 namespace: gateway
+autosync: true
 sources:
   - type: dir
