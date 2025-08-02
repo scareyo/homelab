@@ -12,9 +12,6 @@ cgroup:
   hostRoot: /sys/fs/cgroup
 k8sServiceHost: localhost
 k8sServicePort: 7445
-k8sClientRateLimit:
-  qps: 10
-  burst: 20
 bgpControlPlane:
   enabled: true
 gatewayAPI:
