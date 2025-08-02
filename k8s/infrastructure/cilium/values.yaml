@@ -12,12 +12,13 @@ cgroup:
   hostRoot: /sys/fs/cgroup
 k8sServiceHost: localhost
 k8sServicePort: 7445
+defaultLBServiceIPAM: none
 bgpControlPlane:
   enabled: true
 gatewayAPI:
   enabled: true
-externalIPs:
-  enabled: true
+#externalIPs:
+#  enabled: true
 hubble:
   relay:
     enabled: true

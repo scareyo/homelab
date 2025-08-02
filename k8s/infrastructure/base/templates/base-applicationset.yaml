@@ -16,6 +16,8 @@ spec:
   template:
     metadata:
       name: '{{`{{ .name }}`}}'
+      labels:
+        name: '{{`{{ .name }}`}}'
     spec:
       project: "{{ $project.name }}"
       destination:
@@ -54,9 +56,9 @@ spec:
       {{`{{- end }}`}}
     {{`{{- end }}`}}
       syncPolicy:
-    {{`{{- if .autosync }}`}}
-        automated: {}
-    {{`{{- end }}`}}
+    #{{`{{- if .autosync }}`}}
+    #    automated: {}
+    #{{`{{- end }}`}}
         syncOptions:
           - CreateNamespace=true
     {{`{{- range $syncOption := .syncOptions }}`}}

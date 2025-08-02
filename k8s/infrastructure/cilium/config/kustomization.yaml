@@ -9,3 +9,5 @@ resources:
   - default-bgppeerconfig.yaml
   - default-ippool.yaml
   - hubble-httproute.yaml
+  - internal-gatewayclass.yaml
+  - internal-gatewayclassconfig.yaml
