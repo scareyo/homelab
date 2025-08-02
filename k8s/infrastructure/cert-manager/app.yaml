@@ -1,10 +1,13 @@
 ---
 name: cert-manager
 namespace: cert-manager
+autosync: true
+syncWave: "-20"
 sources:
   - type: helm
     chart: cert-manager
     repoURL: https://charts.jetstack.io
     targetRevision: v1.18.2
+
   - type: dir
     path: config

@@ -1,5 +1,7 @@
 ---
 name: gateway
 namespace: gateway
+autosync: true
+syncWave: "-10"
 sources:
   - type: dir

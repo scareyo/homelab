@@ -1,6 +1,7 @@
 ---
 name: argocd
 namespace: argocd
+autosync: true
 sources:
   - type: helm
     chart: argo-cd
