@@ -1,7 +1,6 @@
 ---
 name: cilium
 namespace: kube-system
-autosync: true
 sources:
   - type: helm
     chart: cilium

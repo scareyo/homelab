@@ -1,8 +1,6 @@
 ---
 name: external-secrets
 namespace: external-secrets
-autosync: true
-syncWave: "-40"
 sources:
   - type: helm
     chart: external-secrets

@@ -1,6 +1,5 @@
 ---
 name: base
 namespace: argocd
-autosync: true
 sources:
   - type: dir

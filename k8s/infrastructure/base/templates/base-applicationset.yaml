@@ -13,6 +13,23 @@ spec:
         revision: main
         files:
           - path: k8s/{{ $project.name }}/**/app.yaml
+  {{- if .steps }}
+  strategy:
+    type: RollingSync
+    rollingSync:
+      steps:
+    {{- range $step := .steps }}
+        - matchExpressions:
+            - key: name
+              operator: In
+              values:
+                - {{ $step }}
+    {{- end }}
+        - matchExpressions:
+            - key: name
+              operator: NotIn
+              values: {{ .steps | toJson }}
+  {{- end }}
   template:
     metadata:
       name: '{{`{{ .name }}`}}'
@@ -24,11 +41,6 @@ spec:
         name: in-cluster
         namespace: '{{`{{ .namespace }}`}}'
   templatePatch: |
-    {{`{{- if .syncWave }}`}}
-    metadata:
-      annotations:
-        argocd.argoproj.io/sync-wave: "{{`{{ .syncWave }}`}}"
-    {{`{{- end }}`}}
     spec:
       sources:
     {{`{{- range $source := .sources }}`}}
@@ -56,9 +68,9 @@ spec:
       {{`{{- end }}`}}
     {{`{{- end }}`}}
       syncPolicy:
-    #{{`{{- if .autosync }}`}}
-    #    automated: {}
-    #{{`{{- end }}`}}
+    {{`{{- if .autosync }}`}}
+        automated: {}
+    {{`{{- end }}`}}
         syncOptions:
           - CreateNamespace=true
     {{`{{- range $syncOption := .syncOptions }}`}}

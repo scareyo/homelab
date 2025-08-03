@@ -1,8 +1,6 @@
 ---
 name: cert-manager
 namespace: cert-manager
-autosync: true
-syncWave: "-20"
 sources:
   - type: helm
     chart: cert-manager

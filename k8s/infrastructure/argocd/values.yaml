@@ -22,6 +22,7 @@ configs:
   #    g, argocd-readonly, role:readonly
   params:
     server.insecure: true
+    applicationsetcontroller.enable.progressive.syncs: true
 #global:
 #  addPrometheusAnnotations: true
 #applicationSet:

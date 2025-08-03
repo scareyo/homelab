@@ -1,8 +1,6 @@
 ---
 name: hcloud
 namespace: hcloud
-autosync: true
-syncWave: "-30"
 sources:
   - type: helm
     chart: hcloud-cloud-controller-manager

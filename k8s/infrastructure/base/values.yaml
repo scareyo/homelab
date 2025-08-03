@@ -1,3 +1,10 @@
 ---
 projects:
   - name: infrastructure
+    steps:
+      - cilium
+      - external-secrets
+      - hcloud
+      - cert-manager
+      - gateway
+      - argocd
