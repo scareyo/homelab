@@ -17,10 +17,6 @@
           inherit system;
           config.allowUnfree = true;
         };
-
-        myPkgs = import ./nix/pkg {
-          inherit pkgs;
-        };
       in {
         devShells.default = pkgs.mkShell {
           packages = with pkgs; [
@@ -35,7 +31,7 @@
             ansible-lint
             python3Packages.kubernetes
 
-            myPkgs.bitwarden-sdk 
+            infisicalsdk
 
             # Kubernetes
             argocd

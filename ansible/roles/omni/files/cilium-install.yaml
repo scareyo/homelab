@@ -92,3 +92,13 @@ cluster:
                   - k8sServiceHost=localhost
                   - --set
                   - k8sServicePort=7445
+                  - --set
+                  - defaultLBServiceIPAM=none
+                  - --set
+                  - bgpControlPlane.enabled=true
+                  - --set
+                  - gatewayAPI.enabled=true
+                  - --set
+                  - hubble.relay.enabled=true
+                  - --set
+                  - hubble.ui.enabled=true

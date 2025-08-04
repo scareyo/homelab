@@ -5,7 +5,8 @@
       - omni_talos_version is defined
       - omni_kubernetes_version is defined
       - omni_cluster_name is defined
-      - omni_bws_access_token is defined
+      - omni_infisical_client_id is defined
+      - omni_infisical_client_secret is defined
 
 - name: Get machine status
   ansible.builtin.shell: |-
@@ -43,50 +44,74 @@
   changed_when: true
 
 - name: Wait for healthy cluster
-  ansible.builtin.command: "omnictl cluster template status -f {{ role_path }}/files/data/cluster.yaml"
+  ansible.builtin.command: "omnictl cluster template status --wait 10m -f {{ role_path }}/files/data/cluster.yaml"
   changed_when: false
 
 - name: Configure Kubernetes service account
   ansible.builtin.command: "omnictl kubeconfig --force --service-account -c {{ omni_cluster_name }} --user ansible {{ role_path }}/files/data/kubeconfig"
   changed_when: false
 
-- name: Create External Secrets namespace
-  kubernetes.core.k8s:
-    name: external-secrets
-    api_version: v1
-    kind: Namespace
-    kubeconfig: "{{ role_path }}/files/data/kubeconfig"
-    state: present
+- name: Get Argo CD status
+  ansible.builtin.uri:
+    url: https://argocd.apps.int.scarey.me/healthz
+    return_content: true
+    validate_certs: false
+  register: result
 
-- name: Add Bitwarden Secrets token
-  kubernetes.core.k8s:
-    name: bws-access-token
-    namespace: external-secrets
-    api_version: v1
-    kind: Secret
-    definition:
-      stringData:
-        token: "{{ omni_bws_access_token }}"
-    kubeconfig: "{{ role_path }}/files/data/kubeconfig"
-    state: present
+- name: Bootstrap Cluster
+  when: result is defined and result.status != 200
+  block:
+    - name: Create External Secrets namespace
+      kubernetes.core.k8s:
+        name: external-secrets
+        api_version: v1
+        kind: Namespace
+        kubeconfig: "{{ role_path }}/files/data/kubeconfig"
+        state: present
 
-- name: Install Argo CD
-  kubernetes.core.helm:
-    name: argo-cd
-    chart_ref: argo-cd
-    chart_version: 8.2.2
-    chart_repo_url: https://argoproj.github.io/argo-helm
-    release_namespace: argocd
-    create_namespace: true
-    values_files:
-      - "{{ playbook_dir }}/../k8s/infrastructure/argocd/values.yaml"
-    kubeconfig: "{{ role_path }}/files/data/kubeconfig"
+    - name: Add Infisical secret
+      kubernetes.core.k8s:
+        name: infisical-credentials
+        namespace: external-secrets
+        api_version: v1
+        kind: Secret
+        definition:
+          stringData:
+            clientId: "{{ omni_infisical_client_id }}"
+            clientSecret: "{{ omni_infisical_client_secret }}"
+        kubeconfig: "{{ role_path }}/files/data/kubeconfig"
+        state: present
 
-- name: Bootstrap Argo CD
-  kubernetes.core.helm:
-    name: base
-    chart_ref: "{{ playbook_dir }}/../k8s/infrastructure/base"
-    release_namespace: argocd
-    values_files:
-      - "{{ playbook_dir }}/../k8s/infrastructure/base/values.yaml"
-    kubeconfig: "{{ role_path }}/files/data/kubeconfig"
+    - name: Create Argo CD namespace
+      kubernetes.core.k8s:
+        name: argocd
+        api_version: v1
+        kind: Namespace
+        kubeconfig: "{{ role_path }}/files/data/kubeconfig"
+        state: present
+
+    - name: Template Argo CD
+      kubernetes.core.helm_template:
+        chart_ref: argo-cd
+        chart_version: 8.2.4
+        chart_repo_url: https://argoproj.github.io/argo-helm
+        release_namespace: argocd
+        values:
+          fullnameOverride: argocd
+        values_files:
+          - "{{ playbook_dir }}/../k8s/infrastructure/argocd/values.yaml"
+      register: template
+
+    - name: Install Argo CD
+      kubernetes.core.k8s:
+        state: present
+        definition: "{{ template.stdout }}"
+
+    - name: Install App of Apps
+      kubernetes.core.helm:
+        name: base
+        chart_ref: "{{ playbook_dir }}/../k8s/infrastructure/base"
+        release_namespace: argocd
+        values_files:
+          - "{{ playbook_dir }}/../k8s/infrastructure/base/values.yaml"
+        kubeconfig: "{{ role_path }}/files/data/kubeconfig"

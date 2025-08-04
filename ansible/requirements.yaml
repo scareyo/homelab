@@ -1,5 +1,5 @@
 ---
 collections:
-  - name: bitwarden.secrets
   - name: hetzner.hcloud
+  - name: infisical.vault
   - name: kubernetes.core
