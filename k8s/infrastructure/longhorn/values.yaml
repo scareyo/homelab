@@ -1,0 +1,8 @@
+---
+global:
+  nodeSelector:
+    platform: metal
+defaultSettings:
+  defaultDataPath: /var/mnt/data
+preUpgradeChecker:
+  jobEnabled: false
