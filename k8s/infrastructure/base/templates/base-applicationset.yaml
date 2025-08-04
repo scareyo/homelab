@@ -27,8 +27,7 @@ spec:
     {{- end }}
         - matchExpressions:
             - key: name
-              operator: NotIn
-              values: {{ .steps | toJson }}
+              operator: Exists
   {{- end }}
   template:
     metadata:

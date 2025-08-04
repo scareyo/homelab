@@ -2,9 +2,11 @@
 projects:
   - name: infrastructure
     steps:
+      - base
       - cilium
       - external-secrets
       - hcloud
       - cert-manager
       - gateway
       - argocd
+      - longhorn

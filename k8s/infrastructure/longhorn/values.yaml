@@ -1,0 +1,6 @@
+---
+global:
+  nodeSelector:
+    platform: metal
+preUpgradeChecker:
+  jobEnabled: false
