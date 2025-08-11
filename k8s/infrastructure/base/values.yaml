@@ -8,5 +8,3 @@ projects:
       - hcloud
       - cert-manager
       - gateway
-      - argocd
-      - longhorn

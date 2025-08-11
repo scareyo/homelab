@@ -25,6 +25,9 @@ spec:
               values:
                 - {{ $step }}
     {{- end }}
+        - matchExpressions:
+            - key: name
+              operator: Exists
   {{- end }}
   template:
     metadata:

@@ -1,0 +1,11 @@
+---
+name: external-dns
+namespace: external-dns
+sources:
+  - type: helm
+    chart: external-dns
+    repoURL: https://kubernetes-sigs.github.io/external-dns
+    targetRevision: 1.18.0
+
+  - type: dir
+    path: config
