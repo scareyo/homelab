@@ -8,3 +8,5 @@ projects:
       - hcloud
       - cert-manager
       - gateway
+
+  - name: apps
