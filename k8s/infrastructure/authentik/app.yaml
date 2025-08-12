@@ -1,0 +1,11 @@
+---
+name: authentik
+namespace: authentik
+sources:
+  - type: helm
+    chart: authentik
+    repoURL: https://charts.goauthentik.io
+    targetRevision: 2025.6.4
+
+  - type: dir
+    path: config

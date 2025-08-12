@@ -4,6 +4,7 @@ projects:
     steps:
       - base
       - cilium
+      - cnpg
       - external-secrets
       - hcloud
       - cert-manager

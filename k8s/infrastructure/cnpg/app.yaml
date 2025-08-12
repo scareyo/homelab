@@ -1,0 +1,11 @@
+---
+name: cnpg
+namespace: cnpg-system
+sources:
+  - type: helm
+    chart: cloudnative-pg
+    repoURL: https://cloudnative-pg.github.io/charts
+    targetRevision: 0.25.0
+
+syncOptions:
+  - ServerSideApply=true
