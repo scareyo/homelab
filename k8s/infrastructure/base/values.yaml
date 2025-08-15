@@ -9,5 +9,10 @@ projects:
       - hcloud
       - cert-manager
       - gateway
+      - external-dns
+      - external-snapshotter
+      - rook
+      - velero
+      - argocd
 
   - name: apps
