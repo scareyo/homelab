@@ -5,3 +5,4 @@ commonAnnotations:
   argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 resources:
   - longhorn-httproute.yaml
+  - longhorn-volumesnapshotclass.yaml

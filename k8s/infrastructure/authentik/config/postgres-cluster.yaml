@@ -7,10 +7,3 @@ spec:
   instances: 3
   storage:
     size: 32Gi
-  bootstrap:
-    recovery:
-      volumeSnapshots:
-        storage:
-          name: postgres-1
-          kind: PersistentVolumeClaim
-          apiGroup: ""

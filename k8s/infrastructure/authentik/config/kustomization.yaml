@@ -8,3 +8,5 @@ resources:
   - authentik-database.yaml
   - authentik-externalsecret.yaml
   - authentik-httproute.yaml
+  - authentik-backup.yaml
+  - authentik-restore.yaml

@@ -1,0 +1,29 @@
+---
+initContainers:
+  - name: velero-plugin-for-aws
+    image: velero/velero-plugin-for-aws:v1.12.0
+    imagePullPolicy: IfNotPresent
+    volumeMounts:
+      - mountPath: /target
+        name: plugins
+configuration: 
+  backupSyncPeriod: 1h
+  backupStorageLocation:
+    - provider: aws
+      bucket: me-scarey-velero
+      credential:
+        name: backblaze-externalsecret
+        key: key
+      config:
+        region: us-east-005
+        s3Url: https://s3.us-east-005.backblazeb2.com
+        checksumAlgorithm: ""
+  features: EnableCSI
+  volumeSnapshotLocation:
+    - provider: aws
+      credential:
+        name: backblaze-externalsecret
+        key: key
+      config:
+        region: us-east-005
+deployNodeAgent: true
