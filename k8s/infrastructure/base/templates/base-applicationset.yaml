@@ -42,8 +42,10 @@ spec:
   templatePatch: |
     spec:
       sources:
+    {{`{{- $helm := false }}`}}
     {{`{{- range $source := .sources }}`}}
       {{`{{- if eq $source.type "helm" }}`}}
+        {{`{{- $helm = true }}`}}
         - repoURL: '{{`{{ $source.repoURL }}`}}'
           targetRevision: '{{`{{ $source.targetRevision }}`}}'
           chart: '{{`{{ $source.chart }}`}}'
@@ -51,9 +53,6 @@ spec:
             valueFiles:
               - '$values/{{`{{ $.path.path }}`}}/{{`{{ $source.values | default "values.yaml" }}`}}'
             ignoreMissingValueFiles: true
-        - repoURL: https://github.com/scareyo/homelab
-          targetRevision: main
-          ref: values
       {{`{{- else if eq $source.type "git" }}`}}
         - repoURL: '{{`{{ $source.repoURL }}`}}'
           targetRevision: '{{`{{ $source.targetRevision }}`}}'
@@ -65,6 +64,11 @@ spec:
           ref: repo
       {{`{{- else }}`}}
       {{`{{- end }}`}}
+    {{`{{- end }}`}}
+    {{`{{- if $helm }}`}}
+        - repoURL: https://github.com/scareyo/homelab
+          targetRevision: main
+          ref: values
     {{`{{- end }}`}}
       syncPolicy:
     {{`{{- if .autosync }}`}}
