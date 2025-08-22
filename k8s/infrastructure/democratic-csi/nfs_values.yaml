@@ -1,0 +1,37 @@
+---
+csiDriver:
+  name: nfs
+storageClasses:
+- name: nfs
+  defaultClass: false
+  reclaimPolicy: Delete
+  volumeBindingMode: Immediate
+  allowVolumeExpansion: true
+  parameters:
+    fsType: nfs
+    detachedVolumesFromSnapshots: "false"
+  mountOptions:
+  - noatime
+  - nfsvers=3
+  secrets:
+    provisioner-secret:
+    controller-publish-secret:
+    node-stage-secret:
+    node-publish-secret:
+    controller-expand-secret:
+volumeSnapshotClasses:
+- name: nfs
+  parameters:
+    detachedSnapshots: "true"
+driver:
+  image:
+    # FIXME: Using next tag for TrueNAS 25.04 due to new version scheme. Remove after next release
+    tag: next
+  existingConfigSecret: nfs
+  config:
+    driver: freenas-api-nfs
+controller:
+  driver:
+    image:
+      # FIXME: Using next tag for TrueNAS 25.04 due to new version scheme. Remove after next release
+      tag: next

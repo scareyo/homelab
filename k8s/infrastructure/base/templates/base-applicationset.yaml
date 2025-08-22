@@ -47,6 +47,9 @@ spec:
           targetRevision: '{{`{{ $source.targetRevision }}`}}'
           chart: '{{`{{ $source.chart }}`}}'
           helm:
+        {{`{{ if $source.releaseName }}`}}
+            releaseName: {{`{{ $source.releaseName }}`}}
+        {{`{{- end }}`}}
             valueFiles:
               - '$values/{{`{{ $.path.path }}`}}/{{`{{ $source.values | default "values.yaml" }}`}}'
             ignoreMissingValueFiles: true

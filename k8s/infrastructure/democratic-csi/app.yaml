@@ -1,0 +1,21 @@
+---
+name: democratic-csi
+namespace: democratic-csi
+enforce: privileged
+sources:
+  #- type: helm
+  #  releaseName: iscsi
+  #  chart: democratic-csi
+  #  repoURL: https://democratic-csi.github.io/charts
+  #  targetRevision: 0.15.0
+  #  values: iscsi_values.yaml
+
+  - type: helm
+    releaseName: nfs
+    chart: democratic-csi
+    repoURL: https://democratic-csi.github.io/charts
+    targetRevision: 0.15.0
+    values: nfs_values.yaml
+
+  - type: dir
+    path: config

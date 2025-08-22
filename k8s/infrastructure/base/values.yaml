@@ -14,5 +14,7 @@ projects:
       - rook
       - velero
       - argocd
+      - authentik
+      - democratic-csi
 
   - name: apps
