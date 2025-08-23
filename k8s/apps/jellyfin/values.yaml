@@ -1,0 +1,39 @@
+---
+image:
+  # FIXME: Remove once 10.11 is released. Using RC for its firefox HEVC support
+  tag: 10.11.0-rc5
+volumes:
+  - name: movies
+    nfs:
+      server: 10.10.20.51
+      path: /mnt/nami-01/media/movies
+      readOnly: true
+  - name: shows
+    nfs:
+      server: 10.10.20.51
+      path: /mnt/nami-01/media/shows
+      readOnly: true
+volumeMounts:
+  - name: movies
+    mountPath: /media/movies
+  - name: shows
+    mountPath: /media/shows
+persistence:
+  media:
+    enabled: false
+
+# Hardware Acceleration
+securityContext:
+  capabilities:
+    add:
+      - "SYS_ADMIN"
+    drop:
+      - "ALL"
+  privileged: false
+extraVolumes:
+  - name: hwa
+    hostPath:
+      path: /dev/dri
+extraVolumeMounts:
+  - name: hwa
+    mountPath: /dev/dri

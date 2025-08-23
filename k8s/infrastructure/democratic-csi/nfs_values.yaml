@@ -11,8 +11,9 @@ storageClasses:
     fsType: nfs
     detachedVolumesFromSnapshots: "false"
   mountOptions:
-  - noatime
-  - nfsvers=3
+    - noatime
+    - nfsvers=3
+    - nolock
   secrets:
     provisioner-secret:
     controller-publish-secret:
