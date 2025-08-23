@@ -15,6 +15,5 @@ projects:
       - velero
       - argocd
       - authentik
-      - democratic-csi
 
   - name: apps
