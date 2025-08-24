@@ -1,7 +1,6 @@
 ---
 name: jellyfin
 namespace: jellyfin
-enforce: privileged
 sources:
   - type: helm
     chart: jellyfin
