@@ -1,0 +1,11 @@
+---
+name: sonarr
+namespace: sonarr
+sources:
+  - type: helm
+    chart: sonarr
+    repoURL: https://charts.pree.dev
+    targetRevision: 1.11.0
+
+  - type: dir
+    path: config

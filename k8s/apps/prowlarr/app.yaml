@@ -1,0 +1,11 @@
+---
+name: prowlarr
+namespace: prowlarr
+sources:
+  - type: helm
+    chart: prowlarr
+    repoURL: https://charts.pree.dev
+    targetRevision: 1.49.0
+
+  - type: dir
+    path: config

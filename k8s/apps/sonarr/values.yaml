@@ -1,0 +1,3 @@
+---
+env:
+  SONARR__AUTH__METHOD: External
