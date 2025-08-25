@@ -14,6 +14,9 @@ projects:
       - rook
       - velero
       - argocd
+      - loki
+      - kube-prometheus-stack
+      - k8s-monitoring
       - authentik
 
   - name: apps

@@ -1,0 +1,26 @@
+---
+name: kube-prometheus-stack
+namespace: monitoring
+enforce: privileged
+sources:
+  - type: helm
+    chart: kube-prometheus-stack
+    repoURL: https://prometheus-community.github.io/helm-charts
+    targetRevision: 77.0.0
+
+#  - type: dir
+#    path: config
+
+syncOptions:
+  - ServerSideApply=true
+
+ignoreDifferences:
+  - group: gateway.networking.k8s.io
+    kind: HTTPRoute
+    name: ""
+    jqPathExpressions:
+      - .spec.parentRefs[].group
+      - .spec.parentRefs[].kind
+      - .spec.rules[].backendRefs[].group
+      - .spec.rules[].backendRefs[].kind
+      - .spec.rules[].backendRefs[].weight
