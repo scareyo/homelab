@@ -24,7 +24,6 @@
         server_type: cpx11
         image: "249165353"
         location: ash
-        ipv4: zeus
         state: started
 
 - name: Get MS-01 machine status

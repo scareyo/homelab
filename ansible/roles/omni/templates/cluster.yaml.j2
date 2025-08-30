@@ -23,16 +23,6 @@ patches:
         network:
           kubespan:
             enabled: true
-          interfaces:
-            - interface: enp3s0f0np0
-              dhcp: true
-            - interface: enp89s0
-              dhcp: false
-              routes: []
-systemExtensions:
-  - siderolabs/i915
-  - siderolabs/intel-ucode
-  - siderolabs/mei
 
 ---
 kind: ControlPlane
@@ -57,6 +47,11 @@ install:
   disk: {{ machine.disk }}
 {% endif %}
 patches:
+  - name: labels
+    inline:
+      machine:
+        nodeLabels:
+          platform: {{ machine.platform }}
 {% if "control" in machine.groups %}
   - name: cilium 
     file: {{ role_path }}/files/cilium-install.yaml
@@ -70,5 +65,21 @@ patches:
       machine:
         nodeTaints:
           hcloud: NoSchedule
+{% endif %}
+{% if machine.platform == "metal" %}
+  - name: metal
+    inline:
+      machine:
+        network:
+          interfaces:
+            - interface: enp3s0f0np0
+              dhcp: true
+            - interface: enp89s0
+              dhcp: false
+              routes: []
+systemExtensions:
+  - siderolabs/i915
+  - siderolabs/intel-ucode
+  - siderolabs/mei
 {% endif %}
 {% endfor %}
