@@ -1,3 +1,16 @@
 ---
-env:
-  SONARR__AUTH__METHOD: External
+controllers:
+  main:
+    containers:
+      main:
+        image:
+          repository: ghcr.io/home-operations/sonarr
+          tag: 4.0.15
+        env:
+          SONARR__AUTH__METHOD: External
+service:
+  main:
+    controller: main
+    ports:
+      http:
+        port: 80

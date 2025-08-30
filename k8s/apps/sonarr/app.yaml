@@ -3,9 +3,9 @@ name: sonarr
 namespace: sonarr
 sources:
   - type: helm
-    chart: sonarr
-    repoURL: https://charts.pree.dev
-    targetRevision: 1.11.0
+    chart: app-template
+    repoURL: https://bjw-s-labs.github.io/helm-charts
+    targetRevision: 4.2.0
 
   - type: dir
     path: config
