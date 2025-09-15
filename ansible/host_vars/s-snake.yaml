@@ -1,8 +1,2 @@
 ---
-talos_config: "control"
-
-amt_host: 10.10.22.11
-amt_mac_address: "58:47:ca:78:ea:6d"
-
-talos_host: 10.10.20.11
-talos_mac_address: "58:47:ca:78:ea:6a"
+cozystack_data_disk: /dev/disk/by-id/nvme-nvme.8086-42544c45383133303037555931503643474e-4d4f3030313630304b574a534e-00000001

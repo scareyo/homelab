@@ -1,0 +1,67 @@
+---
+- name: Check if machines are running
+  ansible.builtin.shell:
+    cmd: |
+      set -e -o pipefail
+      test $(talm -e {{ host }} -n {{ host }} get machinestatus -o yaml -i | yq '.metadata.phase') == "running"
+    chdir: "{{ cozystack_config_dir }}"
+  changed_when: false
+  retries: 60
+
+- name: Template control plane configurations
+  ansible.builtin.shell:
+    cmd: "talm -e {{ host }} -n {{ host }} template -i -t templates/controlplane.yaml > nodes/{{ inventory_hostname }}.yaml"
+    chdir: "{{ cozystack_config_dir }}"
+  changed_when: true
+  when: cozystack_node_type == "control"
+
+- name: Template worker configurations
+  ansible.builtin.shell:
+    cmd: "talm -e {{ host }} -n {{ host }} template -t templates/worker.yaml -i > nodes/{{ inventory_hostname }}.yaml"
+    chdir: "{{ cozystack_config_dir }}"
+  changed_when: true
+  when: cozystack_node_type == "worker"
+
+- name: Apply node configurations
+  ansible.builtin.command:
+    cmd: "talm -f nodes/{{ inventory_hostname }}.yaml apply -i"
+    chdir: "{{ cozystack_config_dir }}"
+  changed_when: true
+
+- name: Check that reboot has completed
+  ansible.builtin.shell:
+    cmd: |
+      set -e -o pipefail
+      test $(talm -e {{ host }} -n {{ host }} get machinestatus -o yaml | yq '.metadata.phase') == "running"
+    chdir: "{{ cozystack_config_dir }}"
+  changed_when: false
+  retries: 60
+  when: cozystack_node_type == "control"
+
+- name: Bootstrap cluster
+  ansible.builtin.command:
+    cmd: "talm -f nodes/{{ inventory_hostname }}.yaml bootstrap"
+    chdir: "{{ cozystack_config_dir }}"
+  changed_when: true
+  run_once: true
+  when: cozystack_node_type == "control"
+
+- name: Generate kubeconfig
+  ansible.builtin.command:
+    cmd: "talm -f nodes/{{ inventory_hostname }}.yaml kubeconfig kubeconfig"
+    chdir: "{{ cozystack_config_dir }}"
+  changed_when: true
+  run_once: true
+  when: cozystack_node_type == "control"
+
+- name: Wait for nodes to be ready
+  kubernetes.core.k8s_info:
+    api_version: v1
+    name: "{{ inventory_hostname }}"
+    kind: Node
+    wait: true
+    wait_condition:
+      type: Ready
+    wait_timeout: 60
+    kubeconfig: "{{ cozystack_config_dir }}/kubeconfig"
+  retries: 60

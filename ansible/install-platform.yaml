@@ -1,0 +1,85 @@
+# Playbook: Install Cozystack platform
+# Installs Cozystack on bare-metal MS-01 servers
+---
+- name: Get secrets
+  hosts: all
+  connection: local
+  gather_facts: false
+  run_once: true
+  vars:
+    paths:
+      - amt
+      - hcloud
+  tasks:
+    - name: Get secrets
+      ansible.builtin.include_tasks: tasks/get-secrets.yaml
+
+# TODO: wiredoor
+# - name: Provision Cloud Machines
+#   hosts: zeus
+#   connection: local
+#   environment:
+#     HCLOUD_TOKEN: "{{ hcloud.API_TOKEN }}"
+#   tasks:
+#     - name: Create Zeus
+#       hetzner.hcloud.server:
+#         name: zeus
+#         server_type: cpx11
+#         image: "313982412"
+#         location: ash
+#         ipv4: zeus
+#         state: started
+#       register: result
+
+- name: Run PXE server
+  hosts: seraphim
+  connection: local
+  run_once: true
+  environment:
+    AMTCLI_USERNAME: "{{ amt.USERNAME }}"
+    AMTCLI_PASSWORD: "{{ amt.PASSWORD }}"
+  pre_tasks:
+    - name: Get AMT info
+      ansible.builtin.shell: |
+        set -e -o pipefail
+        amtcli info {{ amt_host }} | yq .state
+      changed_when: false
+      register: cmd
+      retries: 5
+      until: cmd.stdout == 'Off'
+  roles:
+    - role: pxe
+      vars:
+        pxe_kernel_url: "https://github.com/cozystack/cozystack/releases/download/v{{ cozystack_version }}/kernel-amd64"
+        pxe_initrd_url: "https://github.com/cozystack/cozystack/releases/download/v{{ cozystack_version }}/initramfs-metal-amd64.xz"
+        pxe_kernel_params: talos.platform=metal slab_nomerge pti=on
+        pxe_subnet: 10.10.22.0/24
+
+- name: Boot MS-01 machines to PXE
+  hosts: ms01
+  connection: local
+  environment:
+    AMTCLI_USERNAME: "{{ amt.USERNAME }}"
+    AMTCLI_PASSWORD: "{{ amt.PASSWORD }}"
+  tasks:
+    - name: Set hosts to boot from PXE
+      ansible.builtin.command: "amtcli boot pxe {{ amt_host }}"
+      changed_when: true
+      register: cmd
+      retries: 5
+      until: cmd.rc == 0
+
+    - name: Start hosts
+      ansible.builtin.command: "amtcli on {{ amt_host }}"
+      changed_when: true
+      register: cmd
+      retries: 5
+      until: cmd.rc == 0
+
+- name: Install Cozystack
+  hosts: seraphim
+  connection: local
+  roles:
+    - role: cozystack
+      vars:
+        cozystack_config_dir: "{{ inventory_dir }}/../platform"

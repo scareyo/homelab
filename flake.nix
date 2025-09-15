@@ -17,14 +17,17 @@
           inherit system;
           config.allowUnfree = true;
         };
+        myPkgs = import ./nix/pkg {
+          inherit pkgs;
+        };
       in {
         devShells.default = pkgs.mkShell {
           packages = with pkgs; [
-            bws
             dnsmasq
-            omnictl
-            packer
+            git-crypt
             yq-go
+
+            myPkgs.talm
 
             # Ansible
             ansible
@@ -36,6 +39,7 @@
             # Kubernetes
             argocd
             cilium-cli
+            fluxcd
             k9s
             kubectl
             kubelogin-oidc

@@ -1,0 +1,11 @@
+---
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: cozystack
+  namespace: cozy-metallb
+spec:
+  addresses:
+    - 10.10.20.100-10.10.20.250
+  autoAssign: true
+  avoidBuggyIPs: false

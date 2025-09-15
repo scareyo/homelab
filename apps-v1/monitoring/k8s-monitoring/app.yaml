@@ -1,8 +1,0 @@
----
-name: k8s-monitoring
-namespace: monitoring
-enforce: privileged
-sources:
-  - chart: k8s-monitoring
-    repoURL: https://grafana.github.io/helm-charts
-    targetRevision: 2.0.25

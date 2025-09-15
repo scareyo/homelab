@@ -1,3 +1,0 @@
----
-env:
-  PROWLARR__AUTH__METHOD: External

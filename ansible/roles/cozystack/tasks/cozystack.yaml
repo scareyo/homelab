@@ -1,0 +1,67 @@
+---
+- name: Create Cozystack Namespace
+  kubernetes.core.k8s:
+    name: cozy-system
+    api_version: v1
+    kind: Namespace
+    kubeconfig: "{{ cozystack_config_dir }}/kubeconfig"
+    state: present
+  run_once: true
+
+- name: Create Cozystack ConfigMap
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ cozystack_config_dir }}/config/cozystack/cozystack-cm.yaml"
+    kubeconfig: "{{ cozystack_config_dir }}/kubeconfig"
+  run_once: true
+
+- name: Download cozystack-installer.yaml
+  ansible.builtin.get_url:
+    url: https://github.com/cozystack/cozystack/releases/latest/download/cozystack-installer.yaml
+    dest: "{{ role_path }}/files/cozystack-installer.yaml"
+    mode: '0664'
+  run_once: true
+
+- name: Install Cozystack
+  kubernetes.core.k8s:
+    src: "{{ role_path }}/files/cozystack-installer.yaml"
+    wait: true
+    kubeconfig: "{{ cozystack_config_dir }}/kubeconfig"
+    state: present
+  run_once: true
+
+- name: Wait for HelmRelease CRD
+  kubernetes.core.k8s_info:
+    name: helmreleases.helm.toolkit.fluxcd.io
+    api_version: apiextensions.k8s.io/v1
+    kind: CustomResourceDefinition
+    wait: true
+    wait_condition:
+      type: NamesAccepted
+    wait_timeout: 60
+    kubeconfig: "{{ cozystack_config_dir }}/kubeconfig"
+  run_once: true
+
+- name: Wait for Cozystack Controller
+  kubernetes.core.k8s_info:
+    name: cozystack-controller
+    namespace: cozy-system
+    api_version: helm.toolkit.fluxcd.io/v2
+    kind: HelmRelease
+    wait: true
+    wait_condition:
+      type: Ready
+    wait_timeout: 300
+    kubeconfig: "{{ cozystack_config_dir }}/kubeconfig"
+  run_once: true
+
+- name: Wait for Cozystack HelmReleases
+  kubernetes.core.k8s_info:
+    api_version: helm.toolkit.fluxcd.io/v2
+    kind: HelmRelease
+    wait: true
+    wait_condition:
+      type: Ready
+    wait_timeout: 300
+    kubeconfig: "{{ cozystack_config_dir }}/kubeconfig"
+  run_once: true

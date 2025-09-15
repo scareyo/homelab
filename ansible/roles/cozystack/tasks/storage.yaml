@@ -1,0 +1,47 @@
+---
+- name: Get Linstor Pod
+  kubernetes.core.k8s_info:
+    api_version: v1
+    kind: Pod
+    namespace: cozy-linstor
+    label_selectors:
+      - app.kubernetes.io/component=linstor-controller
+  register: cozystack_pod_info
+
+- name: Check that all storage nodes are online
+  kubernetes.core.k8s_exec:
+    namespace: cozy-linstor
+    pod: "{{ cozystack_pod_info.resources[0].metadata.name }}"
+    command: "linstor node list -n {{ inventory_hostname }}"
+  register: cozystack_result
+  failed_when: "'Online' not in cozystack_result.stdout"
+  changed_when: false
+  retries: 60
+
+- name: List storage pools
+  kubernetes.core.k8s_exec:
+    namespace: cozy-linstor
+    pod: "{{ cozystack_pod_info.resources[0].metadata.name }}"
+    command: "linstor sp list -n {{ inventory_hostname }} -s data"
+  register: cozystack_storage_pools
+
+- name: Create storage pool
+  kubernetes.core.k8s_exec:
+    namespace: cozy-linstor
+    pod: "{{ cozystack_pod_info.resources[0].metadata.name }}"
+    command: "linstor ps cdp zfs {{ inventory_hostname }} {{ cozystack_data_disk }} --pool-name data --storage-pool data"
+  when: "'Ok' not in cozystack_storage_pools.stdout"
+
+- name: Create local StorageClass
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ cozystack_config_dir }}/config/linstor/local-storageclass.yaml"
+    kubeconfig: "{{ cozystack_config_dir }}/kubeconfig"
+  run_once: true
+
+- name: Create replicated StorageClass
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ cozystack_config_dir }}/config/linstor/replicated-storageclass.yaml"
+    kubeconfig: "{{ cozystack_config_dir }}/kubeconfig"
+  run_once: true

@@ -1,8 +1,2 @@
 ---
-talos_config: "worker"
-
-amt_host: 10.10.22.14
-amt_mac_address: "58:47:ca:78:dc:b5"
-
-talos_host: 10.10.20.14
-talos_mac_address: "58:47:ca:78:dc:b2"
+cozystack_data_disk: /dev/disk/by-id/nvme-nvme.8086-50484c45373435363030364531503643474e-4d4f3030313630304b574a534e-00000001
