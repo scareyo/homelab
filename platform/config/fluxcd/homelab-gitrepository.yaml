@@ -1,0 +1,12 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: homelab
+  namespace: tenant-root
+spec:
+  url: https://github.com/scareyo/homelab
+  ref:
+    branch: main
+  interval: 1m0s
+  timeout: 60s

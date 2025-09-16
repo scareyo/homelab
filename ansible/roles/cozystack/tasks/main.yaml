@@ -53,3 +53,17 @@
       type: Ready
     wait_timeout: 60
     kubeconfig: "{{ cozystack_config_dir }}/kubeconfig"
+
+- name: Create Flux CD GitRepository
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ cozystack_config_dir }}/config/fluxcd/homelab-gitrepository.yaml"
+    kubeconfig: "{{ cozystack_config_dir }}/kubeconfig"
+  run_once: true
+
+- name: Create Flux CD platform Kustomization
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ cozystack_config_dir }}/config/fluxcd/platform-kustomization.yaml"
+    kubeconfig: "{{ cozystack_config_dir }}/kubeconfig"
+  run_once: true
