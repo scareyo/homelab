@@ -6,7 +6,6 @@ metadata:
   namespace: cozy-system
 data:
   bundle-name: paas-full
-  bundle-enable: "external-secrets-operator"
   root-host: vegapunk.cloud
   api-server-endpoint: https://api.vegapunk.cloud:443
   expose-services: dashboard,api
@@ -15,9 +14,3 @@ data:
   ipv4-svc-cidr: 10.96.0.0/16
   ipv4-join-cidr: 100.64.0.0/16
   clusterissuer: cloudflare
-
-  values-external-secrets-operator: |
-    external-secrets:
-      image:
-        tag: v0.19.2
-
