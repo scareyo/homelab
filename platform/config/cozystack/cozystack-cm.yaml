@@ -15,3 +15,9 @@ data:
   ipv4-svc-cidr: 10.96.0.0/16
   ipv4-join-cidr: 100.64.0.0/16
   clusterissuer: cloudflare
+
+  values-external-secrets-operator: |
+    external-secrets:
+      image:
+        tag: v0.19.2
+
