@@ -10,6 +10,7 @@
     paths:
       - amt
       - hcloud
+      - infisical
   tasks:
     - name: Get secrets
       ansible.builtin.include_tasks: tasks/get-secrets.yaml
@@ -83,3 +84,5 @@
     - role: cozystack
       vars:
         cozystack_config_dir: "{{ inventory_dir }}/../platform"
+        cozystack_infisical_client_id: "{{ infisical.SERAPHIM_CLIENT_ID }}"
+        cozystack_infisical_client_secret: "{{ infisical.SERAPHIM_CLIENT_SECRET }}"

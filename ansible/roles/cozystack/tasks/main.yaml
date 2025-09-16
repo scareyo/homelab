@@ -6,6 +6,8 @@
       - cozystack_node_type is defined
       - cozystack_config_dir is defined
       - cozystack_data_disk is defined
+      - cozystack_infisical_client_id is defined
+      - cozystack_infisical_client_secret is defined
 
 - name: Get cluster information
   kubernetes.core.k8s_cluster_info:
@@ -53,6 +55,20 @@
       type: Ready
     wait_timeout: 60
     kubeconfig: "{{ cozystack_config_dir }}/kubeconfig"
+
+- name: Add Infisical secret
+  kubernetes.core.k8s:
+    state: present
+    name: infisical-credentials
+    namespace: cozy-external-secrets-operator
+    api_version: v1
+    kind: Secret
+    definition:
+      stringData:
+        clientId: "{{ cozystack_infisical_client_id }}"
+        clientSecret: "{{ cozystack_infisical_client_secret }}"
+    kubeconfig: "{{ cozystack_config_dir }}/kubeconfig"
+  run_once: true
 
 - name: Create Flux CD GitRepository
   kubernetes.core.k8s:
