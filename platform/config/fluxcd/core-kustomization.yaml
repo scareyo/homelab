@@ -1,0 +1,14 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: core
+  namespace: cozy-public
+spec:
+  force: false
+  interval: 10m0s
+  path: ./platform/external-apps/core
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: homelab

@@ -3,7 +3,7 @@ apiVersion: source.toolkit.fluxcd.io/v1
 kind: GitRepository
 metadata:
   name: homelab
-  namespace: tenant-root
+  namespace: cozy-public
 spec:
   url: https://github.com/scareyo/homelab
   ref:

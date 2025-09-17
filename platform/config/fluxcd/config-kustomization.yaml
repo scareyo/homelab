@@ -2,12 +2,14 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: platform-controller
-  namespace: tenant-root
+  name: config
+  namespace: cozy-public
 spec:
+  dependsOn:
+    - name: system
   force: false
   interval: 10m0s
-  path: ./platform/controller
+  path: ./platform/config
   prune: true
   sourceRef:
     kind: GitRepository
