@@ -1,0 +1,17 @@
+---
+apiVersion: front.in-cloud.io/v1alpha1
+kind: MarketplacePanel
+metadata:
+  name: wiredoor
+spec:
+  description: Expose private services securely from anywhere
+  name: Wiredoor
+  type: nonCrd
+  apiGroup: apps.cozystack.io
+  apiVersion: v1alpha1
+  typeName: wiredoors
+  disabled: false
+  hidden: false
+  tags:
+  - ingress
+  icon: PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTIwLjU4NSAyMy4xODVDMjAuNTg1IDIyLjcwNiAyMC4zODUgMjIuMjk3IDIwLjA0NSAyMS45NzVDMTguMTc1IDIwLjE1NSAxNi43NDUgMTcuNDY1IDE2LjI4NSAxNS42NDVDMTYuMjc1IDE1LjYyNSAxNi4yNzUgMTUuNjA1IDE2LjI2NSAxNS41ODVDMTYuMjY1IDE1LjU3NSAxNi4yNjUgMTUuNTY1IDE2LjI2NSAxNS41NDVDMTYuMTA1IDE0LjkwNSAxNS45MDUgMTQuMjU1IDE1LjcwNSAxMy42NzVDMTQuODI1IDExLjA5NSAxNC4xNjUgOS4xNzUgMTMuNDU1IDcuNzY1QzEzLjMwNSAxNS43NDUgMTQuOTg1IDE3LjUwNSAxNy4xNjUgMTguMzM1QzE3LjMwNSAxOC4zODUgMTcuNTA1IDE4LjQ0NSAxNy43MDUgMTguNDk1TDE3LjcwNSAyMS45NzdDMjAuMjY1IDI0LjQ5NSAyMy40NTUgMjMuMzQ1IDIzLjQ1NSAyMy4zNDVMMjAuNTg1IDIzLjE4NVoiIGZpbGw9IiMwODBBNTMiLz4KPC9zdmc+

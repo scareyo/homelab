@@ -1,0 +1,42 @@
+---
+apiVersion: cozystack.io/v1alpha1
+kind: CozystackResourceDefinition
+metadata:
+  name: wiredoor
+  namespace: cozy-system
+spec:
+  application:
+    kind: Wiredoor
+    openAPISchema: |
+      {
+        "properties": {
+          "wiredoor": {
+            "properties": {
+              "server": {
+                "default": "",
+                "description": "Wiredoor server URL",
+                "type": "string"
+              },
+              "token": {
+                "default": "",
+                "description": "Wiredoor gateway node token",
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "title": "Chart Values",
+        "type": "object"
+      }
+    plural: wiredoors
+    singular: wiredoor
+  release:
+    chart:
+      name: wiredoor-gateway
+      sourceRef:
+        name: wiredoor
+        namespace: cozy-public
+    labels:
+      cozystack.io/ui: "true"
+    prefix: wiredoor-

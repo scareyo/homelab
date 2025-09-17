@@ -5,3 +5,4 @@ resources:
   - homelab-gitrepository.yaml
   - system-kustomization.yaml
   - config-kustomization.yaml
+  - apps-kustomization.yaml
