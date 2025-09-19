@@ -5,6 +5,12 @@
   hosts: ms01
   connection: local
   run_once: true
+  roles:
+    - role: pxe
+
+- name: Boot machines to PXE
+  hosts: ms01
+  connection: local
   environment:
     AMTCLI_USERNAME: "{{ amt_username }}"
     AMTCLI_PASSWORD: "{{ amt_password }}"
@@ -17,8 +23,6 @@
       register: cmd
       retries: 5
       until: cmd.stdout == 'Off'
-  roles:
-    - role: pxe
   tasks:
     - name: Set hosts to boot from PXE
       ansible.builtin.command: "amtcli boot pxe {{ amt_host }}"
@@ -34,27 +38,8 @@
       retries: 5
       until: cmd.rc == 0
 
-- name: Generate talosconfig
-  hosts: seraphim
-  connection: local
-  run_once: true
-  tasks:
-    - name: Generate talosconfig
-      ansible.builtin.command:
-        cmd: >
-          talosctl gen config
-            --with-secrets secrets.yaml
-            --output-types talosconfig
-            --output {{ inventory_dir }}/../.talos/talosconfig
-            --force
-            seraphim https://api.vegapunk.cloud:6443
-        chdir: "{{ cozystack_cluster_dir }}"
-      changed_when: true
-
 - name: Install Cozystack
   hosts: seraphim
   connection: local
-  environment:
-    KUBECONFIG: "{{ cozystack_kubeconfig }}"
   roles:
     - role: cozystack

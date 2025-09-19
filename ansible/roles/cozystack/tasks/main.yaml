@@ -6,47 +6,54 @@
       - cozystack_node_type is defined
       - cozystack_config_dir is defined
       - cozystack_data_disk is defined
-
-- name: Get cluster information
-  kubernetes.core.k8s_cluster_info:
-  register: cozystack_api_status
-  ignore_errors: true
-  timeout: 15
-  run_once: true
-
-- name: Bootstrap cluster
-  ansible.builtin.include_tasks: bootstrap.yaml
-  when: cozystack_api_status.failed
+      - cozystack_kubeconfig is defined
+      - cozystack_talosconfig is defined
 
 - name: Install Cozystack
-  ansible.builtin.include_tasks: cozystack.yaml
+  environment:
+    KUBECONFIG: "{{ cozystack_kubeconfig }}"
+    TALOSCONFIG: "{{ cozystack_talosconfig }}"
+  block:
+    - name: Get cluster information
+      kubernetes.core.k8s_cluster_info:
+      register: cozystack_api_status
+      ignore_errors: true
+      timeout: 15
+      run_once: true
 
-- name: Configure storage
-  ansible.builtin.include_tasks: storage.yaml
+    - name: Bootstrap cluster
+      ansible.builtin.include_tasks: bootstrap.yaml
+      when: cozystack_api_status.failed
 
-- name: Configure network
-  ansible.builtin.include_tasks: network.yaml
+    - name: Install Cozystack
+      ansible.builtin.include_tasks: cozystack.yaml
 
-- name: Finalize installation
-  kubernetes.core.k8s:
-    state: patched
-    name: root
-    namespace: tenant-root
-    api_version: apps.cozystack.io/v1alpha1
-    kind: Tenant
-    definition:
-      spec:
-        etcd: true
-        isolated: true
-        monitoring: true
-  run_once: true
+    - name: Configure storage
+      ansible.builtin.include_tasks: storage.yaml
 
-- name: Wait for pods to be ready
-  kubernetes.core.k8s_info:
-    api_version: v1
-    namespace: tenant-root
-    kind: Pod
-    wait: true
-    wait_condition:
-      type: Ready
-    wait_timeout: 60
+    - name: Configure network
+      ansible.builtin.include_tasks: network.yaml
+
+    - name: Finalize installation
+      kubernetes.core.k8s:
+        state: patched
+        name: root
+        namespace: tenant-root
+        api_version: apps.cozystack.io/v1alpha1
+        kind: Tenant
+        definition:
+          spec:
+            etcd: true
+            isolated: true
+            monitoring: true
+      run_once: true
+
+    - name: Wait for pods to be ready
+      kubernetes.core.k8s_info:
+        api_version: v1
+        namespace: tenant-root
+        kind: Pod
+        wait: true
+        wait_condition:
+          type: Ready
+        wait_timeout: 60
