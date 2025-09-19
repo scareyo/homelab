@@ -2,74 +2,68 @@
 
 My k8s homelab infrastructure
 
-## Getting Started
+## Overview
 
-To start up Podman for the first time, run
+### Seraphim
 
-```
-just init
-```
-
-## Metal Deployments
-
-### deploy-seraphim
-
-Seraphim cluster (4-node Minisforum MS-01) will be booted and Talos will be installed via PXE boot. After installation, it will be bootstrapped and services will be deployed with Argo CD
+Seraphim is the 4-node Minisforum MS-01 cluster running the Cozystack platform.
 
 - `s-snake  - control plane`
 - `s-hawk   - control plane`
 - `s-bear   - control plane`
 - `s-shark  - worker`
 
-#### Requirements
+### Zeus
+
+Zeus is a Hetzner Cloud VPS used to expose services running on the Cozystack platform to the internet.
+
+## Setup
+
+### Requirements
 
 1. All nodes must be powered off
-2. Ansible host is connected to the cluster VLAN
-3. Target machines should be able to access the following host ports:
+2. Ansible host is connected to the IPMI VLAN
+3. Ansible host has the following ports allowed by firewall:
 
     - `67/udp   (DHCP)`
     - `69/udp   (TFTP)`
     - `4011/udp (DHCP)`
     - `8080/tcp (HTTP)`
 
-#### Start MeshCentral (optional)
+4. `HCLOUD_TOKEN` environment variable is set
 
-MeshCentral is used to access the remote desktop for each node. We can use this to observe the installation process.
+### Seraphim
 
-```
-just play run-meshcentral
-```
-
-#### Deploy
-
-1. Ansible spins up a PXE server
-2. Each node boots to PXE
-3. Talos is installed and bootstrapped
-4. Cilium is deployed to the cluster
-5. Argo CD is deployed to the cluster, along with its managed applications
+1. Provision the Seraphim cluster:
 
 ```
-just play deploy-seraphim
+just play provision-seraphim
 ```
 
-#### Destroy
-
-This command is destructive. It will reset the Talos cluster and power down the machines.
+2. Configure the Seraphim cluster:
 
 ```
-just destroy-talos
+just play configure-seraphim
 ```
 
-### deploy-zeus
+### Zeus
 
-Nginx server to establish access to Seraphim's external gateway
-
-#### Requirements
-
-1. `HCLOUD_TOKEN` environment variable must be set
-
-#### Deploy
+1. Provision and configure the Hetzner Cloud VPS:
 
 ```
-just play deploy-zeus
+just play provision-zeus
 ```
+
+## Destroy
+
+### Seraphim
+
+This command is destructive. It will wipe the Seraphim data disks, reset Talos Linux, and power down the node.
+
+```
+just play destroy-seraphim
+```
+
+### Zeus
+
+TODO: Create a playbook to tear down Hetzner Cloud resources
