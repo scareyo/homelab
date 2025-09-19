@@ -34,6 +34,23 @@
       retries: 5
       until: cmd.rc == 0
 
+- name: Generate talosconfig
+  hosts: seraphim
+  connection: local
+  run_once: true
+  tasks:
+    - name: Generate talosconfig
+      ansible.builtin.command:
+        cmd: >
+          talosctl gen config
+            --with-secrets secrets.yaml
+            --output-types talosconfig
+            --output {{ inventory_dir }}/../.talos/talosconfig
+            --force
+            seraphim https://api.vegapunk.cloud:6443
+        chdir: "{{ cozystack_cluster_dir }}"
+      changed_when: true
+
 - name: Install Cozystack
   hosts: seraphim
   connection: local
