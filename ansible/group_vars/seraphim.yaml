@@ -1,2 +1,7 @@
 ---
 cozystack_version: 0.35.5
+cozystack_kubeconfig: "{{ inventory_dir }}/../.kube/kubeconfig"
+cozystack_cluster_dir: "{{ inventory_dir }}/../platform/cluster"
+cozystack_config_dir: "{{ inventory_dir }}/../platform/cozystack"
+cozystack_infisical_client_id: "{{ lookup('secret', '/infisical', 'SERAPHIM_CLIENT_ID') }}"
+cozystack_infisical_client_secret: "{{ lookup('secret', '/infisical', 'SERAPHIM_CLIENT_SECRET') }}"

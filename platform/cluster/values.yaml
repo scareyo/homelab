@@ -1,5 +1,5 @@
 endpoint: https://api.vegapunk.cloud:6443
-clusterDomain: vegapunk.local
+clusterDomain: cozy.local
 image: ghcr.io/cozystack/cozystack/talos:v1.10.6
 podSubnets:
   - 10.244.0.0/16

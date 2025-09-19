@@ -1,0 +1,8 @@
+---
+amt_username: "{{ lookup('secret', '/amt', 'USERNAME') }}"
+amt_password: "{{ lookup('secret', '/amt', 'PASSWORD') }}"
+
+pxe_kernel_url: "https://github.com/cozystack/cozystack/releases/download/v{{ cozystack_version }}/kernel-amd64"
+pxe_initrd_url: "https://github.com/cozystack/cozystack/releases/download/v{{ cozystack_version }}/initramfs-metal-amd64.xz"
+pxe_kernel_params: talos.platform=metal slab_nomerge pti=on
+pxe_subnet: 10.10.22.0/24

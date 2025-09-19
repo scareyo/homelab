@@ -1,0 +1,6 @@
+---
+hcloud_api_token: "{{ lookup('secret', '/hcloud', 'API_TOKEN') }}"
+
+wiredoor_admin_email: "{{ lookup('secret', '/wiredoor', 'USERNAME') }}"
+wiredoor_admin_password: "{{ lookup('secret', '/wiredoor', 'PASSWORD') }}"
+wiredoor_vpn_host: wiredoor.vegapunk.cloud
