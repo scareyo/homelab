@@ -4,7 +4,6 @@
     name: cozy-system
     api_version: v1
     kind: Namespace
-    kubeconfig: "{{ cozystack_config_dir }}/kubeconfig"
     state: present
   run_once: true
 
@@ -12,7 +11,6 @@
   kubernetes.core.k8s:
     state: present
     src: "{{ cozystack_config_dir }}/config/cozystack/cozystack-cm.yaml"
-    kubeconfig: "{{ cozystack_config_dir }}/kubeconfig"
   run_once: true
 
 - name: Download cozystack-installer.yaml
@@ -26,7 +24,6 @@
   kubernetes.core.k8s:
     src: "{{ role_path }}/files/cozystack-installer.yaml"
     wait: true
-    kubeconfig: "{{ cozystack_config_dir }}/kubeconfig"
     state: present
   run_once: true
 
@@ -39,7 +36,6 @@
     wait_condition:
       type: NamesAccepted
     wait_timeout: 60
-    kubeconfig: "{{ cozystack_config_dir }}/kubeconfig"
   run_once: true
 
 - name: Wait for Cozystack Controller
@@ -52,7 +48,6 @@
     wait_condition:
       type: Ready
     wait_timeout: 300
-    kubeconfig: "{{ cozystack_config_dir }}/kubeconfig"
   run_once: true
 
 - name: Wait for Cozystack HelmReleases
@@ -63,5 +58,4 @@
     wait_condition:
       type: Ready
     wait_timeout: 300
-    kubeconfig: "{{ cozystack_config_dir }}/kubeconfig"
   run_once: true

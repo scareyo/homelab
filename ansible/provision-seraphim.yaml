@@ -54,5 +54,7 @@
 - name: Install Cozystack
   hosts: seraphim
   connection: local
+  environment:
+    KUBECONFIG: "{{ cozystack_kubeconfig }}"
   roles:
     - role: cozystack

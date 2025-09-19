@@ -63,5 +63,4 @@
     wait_condition:
       type: Ready
     wait_timeout: 60
-    kubeconfig: "{{ cozystack_kubeconfig }}"
   retries: 60

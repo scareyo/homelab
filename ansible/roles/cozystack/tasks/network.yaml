@@ -3,14 +3,12 @@
   kubernetes.core.k8s:
     state: present
     src: "{{ cozystack_config_dir }}/config/metallb/cozystack-l2advertisement.yaml"
-    kubeconfig: "{{ cozystack_config_dir }}/kubeconfig"
   run_once: true
 
 - name: Create MetalLB IPAddressPool
   kubernetes.core.k8s:
     state: present
     src: "{{ cozystack_config_dir }}/config/metallb/cozystack-ipaddresspool.yaml"
-    kubeconfig: "{{ cozystack_config_dir }}/kubeconfig"
   run_once: true
 
 - name: Enable root ingress
@@ -23,7 +21,6 @@
     definition:
       spec:
         ingress: true
-    kubeconfig: "{{ cozystack_config_dir }}/kubeconfig"
   run_once: true
 
 - name: Wait for ingress
@@ -36,7 +33,6 @@
     wait_condition:
       type: Ready
     wait_timeout: 60
-    kubeconfig: "{{ cozystack_config_dir }}/kubeconfig"
   run_once: true
 
 - name: Wait for ingress-nginx-system
@@ -49,5 +45,4 @@
     wait_condition:
       type: Ready
     wait_timeout: 60
-    kubeconfig: "{{ cozystack_config_dir }}/kubeconfig"
   run_once: true

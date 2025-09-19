@@ -36,12 +36,10 @@
   kubernetes.core.k8s:
     state: present
     src: "{{ cozystack_config_dir }}/config/linstor/local-storageclass.yaml"
-    kubeconfig: "{{ cozystack_config_dir }}/kubeconfig"
   run_once: true
 
 - name: Create replicated StorageClass
   kubernetes.core.k8s:
     state: present
     src: "{{ cozystack_config_dir }}/config/linstor/replicated-storageclass.yaml"
-    kubeconfig: "{{ cozystack_config_dir }}/kubeconfig"
   run_once: true
