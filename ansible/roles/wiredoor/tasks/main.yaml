@@ -9,7 +9,7 @@
 
 - name: Ensure podman is installed
   become: true
-  package:
+  ansible.builtin.package:
     name: podman
     state: present
 
@@ -67,18 +67,18 @@
       GID: "${GID-1000}"
     ports:
       - "127.0.0.1:8080:8080"
-    #healthcheck:
-    #  test: ["CMD", "cscli", "lapi", "status"]
-    #  interval: 15s
-    #  timeout: 10s
-    #  retries: 4
-    #  start_period: 30s
     network:
       - wiredoor.network
+    healthcheck: cscli lapi status
+    healthcheck_interval: 15s
+    healthcheck_timeout: 10s
+    healthcheck_retries: 4
+    healthcheck_start_period: 30s
 
 - name: Create acquis.yaml
   ansible.builtin.copy:
     dest: ~/acquis.yaml
+    mode: "0644"
     content: |
       filenames:
         - /var/log/nginx/*/access.log

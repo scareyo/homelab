@@ -5,12 +5,11 @@
   hosts: localhost
   connection: local
   run_once: true
-  environment:
-    HCLOUD_TOKEN: "{{ hcloud_api_token }}"
   tasks:
     - name: Create Zeus
       hetzner.hcloud.server:
         name: zeus
+        api_token: "{{ hcloud_api_token }}"
         server_type: cpx11
         image: alma-10
         location: ash
@@ -59,7 +58,7 @@
   vars:
     dnf_automatic_upgrade_type: default
     dnf_automatic_reboot: true
-    dnf_automatic_reboot_OnCalendar: "04:00"
+    dnf_automatic_reboot_OnCalendar: "04:00" # noqa: var-naming
   roles:
     - exploide.dnf-automatic
 

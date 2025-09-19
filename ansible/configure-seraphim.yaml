@@ -3,7 +3,7 @@
   hosts: seraphim
   connection: local
   run_once: true
-  env:
+  environment:
     KUBECONFIG: "{{ cozystack_kubeconfig }}"
   tasks:
     - name: Create External Secrets Namespace
