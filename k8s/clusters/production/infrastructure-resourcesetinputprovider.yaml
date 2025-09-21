@@ -1,0 +1,71 @@
+---
+apiVersion: fluxcd.controlplane.io/v1
+kind: ResourceSetInputProvider
+metadata:
+  name: infrastructure
+spec:
+  type: Static
+  defaultValues:
+    apps:
+      # Cilium
+      - name: infra-controller-cilium
+        path: k8s/infrastructure/controllers/cilium
+        dependsOn: []
+
+      - name: infra-config-cilium
+        path: k8s/infrastructure/configs/cilium
+        dependsOn: []
+
+      # Flux Operator
+      - name: infra-controller-fluxcd
+        path: k8s/infrastructure/controllers/fluxcd
+        dependsOn: []
+
+      - name: infra-config-fluxcd
+        path: k8s/infrastructure/configs/fluxcd
+        dependsOn: []
+
+      # CloudNativePG
+      #- name: infra-cnpg-controller
+      #  path: k8s/infrastructure/controllers/cert-manager
+      #  dependsOn: []
+
+      ## External Secrets
+      - name: infra-controller-external-secrets
+        path: k8s/infrastructure/controllers/external-secrets
+        dependsOn: []
+
+      - name: infra-config-external-secrets
+        path: k8s/infrastructure/configs/external-secrets
+        dependsOn:
+          - infra-controller-external-secrets
+      
+      # Hetzner Cloud
+      - name: infra-controller-hcloud
+        path: k8s/infrastructure/controllers/hcloud
+        dependsOn:
+          - infra-config-external-secrets
+
+      ## cert-manager
+      - name: infra-controller-cert-manager
+        path: k8s/infrastructure/controllers/cert-manager
+        dependsOn:
+          - infra-config-external-secrets
+
+      - name: infra-config-cert-manager
+        path: k8s/infrastructure/configs/cert-manager
+        dependsOn:
+          - infra-controller-cert-manager
+
+      # Gateway
+      - name: infra-config-gateway
+        path: k8s/infrastructure/configs/gateway
+        dependsOn:
+          - infra-config-cert-manager
+
+      # External DNS
+      - name: infra-controller-external-dns
+        path: k8s/infrastructure/controllers/external-dns
+        dependsOn:
+          - infra-config-external-secrets
+          - infra-config-gateway

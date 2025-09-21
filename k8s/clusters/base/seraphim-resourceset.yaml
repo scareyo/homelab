@@ -1,0 +1,37 @@
+---
+apiVersion: fluxcd.controlplane.io/v1
+kind: ResourceSet
+metadata:
+  name: seraphim
+  namespace: flux-system
+spec:
+  inputsFrom:
+    - apiVersion: fluxcd.controlplane.io/v1
+      kind: ResourceSetInputProvider
+      name: infrastructure
+
+  resourcesTemplate: |
+    <<- range $app := inputs.apps >>
+    ---
+    apiVersion: kustomize.toolkit.fluxcd.io/v1
+    kind: Kustomization
+    metadata:
+      name: << $app.name >>
+      namespace: flux-system
+    spec:
+      << if $app.dependsOn >>
+      dependsOn:
+        <<- range $dep := $app.dependsOn >>
+        - name: << $dep >>
+        <<- end >>
+      << end >>
+      path: << $app.path >>
+      interval: 30m
+      retryInterval: 5m
+      prune: true
+      wait: true
+      timeout: 5m
+      sourceRef:
+        kind: GitRepository
+        name: flux-system
+    <<- end >>

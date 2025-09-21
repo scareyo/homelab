@@ -42,6 +42,7 @@
             argocd
             cilium-cli
             fluxcd
+            fluxcd-operator
             k9s
             kubectl
             kubelogin-oidc

@@ -4,4 +4,5 @@ kind: HelmRepository
 metadata:
   name: flux-operator
 spec:
+  type: oci
   url: oci://ghcr.io/controlplaneio-fluxcd/charts
