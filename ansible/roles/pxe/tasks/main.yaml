@@ -44,6 +44,19 @@
     version: master
     force: true
 
+- name: Download kernel params
+  when: pxe_kernel_params_url != ''
+  block:
+    - name: Download file
+      ansible.builtin.get_url:
+        url: "{{ pxe_kernel_params_url }}"
+        dest: "{{ role_path }}/files/data/kernel_params"
+        mode: "0660"
+
+    - name: Set pxe_kernel_params
+      ansible.builtin.set_fact:
+        pxe_kernel_params: "{{ lookup('file', role_path + '/files/data/kernel_params') }}"
+
 - name: Generate iPXE script
   ansible.builtin.template:
     src: boot.ipxe.j2

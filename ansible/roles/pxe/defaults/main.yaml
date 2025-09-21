@@ -1,5 +1,6 @@
 ---
 pxe_kernel_params: ""
+pxe_kernel_params_url: ""
 
 pxe_dnsmasq_path: "{{ role_path }}/files/data/dnsmasq"
 pxe_http_path: "{{ role_path }}/files/data/http"

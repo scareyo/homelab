@@ -25,6 +25,8 @@
           packages = with pkgs; [
             dnsmasq
             git-crypt
+            omnictl
+            packer
             yq-go
 
             myPkgs.talm
