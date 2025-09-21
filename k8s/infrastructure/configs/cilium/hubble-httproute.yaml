@@ -5,7 +5,7 @@ metadata:
   name: hubble
 spec:
   parentRefs:
-    - name: external
+    - name: internal
       namespace: gateway
   hostnames:
     - hubble.vegapunk.cloud

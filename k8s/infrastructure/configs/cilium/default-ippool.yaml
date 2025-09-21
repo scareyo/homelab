@@ -7,9 +7,5 @@ metadata:
     bgp: default
 spec:
   blocks:
-    - start: 10.10.21.2
-      stop: 10.10.21.99
+    - cidr: 10.10.21.0/24
   allowFirstLastIPs: No
-  #serviceSelector:
-  #  matchLabels:
-  #    gateway.networking.k8s.io/gateway-name: internal

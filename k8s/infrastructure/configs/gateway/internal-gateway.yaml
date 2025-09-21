@@ -13,7 +13,7 @@ spec:
   listeners:
     - protocol: HTTPS
       port: 443
-      name: https-apps-gateway
+      name: apps-vegapunk-cloud-https
       hostname: "*.vegapunk.cloud"
       allowedRoutes:
         namespaces:

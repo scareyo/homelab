@@ -4,12 +4,15 @@ kind: CiliumBGPClusterConfig
 metadata:
   name: default
 spec:
+  nodeSelector:
+    matchLabels:
+      platform: metal
   bgpInstances:
     - name: default
       localASN: 65001
       peers:
         - name: stella
           peerASN: 65000
-          peerAddress: "10.10.20.1"
+          peerAddress: 10.10.20.1
           peerConfigRef:
             name: default
