@@ -69,3 +69,8 @@ spec:
         dependsOn:
           - infra-config-external-secrets
           - infra-config-gateway
+
+      # External Snapshotter
+      - name: infra-controller-external-snapshotter
+        path: k8s/infrastructure/controllers/external-snapshotter
+        dependsOn: []
