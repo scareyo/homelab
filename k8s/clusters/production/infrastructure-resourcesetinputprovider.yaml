@@ -74,3 +74,15 @@ spec:
       - name: infra-controller-external-snapshotter
         path: k8s/infrastructure/controllers/external-snapshotter
         dependsOn: []
+
+      ## Rook
+      - name: infra-controller-rook
+        path: k8s/infrastructure/controllers/rook
+        dependsOn:
+          - infra-config-gateway
+
+      ## Velero
+      - name: infra-controller-velero
+        path: k8s/infrastructure/controllers/velero
+        dependsOn:
+          - infra-config-external-secrets
