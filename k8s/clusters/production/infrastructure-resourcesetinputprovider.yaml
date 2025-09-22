@@ -25,11 +25,6 @@ spec:
         path: k8s/infrastructure/configs/fluxcd
         dependsOn: []
 
-      # CloudNativePG
-      #- name: infra-cnpg-controller
-      #  path: k8s/infrastructure/controllers/cert-manager
-      #  dependsOn: []
-
       ## External Secrets
       - name: infra-controller-external-secrets
         path: k8s/infrastructure/controllers/external-secrets
@@ -86,3 +81,11 @@ spec:
         path: k8s/infrastructure/controllers/velero
         dependsOn:
           - infra-config-external-secrets
+
+      # CloudNativePG
+      - name: infra-cnpg-controller
+        path: k8s/infrastructure/controllers/cnpg
+        dependsOn:
+          - infra-controller-rook
+          - infra-controller-velero
+
