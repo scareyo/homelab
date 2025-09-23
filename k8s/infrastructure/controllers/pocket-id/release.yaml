@@ -1,0 +1,45 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: pocket-id
+spec:
+  chart:
+    spec:
+      chart: pocket-id
+      version: 1.5.6
+      sourceRef:
+        kind: HelmRepository
+        name: pocket-id
+  releaseName: pocket-id
+  interval: 10m
+  values:
+    host: id.scarey.me
+    timeZone: America/New_York
+    database:
+      provider: postgres
+      connectionString: postgres://
+  postRenderers:
+    - kustomize:
+        patches:
+          - target:
+              group: apps
+              version: v1
+              kind: StatefulSet
+              name: pocket-id
+            patch: |
+              apiVersion: apps/v1
+              kind: StatefulSet
+              metadata:
+                name: pocket-id
+              spec:
+                template:
+                  spec:
+                    containers:
+                      - name: pocket-id
+                        env:
+                          - name: DB_CONNECTION_STRING
+                            valueFrom:
+                              secretKeyRef:
+                                name: postgres-app
+                                key: uri

@@ -83,9 +83,14 @@ spec:
           - infra-config-external-secrets
 
       # CloudNativePG
-      - name: infra-cnpg-controller
+      - name: infra-controller-cnpg
         path: k8s/infrastructure/controllers/cnpg
         dependsOn:
           - infra-controller-rook
           - infra-controller-velero
 
+      # Pocket ID
+      - name: infra-controller-pocket-id
+        path: k8s/infrastructure/controllers/pocket-id
+        dependsOn:
+          - infra-controller-cnpg

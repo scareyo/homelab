@@ -1,0 +1,19 @@
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: pocket-id
+spec:
+  parentRefs:
+    - name: external
+      namespace: gateway
+  hostnames:
+    - id.scarey.me
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: pocket-id
+          port: 80
