@@ -1,0 +1,11 @@
+---
+apiVersion: velero.io/v1
+kind: Restore
+metadata:
+  name: pocket-id
+  namespace: velero
+spec:
+  scheduleName: pocket-id
+  restorePVs: true
+  includedResources:
+    - pvc

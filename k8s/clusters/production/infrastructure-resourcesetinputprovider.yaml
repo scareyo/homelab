@@ -82,15 +82,26 @@ spec:
         dependsOn:
           - infra-config-external-secrets
 
+      - name: infra-config-velero-backups
+        path: k8s/infrastructure/configs/velero/backups
+        dependsOn:
+          - infra-controller-velero
+          - infra-controller-rook
+
+      - name: infra-config-velero-restores
+        path: k8s/infrastructure/configs/velero/restores
+        dependsOn:
+          - infra-config-velero-backups
+
       # CloudNativePG
       - name: infra-controller-cnpg
         path: k8s/infrastructure/controllers/cnpg
         dependsOn:
           - infra-controller-rook
-          - infra-controller-velero
 
       # Pocket ID
       - name: infra-controller-pocket-id
         path: k8s/infrastructure/controllers/pocket-id
         dependsOn:
           - infra-controller-cnpg
+          - infra-config-velero-restores
