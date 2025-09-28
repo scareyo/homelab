@@ -18,16 +18,19 @@
 - name: Get MS-01 machine status
   hosts: ms01
   connection: local
-  environment:
-    OMNI_ENDPOINT: "{{ omni_endpoint }}"
-    OMNI_SERVICE_ACCOUNT_KEY: "{{ omni_service_account_key }}"
   tasks:
     - name: Get machine status
+      run_once: true
+      ansible.builtin.command: omnictl get machinestatus -o yaml
+      register: cmd
+      changed_when: false
+
+    - name: Check if machine is running
       ansible.builtin.shell: |
         set -o pipefail
-        omnictl get machinestatus -o yaml | yq 'select(.spec.network.hostname == "{{ inventory_hostname | quote }}") | .metadata.phase'
-      changed_when: false
+        echo "{{ cmd.stdout }}" | yq 'select(.spec.network.hostname == "{{ inventory_hostname | quote }}") | .metadata.phase'
       register: cmd
+      changed_when: false
 
     - name: Set machine status fact
       ansible.builtin.set_fact:
@@ -77,18 +80,9 @@
 - name: Wait for all machines to be running
   hosts: seraphim
   connection: local
-  environment:
-    OMNI_ENDPOINT: "{{ omni_endpoint }}"
-    OMNI_SERVICE_ACCOUNT_KEY: "{{ omni_service_account_key }}"
   tasks:
     - name: Get machine status
-      ansible.builtin.shell: |
-        set -o pipefail
-        omnictl get machinestatus -o yaml | yq 'select(.spec.network.hostname == "{{ inventory_hostname | quote }}") | .metadata.phase'
-      register: cmd
-      retries: 24
-      changed_when: false
-      failed_when: cmd.stdout != 'running'
+      ansible.builtin.include_tasks: tasks/is-machine-running.yaml
 
 - name: Configure Seraphim
   hosts: seraphim
@@ -101,11 +95,29 @@
         omni_kubernetes_version: "{{ kubernetes_version }}"
   tasks:
     - name: Get a talosconfig
-      ansible.builtin.command: "omnictl talosconfig -f -c {{ omni_cluster_name }} {{ inventory_dir }}/../.talos/config"
+      ansible.builtin.command: "omnictl talosconfig -f -m=false -c {{ omni_cluster_name }} {{ inventory_dir }}/../.talos/config"
+      retries: 8
+      delay: 5
       changed_when: true
 
     - name: Get a kubeconfig
-      ansible.builtin.command: "omnictl kubeconfig -f -c {{ omni_cluster_name }} {{ inventory_dir }}/../.kube/config"
+      ansible.builtin.command: "omnictl kubeconfig -f -m=false -c {{ omni_cluster_name }} {{ inventory_dir }}/../.kube/config"
+      retries: 8
+      delay: 5
+      changed_when: true
+
+    - name: Get data disk ID
+      ansible.builtin.shell: |
+        talosctl -n {{ host }} get disks -o yaml \
+          | yq 'select(.spec.symlinks[] == "{{ omni_data_disk }}" or .spec.dev_path == "{{ omni_data_disk }}")' \
+          | yq .metadata.id
+      register: data_disk
+      changed_when: false
+
+    - name: Wipe data disk
+      #ansible.builtin.command: "omnictl -n {{ ansible_host }} wipe disk {{ data_disk.stdout }}"
+      debug:
+        msg: "omnictl -n {{ host }} wipe disk {{ data_disk.stdout }}"
       changed_when: true
 
     - name: Create External Secrets namespace
@@ -114,6 +126,8 @@
         api_version: v1
         kind: Namespace
         state: present
+      retries: 8
+      delay: 5
 
     - name: Add Infisical secret
       kubernetes.core.k8s:
@@ -126,6 +140,8 @@
             clientId: "{{ infisical_client_id }}"
             clientSecret: "{{ infisical_client_secret }}"
         state: present
+      retries: 8
+      delay: 5
 
     - name: Install Flux Operator
       kubernetes.core.helm:
@@ -134,7 +150,11 @@
         chart_version: 0.28.0
         release_namespace: flux-system
         create_namespace: true
+      retries: 8
+      delay: 5
 
     - name: Add FluxInstance
       kubernetes.core.k8s:
         definition: "{{ lookup('kubernetes.core.kustomize', dir=inventory_dir + '/../k8s/infrastructure/configs/fluxcd') }}"
+      retries: 8
+      delay: 5

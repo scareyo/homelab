@@ -55,7 +55,7 @@
 
     - name: Set pxe_kernel_params
       ansible.builtin.set_fact:
-        pxe_kernel_params: "{{ lookup('file', role_path + '/files/data/kernel_params') }}"
+        pxe_kernel_params: "{{ pxe_kernel_params }} {{ lookup('file', role_path + '/files/data/kernel_params') }}"
 
 - name: Generate iPXE script
   ansible.builtin.template:

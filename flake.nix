@@ -47,6 +47,7 @@
             kubectl
             kubelogin-oidc
             kubernetes-helm
+            kubernetes-helmPlugins.helm-diff
             talosctl
             velero
 

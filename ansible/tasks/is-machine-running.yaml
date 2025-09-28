@@ -1,0 +1,35 @@
+---
+- name: Group of tasks that are tightly coupled
+  block:
+    - name: Increment the retry count
+      set_fact:
+        retry_count: "{{ 0 if retry_count is undefined else retry_count | int + 1 }}"
+
+    - name: Get machine status
+      run_once: true
+      ansible.builtin.command: omnictl get machinestatus -o yaml
+      register: cmd
+      changed_when: false
+
+    - name: Check if machine is running
+      ansible.builtin.shell: |
+        set -o pipefail
+        echo "{{ cmd.stdout }}" | yq 'select(.spec.network.hostname == "{{ inventory_hostname | quote }}") | .metadata.phase'
+      register: status
+      failed_when: status.stdout != 'running'
+      changed_when: false
+
+    - name: Set machine status fact
+      ansible.builtin.set_fact:
+        omni_status: "{{ status.stdout }}"
+
+  rescue:
+    - fail:
+        msg: Maximum retries of grouped tasks reached
+      when: retry_count | int == 24
+
+    - name: Waiting 5 seconds to retry
+      ansible.builtin.pause:
+        seconds: 5
+
+    - ansible.builtin.include_tasks: tasks/is-machine-running.yaml

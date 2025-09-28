@@ -5,20 +5,21 @@
       - omni_talos_version is defined
       - omni_kubernetes_version is defined
       - omni_cluster_name is defined
-      - omni_endpoint is defined
-      - omni_service_account_key is defined
 
 - name: Get machine status
-  environment:
-    OMNI_ENDPOINT: "{{ omni_endpoint }}"
-    OMNI_SERVICE_ACCOUNT_KEY: "{{ omni_service_account_key }}"
+  ansible.builtin.command: omnictl get machinestatus -o yaml
+  register: cmd
+  retries: 4
+  delay: 5
+
+- name: Get machine status
   ansible.builtin.shell: |-
     set -o pipefail;
-    omnictl get machinestatus -o yaml | yq -o json -I 0 'select(.spec.network.hostname == "{{ item }}") |
+    echo "{{ cmd.stdout }}" | yq -o json -I 0 'select(.spec.network.hostname == "{{ item }}") |
     {
       "id": .metadata.id,
       "name": "{{ item }}",
-      "disk": "{{ hostvars[item].osdisk | default('') | quote }}",
+      "disk": "{{ hostvars[item].omni_os_disk | default('') | quote }}",
       "groups": {{ hostvars[item].group_names | to_json }},
       "platform": .spec.platformmetadata.platform
     }'
@@ -40,16 +41,20 @@
 
 - name: Validate cluster definition
   environment:
-    OMNI_ENDPOINT: "{{ omni_endpoint }}"
-    OMNI_SERVICE_ACCOUNT_KEY: "{{ omni_service_account_key }}"
   ansible.builtin.command: "omnictl cluster template validate -f {{ role_path }}/files/data/cluster.yaml"
+  retries: 4
+  delay: 5
   changed_when: false
 
 - name: Sync cluster
   ansible.builtin.command: "omnictl cluster template sync -f {{ role_path }}/files/data/cluster.yaml"
   register: output
+  retries: 4
+  delay: 5
   changed_when: output.stdout != ''
 
 - name: Wait for healthy cluster
   ansible.builtin.command: "omnictl cluster template status --wait 10m -f {{ role_path }}/files/data/cluster.yaml"
+  retries: 4
+  delay: 5
   changed_when: false
