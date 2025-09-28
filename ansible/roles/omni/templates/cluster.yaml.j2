@@ -27,18 +27,18 @@ patches:
 ---
 kind: ControlPlane
 machines:
-{% for machine in machines | selectattr("groups", "contains", "control") %}
+{% for machine in omni_machines | selectattr("groups", "contains", "control") %}
   - {{ machine.id }}
 {% endfor %}
 
 ---
 kind: Workers
 machines:
-{% for machine in machines | selectattr("groups", "contains", "worker") %}
+{% for machine in omni_machines | selectattr("groups", "contains", "worker") %}
   - {{ machine.id }}
 {% endfor %}
 
-{% for machine in machines %}
+{% for machine in omni_machines %}
 ---
 kind: Machine
 name: {{ machine.id }}
