@@ -29,7 +29,25 @@ spec:
       interval: 30m
       retryInterval: 5m
       prune: true
-      wait: true
+      wait: << $app.wait >>
+      << if $app.healthChecks >>
+      healthChecks:
+        <<- range $check := $app.healthChecks >>
+        - apiVersion: << $check.apiVersion >>
+          kind: << $check.kind >>
+          name: << $check.name >>
+          namespace: << $check.namespace >>
+        <<- end >>
+      << end >>
+      << if $app.healthCheckExprs >>
+      healthCheckExprs:
+        <<- range $expr := $app.healthCheckExprs >>
+        - apiVersion: << $expr.apiVersion >>
+          kind: << $expr.kind >>
+          failed: << $expr.failed >>
+          current: << $expr.current >>
+        <<- end >>
+      << end >>
       timeout: 5m
       sourceRef:
         kind: GitRepository

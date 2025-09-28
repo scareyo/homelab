@@ -11,52 +11,90 @@ spec:
       - name: infra-controller-cilium
         path: k8s/infrastructure/controllers/cilium
         dependsOn: []
+        wait: true
+        healthChecks: []
+        healthCheckExprs: []
 
       - name: infra-config-cilium
         path: k8s/infrastructure/configs/cilium
         dependsOn: []
+        wait: true
+        healthChecks: []
+        healthCheckExprs: []
 
       # Flux Operator
       - name: infra-controller-fluxcd
         path: k8s/infrastructure/controllers/fluxcd
         dependsOn: []
+        wait: true
+        healthChecks: []
+        healthCheckExprs: []
 
       - name: infra-config-fluxcd
         path: k8s/infrastructure/configs/fluxcd
         dependsOn: []
+        wait: true
+        healthChecks: []
+        healthCheckExprs: []
 
       ## External Secrets
       - name: infra-controller-external-secrets
         path: k8s/infrastructure/controllers/external-secrets
         dependsOn: []
+        wait: true
+        healthChecks: []
+        healthCheckExprs: []
 
       - name: infra-config-external-secrets
         path: k8s/infrastructure/configs/external-secrets
         dependsOn:
           - infra-controller-external-secrets
-      
+        wait: true
+        healthChecks: []
+        healthCheckExprs:
+          - apiVersion: external-secrets.io/v1beta1
+            kind: ClusterSecretStore
+            failed: status.conditions.filter(e, e.type == 'Ready').all(e, e.status == 'False')
+            current: status.conditions.filter(e, e.type == 'Ready').all(e, e.status == 'True')
+
       # Hetzner Cloud
       - name: infra-controller-hcloud
         path: k8s/infrastructure/controllers/hcloud
         dependsOn:
           - infra-config-external-secrets
+        wait: true
+        healthChecks: []
+        healthCheckExprs: []
 
       ## cert-manager
       - name: infra-controller-cert-manager
         path: k8s/infrastructure/controllers/cert-manager
         dependsOn:
           - infra-config-external-secrets
+        wait: true
+        healthChecks: []
+        healthCheckExprs: []
 
       - name: infra-config-cert-manager
         path: k8s/infrastructure/configs/cert-manager
         dependsOn:
           - infra-controller-cert-manager
+        wait: true
+        healthChecks: []
+        healthCheckExprs:
+          - apiVersion: cert-manager.io/v1
+            kind: ClusterIssuer
+            failed: status.conditions.filter(e, e.type == 'Ready').all(e, e.status == 'False')
+            current: status.conditions.filter(e, e.type == 'Ready').all(e, e.status == 'True')
 
       # Gateway
       - name: infra-config-gateway
         path: k8s/infrastructure/configs/gateway
         dependsOn:
           - infra-config-cert-manager
+        wait: true
+        healthChecks: []
+        healthCheckExprs: []
 
       # External DNS
       - name: infra-controller-external-dns
@@ -64,40 +102,73 @@ spec:
         dependsOn:
           - infra-config-external-secrets
           - infra-config-gateway
+        wait: true
+        healthChecks: []
+        healthCheckExprs: []
 
       # External Snapshotter
       - name: infra-controller-external-snapshotter
         path: k8s/infrastructure/controllers/external-snapshotter
         dependsOn: []
+        wait: true
+        healthChecks: []
+        healthCheckExprs: []
 
       ## Rook
       - name: infra-controller-rook
         path: k8s/infrastructure/controllers/rook
         dependsOn:
           - infra-config-gateway
+        wait: false
+        healthChecks:
+          - apiVersion: helm.toolkit.fluxcd.io/v2
+            kind: HelmRelease
+            name: rook-ceph-cluster
+            namespace: rook-ceph
+          - apiVersion: ceph.rook.io/v1
+            kind: CephCluster
+            name: rook-ceph
+            namespace: rook-ceph
+        healthCheckExprs:
+          - apiVersion: ceph.rook.io/v1
+            kind: CephCluster
+            failed: has(status.ceph) && status.ceph.health == 'HEALTH_ERR'
+            current: has(status.ceph) && status.ceph.health == 'HEALTH_OK'
 
       ## Velero
       - name: infra-controller-velero
         path: k8s/infrastructure/controllers/velero
         dependsOn:
           - infra-config-external-secrets
+        wait: true
+        healthChecks: []
+        healthCheckExprs: []
 
       - name: infra-config-velero-backups
         path: k8s/infrastructure/configs/velero/backups
         dependsOn:
           - infra-controller-velero
           - infra-controller-rook
+        wait: true
+        healthChecks: []
+        healthCheckExprs: []
 
       - name: infra-config-velero-restores
         path: k8s/infrastructure/configs/velero/restores
         dependsOn:
           - infra-config-velero-backups
+        wait: true
+        healthChecks: []
+        healthCheckExprs: []
 
       # CloudNativePG
       - name: infra-controller-cnpg
         path: k8s/infrastructure/controllers/cnpg
         dependsOn:
           - infra-controller-rook
+        wait: true
+        healthChecks: []
+        healthCheckExprs: []
 
       # Pocket ID
       - name: infra-controller-pocket-id
@@ -105,3 +176,6 @@ spec:
         dependsOn:
           - infra-controller-cnpg
           - infra-config-velero-restores
+        wait: true
+        healthChecks: []
+        healthCheckExprs: []
