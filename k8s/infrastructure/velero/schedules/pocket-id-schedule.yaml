@@ -1,0 +1,35 @@
+---
+apiVersion: velero.io/v1
+kind: Schedule
+metadata:
+  name: pocket-id-daily
+  namespace: velero
+spec:
+  schedule: 0 4 * * *
+  template:
+    ttl: 168h0m0s # 1 week
+    includedNamespaces:
+      - pocket-id
+    includedResources:
+      - pv
+      - pvc
+    snapshotVolumes: true
+    snapshotMoveData: true
+
+---
+apiVersion: velero.io/v1
+kind: Schedule
+metadata:
+  name: pocket-id-quarterly
+  namespace: velero
+spec:
+  schedule: 0 0 1 1,4,7,10 *
+  template:
+    ttl: 8760h0m0s # 1 year
+    includedNamespaces:
+      - pocket-id
+    includedResources:
+      - pv
+      - pvc
+    snapshotVolumes: true
+    snapshotMoveData: true

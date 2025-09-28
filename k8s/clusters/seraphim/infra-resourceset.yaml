@@ -29,8 +29,8 @@ spec:
       interval: 30m
       retryInterval: 5m
       prune: true
-      wait: << $app.wait >>
       << if $app.healthChecks >>
+      wait: false
       healthChecks:
         <<- range $check := $app.healthChecks >>
         - apiVersion: << $check.apiVersion >>
@@ -38,6 +38,8 @@ spec:
           name: << $check.name >>
           namespace: << $check.namespace >>
         <<- end >>
+      << else >>
+      wait: true
       << end >>
       << if $app.healthCheckExprs >>
       healthCheckExprs:
@@ -48,7 +50,11 @@ spec:
           current: << $expr.current >>
         <<- end >>
       << end >>
+      << if $app.timeout >>
+      timeout: << $app.timeout >>
+      << else >>
       timeout: 5m
+      << end >>
       sourceRef:
         kind: GitRepository
         name: flux-system
