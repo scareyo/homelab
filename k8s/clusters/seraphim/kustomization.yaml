@@ -5,3 +5,5 @@ namespace: flux-system
 resources:
   - infra-resourcesetinputprovider.yaml
   - infra-resourceset.yaml
+  - apps-resourcesetinputprovider.yaml
+  - apps-resourceset.yaml

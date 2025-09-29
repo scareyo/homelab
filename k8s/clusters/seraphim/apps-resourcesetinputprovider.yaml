@@ -1,0 +1,12 @@
+---
+apiVersion: fluxcd.controlplane.io/v1
+kind: ResourceSetInputProvider
+metadata:
+  name: apps
+spec:
+  type: Static
+  defaultValues:
+    apps:
+      # Forgejo
+      - name: app-forgejo
+        path: k8s/apps/forgejo
