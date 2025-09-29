@@ -1,0 +1,11 @@
+---
+apiVersion: velero.io/v1
+kind: Restore
+metadata:
+  name: forgejo
+  namespace: velero
+spec:
+  scheduleName: forgejo
+  restorePVs: true
+  includedResources:
+    - pvc
