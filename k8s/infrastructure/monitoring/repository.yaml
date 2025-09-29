@@ -1,0 +1,16 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: grafana
+spec:
+  url: https://grafana.github.io/helm-charts
+
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: prometheus
+spec:
+  type: oci
+  url: oci://ghcr.io/prometheus-community/charts

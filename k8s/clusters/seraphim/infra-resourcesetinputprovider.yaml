@@ -162,6 +162,15 @@ spec:
         healthChecks: []
         healthCheckExprs: []
 
+      # Monitoring
+      - name: infra-monitoring
+        path: k8s/infrastructure/monitoring
+        timeout: []
+        dependsOn:
+          - infra-velero-restores
+        healthChecks: []
+        healthCheckExprs: []
+
       # CloudNativePG
       - name: infra-cnpg
         path: k8s/infrastructure/cnpg

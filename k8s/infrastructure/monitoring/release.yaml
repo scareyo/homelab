@@ -1,0 +1,183 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: kube-prometheus-stack
+spec:
+  chart:
+    spec:
+      chart: kube-prometheus-stack
+      version: 77.12.0
+      sourceRef:
+        kind: HelmRepository
+        name: prometheus
+  releaseName: kube-prometheus-stack
+  interval: 10m
+  values:
+    grafana:
+      grafana.ini:
+        server:
+          root_url: https://grafana.vegapunk.cloud
+     #   auth.generic_oauth:
+     #     enabled: true
+     #     client_id: $__file{/etc/secrets/oauth/client_id}
+     #     client_secret: $__file{/etc/secrets/oauth/client_secret}
+     #     scopes: openid email profile offline_access roles
+     #     email_attribute_path: email
+     #     login_attribute_path: username
+     #     name_attribute_path: full_name
+     #     auth_url: https://sso.scarey.me/application/o/authorize/
+     #     token_url: https://sso.scarey.me/application/o/token/
+     #     api_url: https://sso.scarey.me/application/o/userinfo/
+     #     role_attribute_path: "contains(groups, 'grafana-admin') && 'Admin' || contains(groups, 'grafana-editor') && 'Editor' || 'Viewer'"
+     #     allow_assign_grafana_admin: true
+     # extraSecretMounts:
+     #   - name: oauth
+     #     secretName: oauth
+     #     defaultMode: 0440
+     #     mountPath: /etc/secrets/oauth
+     #     readOnly: true
+      route:
+        main:
+          enabled: true
+          hostnames:
+            - "grafana.vegapunk.cloud"
+          parentRefs:
+            - name: internal
+              namespace: gateway
+          matches:
+            - path:
+                type: PathPrefix
+                value: /
+      additionalDataSources:
+       - name: loki
+         type: loki
+         url: http://loki-gateway.monitoring
+    prometheus:
+      route:
+        main:
+          enabled: true
+          hostnames:
+            - "prometheus.vegapunk.cloud"
+          parentRefs:
+            - name: internal
+              namespace: gateway
+          matches:
+            - path:
+                type: PathPrefix
+                value: /
+    alertmanager:
+      route:
+        main:
+          enabled: true
+          hostnames:
+            - "alertmanager.vegapunk.cloud"
+          parentRefs:
+            - name: internal
+              namespace: gateway
+          matches:
+            - path:
+                type: PathPrefix
+                value: /
+    kubeControllerManager:
+      enabled: false
+    kubeScheduler:
+      enabled: false
+    defaultRules:
+      rules:
+        kubeProxy: false
+
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: k8s-monitoring
+spec:
+  chart:
+    spec:
+      chart: k8s-monitoring
+      version: 3.5.2
+      sourceRef:
+        kind: HelmRepository
+        name: grafana
+  releaseName: k8s-monitoring
+  interval: 10m
+  values:
+    cluster:
+      name: seraphim
+    clusterEvents:
+      enabled: true
+    podLogs:
+      enabled: true
+    alloy-logs:
+      enabled: true
+    alloy-singleton:
+      enabled: true
+    destinations:
+      - name: loki
+        type: loki
+        url: http://loki-gateway.monitoring.svc.cluster.local/loki/api/v1/push
+
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: loki
+spec:
+  chart:
+    spec:
+      chart: loki
+      version: 6.41.1
+      sourceRef:
+        kind: HelmRepository
+        name: grafana
+  releaseName: loki
+  interval: 10m
+  values:
+    global:
+      extraArgs:
+        - -config.expand-env=true
+      extraEnvFrom:
+        - configMapRef:
+            name: loki-bucket
+        - secretRef:
+            name: loki-bucket
+
+    loki:
+      auth_enabled: false
+      schemaConfig:
+        configs:
+          - from: "2024-04-01"
+            store: tsdb
+            object_store: s3
+            schema: v13
+            index:
+              prefix: loki_index_
+              period: 24h
+      ingester:
+        chunk_encoding: snappy
+      querier:
+        max_concurrent: 4
+      pattern_ingester:
+        enabled: true
+      limits_config:
+        allow_structured_metadata: true
+        volume_enabled: true
+      storage:
+        s3:
+          endpoint: ${BUCKET_HOST}
+          insecure: true
+          s3ForcePathStyle: true
+        bucketNames:
+          chunks: ${BUCKET_NAME}
+          ruler: ${BUCKET_NAME}
+          admin: ${BUCKET_NAME}
+
+    deploymentMode: SimpleScalable
+
+    backend:
+      replicas: 2
+    read:
+      replicas: 2
+    write:
+      replicas: 3
