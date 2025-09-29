@@ -1,7 +1,0 @@
----
-apiVersion: source.toolkit.fluxcd.io/v1
-kind: HelmRepository
-metadata:
-  name: wiredoor
-spec:
-  url: https://charts.wiredoor.net
