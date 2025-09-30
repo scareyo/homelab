@@ -10,3 +10,7 @@ spec:
       # Forgejo
       - name: app-forgejo
         path: k8s/apps/forgejo
+
+      # Prowlarr
+      - name: app-prowlarr
+        path: k8s/apps/prowlarr
