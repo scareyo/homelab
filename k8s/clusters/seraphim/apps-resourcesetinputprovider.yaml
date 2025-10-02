@@ -7,6 +7,10 @@ spec:
   type: Static
   defaultValues:
     apps:
+      # Homarr
+      - name: app-homarr
+        path: k8s/apps/homarr
+
       # Forgejo
       - name: app-forgejo
         path: k8s/apps/forgejo

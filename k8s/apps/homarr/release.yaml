@@ -1,0 +1,41 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: homarr
+spec:
+  chart:
+    spec:
+      chart: homarr
+      version: 7.1.0
+      sourceRef:
+        kind: HelmRepository
+        name: homarr
+  releaseName: homarr
+  interval: 10m
+  values:
+    env:
+      AUTH_PROVIDERS: oidc
+      AUTH_OIDC_ISSUER: https://id.scarey.me
+      AUTH_OIDC_CLIENT_NAME: Pocket ID
+    database:
+      type: postgresql
+    envSecrets:
+      dbCredentials:
+        existingSecret: postgres-app
+        dbUrlKey: uri
+    httproute:
+      enabled: true
+      parentRefs:
+        - name: internal
+          namespace: gateway
+      hostnames:
+        - home.vegapunk.cloud
+      rules:
+        - matches:
+            - path:
+                type: PathPrefix
+                value: /
+          backendRefs:
+            - name: homarr
+              port: 7575
