@@ -6,7 +6,7 @@ My k8s homelab infrastructure
 
 ### Seraphim
 
-Seraphim is the 4-node Minisforum MS-01 cluster running the Cozystack platform.
+Seraphim is the 4-node Minisforum MS-01 cluster running Talos Linux.
 
 - `s-snake  - control plane`
 - `s-hawk   - control plane`
@@ -15,7 +15,7 @@ Seraphim is the 4-node Minisforum MS-01 cluster running the Cozystack platform.
 
 ### Zeus
 
-Zeus is a Hetzner Cloud VPS used to expose services running on the Cozystack platform to the internet.
+Zeus is a Hetzner Cloud VPS used to expose cluster applications to the internet.
 
 ## Setup
 
@@ -34,36 +34,8 @@ Zeus is a Hetzner Cloud VPS used to expose services running on the Cozystack pla
 
 ### Seraphim
 
-1. Provision the Seraphim cluster:
+1. Create the Seraphim cluster
 
 ```
-just play provision-seraphim
+just play create-seraphim
 ```
-
-2. Configure the Seraphim cluster:
-
-```
-just play configure-seraphim
-```
-
-### Zeus
-
-1. Provision and configure the Hetzner Cloud VPS:
-
-```
-just play provision-zeus
-```
-
-## Destroy
-
-### Seraphim
-
-This command is destructive. It will wipe the Seraphim data disks, reset Talos Linux, and power down the node.
-
-```
-just play destroy-seraphim
-```
-
-### Zeus
-
-TODO: Create a playbook to tear down Hetzner Cloud resources

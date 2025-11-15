@@ -1,9 +1,5 @@
 ---
 collections:
-  - name: devsec.hardening
   - name: hetzner.hcloud
   - name: infisical.vault
   - name: kubernetes.core
-
-roles:
-  - name: exploide.dnf-automatic

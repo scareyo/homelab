@@ -1,9 +1,0 @@
----
-wiredoor_version: 1.5.0
-wiredoor_vpn_port: "51820"
-wiredoor_vpn_subnet: 10.0.0.0/24
-wiredoor_timezone: America/New_York
-wiredoor_port_range: "32760-32767"
-wiredoor_oauth2_provider: ""
-wiredoor_oauth2_client_id: ""
-wiredoor_oauth2_client_secret: ""
