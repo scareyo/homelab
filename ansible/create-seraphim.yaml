@@ -160,14 +160,14 @@
             clientSecret: "{{ infisical_client_secret }}"
         state: present
 
-    - name: Install Flux Operator
-      kubernetes.core.helm:
-        name: flux-operator
-        chart_ref: oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator
-        chart_version: 0.28.0
-        release_namespace: flux-system
-        create_namespace: true
+    #- name: Install Flux Operator
+    #  kubernetes.core.helm:
+    #    name: flux-operator
+    #    chart_ref: oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator
+    #    chart_version: 0.28.0
+    #    release_namespace: flux-system
+    #    create_namespace: true
 
-    - name: Add FluxInstance
-      kubernetes.core.k8s:
-        definition: "{{ lookup('kubernetes.core.kustomize', dir=inventory_dir + '/../k8s/infrastructure/fluxcd/config') }}"
+    #- name: Add FluxInstance
+    #  kubernetes.core.k8s:
+    #    definition: "{{ lookup('kubernetes.core.kustomize', dir=inventory_dir + '/../k8s/infrastructure/fluxcd/config') }}"
