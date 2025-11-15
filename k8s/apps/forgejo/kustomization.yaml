@@ -4,9 +4,7 @@ kind: Kustomization
 namespace: forgejo
 resources:
   - namespace.yaml
-  - repository.yaml
-  - release.yaml
-  - oidc-externalsecret.yaml
-  - postgres-cluster.yaml
-  - forgejo-httproute.yaml
+  - helm.yaml
+  - externalsecret.yaml
+  - postgres.yaml
   - anubis.yaml
