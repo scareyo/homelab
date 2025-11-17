@@ -4,10 +4,15 @@
     ./cert-manager
     ./cilium
     ./external-secrets
+    ./external-snapshotter
     ./gateway
+    ./monitoring
+    ./rook
 
     ../templates
   ];
+
+  nixidy.chartsDir = ../charts;
 
   nixidy.applicationImports = [
     ../generated/cert-manager.nix

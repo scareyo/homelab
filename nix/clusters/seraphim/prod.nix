@@ -12,6 +12,9 @@
     cert-manager.enable = true;
     cilium.enable = true;
     external-secrets.enable = true;
+    external-snapshotter.enable = true;
     gateway.enable = true;
+    monitoring.enable = true;
+    rook.enable = true;
   };
 }

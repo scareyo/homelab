@@ -32,6 +32,8 @@
         spec = {
           parentRefs = [
             {
+              group = "gateway.networking.k8s.io";
+              kind = "Gateway";
               name = "${cfg.gateway}";
               namespace = "gateway";
             }
@@ -51,8 +53,11 @@
               ];
               backendRefs = [
                 {
+                  group = "";
+                  kind = "Service";
                   name = "${cfg.serviceName}";
                   port = cfg.servicePort;
+                  weight = 1;
                 }
               ];
             }
