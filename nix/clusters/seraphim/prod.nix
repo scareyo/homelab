@@ -15,6 +15,7 @@
     external-secrets.enable = true;
     external-snapshotter.enable = true;
     gateway.enable = true;
+    hcloud.enable = true;
     monitoring.enable = true;
     rook.enable = true;
     velero.enable = true;

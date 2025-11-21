@@ -7,6 +7,7 @@
     ./external-secrets
     ./external-snapshotter
     ./gateway
+    ./hcloud
     ./monitoring
     ./rook
     ./velero
