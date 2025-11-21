@@ -12,6 +12,7 @@
     cert-manager.enable = true;
     cilium.enable = true;
     cnpg.enable = true;
+    external-dns.enable = true;
     external-secrets.enable = true;
     external-snapshotter.enable = true;
     gateway.enable = true;

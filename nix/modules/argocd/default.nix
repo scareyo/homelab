@@ -7,7 +7,7 @@ in
   options = with lib; {
     scarey.k8s.argocd.enable = mkEnableOption "Enable Argo CD";
   };
-  
+
   config = lib.mkIf cfg.enable {
     applications.argocd = {
       namespace = "argocd";

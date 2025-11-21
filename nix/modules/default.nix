@@ -4,6 +4,7 @@
     ./cert-manager
     ./cilium
     ./cnpg
+    ./external-dns
     ./external-secrets
     ./external-snapshotter
     ./gateway
