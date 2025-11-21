@@ -14,6 +14,7 @@ let
         "deploy/crds/cert-manager.io_clusterissuers.yaml"
       ];
     };
+
     cilium = generators.fromCRD {
       name = "cilium";
       src = pkgs.fetchFromGitHub {
@@ -30,6 +31,20 @@ let
         "pkg/k8s/apis/cilium.io/client/crds/v2alpha1/ciliumgatewayclassconfigs.yaml"
       ];
     };
+
+    cnpg = generators.fromCRD {
+      name = "cnpg";
+      src = pkgs.fetchFromGitHub {
+        owner = "cloudnative-pg";
+        repo = "cloudnative-pg";
+        rev = "v1.27.1";
+        hash = "sha256-iEia3g3nxnVm4q5lpV9SFOSKgHJsZ7jdqE73vA2bPpI=";
+      };
+      crds = [
+        "config/crd/bases/postgresql.cnpg.io_clusters.yaml"
+      ];
+    };
+
     external-secrets = generators.fromCRD {
       name = "external-secrets";
       src = pkgs.fetchFromGitHub {

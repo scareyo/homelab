@@ -10,6 +10,7 @@
     ./gateway
     ./hcloud
     ./monitoring
+    ./pocket-id
     ./rook
     ./velero
 
@@ -21,6 +22,7 @@
   nixidy.applicationImports = [
     ../generated/cert-manager.nix
     ../generated/cilium.nix
+    ../generated/cnpg.nix
     ../generated/external-secrets.nix
     ../generated/gateway-api.nix
     ../generated/velero.nix

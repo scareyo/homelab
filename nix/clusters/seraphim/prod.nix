@@ -18,6 +18,7 @@
     gateway.enable = true;
     hcloud.enable = true;
     monitoring.enable = true;
+    pocket-id.enable = true;
     rook.enable = true;
     velero.enable = true;
   };
