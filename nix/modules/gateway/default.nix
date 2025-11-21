@@ -43,6 +43,50 @@ in
             ];
           };
         };
+        "gateway.networking.k8s.io".v1.Gateway.external = {
+          metadata = {
+            name = "external";
+            annotations = {
+              "cert-manager.io/cluster-issuer" = "letsencrypt-staging";
+            };
+          };
+          spec = {
+            gatewayClassName = "cilium";
+            infrastructure.annotations."load-balancer.hetzner.cloud/location" = "ash";
+            listeners = [
+              {
+                protocol = "HTTPS";
+                port = 443;
+                name = "apps-scarey-me-https";
+                hostname = "*.scarey.me";
+                allowedRoutes.namespaces.from = "All";
+                tls = {
+                  mode = "Terminate";
+                  certificateRefs = [
+                    {
+                      name = "apps-scarey-me-tls";
+                    }
+                  ];
+                };
+              }
+              {
+                protocol = "HTTPS";
+                port = 443;
+                name = "scarey-me-https";
+                hostname = "scarey.me";
+                allowedRoutes.namespaces.from = "All";
+                tls = {
+                  mode = "Terminate";
+                  certificateRefs = [
+                    {
+                      name = "scarey-me-tls";
+                    }
+                  ];
+                };
+              }
+            ];
+          };
+        };
       };
     };
   };

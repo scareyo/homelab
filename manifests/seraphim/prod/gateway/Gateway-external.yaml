@@ -1,0 +1,35 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-staging
+  name: external
+  namespace: gateway
+spec:
+  gatewayClassName: cilium
+  infrastructure:
+    annotations:
+      load-balancer.hetzner.cloud/location: ash
+  listeners:
+    - allowedRoutes:
+        namespaces:
+          from: All
+      hostname: '*.scarey.me'
+      name: apps-scarey-me-https
+      port: 443
+      protocol: HTTPS
+      tls:
+        certificateRefs:
+          - name: apps-scarey-me-tls
+        mode: Terminate
+    - allowedRoutes:
+        namespaces:
+          from: All
+      hostname: scarey.me
+      name: scarey-me-https
+      port: 443
+      protocol: HTTPS
+      tls:
+        certificateRefs:
+          - name: scarey-me-tls
+        mode: Terminate
