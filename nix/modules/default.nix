@@ -3,6 +3,7 @@
     ./argocd
     ./cert-manager
     ./cilium
+    ./cnpg
     ./external-secrets
     ./external-snapshotter
     ./gateway
