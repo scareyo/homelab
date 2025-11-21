@@ -16,5 +16,6 @@
     gateway.enable = true;
     monitoring.enable = true;
     rook.enable = true;
+    velero.enable = true;
   };
 }

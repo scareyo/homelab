@@ -8,6 +8,7 @@
     ./gateway
     ./monitoring
     ./rook
+    ./velero
 
     ../templates
   ];
@@ -19,5 +20,6 @@
     ../generated/cilium.nix
     ../generated/external-secrets.nix
     ../generated/gateway-api.nix
+    ../generated/velero.nix
   ];
 }

@@ -28,23 +28,13 @@ in
         };
       };
 
+      templates.externalSecret.cloudflare = {
+        keys = [
+          { source = "/cloudflare/API_TOKEN"; dest = "token"; }
+        ];
+      };
+
       resources = {
-        "external-secrets.io".v1.ExternalSecret.cloudflare = {
-          metadata.name = "cloudflare";
-          spec = {
-            secretStoreRef = {
-              kind = "ClusterSecretStore";
-              name = "infisical";
-            };
-            target.name = "cloudflare-api-token";
-            data = [
-              {
-                secretKey = "token";
-                remoteRef.key = "/cloudflare/API_TOKEN";
-              }
-            ];
-          };
-        };
         "cert-manager.io".v1.ClusterIssuer.letsencrypt-staging = {
           metadata.name = "letsencrypt-staging";
           spec = {
@@ -55,7 +45,7 @@ in
               solvers = [
                 {
                   dns01.cloudflare.apiTokenSecretRef = {
-                    name = "cloudflare-api-token";
+                    name = "cloudflare";
                     key = "token";
                   };
                 }
