@@ -12,8 +12,6 @@ in
     applications.external-snapshotter = {
       namespace = "kube-system";
 
-      syncPolicy.autoSync.enable = true;
-
       helm.releases.snapshot-controller = {
         chart = charts.piraeus.snapshot-controller;
       };

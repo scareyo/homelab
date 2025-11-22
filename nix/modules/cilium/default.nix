@@ -12,8 +12,6 @@ in
     applications.cilium = {
       namespace = "kube-system";
 
-      syncPolicy.autoSync.enable = true;
-
       helm.releases.cilium = {
         chart = charts.cilium.cilium;
         values = {

@@ -13,7 +13,6 @@ in
       namespace = "monitoring";
       createNamespace = true;
 
-      syncPolicy.autoSync.enable = true;
       syncPolicy.syncOptions.serverSideApply = true;
 
       helm.releases.kube-prometheus-stack = {

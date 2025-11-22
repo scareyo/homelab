@@ -12,7 +12,4 @@ spec:
     path: ./manifests/seraphim/prod/argocd
     repoURL: https://github.com/scareyo/homelab.git
     targetRevision: main
-  syncPolicy:
-    automated:
-      prune: false
-      selfHeal: false
+  syncPolicy: {}

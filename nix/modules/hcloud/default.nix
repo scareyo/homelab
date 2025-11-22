@@ -13,8 +13,6 @@ in
       namespace = "hcloud";
       createNamespace = true;
 
-      syncPolicy.autoSync.enable = true;
-
       helm.releases.hcloud = {
         chart = charts.hcloud.hcloud-cloud-controller-manager;
         values = {
