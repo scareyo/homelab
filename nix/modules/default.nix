@@ -1,19 +1,15 @@
-{
-  imports = [
-    ./argocd
-    ./cert-manager
-    ./cilium
-    ./cnpg
-    ./external-dns
-    ./external-secrets
-    ./external-snapshotter
-    ./gateway
-    ./hcloud
-    ./monitoring
-    ./pocket-id
-    ./rook
-    ./velero
+let
+  entries = builtins.readDir ./.;
 
+  modules = builtins.filter (name:
+    entries.${name} == "directory"
+    && builtins.pathExists (./. + "/${name}/default.nix")
+  ) (builtins.attrNames entries);
+
+  imports = map (name: ./. + "/${name}") modules;
+in
+{
+  imports = imports ++ [
     ../templates
   ];
 
