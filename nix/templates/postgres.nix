@@ -6,12 +6,12 @@
       instances = lib.mkOption {
         type = lib.types.int;
         default = 3;
-        description = "";
+        description = "Number of instances";
       };
       size = lib.mkOption {
         type = lib.types.str;
         default = "32Gi";
-        description = "";
+        description = "Size of the storage";
       };
     };
     output = { name, config, ...  }: let

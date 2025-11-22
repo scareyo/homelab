@@ -8,15 +8,15 @@
           options = {
             source = lib.mkOption {
               type = lib.types.str;
-              description = "";
+              description = "Source key on the secret provider";
             };
             dest = lib.mkOption {
               type = lib.types.str;
-              description = "";
+              description = "Destination key on the generated Secret";
             };
           };
         });
-        description = "";
+        description = "A list of secrets to include in the generated Secret";
       };
     };
     output = { name, config, ...  }: let

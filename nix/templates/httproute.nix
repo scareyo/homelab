@@ -6,20 +6,20 @@
       gateway = mkOption {
         type = lib.types.str;
         default = "internal";
-        description = "";
+        description = "Gateway of the HTTPRoute";
       };
       hostname = mkOption {
         type = lib.types.str;
-        description = "";
+        description = "Hostname of the HTTPRoute";
       };
       serviceName = mkOption {
         type = lib.types.str;
-        description = "";
+        description = "Name of the referenced service";
       };
       servicePort = mkOption {
         type = lib.types.int;
         default = 80;
-        description = "";
+        description = "Port of the referenced service";
       };
     };
     output = { name, config, ...  }: let

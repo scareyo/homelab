@@ -6,24 +6,26 @@
       namespace = mkOption {
         type = lib.types.str;
         default = "velero";
-        description = "";
+        description = "Namespace of the Velero resources";
       };
       restore = mkOption {
         type = lib.types.bool;
         default = false;
-        description = "";
+        description = "Enable automatic volume restoration";
       };
       schedule = mkOption {
         type = lib.types.str;
-        description = "";
+        description = "Backup schedule";
+        example = "12h30m45s";
       };
       ttl = mkOption {
         type = lib.types.str;
-        description = "";
+        description = "Duration to keep backups";
+        example = "12h30m45s";
       };
       includedNamespaces = mkOption {
         type = lib.types.listOf lib.types.str;
-        description = "";
+        description = "Namespace to backup";
       };
     };
     output = { name, config, ...  }: let
