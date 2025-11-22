@@ -31,7 +31,7 @@ in
         gateway = "external";
       };
 
-      templates.cluster.postgres = {
+      templates.postgres.postgres = {
         instances = 3;
         size = "32Gi";
       };

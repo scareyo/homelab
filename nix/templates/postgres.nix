@@ -1,7 +1,7 @@
 { lib, ... }:
 
 {
-  templates.cluster = {
+  templates.postgres = {
     options = {
       instances = lib.mkOption {
         type = lib.types.int;
