@@ -13,6 +13,8 @@ in
       namespace = "argocd";
       createNamespace = true;
 
+      syncPolicy.autoSync.enable = true;
+
       helm.releases.argocd = {
         chart = charts.argoproj.argo-cd;
         values = {

@@ -13,5 +13,8 @@ spec:
     repoURL: https://github.com/scareyo/homelab.git
     targetRevision: main
   syncPolicy:
+    automated:
+      prune: false
+      selfHeal: false
     syncOptions:
       - ServerSideApply=true

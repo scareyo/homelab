@@ -13,6 +13,8 @@ in
       namespace = "gateway";
       createNamespace = true;
 
+      syncPolicy.autoSync.enable = true;
+
       resources = {
         "gateway.networking.k8s.io".v1.Gateway.internal = {
           metadata = {

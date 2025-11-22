@@ -13,6 +13,8 @@ in
       namespace = "velero";
       createNamespace = true;
 
+      syncPolicy.autoSync.enable = true;
+
       helm.releases.velero = {
         chart = charts.vmware-tanzu.velero;
         values = {

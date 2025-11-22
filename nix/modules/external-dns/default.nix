@@ -13,6 +13,8 @@ in
       namespace = "external-dns";
       createNamespace = true;
 
+      syncPolicy.autoSync.enable = true;
+
       helm.releases.external-dns = {
         chart = charts.external-dns.external-dns;
         values = {

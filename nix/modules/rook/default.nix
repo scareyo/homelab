@@ -13,6 +13,7 @@ in
       namespace = "rook-ceph";
       createNamespace = true;
 
+      syncPolicy.autoSync.enable = true;
       syncPolicy.syncOptions.serverSideApply = true;
 
       helm.releases.rook-ceph = {

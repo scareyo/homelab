@@ -13,6 +13,8 @@ in
       namespace = "cert-manager";
       createNamespace = true;
 
+      syncPolicy.autoSync.enable = true;
+
       helm.releases.cert-manager = {
         chart = charts.jetstack.cert-manager;
         values = {

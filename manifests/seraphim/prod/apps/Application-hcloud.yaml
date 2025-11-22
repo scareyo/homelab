@@ -12,4 +12,7 @@ spec:
     path: ./manifests/seraphim/prod/hcloud
     repoURL: https://github.com/scareyo/homelab.git
     targetRevision: main
-  syncPolicy: {}
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: false
