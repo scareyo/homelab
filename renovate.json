@@ -1,0 +1,25 @@
+{
+  "customManagers": [
+    {
+      "customType": "regex",
+      "datasourceTemplate": "helm",
+      "managerFilePatterns": ["/^nix/charts/.*\\.nix$/"],
+      "matchStrings": [
+        "repo = \"(?<registryUrl>.*?)\";\n.*chart = \"(?<depName>.*?)\";\n.*version = \"(?<currentValue>.*?)\""
+      ]
+    }
+  ],
+  "packageRules": [
+    {
+      "matchManagers": ["regex"],
+      "postUpgradeTasks": {
+        "commands": [
+          "./scripts/update-hash.sh {{{packageFile}}}",
+          "./scripts/generate-manifests.sh"
+        ],
+        "executionMode": "update"
+      }
+    }
+  ],
+  "prHourlyLimit": 16
+}
