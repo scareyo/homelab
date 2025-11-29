@@ -28,6 +28,9 @@
       "gateway.networking.k8s.io".v1.HTTPRoute.${name} = {
         metadata = {
           name = "${name}";
+          annotations = {
+            "argocd.argoproj.io/sync-wave" = "10";
+          };
         };
         spec = {
           parentRefs = [
