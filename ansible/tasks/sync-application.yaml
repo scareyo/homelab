@@ -1,0 +1,9 @@
+---
+- name: Sync Argo CD application
+  ansible.builtin.command: argocd app sync --retry-limit 5 {{ item.name }}
+  changed_when: true
+
+- name: Wait for Argo CD application
+  ansible.builtin.command: argocd app wait {{ item.name }}
+  changed_when: true
+  when: item.wait

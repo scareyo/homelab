@@ -1,8 +1,6 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  annotations:
-    argocd.argoproj.io/sync-wave: "-3"
   name: external-dns
   namespace: argocd
 spec:
@@ -14,7 +12,4 @@ spec:
     path: ./manifests/seraphim/prod/external-dns
     repoURL: https://github.com/scareyo/homelab.git
     targetRevision: main
-  syncPolicy:
-    automated:
-      prune: false
-      selfHeal: false
+  syncPolicy: {}

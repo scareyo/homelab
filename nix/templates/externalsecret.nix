@@ -35,6 +35,9 @@
     };
     output = { name, config, ...  }: let
       cfg = config;
+
+      providerKeys = builtins.filter(x: x.type == "provider") cfg.keys;
+      passwordKeys = builtins.filter(x: x.type == "password") cfg.keys;
     in {
       "external-secrets.io".v1.ExternalSecret.${name} = {
         metadata = {
@@ -46,30 +49,36 @@
             name = "infisical";
           };
           target.creationPolicy = lib.mkIf cfg.merge "Merge";
-          data = map (x: {
-            secretKey = "${x.dest}";
-            remoteRef = {
-              conversionStrategy = "Default";
-              decodingStrategy = "None";
-              key = "${x.source}";
-              metadataPolicy = "None";
-            };
-          }) (builtins.filter (x: x.type == "provider") cfg.keys);
-          dataFrom = map (x: {
-            sourceRef.generatorRef = {
-              apiVersion = "generators.external-secrets.io/v1alpha1";
-              kind = "Password";
-              name = "${x.dest}";
-            };
-            rewrite = [
-              {
-                regexp = {
-                  source = "password";
-                  target = "${x.dest}";
-                };
-              }
-            ];
-          }) (builtins.filter (x: x.type == "password") cfg.keys);
+          data =
+            if builtins.length providerKeys == 0 then 
+              null 
+            else map (x: {
+              secretKey = "${x.dest}";
+              remoteRef = {
+                conversionStrategy = "Default";
+                decodingStrategy = "None";
+                key = "${x.source}";
+                metadataPolicy = "None";
+              };
+            }) providerKeys;
+          dataFrom = 
+            if builtins.length passwordKeys == 0 then 
+              null 
+            else map (x: {
+              sourceRef.generatorRef = {
+                apiVersion = "generators.external-secrets.io/v1alpha1";
+                kind = "Password";
+                name = "${x.dest}";
+              };
+              rewrite = [
+                {
+                  regexp = {
+                    source = "password";
+                    target = "${x.dest}";
+                  };
+                }
+              ];
+            }) passwordKeys;
         };
       };
       "generators.external-secrets.io".v1alpha1.Password = builtins.listToAttrs (map (x: {

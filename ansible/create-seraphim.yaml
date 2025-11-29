@@ -131,12 +131,12 @@
           | yq .metadata.id
       register: data_disk
       changed_when: false
-      when: omni_is_new_cluster
+      #when: omni_is_new_cluster
 
     - name: Wipe data disk
       ansible.builtin.command: "talosctl -n {{ ansible_host }} wipe disk {{ data_disk.stdout }}"
       changed_when: true
-      when: omni_is_new_cluster
+      #when: omni_is_new_cluster
 
 - name: Bootstrap cluster
   hosts: seraphim
@@ -149,7 +149,7 @@
         api_version: v1
         kind: Namespace
         state: present
-      when: omni_is_new_cluster
+      #when: omni_is_new_cluster
 
     - name: Add Infisical secret
       kubernetes.core.k8s:
@@ -162,7 +162,7 @@
             clientId: "{{ infisical_client_id }}"
             clientSecret: "{{ infisical_client_secret }}"
         state: present
-      when: omni_is_new_cluster
+      #when: omni_is_new_cluster
 
     - name: Create Argo CD namespace
       kubernetes.core.k8s:
@@ -170,16 +170,46 @@
         api_version: v1
         kind: Namespace
         state: present
-      when: omni_is_new_cluster
+      #when: omni_is_new_cluster
+
+    - name: Install External Secrets CRDs
+      ansible.builtin.command: >
+        kubectl apply -f {{ inventory_dir }}/../manifests/seraphim/prod/external-secrets/CustomResourceDefinition*.yaml --server-side
+      changed_when: true
+      #when: omni_is_new_cluster
 
     - name: Install Argo CD
       ansible.builtin.command: "kubectl apply -f {{ inventory_dir }}/../manifests/seraphim/prod/argocd"
       changed_when: true
-      when: omni_is_new_cluster
+      #when: omni_is_new_cluster
+
+    - name: Set Argo CD context
+      ansible.builtin.command: kubectl config set-context --current --namespace=argocd
+      changed_when: true
+      #when: omni_is_new_cluster
 
     - name: Bootstrap applications
       ansible.builtin.shell: |
         set -o pipefail
         nixidy bootstrap .#seraphim | kubectl apply -f -
       changed_when: true
-      when: omni_is_new_cluster
+      #when: omni_is_new_cluster
+
+    - name: Bootstrap applications
+      ansible.builtin.include_tasks: tasks/sync-application.yaml
+      loop:
+        - { name: "external-snapshotter", wait: false }
+        - { name: "external-secrets", wait: true }
+        - { name: "hcloud", wait: false }
+        - { name: "cert-manager", wait: true }
+        - { name: "cilium", wait: false }
+        - { name: "argocd", wait: false }
+        - { name: "gateway", wait: true }
+        - { name: "argocd", wait: false }
+        - { name: "external-dns", wait: false }
+        - { name: "rook", wait: true }
+        - { name: "cnpg", wait: false }
+        - { name: "velero", wait: true }
+        - { name: "monitoring", wait: false }
+        - { name: "pocket-id", wait: false }
+      #when: omni_is_new_cluster

@@ -7,7 +7,6 @@ data:
   commitserver.log.level: info
   controller.log.format: text
   controller.log.level: info
-  controller.sync.wave.delay.seconds: "5"
   dexserver.log.format: text
   dexserver.log.level: info
   notificationscontroller.log.format: text

@@ -69,28 +69,8 @@ in
       };
 
       resources.configMaps = {
-        argocd-cmd-params-cm = {
-          data = {
-            "controller.sync.wave.delay.seconds" = "5";
-          };
-        };
         argocd-cm = {
           data = {
-            "resource.customizations.health.argoproj.io_Application" = ''
-              hs = {}
-              hs.status = "Progressing"
-              hs.message = ""
-              if obj.status ~= nil then
-                if obj.status.health ~= nil then
-                  hs.status = obj.status.health.status
-                  if obj.status.health.message ~= nil then
-                    hs.message = obj.status.health.message
-                  end
-                end
-              end
-              return hs
-            '';
-
             # TODO: remove once https://github.com/argoproj/argo-cd/pull/24111 is released 
             "resource.customizations.health.ceph.rook.io_CephCluster" = ''
               local hs = {
