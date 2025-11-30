@@ -1,17 +1,11 @@
 { charts, config, lib, ... }:
 
 let
-  cfg = config.scarey.k8s.rook;
+  cfg = config.vegapunk.rook;
 in
 {
-  options = with lib; {
-    scarey.k8s.rook.enable = mkEnableOption "Enable Rook Ceph";
-
-    scarey.k8s.rook.syncWave = mkOption {
-      type = lib.types.nullOr lib.types.str;
-      default = null;
-      description = "Argo CD application sync wave";
-    };
+  options = {
+    vegapunk.rook.enable = lib.mkEnableOption "Enable Rook Ceph";
   };
   
   config = lib.mkIf cfg.enable {
@@ -21,50 +15,13 @@ in
 
       syncPolicy.syncOptions.serverSideApply = true;
 
-      annotations = lib.mkIf (cfg.syncWave != null) {
-        "argocd.argoproj.io/sync-wave" = "${cfg.syncWave}";
-      };
-
       helm.releases.rook-ceph = {
         chart = charts.rook-release.rook-ceph;
       };
 
       helm.releases.rook-ceph-cluster = {
         chart = charts.rook-release.rook-ceph-cluster;
-        values = {
-          cephClusterSpec = {
-            cephVersion.image = "quay.io/ceph/ceph:v19.2.3";
-            mgr.modules = [
-              {
-                name = "rook";
-                enabled = true;
-              }
-            ];
-            dashboard.ssl = false;
-            storage = {
-              allowDeviceClassUpdate = false;
-              allowOsdCrushWeightUpdate = false;
-              scheduleAlways = false;
-              onlyApplyOSDPlacement = false;
-            };
-            csi = {
-              readAffinity.enabled = false;
-              cephfs = {};
-            };
-            healthCheck = {
-              daemonHealth = {};
-              startupProbe = {
-                mon.disabled = false;
-                mgr.disabled = false;
-                osd.disabled = false;
-              };
-            };
-          };
-          cephBlockPoolsVolumeSnapshotClass = {
-            enabled = true;
-            labels."velero.io/csi-volumesnapshot-class" = "true";
-          };
-        };
+        values = import ./values.nix;
       };
 
       templates.httpRoute.ceph = {

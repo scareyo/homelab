@@ -1,17 +1,11 @@
 { charts, config, lib, ... }:
 
 let
-  cfg = config.scarey.k8s.pocket-id;
+  cfg = config.vegapunk.pocket-id;
 in
 {
-  options = with lib; {
-    scarey.k8s.pocket-id.enable = mkEnableOption "Enable Pocket ID";
-
-    scarey.k8s.pocket-id.syncWave = mkOption {
-      type = lib.types.nullOr lib.types.str;
-      default = null;
-      description = "Argo CD application sync wave";
-    };
+  options = {
+    vegapunk.pocket-id.enable = lib.mkEnableOption "Enable Pocket ID";
   };
 
   config = lib.mkIf cfg.enable {
@@ -19,20 +13,9 @@ in
       namespace = "pocket-id";
       createNamespace = true;
 
-      annotations = lib.mkIf (cfg.syncWave != null) {
-        "argocd.argoproj.io/sync-wave" = "${cfg.syncWave}";
-      };
-
       helm.releases.pocket-id = {
         chart = charts.anza-labs.pocket-id;
-        values = {
-          host = "id.vegapunk.cloud";
-          timeZone = "America/New_York";
-          database = {
-            provider = "postgres";
-            connectionString = "postgres://";
-          };
-        };
+        values = import ./values.nix;
       };
 
       templates.httpRoute.pocket-id-int = {

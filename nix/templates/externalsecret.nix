@@ -2,8 +2,8 @@
 
 {
   templates.externalSecret = {
-    options = with lib; {
-      keys = mkOption {
+    options = {
+      keys = lib.mkOption {
         type = lib.types.listOf (lib.types.submodule {
           options = {
             type = lib.mkOption {
@@ -11,14 +11,17 @@
               default = "provider";
               description = "Secret type";
             };
+
             source = lib.mkOption {
               type = lib.types.str;
               description = "Source key on the secret provider";
             };
+
             length = lib.mkOption {
               type = lib.types.int;
               description = "Password length";
             };
+
             dest = lib.mkOption {
               type = lib.types.str;
               description = "Destination key on the generated Secret";
@@ -27,12 +30,14 @@
         });
         description = "A list of secrets to include in the generated Secret";
       };
+
       merge = lib.mkOption {
         type = lib.types.bool;
         default = false;
         description = "Merge with existing secret";
       };
     };
+
     output = { name, config, ...  }: let
       cfg = config;
 
@@ -81,6 +86,7 @@
             }) passwordKeys;
         };
       };
+
       "generators.external-secrets.io".v1alpha1.Password = builtins.listToAttrs (map (x: {
         name = x.dest;
         value = {

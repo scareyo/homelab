@@ -1,17 +1,11 @@
 { charts, config, lib, ... }:
 
 let
-  cfg = config.scarey.k8s.argocd;
+  cfg = config.vegapunk.argocd;
 in
 {
-  options = with lib; {
-    scarey.k8s.argocd.enable = mkEnableOption "Enable Argo CD";
-
-    scarey.k8s.argocd.syncWave = mkOption {
-      type = lib.types.nullOr lib.types.str;
-      default = null;
-      description = "Argo CD application sync wave";
-    };
+  options = {
+    vegapunk.argocd.enable = lib.mkEnableOption "Enable Argo CD";
   };
 
   config = lib.mkIf cfg.enable {
@@ -19,40 +13,9 @@ in
       namespace = "argocd";
       createNamespace = true;
 
-      annotations = lib.mkIf (cfg.syncWave != null) {
-        "argocd.argoproj.io/sync-wave" = "${cfg.syncWave}";
-      };
-
       helm.releases.argocd = {
         chart = charts.argoproj.argo-cd;
-        values = {
-          global.domain = "argocd.vegapunk.cloud";
-          configs = {
-            params."server.insecure" = true;
-            cm = {
-              "oidc.config" = ''
-                name: SSO
-                issuer: https://id.vegapunk.cloud
-                clientID: $oauth_client_id
-                clientSecret: $oauth_client_secret
-                requestedScopes: ["openid", "profile", "email", "groups"]
-              '';
-              "resource.exclusions" = ''
-                - apiGroups:
-                  - "velero.io"
-                  kinds:
-                  - Backup
-                  clusters:
-                  - "*"
-              '';
-              "accounts.readonly" = "apiKey";
-            };
-            rbac."policy.csv" = ''
-              g, argocd_admin, role:admin
-              g, argocd_viewer, role:readonly
-            '';
-          };
-        };
+        values = import ./values.nix;
       };
 
       templates.httpRoute.argocd = {

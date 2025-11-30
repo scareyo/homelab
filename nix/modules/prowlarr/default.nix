@@ -1,11 +1,11 @@
 { charts, config, lib, ... }:
 
 let
-  cfg = config.scarey.k8s.prowlarr;
+  cfg = config.vegapunk.prowlarr;
 in
 {
-  options = with lib; {
-    scarey.k8s.prowlarr.enable = mkEnableOption "Enable Prowlarr";
+  options = {
+    vegapunk.prowlarr.enable = lib.mkEnableOption "Enable Prowlarr";
   };
 
   config = lib.mkIf cfg.enable {

@@ -1,55 +1,20 @@
 { charts, config, lib, ... }:
 
 let
-  cfg = config.scarey.k8s.cilium;
+  cfg = config.vegapunk.cilium;
 in
 {
-  options = with lib; {
-    scarey.k8s.cilium.enable = mkEnableOption "Enable Cilium";
-
-    scarey.k8s.cilium.syncWave = mkOption {
-      type = lib.types.nullOr lib.types.str;
-      default = null;
-      description = "Argo CD application sync wave";
-    };
+  options = {
+    vegapunk.cilium.enable = lib.mkEnableOption "Enable Cilium";
   };
   
   config = lib.mkIf cfg.enable {
     applications.cilium = {
       namespace = "kube-system";
 
-      annotations = lib.mkIf (cfg.syncWave != null) {
-        "argocd.argoproj.io/sync-wave" = "${cfg.syncWave}";
-      };
-
       helm.releases.cilium = {
         chart = charts.cilium.cilium;
-        values = {
-          ipam.mode = "kubernetes";
-          kubeProxyReplacement = true;
-          securityContext.capabilities = {
-            ciliumAgent = [
-              "CHOWN" "KILL" "NET_ADMIN" "NET_RAW" "IPC_LOCK" "SYS_ADMIN" "SYS_RESOURCE" "DAC_OVERRIDE" "FOWNER" "SETGID" "SETUID"
-            ];
-            cleanCiliumState = [
-              "NET_ADMIN" "SYS_ADMIN" "SYS_RESOURCE"
-            ];
-          };
-          cgroup = {
-            autoMount.enabled = false;
-            hostRoot = "/sys/fs/cgroup";
-          };
-          k8sServiceHost = "localhost";
-          k8sServicePort = 7445;
-          defaultLBServiceIPAM = "none";
-          bgpControlPlane.enabled = true;
-          gatewayAPI.enabled = true;
-          hubble = {
-            relay.enabled = true;
-            ui.enabled = true;
-            tls.auto.method = "cronJob";
-          };
-        };
+        values = import ./values.nix;
       };
 
       templates.httpRoute.hubble = {
@@ -57,10 +22,7 @@ in
         serviceName = "hubble-ui";
       };
 
-      resources = lib.mkMerge [
-        (import ./bgp-config.nix)
-        (import ./gateway-config.nix)
-      ];
+      resources = import ./resources.nix;
     };
   };
 }

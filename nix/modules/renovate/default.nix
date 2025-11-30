@@ -1,11 +1,11 @@
 { config, lib, ... }:
 
 let
-  cfg = config.scarey.k8s.renovate;
+  cfg = config.vegapunk.renovate;
 in
 {
-  options = with lib; {
-    scarey.k8s.renovate.enable = mkEnableOption "Enable Renovate";
+  options = {
+    vegapunk.renovate.enable = lib.mkEnableOption "Enable Renovate";
   };
 
   config = lib.mkIf cfg.enable {

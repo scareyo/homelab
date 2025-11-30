@@ -2,32 +2,37 @@
 
 {
   templates.backup = {
-    options = with lib; {
-      namespace = mkOption {
+    options = {
+      namespace = lib.mkOption {
         type = lib.types.str;
         default = "velero";
         description = "Namespace of the Velero resources";
       };
-      restore = mkOption {
+
+      restore = lib.mkOption {
         type = lib.types.bool;
         default = false;
         description = "Enable automatic volume restoration";
       };
-      schedule = mkOption {
+
+      schedule = lib.mkOption {
         type = lib.types.str;
         description = "Backup schedule";
         example = "12h30m45s";
       };
-      ttl = mkOption {
+
+      ttl = lib.mkOption {
         type = lib.types.str;
         description = "Duration to keep backups";
         example = "12h30m45s";
       };
-      includedNamespaces = mkOption {
+
+      includedNamespaces = lib.mkOption {
         type = lib.types.listOf lib.types.str;
         description = "Namespace to backup";
       };
     };
+
     output = { name, config, ...  }: let
       cfg = config;
     in {
@@ -50,6 +55,7 @@
           };
         };
       };
+
       "velero.io".v1.Restore.${name} = lib.mkIf cfg.restore {
         metadata = {
           name = "${name}";

@@ -8,12 +8,14 @@
         default = 3;
         description = "Number of instances";
       };
+
       size = lib.mkOption {
         type = lib.types.str;
         default = "32Gi";
         description = "Size of the storage";
       };
     };
+
     output = { name, config, ...  }: let
       cfg = config;
     in {

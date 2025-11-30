@@ -2,26 +2,30 @@
 
 {
   templates.httpRoute = {
-    options = with lib; {
-      gateway = mkOption {
+    options = {
+      gateway = lib.mkOption {
         type = lib.types.str;
         default = "internal";
         description = "Gateway of the HTTPRoute";
       };
-      hostname = mkOption {
+
+      hostname = lib.mkOption {
         type = lib.types.str;
         description = "Hostname of the HTTPRoute";
       };
-      serviceName = mkOption {
+
+      serviceName = lib.mkOption {
         type = lib.types.str;
         description = "Name of the referenced service";
       };
-      servicePort = mkOption {
+
+      servicePort = lib.mkOption {
         type = lib.types.int;
         default = 80;
         description = "Port of the referenced service";
       };
     };
+
     output = { name, config, ...  }: let
       cfg = config;
     in {
