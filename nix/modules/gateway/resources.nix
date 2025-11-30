@@ -3,7 +3,7 @@
     metadata = {
       name = "internal";
       annotations = {
-        "cert-manager.io/cluster-issuer" = "letsencrypt-staging";
+        "cert-manager.io/cluster-issuer" = "letsencrypt-production";
       };
     };
     spec = {
@@ -33,7 +33,7 @@
     metadata = {
       name = "external";
       annotations = {
-        "cert-manager.io/cluster-issuer" = "letsencrypt-staging";
+        "cert-manager.io/cluster-issuer" = "letsencrypt-production";
       };
     };
     spec = {
