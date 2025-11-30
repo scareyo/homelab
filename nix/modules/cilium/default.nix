@@ -13,7 +13,7 @@ in
       namespace = "kube-system";
 
       helm.releases.cilium = {
-        chart = charts.cilium.cilium;
+        chart = charts.cilium;
         values = import ./values.nix;
       };
 

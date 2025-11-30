@@ -16,11 +16,11 @@ in
       syncPolicy.syncOptions.serverSideApply = true;
 
       helm.releases.rook-ceph = {
-        chart = charts.rook-release.rook-ceph;
+        chart = charts.rook-ceph;
       };
 
       helm.releases.rook-ceph-cluster = {
-        chart = charts.rook-release.rook-ceph-cluster;
+        chart = charts.rook-ceph-cluster;
         values = import ./values.nix;
       };
 

@@ -14,7 +14,7 @@ in
       createNamespace = true;
 
       helm.releases.cert-manager = {
-        chart = charts.jetstack.cert-manager;
+        chart = charts.cert-manager;
         values = import ./values.nix;
       };
 

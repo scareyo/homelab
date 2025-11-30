@@ -16,7 +16,7 @@ in
       syncPolicy.syncOptions.serverSideApply = true;
 
       helm.releases.kube-prometheus-stack = {
-        chart = charts.prometheus-community.kube-prometheus-stack;
+        chart = charts.kube-prometheus-stack;
         values = (import ./values.nix { inherit lib; }).kube-prometheus-stack;
       };
 

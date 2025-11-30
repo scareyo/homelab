@@ -6,17 +6,12 @@
 
   inputs.amtcli.url = "github:scareyo/amtcli";
 
-  inputs.nixhelm = {
-    url = "github:farcaller/nixhelm";
-    inputs.nixpkgs.follows = "nixpkgs";
-  };
-
   inputs.nixidy = {
     url = "github:arnarg/nixidy";
     inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = inputs@{ self, amtcli, flake-parts, nixhelm, nixidy, nixpkgs }:
+  outputs = inputs@{ self, amtcli, flake-parts, nixidy, nixpkgs }:
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = [
         "x86_64-linux"
@@ -77,7 +72,6 @@
           nixidyEnvs.${system}.seraphim = nixidy.lib.mkEnv {
             inherit pkgs;
 
-            charts = nixhelm.chartsDerivations.${system};
             modules = [
               ./nix/clusters/seraphim/prod.nix
             ];

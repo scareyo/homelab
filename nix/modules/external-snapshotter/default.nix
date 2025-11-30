@@ -13,7 +13,7 @@ in
       namespace = "kube-system";
 
       helm.releases.snapshot-controller = {
-        chart = charts.piraeus.snapshot-controller;
+        chart = charts.snapshot-controller;
       };
     };
   };

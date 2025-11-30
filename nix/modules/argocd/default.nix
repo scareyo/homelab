@@ -14,7 +14,7 @@ in
       createNamespace = true;
 
       helm.releases.argocd = {
-        chart = charts.argoproj.argo-cd;
+        chart = charts.argo-cd;
         values = import ./values.nix;
       };
 

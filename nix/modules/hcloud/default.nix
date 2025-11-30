@@ -14,7 +14,7 @@ in
       createNamespace = true;
 
       helm.releases.hcloud = {
-        chart = charts.hcloud.hcloud-cloud-controller-manager;
+        chart = charts.hcloud-cloud-controller-manager;
         values = import ./values.nix;
       };
 

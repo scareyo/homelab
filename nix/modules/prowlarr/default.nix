@@ -14,14 +14,14 @@ in
       createNamespace = true;
 
       helm.releases.prowlarr = {
-        chart = charts.pree.prowlarr;
+        chart = charts.prowlarr;
         values = {
           env.PROWLARR__AUTH__METHOD = "External";
         };
       };
 
       helm.releases.oauth2-proxy = {
-        chart = charts.oauth2-proxy.oauth2-proxy;
+        chart = charts.oauth2-proxy;
         values = {
           config = {
             existingSecret = "oidc";

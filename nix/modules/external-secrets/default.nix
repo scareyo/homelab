@@ -16,7 +16,7 @@ in
       syncPolicy.syncOptions.serverSideApply = true;
 
       helm.releases.external-secrets = {
-        chart = charts.external-secrets.external-secrets;
+        chart = charts.external-secrets;
       };
 
       resources = import ./resources.nix;

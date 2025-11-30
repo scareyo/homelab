@@ -14,7 +14,7 @@ in
       createNamespace = true;
 
       helm.releases.pocket-id = {
-        chart = charts.anza-labs.pocket-id;
+        chart = charts.pocket-id;
         values = import ./values.nix;
       };
 

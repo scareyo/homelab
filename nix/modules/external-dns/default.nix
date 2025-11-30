@@ -14,12 +14,12 @@ in
       createNamespace = true;
 
       helm.releases.external-dns-cloudflare = {
-        chart = charts.external-dns.external-dns;
+        chart = charts.external-dns;
         values = (import ./values.nix).cloudflare;
       };
 
       helm.releases.external-dns-unifi = {
-        chart = charts.external-dns.external-dns;
+        chart = charts.external-dns;
         values = (import ./values.nix).unifi;
       };
 

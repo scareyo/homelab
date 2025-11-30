@@ -16,7 +16,7 @@ in
       syncPolicy.syncOptions.serverSideApply = true;
 
       helm.releases.cnpg = {
-        chart = charts.cloudnative-pg.cloudnative-pg;
+        chart = charts.cloudnative-pg;
       };
     };
   };

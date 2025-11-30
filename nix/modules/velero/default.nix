@@ -14,7 +14,7 @@ in
       createNamespace = true;
 
       helm.releases.velero = {
-        chart = charts.vmware-tanzu.velero;
+        chart = charts.velero;
         values = import ./values.nix;
       };
 
