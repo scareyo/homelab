@@ -9,7 +9,7 @@ metadata:
     app.kubernetes.io/name: oauth2-proxy
     app.kubernetes.io/part-of: oauth2-proxy
     app.kubernetes.io/version: 7.13.0
-    helm.sh/chart: oauth2-proxy-9.0.0
+    helm.sh/chart: oauth2-proxy-9.0.1
   name: oauth2-proxy-prometheus
   namespace: monitoring
 spec:
@@ -29,7 +29,7 @@ spec:
         app.kubernetes.io/name: oauth2-proxy
         app.kubernetes.io/part-of: oauth2-proxy
         app.kubernetes.io/version: 7.13.0
-        helm.sh/chart: oauth2-proxy-9.0.0
+        helm.sh/chart: oauth2-proxy-9.0.1
     spec:
       automountServiceAccountToken: true
       containers:
