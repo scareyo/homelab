@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: pocket-id
+  namespace: argocd
+spec:
+  destination:
+    namespace: pocket-id
+    server: https://kubernetes.default.svc
+  ignoreDifferences:
+    - group: apps
+      jqPathExpressions:
+        - .spec.updateStrategy.rollingUpdate.maxUnavailable
+      kind: StatefulSet
+  project: default
+  source:
+    path: ./manifests/seraphim/prod/pocket-id
+    repoURL: https://github.com/scareyo/homelab.git
+    targetRevision: main
+  syncPolicy: {}

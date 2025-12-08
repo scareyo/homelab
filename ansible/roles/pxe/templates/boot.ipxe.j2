@@ -1,0 +1,9 @@
+{% set ip = ansible_all_ipv4_addresses | ansible.utils.ipaddr(pxe_subnet) | first -%}
+{% set kernel = "http://" + ip + ":8080/kernel" -%}
+{% set initrd = "http://" + ip + ":8080/initrd" -%}
+
+#!ipxe
+ifconf -c dhcp net3
+kernel {{ kernel }} {{ pxe_kernel_params }}
+initrd {{ initrd }}
+boot

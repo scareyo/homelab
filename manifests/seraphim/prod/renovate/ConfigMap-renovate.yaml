@@ -1,0 +1,13 @@
+apiVersion: v1
+data:
+  config.json: |
+    {
+      "allowedCommands": [
+        "update-hash.sh",
+        "generate-manifests.sh"
+      ]
+    }
+kind: ConfigMap
+metadata:
+  name: renovate
+  namespace: renovate
