@@ -1,0 +1,22 @@
+apiVersion: velero.io/v1
+kind: BackupStorageLocation
+metadata:
+  labels:
+    app.kubernetes.io/instance: velero
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: velero
+    helm.sh/chart: velero-11.2.0
+  name: default
+  namespace: velero
+spec:
+  accessMode: ReadWrite
+  config:
+    checksumAlgorithm: ""
+    region: us-east-005
+    s3Url: https://s3.us-east-005.backblazeb2.com
+  credential:
+    key: key
+    name: backblaze
+  objectStorage:
+    bucket: cloud-vegapunk-velero
+  provider: aws

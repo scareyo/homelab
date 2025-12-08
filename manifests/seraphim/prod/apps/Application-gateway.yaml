@@ -1,0 +1,15 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: gateway
+  namespace: argocd
+spec:
+  destination:
+    namespace: gateway
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    path: ./manifests/seraphim/prod/gateway
+    repoURL: https://github.com/scareyo/homelab.git
+    targetRevision: main
+  syncPolicy: {}

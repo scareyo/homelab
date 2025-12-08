@@ -1,0 +1,39 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: renovate
+  namespace: renovate
+spec:
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - command:
+                - /bin/sh
+                - -c
+                - |
+                  echo 'experimental-features = nix-command flakes' >> /etc/nix/nix.conf && \
+                  nix develop github:scareyo/homelab#renovate --command renovate scareyo/homelab
+              env:
+                - name: RENOVATE_PLATFORM
+                  value: github
+                - name: RENOVATE_CONFIG_FILE
+                  value: /opt/renovate/config.json
+                - name: LOG_LEVEL
+                  value: debug
+              envFrom:
+                - secretRef:
+                    name: renovate
+              image: nixos/nix:2.32.4
+              name: renovate
+              volumeMounts:
+                - mountPath: /opt/renovate/
+                  name: config-volume
+          restartPolicy: Never
+          volumes:
+            - configMap:
+                name: renovate
+              name: config-volume
+  schedule: '@hourly'
