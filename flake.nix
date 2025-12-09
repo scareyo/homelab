@@ -45,6 +45,7 @@
             cilium-cli
             k9s
             kubectl
+            kubectl-rook-ceph
             kubelogin-oidc
             talosctl
             velero

@@ -20,58 +20,10 @@ in
         values = (import ./values.nix { inherit lib; }).kube-prometheus-stack;
       };
 
-      #helm.releases.loki = {
-      #  chart = charts.grafana.loki;
-      #  values = {
-      #    global = {
-      #      extraArgs = ["-config.expand-env=true"];
-      #      extraEnvFrom = [
-      #        { configMapRef.name = "loki-bucket"; }
-      #        { secretRef.name = "loki-bucket"; }
-      #      ];
-      #    };
-      #    loki = {
-      #      auth_enabled = false;
-      #      schemaConfig.configs = [
-      #        {
-      #          from = "2024-04-01";
-      #          store = "tsdb";
-      #          object_store = "s3";
-      #          schema = "v13";
-      #          index = {
-      #            prefix = "loki_index_";
-      #            period = "24h";
-      #          };
-      #        }
-      #      ];
-      #      ingester.chunk_encoding = "snappy";
-      #      querier.max_concurrent = 4;
-      #      pattern_ingester.enabled = true;
-      #      limits_config = {
-      #        allow_structured_metadata = true;
-      #        volume_enabled = true;
-      #      };
-      #      storage = {
-      #        s3 = {
-      #          endpoint = ''''${BUCKET_HOST}'';
-      #          insecure = true;
-      #          s3ForcePathStyle = true;
-      #        };
-      #        bucketNames = {
-      #          chunks = ''''${BUCKET_NAME}'';
-      #          ruler = ''''${BUCKET_NAME}'';
-      #          admin = ''''${BUCKET_NAME}'';
-      #        };
-      #      };
-      #    };
-
-      #    deploymentMode = "SimpleScalable";
-
-      #    backend.replicas = 2;
-      #    read.replicas = 2;
-      #    write.replicas = 3;
-      #  };
-      #};
+      helm.releases.loki = {
+        chart = charts.loki;
+        values = (import ./values.nix { inherit lib; }).loki;
+      };
 
       helm.releases.oauth2-proxy-prometheus = {
         chart = charts.oauth2-proxy;
@@ -126,6 +78,12 @@ in
         deployments.oauth2-proxy-prometheus = {
           spec = {
             template.metadata.annotations = lib.mkForce null;
+          };
+        };
+        "objectbucket.io".v1alpha1.ObjectBucketClaim.loki = {
+          spec = {
+            generateBucketName = "loki";
+            storageClassName = "ceph-bucket";
           };
         };
       };

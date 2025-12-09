@@ -61,32 +61,45 @@ let
     };
 
     gateway-api = generators.fromCRD {
-        name = "gateway-api";
-        src = pkgs.fetchFromGitHub {
-          owner = "kubernetes-sigs";
-          repo = "gateway-api";
-          rev = "v1.4.0";
-          hash = "sha256-osM8BRqFw5he93yTTTQb/q9iVvT6oWkCb731n/C6bq4=";
-        };
-        crds = [
-          "config/crd/standard/gateway.networking.k8s.io_gatewayclasses.yaml"
-          "config/crd/standard/gateway.networking.k8s.io_gateways.yaml"
-          "config/crd/standard/gateway.networking.k8s.io_httproutes.yaml"
-        ];
+      name = "gateway-api";
+      src = pkgs.fetchFromGitHub {
+        owner = "kubernetes-sigs";
+        repo = "gateway-api";
+        rev = "v1.4.0";
+        hash = "sha256-osM8BRqFw5he93yTTTQb/q9iVvT6oWkCb731n/C6bq4=";
+      };
+      crds = [
+        "config/crd/standard/gateway.networking.k8s.io_gatewayclasses.yaml"
+        "config/crd/standard/gateway.networking.k8s.io_gateways.yaml"
+        "config/crd/standard/gateway.networking.k8s.io_httproutes.yaml"
+      ];
+    };
+
+    rook = generators.fromCRD {
+      name = "rook";
+      src = pkgs.fetchFromGitHub {
+        owner = "rook";
+        repo = "rook";
+        rev = "v1.18.8";
+        hash = "sha256-9hkHA89NCzLDS6pPfIS8UIfify5MnVSXzpuETgqD6j8=";
+      };
+      crds = [
+        "deploy/olm/assemble/objectbucket.io_objectbucketclaims.yaml"
+      ];
     };
 
     velero = generators.fromCRD {
-        name = "velero";
-        src = pkgs.fetchFromGitHub {
-          owner = "vmware-tanzu";
-          repo = "velero";
-          rev = "v1.17.1";
-          hash = "sha256-ZVnYHBcnYOCBFJ9wyvMDrRIf3NyDV1Zqqf7e6JbA+go=";
-        };
-        crds = [
-          "config/crd/v1/bases/velero.io_restores.yaml"
-          "config/crd/v1/bases/velero.io_schedules.yaml"
-        ];
+      name = "velero";
+      src = pkgs.fetchFromGitHub {
+        owner = "vmware-tanzu";
+        repo = "velero";
+        rev = "v1.17.1";
+        hash = "sha256-ZVnYHBcnYOCBFJ9wyvMDrRIf3NyDV1Zqqf7e6JbA+go=";
+      };
+      crds = [
+        "config/crd/v1/bases/velero.io_restores.yaml"
+        "config/crd/v1/bases/velero.io_schedules.yaml"
+      ];
     };
 
   };

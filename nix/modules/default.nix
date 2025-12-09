@@ -21,6 +21,7 @@ in
     ../generated/cnpg.nix
     ../generated/external-secrets.nix
     ../generated/gateway-api.nix
+    ../generated/rook.nix
     ../generated/velero.nix
   ];
 }
