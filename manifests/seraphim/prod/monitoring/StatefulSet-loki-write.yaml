@@ -6,8 +6,8 @@ metadata:
     app.kubernetes.io/instance: loki
     app.kubernetes.io/name: loki
     app.kubernetes.io/part-of: memberlist
-    app.kubernetes.io/version: 3.5.7
-    helm.sh/chart: loki-6.46.0
+    app.kubernetes.io/version: 3.6.3
+    helm.sh/chart: loki-6.49.0
   name: loki-write
   namespace: monitoring
 spec:
@@ -29,8 +29,8 @@ spec:
         app.kubernetes.io/instance: loki
         app.kubernetes.io/name: loki
         app.kubernetes.io/part-of: memberlist
-        app.kubernetes.io/version: 3.5.7
-        helm.sh/chart: loki-6.46.0
+        app.kubernetes.io/version: 3.6.3
+        helm.sh/chart: loki-6.49.0
     spec:
       affinity:
         podAntiAffinity:
@@ -52,7 +52,7 @@ spec:
                 name: loki
             - secretRef:
                 name: loki
-          image: docker.io/grafana/loki:3.5.7
+          image: docker.io/grafana/loki:3.6.3
           imagePullPolicy: IfNotPresent
           name: loki
           ports:
@@ -91,6 +91,7 @@ spec:
       enableServiceLinks: true
       securityContext:
         fsGroup: 10001
+        fsGroupChangePolicy: OnRootMismatch
         runAsGroup: 10001
         runAsNonRoot: true
         runAsUser: 10001
