@@ -1,0 +1,12 @@
+apiVersion: v1
+data:
+  grafana.ini: "[analytics]\ncheck_for_updates = true\n[auth.generic_oauth]\napi_url = https://id.vegapunk.cloud/api/oidc/userinfo\nauth_url = https://id.vegapunk.cloud/authorize\nclient_id = $__file{/etc/secrets/oauth/client_id}\nclient_secret = $__file{/etc/secrets/oauth/client_secret}\nenabled = true\nrole_attribute_path = contains(groups, 'grafana_admin') && 'Admin' || contains(groups, 'grafana_editor') && 'Editor' || contains(groups, 'grafana_viewer') && 'Viewer' \nscopes = openid email profile groups\ntoken_url = https://id.vegapunk.cloud/api/oidc/token\n[grafana_net]\nurl = https://grafana.net\n[log]\nmode = console\n[paths]\ndata = /var/lib/grafana/\nlogs = /var/log/grafana\nplugins = /var/lib/grafana/plugins\nprovisioning = /etc/grafana/provisioning\n[server]\ndomain = ''\nroot_url = https://grafana.vegapunk.cloud\n"
+kind: ConfigMap
+metadata:
+  labels:
+    app.kubernetes.io/instance: vm
+    app.kubernetes.io/name: grafana
+    app.kubernetes.io/version: 12.3.0
+    helm.sh/chart: grafana-10.1.5
+  name: vm-grafana
+  namespace: monitoring

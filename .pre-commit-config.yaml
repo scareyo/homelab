@@ -1,0 +1,39 @@
+repos:
+  - repo: local
+    hooks:
+      - id: generate-manifests
+        name: Generate manifests
+        description: Generate Kubernetes manifests
+        entry: ./scripts/generate-manifests.sh
+        language: system
+        types: [file]
+        files: \.(nix|lock)$
+        pass_filenames: false
+        stages: [pre-commit]
+
+      - id: gitleaks
+        name: Gitleaks
+        description: Detect secrets in your data
+        entry: gitleaks git --pre-commit --staged
+        language: system
+        pass_filenames: false
+        stages: [pre-commit]
+
+      - id: trufflehog-push
+        name: TruffleHog
+        entry: >
+          bash -c '
+            trufflehog git file://. \
+            --since-commit "$PRE_COMMIT_FROM_REF" \
+            --fail
+          '
+        language: system
+        pass_filenames: false
+        stages: [pre-push]
+  
+      - id: gitleaks-push
+        name: Gitleaks
+        entry: gitleaks git
+        language: system
+        pass_filenames: false
+        stages: [pre-push]

@@ -1,0 +1,13 @@
+{
+  crds.enabled = true;
+
+  config = {
+    apiVersion = "controller.config.cert-manager.io/v1alpha1";
+    kind = "ControllerConfiguration";
+    enableGatewayAPI = true;
+  };
+
+  extraArgs = [
+    "--enable-gateway-api"
+  ];
+}

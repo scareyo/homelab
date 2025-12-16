@@ -1,0 +1,14 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  annotations: null
+  labels: null
+  name: hcloud-cloud-controller-manager
+  namespace: hcloud
+spec:
+  podMetricsEndpoints:
+    - port: metrics
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: hcloud
+      app.kubernetes.io/name: hcloud-cloud-controller-manager

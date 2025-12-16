@@ -1,0 +1,58 @@
+---
+- name: Check mandatory variables are defined
+  ansible.builtin.assert:
+    that:
+      - omni_talos_version is defined
+      - omni_kubernetes_version is defined
+      - omni_cluster_name is defined
+
+- name: Check if cluster exists
+  ansible.builtin.shell: |
+    set -o pipefail
+    omnictl get cluster -o yaml | yq 'select(.metadata.id == "{{ omni_cluster_name }}")'
+  changed_when: false
+  register: omni_cmd
+
+- name: Set facts
+  ansible.builtin.set_fact:
+    omni_is_new_cluster: "{{ omni_cmd.stdout == '' }}"
+
+- name: Get machine status
+  ansible.builtin.shell: |
+    set -o pipefail
+    omnictl get machinestatus -o yaml | yq -o json -I 0 'select(.spec.network.hostname == "{{ item }}") |
+    {
+      "id": .metadata.id,
+      "name": "{{ item }}",
+      "disk": "{{ hostvars[item].omni_os_disk | default('') | quote }}",
+      "groups": {{ hostvars[item].group_names | to_json }},
+      "platform": .spec.platformmetadata.platform
+    }'
+  changed_when: false
+  loop: "{{ groups[omni_cluster_name] }}"
+  register: omni_cmd
+
+- name: Set machine status fact
+  ansible.builtin.set_fact:
+    omni_machines: >
+      {{ omni_machines | default([]) + [item.stdout | from_json] }}
+  with_items: "{{ omni_cmd.results }}"
+
+- name: Generate cluster definition
+  ansible.builtin.template:
+    src: cluster.yaml.j2
+    dest: "{{ role_path }}/files/data/cluster.yaml"
+    mode: "0600"
+
+- name: Validate cluster definition
+  ansible.builtin.command: "omnictl cluster template validate -f {{ role_path }}/files/data/cluster.yaml"
+  changed_when: false
+
+- name: Sync cluster
+  ansible.builtin.command: "omnictl cluster template sync -f {{ role_path }}/files/data/cluster.yaml"
+  register: omni_cmd
+  changed_when: omni_cmd.stdout != ''
+
+- name: Wait for healthy cluster
+  ansible.builtin.command: "omnictl cluster template status --wait 30m -f {{ role_path }}/files/data/cluster.yaml"
+  changed_when: false

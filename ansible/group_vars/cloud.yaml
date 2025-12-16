@@ -1,0 +1,2 @@
+---
+hcloud_api_token: "{{ lookup('secret', '/hcloud', 'API_TOKEN') }}"

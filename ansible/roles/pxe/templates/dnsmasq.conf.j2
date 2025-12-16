@@ -1,0 +1,18 @@
+# Disable DNS Server.
+port=0
+
+dhcp-range={{ ansible_all_ipv4_addresses | ansible.utils.ipaddr(pxe_subnet) | first }},proxy
+dhcp-boot=ipxe.efi,,{{ ansible_all_ipv4_addresses | ansible.utils.ipaddr(pxe_subnet) | first }}
+
+pxe-prompt="Booting homelab", 1
+
+pxe-service=X86-64_EFI, "Boot From Network, (UEFI)", ipxe.efi
+
+# Log DHCP queries to stdout
+log-queries
+log-dhcp
+log-facility=-
+
+# Enable TFTP server
+enable-tftp
+tftp-root={{ pxe_ipxe_path }}/src/bin-x86_64-efi

@@ -1,0 +1,218 @@
+# Playbook: Provision Seraphim cluster machines
+#   - Install Talos Linux on bare-metal MS-01 servers
+#   - Create a Talos Linux cluster with Omni
+---
+- name: Provision Cloud Machines
+  hosts: cloud
+  connection: local
+  tasks:
+    - name: Create Zeus
+      hetzner.hcloud.server:
+        name: zeus
+        api_token: "{{ hcloud_api_token }}"
+        server_type: cpx11
+        image: "318785011"
+        location: ash
+        state: started
+
+- name: Authenticate Omni
+  hosts: localhost
+  run_once: true
+  tasks:
+    - name: Authenticate
+      ansible.builtin.command: omnictl get namespace
+      changed_when: false
+
+- name: Get MS-01 machine status
+  hosts: ms01
+  connection: local
+  tasks:
+    - name: Check if machine is running
+      ansible.builtin.shell: |
+        set -o pipefail
+        omnictl get machinestatus -o yaml | yq 'select(.spec.network.hostname == "{{ inventory_hostname | quote }}") | .metadata.phase'
+      register: cmd
+      changed_when: false
+
+    - name: Set machine status fact
+      ansible.builtin.set_fact:
+        omni_status: "{{ cmd.stdout }}"
+
+- name: Run PXE server
+  hosts: ms01
+  connection: local
+  run_once: true
+  roles:
+    - role: pxe
+      when: omni_status == ''
+
+- name: Boot machines to PXE
+  hosts: ms01
+  connection: local
+  environment:
+    AMTCLI_USERNAME: "{{ amt_username }}"
+    AMTCLI_PASSWORD: "{{ amt_password }}"
+  tasks:
+    - name: Get AMT info
+      ansible.builtin.shell: |
+        set -e -o pipefail
+        amtcli info {{ amt_host }} | yq .state
+      changed_when: false
+      register: cmd
+      retries: 5
+      until: cmd.stdout == 'Off'
+      when: omni_status == ''
+
+    - name: Set hosts to boot from PXE
+      ansible.builtin.command: "amtcli boot pxe {{ amt_host }}"
+      changed_when: true
+      register: cmd
+      retries: 5
+      until: cmd.rc == 0
+      when: omni_status == ''
+
+    - name: Start hosts
+      ansible.builtin.command: "amtcli on {{ amt_host }}"
+      changed_when: true
+      register: cmd
+      retries: 5
+      until: cmd.rc == 0
+      when: omni_status == ''
+
+- name: Wait for all machines to be running
+  hosts: seraphim
+  connection: local
+  tasks:
+    - name: Check if machine is running
+      ansible.builtin.shell: |
+        set -o pipefail
+        omnictl get machinestatus -o yaml | yq 'select(.spec.network.hostname == "{{ inventory_hostname | quote }}") | .metadata.phase'
+      register: status
+      failed_when: status.stdout != 'running'
+      retries: 30
+      delay: 10
+      changed_when: false
+
+- name: Configure Seraphim
+  hosts: seraphim
+  connection: local
+  run_once: true
+  roles:
+    - role: omni
+      vars:
+        omni_talos_version: "{{ talos_version }}"
+        omni_kubernetes_version: "{{ kubernetes_version }}"
+  tasks:
+    - name: Get a talosconfig
+      ansible.builtin.command: "omnictl talosconfig -f -m=false -c {{ omni_cluster_name }} {{ inventory_dir }}/../.talos/config"
+      changed_when: true
+
+    - name: Get a kubeconfig
+      ansible.builtin.command: "omnictl kubeconfig -f -m=false -c {{ omni_cluster_name }} {{ inventory_dir }}/../.kube/config"
+      changed_when: true
+
+    - name: Authenticate Talos
+      ansible.builtin.command: talosctl -n {{ host }} get namespace
+      changed_when: false
+
+    - name: Authenticate Kube
+      ansible.builtin.command: kubectl get namespace
+      changed_when: false
+
+- name: Wipe data disks for Ceph install
+  hosts: ms01
+  connection: local
+  tasks:
+    - name: Get data disk ID
+      ansible.builtin.shell: |
+        set -e -o pipefail
+        talosctl -n {{ host }} get disks -o yaml \
+          | yq 'select(.spec.symlinks[] == "{{ omni_data_disk }}" or .spec.dev_path == "{{ omni_data_disk }}")' \
+          | yq .metadata.id
+      register: data_disk
+      changed_when: false
+      when: omni_is_new_cluster
+
+    - name: Wipe data disk
+      ansible.builtin.command: "talosctl -n {{ ansible_host }} wipe disk {{ data_disk.stdout }}"
+      changed_when: true
+      when: omni_is_new_cluster
+
+- name: Bootstrap cluster
+  hosts: seraphim
+  connection: local
+  run_once: true
+  tasks:
+    - name: Create External Secrets namespace
+      kubernetes.core.k8s:
+        name: external-secrets
+        api_version: v1
+        kind: Namespace
+        state: present
+      when: omni_is_new_cluster
+
+    - name: Add Infisical secret
+      kubernetes.core.k8s:
+        name: infisical-credentials
+        namespace: external-secrets
+        api_version: v1
+        kind: Secret
+        definition:
+          stringData:
+            clientId: "{{ infisical_client_id }}"
+            clientSecret: "{{ infisical_client_secret }}"
+        state: present
+      when: omni_is_new_cluster
+
+    - name: Create Argo CD namespace
+      kubernetes.core.k8s:
+        name: argocd
+        api_version: v1
+        kind: Namespace
+        state: present
+      when: omni_is_new_cluster
+
+    - name: Install External Secrets CRDs
+      ansible.builtin.command: >
+        kubectl apply -f {{ inventory_dir }}/../manifests/seraphim/prod/external-secrets/CustomResourceDefinition*.yaml --server-side
+      changed_when: true
+      when: omni_is_new_cluster
+
+    - name: Install Argo CD
+      ansible.builtin.command: "kubectl apply -f {{ inventory_dir }}/../manifests/seraphim/prod/argocd"
+      changed_when: true
+      when: omni_is_new_cluster
+
+    - name: Set Argo CD context
+      ansible.builtin.command: kubectl config set-context --current --namespace=argocd
+      changed_when: true
+      when: omni_is_new_cluster
+
+    - name: Bootstrap applications
+      ansible.builtin.shell: |
+        set -o pipefail
+        nixidy bootstrap .#seraphim | kubectl apply -f -
+      changed_when: true
+      when: omni_is_new_cluster
+
+    # TODO: Make the application bootstrap less brittle. Sync manually for now.
+    #- name: Bootstrap applications
+    #  ansible.builtin.include_tasks: tasks/sync-application.yaml
+    #  loop:
+    #    - { name: "apps", wait: false }
+    #    - { name: "external-snapshotter", wait: false }
+    #    - { name: "external-secrets", wait: true }
+    #    - { name: "hcloud", wait: false }
+    #    - { name: "cert-manager", wait: true }
+    #    - { name: "cilium", wait: false }
+    #    - { name: "argocd", wait: false }
+    #    - { name: "gateway", wait: true }
+    #    - { name: "argocd", wait: false }
+    #    - { name: "external-dns", wait: false }
+    #    - { name: "rook", wait: true }
+    #    - { name: "cnpg", wait: false }
+    #    - { name: "velero", wait: true }
+    #    - { name: "monitoring", wait: false }
+    #    - { name: "pocket-id", wait: false }
+    #    - { name: "renovate", wait: false }
+    #  when: omni_is_new_cluster

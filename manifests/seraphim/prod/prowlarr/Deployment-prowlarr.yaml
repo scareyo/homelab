@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/instance: prowlarr
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: prowlarr
+    app.kubernetes.io/version: 2.0.2.5116
+    helm.sh/chart: prowlarr-1.49.1
+  name: prowlarr
+  namespace: prowlarr
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: prowlarr
+      app.kubernetes.io/name: prowlarr
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/instance: prowlarr
+        app.kubernetes.io/name: prowlarr
+    spec:
+      automountServiceAccountToken: true
+      containers:
+        - env:
+            - name: PROWLARR__AUTH__METHOD
+              value: External
+            - name: TZ
+              value: UTC
+          image: ghcr.io/home-operations/prowlarr:2.0.2.5116
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            exec:
+              command:
+                - /usr/bin/env
+                - bash
+                - -c
+                - curl --fail localhost:9696/api/v1/system/status?apiKey=`IFS=\> && while read -d \< E C; do if [[ $E = "ApiKey" ]]; then echo $C; fi; done < /config/config.xml`
+            failureThreshold: 5
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 10
+          name: prowlarr
+          ports:
+            - containerPort: 9696
+              name: http
+              protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            tcpSocket:
+              port: 9696
+            timeoutSeconds: 1
+          startupProbe:
+            failureThreshold: 30
+            initialDelaySeconds: 0
+            periodSeconds: 5
+            tcpSocket:
+              port: 9696
+            timeoutSeconds: 1
+      dnsPolicy: ClusterFirst
+      enableServiceLinks: true
+      serviceAccountName: default

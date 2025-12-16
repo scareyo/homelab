@@ -1,0 +1,17 @@
+apiVersion: velero.io/v1
+kind: VolumeSnapshotLocation
+metadata:
+  labels:
+    app.kubernetes.io/instance: velero
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: velero
+    helm.sh/chart: velero-11.2.0
+  name: default
+  namespace: velero
+spec:
+  config:
+    region: us-east-005
+  credential:
+    key: key
+    name: backblaze
+  provider: aws

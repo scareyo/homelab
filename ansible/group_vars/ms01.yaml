@@ -1,0 +1,10 @@
+---
+schematic_id: "{{ lookup('secret', '/omni', 'SCHEMATIC_ID_METAL') }}"
+
+amt_username: "{{ lookup('secret', '/amt', 'USERNAME') }}"
+amt_password: "{{ lookup('secret', '/amt', 'PASSWORD') }}"
+
+pxe_kernel_url: "https://pxe.factory.talos.dev/image/{{ schematic_id }}/v{{ talos_version }}/kernel-amd64"
+pxe_initrd_url: "https://pxe.factory.talos.dev/image/{{ schematic_id }}/v{{ talos_version }}/initramfs-amd64.xz"
+pxe_kernel_params_url: "https://pxe.factory.talos.dev/image/{{ schematic_id }}/v{{ talos_version }}/cmdline-metal-amd64"
+pxe_subnet: 10.10.22.0/24

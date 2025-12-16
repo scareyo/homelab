@@ -1,0 +1,91 @@
+---
+- name: 'Check mandatory variables are defined'
+  ansible.builtin.assert:
+    that:
+      - pxe_kernel_url is defined
+      - pxe_initrd_url is defined
+      - pxe_kernel_params is defined
+      - pxe_subnet is defined
+
+- name: Create iPXE data directory
+  ansible.builtin.file:
+    path: "{{ pxe_ipxe_path }}"
+    state: directory
+    mode: "0755"
+
+- name: Create dnsmasq data directory
+  ansible.builtin.file:
+    path: "{{ pxe_dnsmasq_path }}"
+    state: directory
+    mode: "0755"
+
+- name: Create HTTP data directory
+  ansible.builtin.file:
+    path: "{{ pxe_http_path }}"
+    state: directory
+    mode: "0755"
+
+- name: Download kernel
+  ansible.builtin.get_url:
+    url: "{{ pxe_kernel_url }}"
+    dest: "{{ pxe_http_path }}/kernel"
+    mode: "0600"
+
+- name: Download initrd
+  ansible.builtin.get_url:
+    url: "{{ pxe_initrd_url }}"
+    dest: "{{ pxe_http_path }}/initrd"
+    mode: "0600"
+
+- name: Checkout iPXE
+  ansible.builtin.git:
+    repo: https://github.com/ipxe/ipxe
+    dest: "{{ pxe_ipxe_path }}"
+    version: master
+    force: true
+
+- name: Download kernel params
+  when: pxe_kernel_params_url != ''
+  block:
+    - name: Download file
+      ansible.builtin.get_url:
+        url: "{{ pxe_kernel_params_url }}"
+        dest: "{{ role_path }}/files/data/kernel_params"
+        mode: "0660"
+
+    - name: Set pxe_kernel_params
+      ansible.builtin.set_fact:
+        pxe_kernel_params: "{{ pxe_kernel_params }} {{ lookup('file', role_path + '/files/data/kernel_params') }}"
+
+- name: Generate iPXE script
+  ansible.builtin.template:
+    src: boot.ipxe.j2
+    dest: "{{ pxe_ipxe_path }}/src/boot.ipxe"
+    mode: "0644"
+
+- name: Build iPXE
+  community.general.make:
+    chdir: "{{ pxe_ipxe_path }}/src"
+    jobs: "{{ ansible_processor_vcpus }}"
+    target: bin-x86_64-efi/ipxe.efi
+    params:
+      EMBED: boot.ipxe
+
+- name: Generate dnsmasq config
+  ansible.builtin.template:
+    src: dnsmasq.conf.j2
+    dest: "{{ pxe_dnsmasq_path }}/dnsmasq.conf"
+    mode: "0644"
+
+- name: Run dnsmasq
+  become: true
+  ansible.builtin.command: "dnsmasq -k -C {{ pxe_dnsmasq_path }}/dnsmasq.conf --user"
+  async: 600
+  poll: 0
+  changed_when: true
+
+- name: Run HTTP server
+  ansible.builtin.command: "python3 -m http.server 8080 -d {{ pxe_http_path }}"
+  async: 600
+  poll: 0
+  changed_when: true

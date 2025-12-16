@@ -1,0 +1,12 @@
+.devenv
+.direnv
+.env.private
+.kube
+.talos
+
+Session.vim
+
+result
+
+# REMOVE
+archive

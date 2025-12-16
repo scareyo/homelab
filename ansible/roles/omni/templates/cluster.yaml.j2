@@ -1,0 +1,97 @@
+---
+kind: Cluster
+name: {{ omni_cluster_name }}
+labels:
+  cluster: {{ omni_cluster_name }}
+kubernetes:
+  version: v{{ omni_kubernetes_version }}
+talos:
+  version: v{{ omni_talos_version }}
+patches:
+  - name: config
+    inline:
+      cluster:
+        allowSchedulingOnControlPlanes: true
+        network:
+          cni:
+            name: none
+        proxy:
+          disabled: true
+        extraManifests:
+          - http://github.com/kubernetes-sigs/gateway-api/releases/download/v1.2.0/standard-install.yaml
+      machine:
+        network:
+          kubespan:
+            enabled: true
+
+---
+kind: ControlPlane
+machines:
+{% for machine in omni_machines | selectattr("groups", "contains", "control") %}
+  - {{ machine.id }}
+{% endfor %}
+
+---
+kind: Workers
+machines:
+{% for machine in omni_machines | selectattr("groups", "contains", "worker") %}
+  - {{ machine.id }}
+{% endfor %}
+
+{% for machine in omni_machines %}
+---
+kind: Machine
+name: {{ machine.id }}
+{% if machine.disk != "" %}
+install:
+  disk: {{ machine.disk }}
+{% endif %}
+patches:
+  - name: labels
+    inline:
+      machine:
+        nodeLabels:
+          platform: {{ machine.platform }}
+{% if "control" in machine.groups %}
+  - name: cilium 
+    file: {{ role_path }}/files/cilium-install.yaml
+  - name: kube-metrics
+    inline:
+      cluster:
+        controllerManager:
+          extraArgs:
+            bind-address: "0.0.0.0"
+        scheduler:
+          extraArgs:
+            bind-address: "0.0.0.0"
+{% endif %}
+{% if machine.platform == "hcloud" %}
+  - name: hcloud
+    inline:
+      cluster:
+        externalCloudProvider:
+          enabled: true
+      machine:
+        kubelet:
+          extraConfig:
+            registerWithTaints:
+              - key: hcloud
+                effect: NoSchedule
+{% endif %}
+{% if machine.platform == "metal" %}
+  - name: metal
+    inline:
+      machine:
+        network:
+          interfaces:
+            - interface: enp3s0f0np0
+              dhcp: true
+            - interface: enp89s0
+              dhcp: false
+              routes: []
+systemExtensions:
+  - siderolabs/i915
+  - siderolabs/intel-ucode
+  - siderolabs/mei
+{% endif %}
+{% endfor %}

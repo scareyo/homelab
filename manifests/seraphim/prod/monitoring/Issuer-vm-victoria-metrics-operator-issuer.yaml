@@ -1,0 +1,8 @@
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: vm-victoria-metrics-operator-issuer
+  namespace: monitoring
+spec:
+  ca:
+    secretName: vm-victoria-metrics-operator-root-ca
