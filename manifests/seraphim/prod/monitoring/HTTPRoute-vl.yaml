@@ -3,11 +3,11 @@ kind: HTTPRoute
 metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "10"
-  name: vmagent
+  name: vl
   namespace: monitoring
 spec:
   hostnames:
-    - vmagent.vegapunk.cloud
+    - vl.vegapunk.cloud
   parentRefs:
     - group: gateway.networking.k8s.io
       kind: Gateway
@@ -17,8 +17,8 @@ spec:
     - backendRefs:
         - group: ""
           kind: Service
-          name: vmagent-vm-victoria-metrics-k8s-stack
-          port: 8429
+          name: vlsingle-victoria-logs
+          port: 9428
           weight: 1
       matches:
         - path:
