@@ -102,6 +102,19 @@ let
       ];
     };
 
+    victoria-metrics = generators.fromCRD {
+      name = "victoria-metrics";
+      src = pkgs.fetchFromGitHub {
+        owner = "VictoriaMetrics";
+        repo = "helm-charts";
+        rev = "victoria-metrics-operator-0.57.1";
+        hash = "sha256-2ABmmlTpX5ypjaIvqYduz6hZAy8hN3DsnSfVTnyWm+w=";
+      };
+      crds = [
+        "charts/victoria-metrics-operator/charts/crds/crds/crd.yaml"
+      ];
+    };
+
   };
   names = builtins.attrNames crds;
   values = builtins.attrValues crds;

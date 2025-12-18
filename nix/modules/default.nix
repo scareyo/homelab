@@ -23,5 +23,6 @@ in
     ../generated/gateway-api.nix
     ../generated/rook.nix
     ../generated/velero.nix
+    ../generated/victoria-metrics.nix
   ];
 }

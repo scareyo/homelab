@@ -20,7 +20,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config: 394ec0a38c7e1ba864bf48c330ac7910fb23843d87e81bdfebd0e82aef2196b6
+        checksum/config: 1593ab3f718bafd88f43d3e1ae04a0f597ac0f9d562bb467f4b421fbefcbf781
         checksum/sc-dashboard-provider-config: 89ec8c9c059a6a61286174130a15d183be69b7a486acc8437afbaf5d790a0ddd
         kubectl.kubernetes.io/default-container: grafana
       labels:
@@ -64,6 +64,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            - name: GF_INSTALL_PLUGINS
+              valueFrom:
+                configMapKeyRef:
+                  key: plugins
+                  name: vm-grafana
             - name: GF_PATHS_DATA
               value: /var/lib/grafana/
             - name: GF_PATHS_LOGS
@@ -114,6 +119,9 @@ spec:
               subPath: grafana.ini
             - mountPath: /var/lib/grafana
               name: storage
+            - mountPath: /etc/grafana/provisioning/datasources/victoria-logs.yaml
+              name: config
+              subPath: victoria-logs.yaml
             - mountPath: /var/lib/grafana/dashboards
               name: sc-dashboard-volume
             - mountPath: /etc/grafana/provisioning/dashboards/sc-dashboardproviders.yaml
