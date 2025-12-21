@@ -17,6 +17,7 @@ in
         chart = charts.prowlarr;
         values = {
           env.PROWLARR__AUTH__METHOD = "External";
+          env.DOTNET_SYSTEM_NET_DISABLEIPV6 = "1";
         };
       };
 

@@ -27,6 +27,8 @@ spec:
       automountServiceAccountToken: true
       containers:
         - env:
+            - name: DOTNET_SYSTEM_NET_DISABLEIPV6
+              value: "1"
             - name: PROWLARR__AUTH__METHOD
               value: External
             - name: TZ
