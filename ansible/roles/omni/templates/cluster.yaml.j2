@@ -18,11 +18,7 @@ patches:
         proxy:
           disabled: true
         extraManifests:
-          - http://github.com/kubernetes-sigs/gateway-api/releases/download/v1.2.0/standard-install.yaml
-      machine:
-        network:
-          kubespan:
-            enabled: true
+          - http://github.com/kubernetes-sigs/gateway-api/releases/download/v1.4.0/standard-install.yaml
 
 ---
 kind: ControlPlane
@@ -64,19 +60,6 @@ patches:
         scheduler:
           extraArgs:
             bind-address: "0.0.0.0"
-{% endif %}
-{% if machine.platform == "hcloud" %}
-  - name: hcloud
-    inline:
-      cluster:
-        externalCloudProvider:
-          enabled: true
-      machine:
-        kubelet:
-          extraConfig:
-            registerWithTaints:
-              - key: hcloud
-                effect: NoSchedule
 {% endif %}
 {% if machine.platform == "metal" %}
   - name: metal

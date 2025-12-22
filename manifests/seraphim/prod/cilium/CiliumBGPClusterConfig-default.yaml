@@ -12,6 +12,3 @@ spec:
           peerAddress: 10.10.20.1
           peerConfigRef:
             name: default
-  nodeSelector:
-    matchLabels:
-      platform: metal

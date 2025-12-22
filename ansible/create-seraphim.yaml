@@ -2,19 +2,6 @@
 #   - Install Talos Linux on bare-metal MS-01 servers
 #   - Create a Talos Linux cluster with Omni
 ---
-- name: Provision Cloud Machines
-  hosts: cloud
-  connection: local
-  tasks:
-    - name: Create Zeus
-      hetzner.hcloud.server:
-        name: zeus
-        api_token: "{{ hcloud_api_token }}"
-        server_type: cpx11
-        image: "318785011"
-        location: ash
-        state: started
-
 - name: Authenticate Omni
   hosts: localhost
   run_once: true

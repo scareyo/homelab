@@ -13,20 +13,9 @@ in
       namespace = "external-dns";
       createNamespace = true;
 
-      helm.releases.external-dns-cloudflare = {
+      helm.releases.external-dns = {
         chart = charts.external-dns;
-        values = (import ./values.nix).cloudflare;
-      };
-
-      helm.releases.external-dns-unifi = {
-        chart = charts.external-dns;
-        values = (import ./values.nix).unifi;
-      };
-
-      templates.externalSecret.cloudflare = {
-        keys = [
-          { source = "/cloudflare/API_TOKEN"; dest = "token"; }
-        ];
+        values = import ./values.nix;
       };
 
       templates.externalSecret.unifi = {

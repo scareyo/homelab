@@ -24,12 +24,6 @@ in
         gateway = "internal";
       };
 
-      templates.httpRoute.pocket-id-ext = {
-        hostname = "id.vegapunk.cloud";
-        serviceName = "pocket-id";
-        gateway = "external";
-      };
-
       templates.postgres.pocket-id = {
         instances = 3;
         size = "32Gi";

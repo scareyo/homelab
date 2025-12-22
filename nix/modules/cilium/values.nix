@@ -18,7 +18,6 @@
 
   k8sServiceHost = "localhost";
   k8sServicePort = 7445;
-  defaultLBServiceIPAM = "none";
   bgpControlPlane.enabled = true;
   gatewayAPI.enabled = true;
 

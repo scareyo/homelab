@@ -8,6 +8,7 @@
   nixidy.target.rootPath = "./manifests/seraphim/prod";
 
   nixidy.defaults.helm.extraOpts = [
+    "--api-versions gateway.networking.k8s.io/v1/GatewayClass"
     "--api-versions monitoring.coreos.com/v1/PodMonitor"
   ];
 
@@ -22,7 +23,6 @@
     external-secrets.enable = true;
     external-snapshotter.enable = true;
     gateway.enable = true;
-    hcloud.enable = true;
     monitoring.enable = true;
     pocket-id.enable = true;
     prowlarr.enable = true;

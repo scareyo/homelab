@@ -32,7 +32,7 @@ data:
   datapath-mode: veth
   debug: "false"
   debug-verbose: ""
-  default-lb-service-ipam: none
+  default-lb-service-ipam: lbipam
   direct-routing-skip-unreachable: "false"
   dnsproxy-enable-transparent-mode: "true"
   dnsproxy-socket-linger-timeout: "10"
