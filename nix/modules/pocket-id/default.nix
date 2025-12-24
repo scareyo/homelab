@@ -2,6 +2,7 @@
 
 let
   cfg = config.vegapunk.pocket-id;
+  namespace = "pocket-id";
 in
 {
   options = {
@@ -10,7 +11,7 @@ in
 
   config = lib.mkIf cfg.enable {
     applications.pocket-id = {
-      namespace = "pocket-id";
+      namespace = namespace;
       createNamespace = true;
 
       helm.releases.pocket-id = {
@@ -29,21 +30,20 @@ in
         size = "32Gi";
       };
 
-      templates.backup.pocket-id-daily = {
-        restore = true;
-        schedule = "0 4 * * *";
-        ttl = "168h0m0s"; # 1 week
-        includedNamespaces = [
-          "pocket-id"
-        ];
-      };
+      templates.app.pocket-id = {
+        inherit namespace;
 
-      templates.backup.pocket-id-quarterly = {
-        schedule = "0 0 1 1,4,7,10 *";
-        ttl = "8760h0m0s"; # 1 year
-        includedNamespaces = [
-          "pocket-id"
-        ];
+        backup = {
+          daily = {
+            restore = true;
+            schedule = "0 4 * * *";
+            ttl = "168h0m0s"; # 1 week
+          };
+          quarterly = {
+            schedule = "0 0 1 1,4,7,10 *";
+            ttl = "8760h0m0s"; # 1 year
+          };
+        };
       };
 
       ignoreDifferences.maxUnavailable = {

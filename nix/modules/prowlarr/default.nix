@@ -2,6 +2,7 @@
 
 let
   cfg = config.vegapunk.prowlarr;
+  namespace = "prowlarr";
 in
 {
   options = {
@@ -10,7 +11,7 @@ in
 
   config = lib.mkIf cfg.enable {
     applications.prowlarr = {
-      namespace = "prowlarr";
+      namespace = namespace;
       createNamespace = true;
 
       helm.releases.oauth2-proxy = {
@@ -19,7 +20,7 @@ in
           config = {
             existingSecret = "oidc";
             configFile = ''
-              upstreams="http://prowlarr.prowlarr.svc.cluster.local"
+              upstreams="http://prowlarr.${namespace}.svc.cluster.local"
               email_domains="*"
               redirect_url="https://prowlarr.vegapunk.cloud/oauth2/callback"
               provider="oidc"
@@ -35,8 +36,9 @@ in
       };
 
       templates.app.prowlarr = {
+        inherit namespace;
+
         workload = {
-          enable = true;
           image = "ghcr.io/home-operations/prowlarr:2.3.1";
           port = 9696;
           env = {
@@ -51,8 +53,14 @@ in
           };
         };
         route = {
-          enable = true;
           serviceName = "oauth2-proxy";
+        };
+        backup = {
+          daily = {
+            restore = true;
+            schedule = "0 4 * * *";
+            ttl = "168h0m0s"; # 1 week
+          };
         };
       };
 
