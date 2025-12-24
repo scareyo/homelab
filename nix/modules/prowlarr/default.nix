@@ -13,21 +13,13 @@ in
       namespace = "prowlarr";
       createNamespace = true;
 
-      helm.releases.prowlarr = {
-        chart = charts.prowlarr;
-        values = {
-          env.PROWLARR__AUTH__METHOD = "External";
-          env.DOTNET_SYSTEM_NET_DISABLEIPV6 = "1";
-        };
-      };
-
       helm.releases.oauth2-proxy = {
         chart = charts.oauth2-proxy;
         values = {
           config = {
             existingSecret = "oidc";
             configFile = ''
-              upstreams="http://prowlarr.prowlarr.svc.cluster.local:9696"
+              upstreams="http://prowlarr.prowlarr.svc.cluster.local"
               email_domains="*"
               redirect_url="https://prowlarr.vegapunk.cloud/oauth2/callback"
               provider="oidc"
@@ -42,9 +34,26 @@ in
         };
       };
 
-      templates.httpRoute.prowlarr = {
-        hostname = "prowlarr.vegapunk.cloud";
-        serviceName = "oauth2-proxy";
+      templates.app.prowlarr = {
+        workload = {
+          enable = true;
+          image = "ghcr.io/home-operations/prowlarr:2.3.1";
+          port = 9696;
+          env = {
+            PROWLARR__AUTH__METHOD = "External";
+          };
+        };
+        persistence = {
+          config = {
+            type = "pvc";
+            path = "/config";
+            size = "4Gi";
+          };
+        };
+        route = {
+          enable = true;
+          serviceName = "oauth2-proxy";
+        };
       };
 
       templates.externalSecret.oidc = {
