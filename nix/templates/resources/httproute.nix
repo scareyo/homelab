@@ -1,4 +1,4 @@
-{ name, route }:
+{ lib, name, route }:
 
 {
   metadata = {
@@ -29,13 +29,15 @@
           }
         ];
         backendRefs = [
-          {
+          ({
             group = "";
             kind = "Service";
             name = route.serviceName;
             port = route.servicePort;
             weight = 1;
-          }
+          } // lib.optionalAttrs route.enableAuth {
+            name = "oauth2-proxy";
+          })
         ];
       }
     ];
