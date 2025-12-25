@@ -19,12 +19,6 @@ in
         values = import ./values.nix;
       };
 
-      templates.httpRoute.pocket-id-int = {
-        hostname = "id.vegapunk.cloud";
-        serviceName = "pocket-id";
-        gateway = "internal";
-      };
-
       templates.postgres.pocket-id = {
         instances = 3;
         size = "32Gi";
@@ -32,6 +26,12 @@ in
 
       templates.app.pocket-id = {
         inherit namespace;
+
+        route = {
+          hostname = "id.vegapunk.cloud";
+          serviceName = "pocket-id";
+          gateway = "internal";
+        };
 
         backup = {
           daily = {

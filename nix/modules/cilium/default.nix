@@ -17,8 +17,7 @@ in
         values = import ./values.nix;
       };
 
-      templates.httpRoute.hubble = {
-        hostname = "hubble.vegapunk.cloud";
+      templates.app.hubble.route = {
         serviceName = "hubble-ui";
       };
 

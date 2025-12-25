@@ -25,25 +25,21 @@ in
         values = (import ./values.nix { inherit lib; }).victoria-logs-collector;
       };
 
-      templates.httpRoute.grafana = {
-        hostname = "grafana.vegapunk.cloud";
+      templates.app.grafana.route = {
         serviceName = "vm-grafana";
       };
 
-      templates.httpRoute.vmagent = {
-        hostname = "vmagent.vegapunk.cloud";
+      templates.app.vmagent.route = {
         serviceName = "vmagent-vm-victoria-metrics-k8s-stack";
         servicePort = 8429;
       };
 
-      templates.httpRoute.vm = {
-        hostname = "vm.vegapunk.cloud";
+      templates.app.vm.route = {
         serviceName = "vmsingle-vm-victoria-metrics-k8s-stack";
         servicePort = 8428;
       };
 
-      templates.httpRoute.vl = {
-        hostname = "vl.vegapunk.cloud";
+      templates.app.vl.route = {
         serviceName = "vlsingle-victoria-logs";
         servicePort = 9428;
       };

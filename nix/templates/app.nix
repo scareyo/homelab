@@ -107,7 +107,7 @@
         description = "Route configuration";
       };
       backup = lib.mkOption {
-        type = lib.types.attrsOf (lib.types.submodule {
+        type = lib.types.nullOr (lib.types.attrsOf (lib.types.submodule {
           options = {
             namespace = lib.mkOption {
               type = lib.types.str;
@@ -133,7 +133,8 @@
               example = "12h30m45s";
             };
           };
-        });
+        }));
+        default = null;
         description = "Backup configuration";
       };
     };
@@ -168,17 +169,19 @@
           inherit name;
         });
 
-      "velero.io".v1.Restore = lib.mapAttrs (name: backup: lib.mkIf (backup.restore)
-        (import ./resources/restore.nix {
-          inherit config;
-          inherit name;
-        })) cfg.backup;
+      "velero.io".v1.Restore = lib.mkIf (cfg.backup != null)
+        (lib.mapAttrs (name: backup: lib.mkIf (backup.restore)
+          (import ./resources/restore.nix {
+            inherit config;
+            inherit name;
+          })) cfg.backup);
 
-      "velero.io".v1.Schedule = lib.mapAttrs (name: backup:
-        (import ./resources/schedule.nix {
-          inherit config;
-          inherit name;
-        })) cfg.backup;
+      "velero.io".v1.Schedule = lib.mkIf (cfg.backup != null)
+        (lib.mapAttrs (name: backup:
+          (import ./resources/schedule.nix {
+            inherit config;
+            inherit name;
+          })) cfg.backup);
     };
   };
 }

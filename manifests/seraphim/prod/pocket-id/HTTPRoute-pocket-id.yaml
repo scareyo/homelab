@@ -3,7 +3,7 @@ kind: HTTPRoute
 metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "10"
-  name: pocket-id-int
+  name: pocket-id
   namespace: pocket-id
 spec:
   hostnames:

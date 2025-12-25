@@ -18,7 +18,7 @@ in
         values = import ./values.nix;
       };
 
-      templates.httpRoute.argocd = {
+      templates.app.argocd.route = {
         hostname = "argocd.vegapunk.cloud";
         serviceName = "argocd-server";
       };

@@ -24,8 +24,7 @@ in
         values = import ./values.nix;
       };
 
-      templates.httpRoute.ceph = {
-        hostname = "ceph.vegapunk.cloud";
+      templates.app.ceph.route = {
         serviceName = "rook-ceph-mgr-dashboard";
         servicePort = 7000;
       };
