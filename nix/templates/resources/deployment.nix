@@ -27,7 +27,10 @@
           image = workload.image;
 
           env = builtins.mapAttrs
-            (_: v: { value = v; }) workload.env;
+            (_: v: {
+              value = lib.mkIf (lib.isString v) v;
+              valueFrom = lib.mkIf (lib.isAttrs v) v;
+            }) workload.env;
 
           ports.http.containerPort = workload.port;
           securityContext = {

@@ -14,26 +14,26 @@ in
       namespace = namespace;
       createNamespace = true;
 
-      helm.releases.oauth2-proxy = {
-        chart = charts.oauth2-proxy;
-        values = {
-          config = {
-            existingSecret = "oidc";
-            configFile = ''
-              upstreams="http://prowlarr.${namespace}.svc.cluster.local"
-              email_domains="*"
-              redirect_url="https://prowlarr.vegapunk.cloud/oauth2/callback"
-              provider="oidc"
-              scope="openid email profile groups"
-              oidc_issuer_url="https://id.vegapunk.cloud"
-              provider_display_name="Pocket ID"
-              custom_sign_in_logo="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/prowlarr.svg"
-              banner="Prowlarr"
-              insecure_oidc_allow_unverified_email="true"
-            '';
-          };
-        };
-      };
+      #helm.releases.oauth2-proxy = {
+      #  chart = charts.oauth2-proxy;
+      #  values = {
+      #    config = {
+      #      existingSecret = "oidc";
+      #      configFile = ''
+      #        upstreams="http://prowlarr.${namespace}.svc.cluster.local"
+      #        email_domains="*"
+      #        redirect_url="https://prowlarr.vegapunk.cloud/oauth2/callback"
+      #        provider="oidc"
+      #        scope="openid email profile groups"
+      #        oidc_issuer_url="https://id.vegapunk.cloud"
+      #        provider_display_name="Pocket ID"
+      #        custom_sign_in_logo="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/prowlarr.svg"
+      #        banner="Prowlarr"
+      #        insecure_oidc_allow_unverified_email="true"
+      #      '';
+      #    };
+      #  };
+      #};
 
       templates.app.prowlarr = {
         inherit namespace;
@@ -55,7 +55,7 @@ in
         };
 
         route = {
-          serviceName = "oauth2-proxy";
+          enableAuth = true;
         };
 
         backup = {
@@ -75,13 +75,13 @@ in
         ];
       };
 
-      resources = {
-        deployments.oauth2-proxy = {
-          spec = {
-            template.metadata.annotations = lib.mkForce null;
-          };
-        };
-      };
+      #resources = {
+      #  deployments.oauth2-proxy = {
+      #    spec = {
+      #      template.metadata.annotations = lib.mkForce null;
+      #    };
+      #  };
+      #};
     };
   };
 }
