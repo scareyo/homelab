@@ -45,6 +45,7 @@ in
             PROWLARR__AUTH__METHOD = "External";
           };
         };
+
         persistence = {
           config = {
             type = "pvc";
@@ -52,9 +53,11 @@ in
             size = "4Gi";
           };
         };
+
         route = {
           serviceName = "oauth2-proxy";
         };
+
         backup = {
           daily = {
             restore = true;

@@ -1,4 +1,4 @@
-{ config, name }:
+{ name, workload }:
 
 {
   spec = {
@@ -9,7 +9,7 @@
       {
         protocol = "TCP";
         port = 80;
-        targetPort = config.workload.port;
+        targetPort = workload.port;
       }
     ];
   };

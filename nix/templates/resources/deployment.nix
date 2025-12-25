@@ -1,4 +1,4 @@
-{ config, lib, name }:
+{ lib, name, persistence, workload }:
 
 {
   metadata = {
@@ -24,12 +24,12 @@
       };
       spec = {
         containers.${name} = {
-          image = config.workload.image;
+          image = workload.image;
 
           env = builtins.mapAttrs
-            (_: v: { value = v; }) config.workload.env;
+            (_: v: { value = v; }) workload.env;
 
-          ports.http.containerPort = config.workload.port;
+          ports.http.containerPort = workload.port;
           securityContext = {
             allowPrivilegeEscalation = false;
             capabilities.drop = [ "ALL" ];
@@ -39,7 +39,7 @@
           volumeMounts = lib.mapAttrsToList (name: volume: {
             name = name;
             mountPath = volume.path;
-          }) config.persistence;
+          }) persistence;
         };
 
         securityContext = {
@@ -59,7 +59,7 @@
         }
         // lib.optionalAttrs (volume.type == "pvc") {
           persistentVolumeClaim.claimName = name;
-        }) config.persistence;
+        }) persistence;
       };
     };
   };

@@ -1,4 +1,4 @@
-{ config, name }:
+{ name, route }:
 
 {
   metadata = {
@@ -11,12 +11,12 @@
       {
         group = "gateway.networking.k8s.io";
         kind = "Gateway";
-        name = config.route.gateway;
+        name = route.gateway;
         namespace = "gateway";
       }
     ];
     hostnames = [
-      (if config.route.hostname == null then "${name}.vegapunk.cloud" else config.route.hostname)
+      (if route.hostname == null then "${name}.vegapunk.cloud" else route.hostname)
     ];
     rules = [
       {
@@ -32,8 +32,8 @@
           {
             group = "";
             kind = "Service";
-            name = config.route.serviceName;
-            port = config.route.servicePort;
+            name = route.serviceName;
+            port = route.servicePort;
             weight = 1;
           }
         ];

@@ -140,48 +140,55 @@
     };
 
     output = { name, config, ...  }: let
-      cfg = config;
+      backup = config.backup;
+      namespace = config.namespace;
+      persistence = config.persistence;
+      route = config.route;
+      workload = config.workload;
     in {
-      deployments.${name} = lib.mkIf (cfg.workload != null)
+      deployments.${name} = lib.mkIf (workload != null)
         (import ./resources/deployment.nix {
-          inherit config;
           inherit lib;
           inherit name;
+          inherit persistence;
+          inherit workload;
         });
 
-      services.${name} = lib.mkIf (cfg.workload != null)
+      services.${name} = lib.mkIf (workload != null)
         (import ./resources/service.nix {
-          inherit config;
           inherit name;
+          inherit workload;
         });
 
-      core.v1.PersistentVolumeClaim = lib.mkIf (cfg.persistence != null)
+      core.v1.PersistentVolumeClaim = lib.mkIf (persistence != null)
         (lib.mapAttrs (name: pvc: lib.mkIf (pvc.type == "pvc")
           (import ./resources/pvc.nix {
-            inherit config;
             inherit lib;
             inherit name;
-          })) cfg.persistence);
+            inherit persistence;
+          })) persistence);
 
-      "gateway.networking.k8s.io".v1.HTTPRoute.${name} = lib.mkIf (cfg.route != null) 
+      "gateway.networking.k8s.io".v1.HTTPRoute.${name} = lib.mkIf (route != null) 
         (import ./resources/httproute.nix {
-          inherit config;
           inherit name;
+          inherit route;
         });
 
-      "velero.io".v1.Restore = lib.mkIf (cfg.backup != null)
+      "velero.io".v1.Restore = lib.mkIf (backup != null)
         (lib.mapAttrs (name: backup: lib.mkIf (backup.restore)
           (import ./resources/restore.nix {
-            inherit config;
             inherit name;
-          })) cfg.backup);
+            inherit namespace;
+            inherit backup;
+          })) backup);
 
-      "velero.io".v1.Schedule = lib.mkIf (cfg.backup != null)
+      "velero.io".v1.Schedule = lib.mkIf (backup != null)
         (lib.mapAttrs (name: backup:
           (import ./resources/schedule.nix {
-            inherit config;
             inherit name;
-          })) cfg.backup);
+            inherit namespace;
+            inherit backup;
+          })) backup);
     };
   };
 }

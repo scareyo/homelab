@@ -1,15 +1,15 @@
-{ config, name }:
+{ name, namespace, backup }:
 
 {
   metadata = {
-    name = "${config.namespace}-${name}";
-    namespace = config.backup.${name}.namespace;
+    name = "${namespace}-${name}";
+    namespace = backup.namespace;
     annotations = {
       "argocd.argoproj.io/sync-wave" = "-10";
     };
   };
   spec = {
-    scheduleName = "${config.namespace}-${name}";
+    scheduleName = "${namespace}-${name}";
     restorePVs = true;
     includedResources = [
       "pvc"

@@ -1,16 +1,16 @@
-{ config, name }:
+{ name, namespace, backup }:
 
 {
   metadata = {
-    name = "${config.namespace}-${name}";
-    namespace = config.backup.${name}.namespace;
+    name = "${namespace}-${name}";
+    namespace = backup.namespace;
   };
   spec = {
-    schedule = config.backup.${name}.schedule;
+    schedule = backup.schedule;
     template = {
-      ttl = config.backup.${name}.ttl;
+      ttl = backup.ttl;
       includedNamespaces = [
-        config.namespace
+        namespace
       ];
       includedResources = [
         "pv"
