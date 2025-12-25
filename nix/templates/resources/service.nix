@@ -1,6 +1,9 @@
-{ name, workload }:
+{ labels, name }:
 
 {
+  metadata = {
+    inherit labels;
+  };
   spec = {
     selector = {
       "app.kubernetes.io/name" = name;
@@ -9,7 +12,7 @@
       {
         protocol = "TCP";
         port = 80;
-        targetPort = workload.port;
+        targetPort = "http";
       }
     ];
   };

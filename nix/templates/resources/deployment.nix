@@ -1,33 +1,32 @@
-{ lib, name, persistence, workload }:
+{ lib, labels, name, persistence, workload }:
 
 {
   metadata = {
-    labels = {
-      "app.kubernetes.io/name" = name;
-      "app.kubernetes.io/instance" = name;
-    };
+    inherit labels;
   };
   spec = {
     replicas = 1;
     selector = {
       matchLabels = {
-        "app.kubernetes.io/name" = name;
-        "app.kubernetes.io/instance" = name;
+        "app.kubernetes.io/name" = labels."app.kubernetes.io/name" or name;
+        "app.kubernetes.io/instance" = labels."app.kubernetes.io/instance" or name;
       };
     };
     template = {
       metadata = {
-        labels = {
-          "app.kubernetes.io/name" = name;
-          "app.kubernetes.io/instance" = name;
-        };
+        inherit labels;
       };
       spec = {
         containers.${name} = {
-          image = workload.image;
+          image = "${workload.image}:${workload.version}";
+
+          args = workload.args;
 
           env = builtins.mapAttrs
-            (_: v: { value = v; }) workload.env;
+            (_: v: {
+              value = lib.mkIf (lib.isString v) v;
+              valueFrom = lib.mkIf (lib.isAttrs v) v;
+            }) workload.env;
 
           ports.http.containerPort = workload.port;
           securityContext = {
@@ -49,7 +48,7 @@
           fsGroupChangePolicy = "OnRootMismatch";
         };
 
-        dnsPolicy = "Default";
+        dnsPolicy = workload.dnsPolicy;
 
         volumes = lib.mapAttrsToList (name: volume: {
           name = name;
@@ -59,6 +58,9 @@
         }
         // lib.optionalAttrs (volume.type == "pvc") {
           persistentVolumeClaim.claimName = name;
+        }
+        // lib.optionalAttrs (volume.type == "configMap") {
+          configMap.name = name;
         }) persistence;
       };
     };

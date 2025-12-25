@@ -2,8 +2,11 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
+    app.kubernetes.io/component: main
     app.kubernetes.io/instance: prowlarr
     app.kubernetes.io/name: prowlarr
+    app.kubernetes.io/part-of: prowlarr
+    app.kubernetes.io/version: 2.3.1
   name: prowlarr
   namespace: prowlarr
 spec:
@@ -15,8 +18,11 @@ spec:
   template:
     metadata:
       labels:
+        app.kubernetes.io/component: main
         app.kubernetes.io/instance: prowlarr
         app.kubernetes.io/name: prowlarr
+        app.kubernetes.io/part-of: prowlarr
+        app.kubernetes.io/version: 2.3.1
     spec:
       containers:
         - env:

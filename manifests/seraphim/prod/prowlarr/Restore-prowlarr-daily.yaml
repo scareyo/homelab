@@ -3,6 +3,12 @@ kind: Restore
 metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "-10"
+  labels:
+    app.kubernetes.io/component: main
+    app.kubernetes.io/instance: prowlarr
+    app.kubernetes.io/name: prowlarr
+    app.kubernetes.io/part-of: prowlarr
+    app.kubernetes.io/version: 2.3.1
   name: prowlarr-daily
   namespace: velero
 spec:

@@ -1,4 +1,4 @@
-{ charts, config, lib, ... }:
+{ config, lib, ... }:
 
 let
   cfg = config.vegapunk.prowlarr;
@@ -14,36 +14,17 @@ in
       namespace = namespace;
       createNamespace = true;
 
-      helm.releases.oauth2-proxy = {
-        chart = charts.oauth2-proxy;
-        values = {
-          config = {
-            existingSecret = "oidc";
-            configFile = ''
-              upstreams="http://prowlarr.${namespace}.svc.cluster.local"
-              email_domains="*"
-              redirect_url="https://prowlarr.vegapunk.cloud/oauth2/callback"
-              provider="oidc"
-              scope="openid email profile groups"
-              oidc_issuer_url="https://id.vegapunk.cloud"
-              provider_display_name="Pocket ID"
-              custom_sign_in_logo="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/prowlarr.svg"
-              banner="Prowlarr"
-              insecure_oidc_allow_unverified_email="true"
-            '';
-          };
-        };
-      };
-
       templates.app.prowlarr = {
         inherit namespace;
 
         workload = {
-          image = "ghcr.io/home-operations/prowlarr:2.3.1";
+          image = "ghcr.io/home-operations/prowlarr";
+          version = "2.3.1";
           port = 9696;
           env = {
             PROWLARR__AUTH__METHOD = "External";
           };
+          dnsPolicy = "Default";
         };
 
         persistence = {
@@ -55,7 +36,11 @@ in
         };
 
         route = {
-          serviceName = "oauth2-proxy";
+          auth = {
+            enable = true;
+            banner = "Prowlarr";
+            logo = "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/prowlarr.svg";
+          };
         };
 
         backup = {
@@ -73,14 +58,6 @@ in
           { source = "/prowlarr/OIDC_CLIENT_SECRET"; dest = "client-secret"; }
           { type = "password"; length = 32; dest = "cookie-secret"; }
         ];
-      };
-
-      resources = {
-        deployments.oauth2-proxy = {
-          spec = {
-            template.metadata.annotations = lib.mkForce null;
-          };
-        };
       };
     };
   };

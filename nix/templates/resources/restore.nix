@@ -1,7 +1,9 @@
-{ name, namespace, backup }:
+{ labels, name, namespace, backup }:
 
 {
   metadata = {
+    inherit labels;
+
     name = "${namespace}-${name}";
     namespace = backup.namespace;
     annotations = {

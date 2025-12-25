@@ -14,13 +14,10 @@ data:
 kind: ConfigMap
 metadata:
   labels:
-    app: oauth2-proxy
     app.kubernetes.io/component: authentication-proxy
-    app.kubernetes.io/instance: oauth2-proxy
-    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/instance: oauth2-proxy-prowlarr
     app.kubernetes.io/name: oauth2-proxy
-    app.kubernetes.io/part-of: oauth2-proxy
-    app.kubernetes.io/version: 7.13.0
-    helm.sh/chart: oauth2-proxy-9.0.0
+    app.kubernetes.io/part-of: prowlarr
+    app.kubernetes.io/version: v7.13.0
   name: oauth2-proxy
   namespace: prowlarr

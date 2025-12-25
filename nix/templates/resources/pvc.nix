@@ -1,6 +1,9 @@
-{ lib, name, persistence }:
+{ lib, labels, name, persistence }:
 
 {
+  metadata = {
+    inherit labels;
+  };
   spec = {
     accessModes = persistence.${name}.accessMode;
     resources.requests.storage = persistence.${name}.size;

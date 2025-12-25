@@ -1,7 +1,9 @@
-{ name, route }:
+{ lib, labels, name, route }:
 
 {
   metadata = {
+    inherit labels;
+
     annotations = {
       "argocd.argoproj.io/sync-wave" = "10";
     };
@@ -29,13 +31,17 @@
           }
         ];
         backendRefs = [
-          {
+          ({
             group = "";
             kind = "Service";
             name = route.serviceName;
             port = route.servicePort;
             weight = 1;
-          }
+          } // lib.optionalAttrs (route.serviceName == null) {
+            name = name;
+          } // lib.optionalAttrs route.auth.enable {
+            name = "oauth2-proxy";
+          })
         ];
       }
     ];
