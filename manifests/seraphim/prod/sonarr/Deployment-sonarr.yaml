@@ -3,35 +3,35 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/component: main
-    app.kubernetes.io/instance: prowlarr
-    app.kubernetes.io/name: prowlarr
-    app.kubernetes.io/part-of: prowlarr
-    app.kubernetes.io/version: 2.3.1
-  name: prowlarr
-  namespace: prowlarr
+    app.kubernetes.io/instance: sonarr
+    app.kubernetes.io/name: sonarr
+    app.kubernetes.io/part-of: sonarr
+    app.kubernetes.io/version: 4.0.16
+  name: sonarr
+  namespace: sonarr
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/instance: prowlarr
-      app.kubernetes.io/name: prowlarr
+      app.kubernetes.io/instance: sonarr
+      app.kubernetes.io/name: sonarr
   template:
     metadata:
       labels:
         app.kubernetes.io/component: main
-        app.kubernetes.io/instance: prowlarr
-        app.kubernetes.io/name: prowlarr
-        app.kubernetes.io/part-of: prowlarr
-        app.kubernetes.io/version: 2.3.1
+        app.kubernetes.io/instance: sonarr
+        app.kubernetes.io/name: sonarr
+        app.kubernetes.io/part-of: sonarr
+        app.kubernetes.io/version: 4.0.16
     spec:
       containers:
         - env:
-            - name: PROWLARR__AUTH__METHOD
+            - name: SONARR__AUTH__METHOD
               value: External
-          image: ghcr.io/home-operations/prowlarr:2.3.1
-          name: prowlarr
+          image: ghcr.io/home-operations/sonarr:4.0.16
+          name: sonarr
           ports:
-            - containerPort: 9696
+            - containerPort: 8989
               name: http
           securityContext:
             allowPrivilegeEscalation: false

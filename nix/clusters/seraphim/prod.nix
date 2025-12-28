@@ -28,6 +28,7 @@
     prowlarr.enable = true;
     renovate.enable = true;
     rook.enable = true;
+    sonarr.enable = true;
     velero.enable = true;
   };
 }

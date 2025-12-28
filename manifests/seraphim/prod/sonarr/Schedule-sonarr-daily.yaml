@@ -1,0 +1,22 @@
+apiVersion: velero.io/v1
+kind: Schedule
+metadata:
+  labels:
+    app.kubernetes.io/component: main
+    app.kubernetes.io/instance: sonarr
+    app.kubernetes.io/name: sonarr
+    app.kubernetes.io/part-of: sonarr
+    app.kubernetes.io/version: 4.0.16
+  name: sonarr-daily
+  namespace: velero
+spec:
+  schedule: 0 4 * * *
+  template:
+    includedNamespaces:
+      - sonarr
+    includedResources:
+      - pv
+      - pvc
+    snapshotMoveData: true
+    snapshotVolumes: true
+    ttl: 168h0m0s

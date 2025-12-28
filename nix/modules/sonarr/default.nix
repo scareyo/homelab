@@ -1,28 +1,28 @@
 { config, lib, ... }:
 
 let
-  cfg = config.vegapunk.prowlarr;
-  namespace = "prowlarr";
+  cfg = config.vegapunk.sonarr;
+  namespace = "sonarr";
 in
 {
   options = {
-    vegapunk.prowlarr.enable = lib.mkEnableOption "Enable Prowlarr";
+    vegapunk.sonarr.enable = lib.mkEnableOption "Enable Sonarr";
   };
 
   config = lib.mkIf cfg.enable {
-    applications.prowlarr = {
+    applications.sonarr = {
       namespace = namespace;
       createNamespace = true;
 
-      templates.app.prowlarr = {
+      templates.app.sonarr = {
         inherit namespace;
 
         workload = {
-          image = "ghcr.io/home-operations/prowlarr";
-          version = "2.3.1";
-          port = 9696;
+          image = "ghcr.io/home-operations/sonarr";
+          version = "4.0.16";
+          port = 8989;
           env = {
-            PROWLARR__AUTH__METHOD = "External";
+            SONARR__AUTH__METHOD = "External";
           };
         };
 
@@ -37,8 +37,8 @@ in
         route = {
           auth = {
             enable = true;
-            banner = "Prowlarr";
-            logo = "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/prowlarr.svg";
+            banner = "Sonarr";
+            logo = "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/sonarr.svg";
           };
         };
 
@@ -53,8 +53,8 @@ in
 
       templates.externalSecret.oidc = {
         keys = [
-          { source = "/prowlarr/OIDC_CLIENT_ID"; dest = "client-id"; }
-          { source = "/prowlarr/OIDC_CLIENT_SECRET"; dest = "client-secret"; }
+          { source = "/sonarr/OIDC_CLIENT_ID"; dest = "client-id"; }
+          { source = "/sonarr/OIDC_CLIENT_SECRET"; dest = "client-secret"; }
           { type = "password"; length = 32; dest = "cookie-secret"; }
         ];
       };

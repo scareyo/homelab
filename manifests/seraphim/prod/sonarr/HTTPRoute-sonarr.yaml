@@ -1,0 +1,32 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "10"
+  labels:
+    app.kubernetes.io/component: main
+    app.kubernetes.io/instance: sonarr
+    app.kubernetes.io/name: sonarr
+    app.kubernetes.io/part-of: sonarr
+    app.kubernetes.io/version: 4.0.16
+  name: sonarr
+  namespace: sonarr
+spec:
+  hostnames:
+    - sonarr.vegapunk.cloud
+  parentRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: internal
+      namespace: gateway
+  rules:
+    - backendRefs:
+        - group: ""
+          kind: Service
+          name: oauth2-proxy
+          port: 80
+          weight: 1
+      matches:
+        - path:
+            type: PathPrefix
+            value: /

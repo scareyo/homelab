@@ -1,0 +1,23 @@
+apiVersion: v1
+data:
+  oauth2_proxy.cfg: |
+    upstreams="http://sonarr.sonarr.svc.cluster.local"
+    email_domains="*"
+    redirect_url="https://sonarr.vegapunk.cloud/oauth2/callback"
+    provider="oidc"
+    scope="openid email profile groups"
+    oidc_issuer_url="https://id.vegapunk.cloud"
+    provider_display_name="Pocket ID"
+    custom_sign_in_logo="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/sonarr.svg"
+    banner="Sonarr"
+    insecure_oidc_allow_unverified_email="true"
+kind: ConfigMap
+metadata:
+  labels:
+    app.kubernetes.io/component: authentication-proxy
+    app.kubernetes.io/instance: oauth2-proxy-sonarr
+    app.kubernetes.io/name: oauth2-proxy
+    app.kubernetes.io/part-of: sonarr
+    app.kubernetes.io/version: v7.13.0
+  name: oauth2-proxy
+  namespace: sonarr

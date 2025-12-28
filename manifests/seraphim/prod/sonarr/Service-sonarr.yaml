@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/component: main
+    app.kubernetes.io/instance: sonarr
+    app.kubernetes.io/name: sonarr
+    app.kubernetes.io/part-of: sonarr
+    app.kubernetes.io/version: 4.0.16
+  name: sonarr
+  namespace: sonarr
+spec:
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: http
+  selector:
+    app.kubernetes.io/name: sonarr

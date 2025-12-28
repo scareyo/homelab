@@ -48,8 +48,6 @@
           fsGroupChangePolicy = "OnRootMismatch";
         };
 
-        dnsPolicy = workload.dnsPolicy;
-
         volumes = lib.mapAttrsToList (name: volume: {
           name = name;
         }

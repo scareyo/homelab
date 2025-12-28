@@ -1,0 +1,15 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: sonarr
+  namespace: argocd
+spec:
+  destination:
+    namespace: sonarr
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    path: ./manifests/seraphim/prod/sonarr
+    repoURL: https://github.com/scareyo/homelab.git
+    targetRevision: main
+  syncPolicy: {}
