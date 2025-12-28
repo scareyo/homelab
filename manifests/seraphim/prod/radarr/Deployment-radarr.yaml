@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/component: main
+    app.kubernetes.io/instance: radarr
+    app.kubernetes.io/name: radarr
+    app.kubernetes.io/part-of: radarr
+    app.kubernetes.io/version: 6.1.0
+  name: radarr
+  namespace: radarr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: radarr
+      app.kubernetes.io/name: radarr
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: main
+        app.kubernetes.io/instance: radarr
+        app.kubernetes.io/name: radarr
+        app.kubernetes.io/part-of: radarr
+        app.kubernetes.io/version: 6.1.0
+    spec:
+      containers:
+        - env:
+            - name: RADARR__AUTH__METHOD
+              value: External
+          image: ghcr.io/home-operations/radarr:6.1.0
+          name: radarr
+          ports:
+            - containerPort: 7878
+              name: http
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+          volumeMounts:
+            - mountPath: /config
+              name: config
+      securityContext:
+        fsGroup: 65534
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 1000
+        runAsUser: 1000
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: config
