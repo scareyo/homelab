@@ -32,6 +32,24 @@ in
             path = "/config";
             size = "4Gi";
           };
+          downloads = {
+            type = "nfs";
+            path = "/downloads";
+            nfs = {
+              server = "nami.int.scarey.me";
+              path = "/mnt/nami-01/media/downloads";
+              readOnly = true;
+            };
+          };
+          media = {
+            type = "nfs";
+            path = "/media";
+            nfs = {
+              server = "nami.int.scarey.me";
+              path = "/mnt/nami-01/media/shows";
+              readOnly = false;
+            };
+          };
         };
 
         route = {

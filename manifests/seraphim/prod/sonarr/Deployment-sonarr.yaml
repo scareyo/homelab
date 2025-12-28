@@ -42,6 +42,10 @@ spec:
           volumeMounts:
             - mountPath: /config
               name: config
+            - mountPath: /downloads
+              name: downloads
+            - mountPath: /media
+              name: media
       securityContext:
         fsGroup: 65534
         fsGroupChangePolicy: OnRootMismatch
@@ -51,3 +55,13 @@ spec:
         - name: config
           persistentVolumeClaim:
             claimName: config
+        - name: downloads
+          nfs:
+            path: /mnt/nami-01/media/downloads
+            readOnly: true
+            server: nami.int.scarey.me
+        - name: media
+          nfs:
+            path: /mnt/nami-01/media/shows
+            readOnly: false
+            server: nami.int.scarey.me

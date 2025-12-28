@@ -51,14 +51,21 @@
         volumes = lib.mapAttrsToList (name: volume: {
           name = name;
         }
+        // lib.optionalAttrs (volume.type == "configMap") {
+          configMap.name = name;
+        }
         // lib.optionalAttrs (volume.type == "emptyDir") {
           emptyDir = {};
         }
+        // lib.optionalAttrs (volume.type == "nfs") {
+          nfs = {
+            server = volume.nfs.server;
+            path = volume.nfs.path;
+            readOnly = volume.nfs.readOnly;
+          };
+        }
         // lib.optionalAttrs (volume.type == "pvc") {
           persistentVolumeClaim.claimName = name;
-        }
-        // lib.optionalAttrs (volume.type == "configMap") {
-          configMap.name = name;
         }) persistence;
       };
     };

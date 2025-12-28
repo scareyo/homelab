@@ -6,6 +6,7 @@ lib.types.submodule {
       type = lib.types.enum [
         "configMap"
         "emptyDir"
+        "nfs"
         "pvc"
       ];
       default = "emptyDir";
@@ -37,6 +38,28 @@ lib.types.submodule {
       type = lib.types.nullOr lib.types.str;
       default = null;
       description = "Persistence storage class";
+    };
+
+    nfs = lib.mkOption {
+      type = lib.types.nullOr (lib.types.submodule {
+        options = {
+          server = lib.mkOption {
+            type = lib.types.nullOr lib.types.str;
+            default = null;
+            description = "NFS server";
+          };
+          path = lib.mkOption {
+            type = lib.types.nullOr lib.types.str;
+            default = null;
+            description = "NFS remote path";
+          };
+          readOnly = lib.mkOption {
+            type = lib.types.bool;
+            default = true;
+            description = "NFS share read only";
+          };
+        };
+      });
     };
   };
 }
