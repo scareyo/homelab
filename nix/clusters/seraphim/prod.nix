@@ -23,6 +23,7 @@
     external-secrets.enable = true;
     external-snapshotter.enable = true;
     gateway.enable = true;
+    jellyfin.enable = true;
     monitoring.enable = true;
     pocket-id.enable = true;
     prowlarr.enable = true;

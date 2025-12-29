@@ -1,0 +1,22 @@
+apiVersion: velero.io/v1
+kind: Schedule
+metadata:
+  labels:
+    app.kubernetes.io/component: main
+    app.kubernetes.io/instance: jellyfin
+    app.kubernetes.io/name: jellyfin
+    app.kubernetes.io/part-of: jellyfin
+    app.kubernetes.io/version: 10.11.5
+  name: jellyfin-daily
+  namespace: velero
+spec:
+  schedule: 0 4 * * *
+  template:
+    includedNamespaces:
+      - jellyfin
+    includedResources:
+      - pv
+      - pvc
+    snapshotMoveData: true
+    snapshotVolumes: true
+    ttl: 168h0m0s
