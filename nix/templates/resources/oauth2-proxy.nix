@@ -34,6 +34,7 @@ let
   };
 
   workload = {
+    type = "deployment";
     component = "authentication-proxy";
     image = "quay.io/oauth2-proxy/oauth2-proxy";
     version = version;

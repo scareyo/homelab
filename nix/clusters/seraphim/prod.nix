@@ -27,6 +27,7 @@
     pocket-id.enable = true;
     prowlarr.enable = true;
     radarr.enable = true;
+    recyclarr.enable = true;
     renovate.enable = true;
     rook.enable = true;
     sonarr.enable = true;

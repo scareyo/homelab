@@ -2,6 +2,15 @@
 
 lib.types.submodule {
   options = {
+    type = lib.mkOption {
+      type = lib.types.enum [
+        "cronjob"
+        "deployment"
+      ];
+      default = "deployment";
+      description = "Workload type";
+    };
+
     image = lib.mkOption {
       type = lib.types.str;
       description = "Workload container image";
@@ -13,7 +22,8 @@ lib.types.submodule {
     };
 
     port = lib.mkOption {
-      type = lib.types.int;
+      type = lib.types.nullOr lib.types.int;
+      default = null;
       description = "Workload container port";
     };
 
@@ -25,6 +35,7 @@ lib.types.submodule {
 
     env = lib.mkOption {
       type = lib.types.attrsOf (lib.types.oneOf [lib.types.str lib.types.attrs]);
+      default = {};
       description = "Workload container env";
     };
 

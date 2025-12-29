@@ -1,0 +1,15 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: recyclarr
+  namespace: argocd
+spec:
+  destination:
+    namespace: recyclarr
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    path: ./manifests/seraphim/prod/recyclarr
+    repoURL: https://github.com/scareyo/homelab.git
+    targetRevision: main
+  syncPolicy: {}

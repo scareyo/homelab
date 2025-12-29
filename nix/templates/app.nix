@@ -54,7 +54,7 @@
       };
     in {
       deployments = {
-        ${name} = lib.mkIf (workload != null)
+        ${name} = lib.mkIf (workload != null && workload.type == "deployment")
           (import ./resources/deployment.nix {
             inherit lib;
             inherit labels;
@@ -66,8 +66,19 @@
         oauth2-proxy = oauth2-proxy.deployment;
       };
 
+      cronJobs = {
+        ${name} = lib.mkIf (workload != null && workload.type == "cronjob")
+          (import ./resources/deployment.nix {
+            inherit lib;
+            inherit labels;
+            inherit name;
+            inherit persistence;
+            inherit workload;
+          });
+      };
+
       services = {
-        ${name} = lib.mkIf (workload != null)
+        ${name} = lib.mkIf (workload != null && workload.port != null)
           (import ./resources/service.nix {
             inherit name;
             inherit labels;
