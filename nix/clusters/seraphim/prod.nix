@@ -31,7 +31,6 @@
     recyclarr.enable = true;
     renovate.enable = true;
     rook.enable = true;
-    seedsync.enable = true;
     seerr.enable = true;
     sonarr.enable = true;
     velero.enable = true;
