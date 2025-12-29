@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/component: main
+    app.kubernetes.io/instance: seedsync
+    app.kubernetes.io/name: seedsync
+    app.kubernetes.io/part-of: seedsync
+    app.kubernetes.io/version: 0.8.6
+  name: seedsync
+  namespace: seedsync
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: seedsync
+      app.kubernetes.io/name: seedsync
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: main
+        app.kubernetes.io/instance: seedsync
+        app.kubernetes.io/name: seedsync
+        app.kubernetes.io/part-of: seedsync
+        app.kubernetes.io/version: 0.8.6
+    spec:
+      containers:
+        - env: []
+          image: ipsingh06/seedsync:0.8.6
+          name: seedsync
+          ports:
+            - containerPort: 8800
+              name: http
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+          volumeMounts:
+            - mountPath: /config
+              name: config
+            - mountPath: /downloads
+              name: downloads
+            - mountPath: /home/seedsync
+              name: home
+            - mountPath: /var/tmp
+              name: tmp
+      securityContext:
+        fsGroup: 65534
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 1000
+        runAsUser: 1000
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: config
+        - name: downloads
+          nfs:
+            path: /mnt/nami-01/media/downloads
+            readOnly: false
+            server: nami.int.scarey.me
+        - emptyDir: {}
+          name: home
+        - emptyDir: {}
+          name: tmp

@@ -27,10 +27,11 @@ let
           readOnlyRootFilesystem = true;
         };
 
-        volumeMounts = lib.mapAttrsToList (name: volume: {
-          name = name;
-          mountPath = volume.path;
-        }) persistence;
+        volumeMounts = lib.mkIf (persistence != null)
+          (lib.mapAttrsToList (name: volume: {
+            name = name;
+            mountPath = volume.path;
+          }) persistence);
       };
 
       securityContext = {
@@ -40,25 +41,26 @@ let
         fsGroupChangePolicy = "OnRootMismatch";
       };
 
-      volumes = lib.mapAttrsToList (name: volume: {
-        name = name;
-      }
-      // lib.optionalAttrs (volume.type == "cm") {
-        configMap.name = name;
-      }
-      // lib.optionalAttrs (volume.type == "emptyDir") {
-        emptyDir = {};
-      }
-      // lib.optionalAttrs (volume.type == "nfs") {
-        nfs = {
-          server = volume.config.server;
-          path = volume.config.path;
-          readOnly = volume.config.readOnly;
-        };
-      }
-      // lib.optionalAttrs (volume.type == "pvc") {
-        persistentVolumeClaim.claimName = name;
-      }) persistence;
+      volumes = lib.mkIf (persistence != null)
+        (lib.mapAttrsToList (name: volume: {
+          name = name;
+        }
+        // lib.optionalAttrs (volume.type == "cm") {
+          configMap.name = name;
+        }
+        // lib.optionalAttrs (volume.type == "emptyDir") {
+          emptyDir = {};
+        }
+        // lib.optionalAttrs (volume.type == "nfs") {
+          nfs = {
+            server = volume.config.server;
+            path = volume.config.path;
+            readOnly = volume.config.readOnly;
+          };
+        }
+        // lib.optionalAttrs (volume.type == "pvc") {
+          persistentVolumeClaim.claimName = name;
+        }) persistence);
     } // lib.optionalAttrs (workload.type == "cronjob") {
       restartPolicy = "OnFailure";
     };
