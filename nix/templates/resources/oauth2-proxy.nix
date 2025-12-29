@@ -2,6 +2,8 @@
 
 let
   version = "v7.13.0";
+  hostname = (if route.hostname == null then "${name}.vegapunk.cloud" else route.hostname);
+
   labels = {
     "app.kubernetes.io/name" = "oauth2-proxy";
     "app.kubernetes.io/instance" = "oauth2-proxy-${namespace}";
@@ -9,12 +11,28 @@ let
     "app.kubernetes.io/component" = "authentication-proxy";
     "app.kubernetes.io/part-of" = namespace;
   };
+
   persistence = {
     oauth2-proxy = {
-      type = "configMap";
+      type = "cm";
       path = "/etc/oauth2_proxy";
+      config = {
+        data."oauth2_proxy.cfg" = ''
+          upstreams="http://${name}.${namespace}.svc.cluster.local"
+          email_domains="*"
+          redirect_url="https://${hostname}/oauth2/callback"
+          provider="oidc"
+          scope="openid email profile groups"
+          oidc_issuer_url="https://id.vegapunk.cloud"
+          provider_display_name="Pocket ID"
+          custom_sign_in_logo="${route.auth.logo}"
+          banner="${route.auth.banner}"
+          insecure_oidc_allow_unverified_email="true"
+        '';
+      };
     };
   };
+
   workload = {
     component = "authentication-proxy";
     image = "quay.io/oauth2-proxy/oauth2-proxy";
@@ -62,23 +80,8 @@ in {
     name = "oauth2-proxy";
   });
 
-  configMap = let
-    hostname = (if route.hostname == null then "${name}.vegapunk.cloud" else route.hostname);
-  in {
-    metadata = {
-      inherit labels;
-    };
-    data."oauth2_proxy.cfg" = ''
-      upstreams="http://${name}.${namespace}.svc.cluster.local"
-      email_domains="*"
-      redirect_url="https://${hostname}/oauth2/callback"
-      provider="oidc"
-      scope="openid email profile groups"
-      oidc_issuer_url="https://id.vegapunk.cloud"
-      provider_display_name="Pocket ID"
-      custom_sign_in_logo="${route.auth.logo}"
-      banner="${route.auth.banner}"
-      insecure_oidc_allow_unverified_email="true"
-    '';
-  };
+  configMap = (import ./configmap.nix {
+    inherit labels;
+    persistence = persistence.oauth2-proxy;
+  });
 }

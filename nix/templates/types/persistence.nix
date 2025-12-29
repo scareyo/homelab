@@ -4,7 +4,7 @@ let
   cm = {
     options = {
       data = lib.mkOption {
-        type = lib.types.str;
+        type = lib.types.attrsOf lib.types.str;
         description = "ConfigMap data";
       };
     };

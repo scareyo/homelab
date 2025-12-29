@@ -76,7 +76,15 @@
         oauth2-proxy = oauth2-proxy.service;
       };
       
-      configMaps.oauth2-proxy = lib.mkIf (route != null && route.auth.enable) oauth2-proxy.configMap;
+      configMaps = lib.mkIf (persistence != null)
+        ((lib.mapAttrs (name: persistence: lib.mkIf (persistence.type == "cm")
+          (import ./resources/configmap.nix {
+            inherit labels;
+            inherit persistence;
+          })) persistence)
+      // lib.optionalAttrs (route != null && route.auth.enable) {
+        oauth2-proxy = oauth2-proxy.configMap;
+      });
 
       core.v1.PersistentVolumeClaim = lib.mkIf (persistence != null)
         (lib.mapAttrs (name: pvc: lib.mkIf (pvc.type == "pvc")

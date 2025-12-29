@@ -51,7 +51,7 @@
         volumes = lib.mapAttrsToList (name: volume: {
           name = name;
         }
-        // lib.optionalAttrs (volume.type == "configMap") {
+        // lib.optionalAttrs (volume.type == "cm") {
           configMap.name = name;
         }
         // lib.optionalAttrs (volume.type == "emptyDir") {
