@@ -34,21 +34,12 @@ in
               size = "4Gi";
             };
           };
-          downloads = {
-            type = "nfs";
-            path = "/downloads";
-            config = {
-              server = "nami.int.scarey.me";
-              path = "/mnt/nami-01/media/downloads";
-              readOnly = true;
-            };
-          };
           media = {
             type = "nfs";
             path = "/media";
             config = {
               server = "nami.int.scarey.me";
-              path = "/mnt/nami-01/media/shows";
+              path = "/mnt/nami-01/media";
               readOnly = false;
             };
           };
