@@ -59,9 +59,9 @@
         }
         // lib.optionalAttrs (volume.type == "nfs") {
           nfs = {
-            server = volume.nfs.server;
-            path = volume.nfs.path;
-            readOnly = volume.nfs.readOnly;
+            server = volume.config.server;
+            path = volume.config.path;
+            readOnly = volume.config.readOnly;
           };
         }
         // lib.optionalAttrs (volume.type == "pvc") {

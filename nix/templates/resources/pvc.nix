@@ -5,10 +5,10 @@
     inherit labels;
   };
   spec = {
-    accessModes = persistence.${name}.accessMode;
-    resources.requests.storage = persistence.${name}.size;
+    accessModes = persistence.${name}.config.accessMode;
+    resources.requests.storage = persistence.${name}.config.size;
   }
-  // lib.optionalAttrs (persistence.${name}.storageClass != null) {
-      storageClassName = persistence.${name}.storageClass;
+  // lib.optionalAttrs (persistence.${name}.config.storageClass != null) {
+      storageClassName = persistence.${name}.config.storageClass;
   };
 }

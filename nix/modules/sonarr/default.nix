@@ -30,12 +30,14 @@ in
           config = {
             type = "pvc";
             path = "/config";
-            size = "4Gi";
+            config = {
+              size = "4Gi";
+            };
           };
           downloads = {
             type = "nfs";
             path = "/downloads";
-            nfs = {
+            config = {
               server = "nami.int.scarey.me";
               path = "/mnt/nami-01/media/downloads";
               readOnly = true;
@@ -44,7 +46,7 @@ in
           media = {
             type = "nfs";
             path = "/media";
-            nfs = {
+            config = {
               server = "nami.int.scarey.me";
               path = "/mnt/nami-01/media/shows";
               readOnly = false;

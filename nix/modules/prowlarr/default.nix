@@ -30,7 +30,9 @@ in
           config = {
             type = "pvc";
             path = "/config";
-            size = "4Gi";
+            config = {
+              size = "4Gi";
+            };
           };
         };
 
