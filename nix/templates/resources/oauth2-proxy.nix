@@ -1,6 +1,7 @@
 { lib, name, namespace, route }:
 
 let
+  image = "quay.io/oauth2-proxy/oauth2-proxy";
   version = "v7.13.0";
   hostname = (if route.hostname == null then "${name}.vegapunk.cloud" else route.hostname);
 
@@ -36,7 +37,7 @@ let
   workload = {
     type = "deployment";
     component = "authentication-proxy";
-    image = "quay.io/oauth2-proxy/oauth2-proxy";
+    image = image;
     version = version;
     port = 8080;
     args = [
