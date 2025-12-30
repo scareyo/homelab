@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/instance: newt
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: newt
+    app.kubernetes.io/version: 1.5.0
+    helm.sh/chart: newt-1.1.0
+    newt.instance: main
+  name: newt-newt-main
+  namespace: newt
+spec:
+  ports:
+    - name: wg
+      port: 51820
+      protocol: UDP
+      targetPort: 51820
+    - name: tester
+      port: 51821
+      protocol: UDP
+      targetPort: 51821
+  selector:
+    app.kubernetes.io/instance: newt
+    newt.instance: main
+  type: LoadBalancer

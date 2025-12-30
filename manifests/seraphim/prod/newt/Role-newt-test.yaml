@@ -1,0 +1,42 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  annotations:
+    helm.sh/hook: test
+    helm.sh/hook-delete-policy: hook-succeeded,hook-failed,before-hook-creation
+    helm.sh/hook-weight: "-4"
+    meta.helm.sh/release-name: newt
+    meta.helm.sh/release-namespace: newt
+  labels:
+    app.kubernetes.io/component: test
+    app.kubernetes.io/instance: newt
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: newt
+  name: newt-test
+  namespace: newt
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - pods
+      - pods/log
+      - services
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - pods/exec
+    verbs:
+      - create
+  - apiGroups:
+      - apps
+    resources:
+      - deployments
+      - statefulsets
+    verbs:
+      - get
+      - list
+      - watch

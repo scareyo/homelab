@@ -25,6 +25,7 @@
     gateway.enable = true;
     jellyfin.enable = true;
     monitoring.enable = true;
+    newt.enable = true;
     pocket-id.enable = true;
     prowlarr.enable = true;
     radarr.enable = true;

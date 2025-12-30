@@ -1,0 +1,89 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/component: newt
+    app.kubernetes.io/instance: newt
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: newt
+    app.kubernetes.io/version: 1.5.0
+    helm.sh/chart: newt-1.1.0
+    newt.instance: main
+  name: newt-newt-main
+  namespace: newt
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: newt
+      newt.instance: main
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: newt
+        app.kubernetes.io/instance: newt
+        newt.instance: main
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - env:
+            - name: PANGOLIN_ENDPOINT
+              valueFrom:
+                secretKeyRef:
+                  key: pangolin-url
+                  name: newt
+            - name: NEWT_ID
+              valueFrom:
+                secretKeyRef:
+                  key: newt-id
+                  name: newt
+            - name: NEWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  key: newt-secret
+                  name: newt
+            - name: LOG_LEVEL
+              value: INFO
+            - name: HEALTH_FILE
+              value: /tmp/healthy
+          image: docker.io/fosrl/newt:1.5.0
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            exec:
+              command:
+                - test
+                - -f
+                - /tmp/healthy
+            initialDelaySeconds: 10
+            periodSeconds: 15
+          name: newt
+          ports:
+            - containerPort: 51820
+              name: wg
+              protocol: UDP
+            - containerPort: 51821
+              name: tester
+              protocol: UDP
+          readinessProbe:
+            exec:
+              command:
+                - test
+                - -f
+                - /tmp/healthy
+            failureThreshold: 3
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          resources:
+            limits:
+              cpu: 200m
+              ephemeral-storage: 256Mi
+              memory: 256Mi
+            requests:
+              cpu: 100m
+              ephemeral-storage: 128Mi
+              memory: 128Mi
+          securityContext:
+            allowPrivilegeEscalation: true
+            readOnlyRootFilesystem: false
+            runAsUser: 0

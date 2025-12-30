@@ -1,0 +1,24 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  annotations:
+    helm.sh/hook: test
+    helm.sh/hook-delete-policy: hook-succeeded,hook-failed,before-hook-creation
+    helm.sh/hook-weight: "-3"
+    meta.helm.sh/release-name: newt
+    meta.helm.sh/release-namespace: newt
+  labels:
+    app.kubernetes.io/component: test
+    app.kubernetes.io/instance: newt
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: newt
+  name: newt-test
+  namespace: newt
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: newt-test
+subjects:
+  - kind: ServiceAccount
+    name: newt-test
+    namespace: newt
