@@ -5,7 +5,8 @@ metadata:
     app.kubernetes.io/instance: vl-collector
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: victoria-logs-collector
-    helm.sh/chart: victoria-logs-collector-0.1.2
+    app.kubernetes.io/version: v1.43.1
+    helm.sh/chart: victoria-logs-collector-0.2.4
   name: vl-collector-victoria-logs-collector
   namespace: monitoring
 spec:
@@ -15,22 +16,32 @@ spec:
       app.kubernetes.io/name: victoria-logs-collector
   template:
     metadata:
-      annotations:
-        checksum/config: dae633b4455227fb331ee7fef5a1f63e186555f86b2ce3cb4c8f4786cedfa8f5
       labels:
         app.kubernetes.io/instance: vl-collector
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: victoria-logs-collector
     spec:
       containers:
-        - env:
-            - name: VECTOR_SELF_NODE_NAME
-              valueFrom:
-                fieldRef:
-                  fieldPath: spec.nodeName
-          image: docker.io/timberio/vector:0.51.1-alpine
+        - args:
+            - --envflag.enable
+            - --envflag.prefix=VL_
+            - --kubernetesCollector
+            - --kubernetesCollector.includeNodeAnnotations=false
+            - --kubernetesCollector.includeNodeLabels=false
+            - --kubernetesCollector.includePodAnnotations=false
+            - --kubernetesCollector.includePodLabels
+            - --kubernetesCollector.msgField=message.msg,message,msg
+            - --kubernetesCollector.timeField=message.time,message.ts,message.timestamp,m,time,ts,timestamp
+            - --remoteWrite.headers="AccountID:0^^ProjectID:0"
+            - --remoteWrite.url=http://vlsingle-victoria-logs:9428/insert/native
+            - --tmpDataPath=/vl-collector
+          image: victoriametrics/vlagent:v1.43.1
           imagePullPolicy: IfNotPresent
-          name: victoria-logs-collector
+          name: collector
+          ports:
+            - containerPort: 9429
+              name: http
+              protocol: TCP
           securityContext: {}
           volumeMounts:
             - mountPath: /var/log
@@ -38,9 +49,6 @@ spec:
               readOnly: true
             - mountPath: /var/lib
               name: varlib
-              readOnly: true
-            - mountPath: /etc/vector
-              name: config
               readOnly: true
             - mountPath: /vl-collector
               name: vl-collector-data
@@ -53,9 +61,6 @@ spec:
         - hostPath:
             path: /var/lib
           name: varlib
-        - configMap:
-            name: vl-collector-victoria-logs-collector-config
-          name: config
         - hostPath:
             path: /var/lib/vl-collector
           name: vl-collector-data
