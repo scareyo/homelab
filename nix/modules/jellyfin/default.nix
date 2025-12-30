@@ -35,9 +35,18 @@ in
             type = "emptyDir";
             path = "/cache";
           };
+          movies = {
+            type = "nfs";
+            path = "/mnt/media/movies";
+            config = {
+              server = "nami.int.scarey.me";
+              path = "/mnt/nami-01/media/movies";
+              readOnly = true;
+            };
+          };
           shows = {
             type = "nfs";
-            path = "/media/shows";
+            path = "/mnt/media/shows";
             config = {
               server = "nami.int.scarey.me";
               path = "/mnt/nami-01/media/shows";

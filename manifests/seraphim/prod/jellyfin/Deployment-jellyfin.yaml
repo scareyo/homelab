@@ -42,7 +42,9 @@ spec:
               name: cache
             - mountPath: /config
               name: config
-            - mountPath: /media/shows
+            - mountPath: /mnt/media/movies
+              name: movies
+            - mountPath: /mnt/media/shows
               name: shows
       securityContext:
         fsGroup: 65534
@@ -55,6 +57,11 @@ spec:
         - name: config
           persistentVolumeClaim:
             claimName: config
+        - name: movies
+          nfs:
+            path: /mnt/nami-01/media/movies
+            readOnly: true
+            server: nami.int.scarey.me
         - name: shows
           nfs:
             path: /mnt/nami-01/media/shows
