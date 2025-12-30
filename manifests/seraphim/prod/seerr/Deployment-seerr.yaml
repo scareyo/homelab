@@ -6,7 +6,7 @@ metadata:
     app.kubernetes.io/instance: seerr
     app.kubernetes.io/name: seerr
     app.kubernetes.io/part-of: seerr
-    app.kubernetes.io/version: 2.7.3
+    app.kubernetes.io/version: preview-OIDC
   name: seerr
   namespace: seerr
 spec:
@@ -22,11 +22,11 @@ spec:
         app.kubernetes.io/instance: seerr
         app.kubernetes.io/name: seerr
         app.kubernetes.io/part-of: seerr
-        app.kubernetes.io/version: 2.7.3
+        app.kubernetes.io/version: preview-OIDC
     spec:
       containers:
         - env: []
-          image: fallenbagel/jellyseerr:2.7.3
+          image: fallenbagel/jellyseerr:preview-OIDC
           name: seerr
           ports:
             - containerPort: 5055

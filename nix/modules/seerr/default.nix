@@ -19,7 +19,7 @@ in
 
         workload = {
           image = "fallenbagel/jellyseerr";
-          version = "2.7.3";
+          version = "preview-OIDC";
           port = 5055;
         };
 
