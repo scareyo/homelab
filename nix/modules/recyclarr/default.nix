@@ -101,6 +101,14 @@ in
             };
           };
         };
+
+        backup = {
+          daily = {
+            restore = true;
+            schedule = "0 4 * * *";
+            ttl = "168h0m0s"; # 1 week
+          };
+        };
       };
 
       templates.externalSecret.recyclarr = {
