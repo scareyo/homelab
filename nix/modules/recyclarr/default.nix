@@ -90,6 +90,13 @@ in
               };
             };
           };
+          data = {
+            type = "pvc";
+            path = "/config";
+            config = {
+              size = "4Gi";
+            };
+          };
         };
       };
 
