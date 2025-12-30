@@ -58,6 +58,8 @@ in
                         - template: radarr-quality-definition-movie
                         - template: radarr-quality-profile-uhd-bluray-web
                         - template: radarr-custom-formats-uhd-bluray-web
+                        - template: radarr-quality-profile-remux-web-1080p
+                        - template: radarr-custom-formats-remux-web-1080p
 
                       custom_formats:
                         # Movie Versions
@@ -67,6 +69,7 @@ in
                             - 9f6cbff8cfe4ebbc1bde14c7b7bec0de # IMAX Enhanced
                           assign_scores_to:
                             - name: UHD Bluray + WEB
+                            - name: Remux + WEB 1080p
 
                         - trash_ids:
                             - 923b6abef9b17f937fab56cfcf89e1f1 # DV (w/o HDR fallback)
@@ -78,7 +81,8 @@ in
                         - trash_ids:
                             - 25c12f78430a3a23413652cbd1d48d77 # SDR (no WEBDL)
                           assign_scores_to:
-                          - name: UHD Bluray + WEB
+                            - name: UHD Bluray + WEB
+                            - name: Remux + WEB 1080p
                   sonarr:
                     web-2160p-v4:
                       base_url: http://sonarr.sonarr
