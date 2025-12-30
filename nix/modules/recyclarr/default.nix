@@ -52,7 +52,7 @@ in
                   radarr:
                     uhd-bluray-web:
                       base_url: http://radarr.radarr
-                      api_key: !env_var SONARR_API_KEY
+                      api_key: !env_var RADARR_API_KEY
 
                       include:
                         - template: radarr-quality-definition-movie
