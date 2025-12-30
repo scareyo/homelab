@@ -18,8 +18,8 @@ in
         inherit namespace;
 
         workload = {
-          image = "ghcr.io/seerr-team/seerr";
-          version = "sha-8bbe786";
+          image = "fallenbagel/jellyseerr";
+          version = "2.7.3";
           port = 5055;
         };
 
