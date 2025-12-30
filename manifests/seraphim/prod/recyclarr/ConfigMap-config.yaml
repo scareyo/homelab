@@ -1,6 +1,36 @@
 apiVersion: v1
 data:
   recyclarr.yaml: |
+    radarr:
+      uhd-bluray-web:
+        base_url: http://radarr.radarr
+        api_key: !env_var SONARR_API_KEY
+
+        include:
+          - template: radarr-quality-definition-movie
+          - template: radarr-quality-profile-uhd-bluray-web
+          - template: radarr-custom-formats-uhd-bluray-web
+
+        custom_formats:
+          # Movie Versions
+          - trash_ids:
+              - 570bc9ebecd92723d2d21500f4be314c # Remaster
+              - eca37840c13c6ef2dd0262b141a5482f # 4K Remaster
+              - 9f6cbff8cfe4ebbc1bde14c7b7bec0de # IMAX Enhanced
+            assign_scores_to:
+              - name: UHD Bluray + WEB
+
+          - trash_ids:
+              - 923b6abef9b17f937fab56cfcf89e1f1 # DV (w/o HDR fallback)
+              - b337d6812e06c200ec9a2d3cfa9d20a7 # DV Boost
+              - caa37d0df9c348912df1fb1d88f9273a # HDR10+ Boost
+            assign_scores_to:
+              - name: UHD Bluray + WEB
+
+          - trash_ids:
+              - 25c12f78430a3a23413652cbd1d48d77 # SDR (no WEBDL)
+            assign_scores_to:
+            - name: UHD Bluray + WEB
     sonarr:
       web-2160p-v4:
         base_url: http://sonarr.sonarr
