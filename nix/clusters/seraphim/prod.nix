@@ -35,6 +35,5 @@
     seerr.enable = true;
     sonarr.enable = true;
     velero.enable = true;
-    wiredoor.enable = true;
   };
 }
