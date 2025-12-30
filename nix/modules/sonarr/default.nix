@@ -36,7 +36,7 @@ in
           };
           media = {
             type = "nfs";
-            path = "/media";
+            path = "/mnt/media";
             config = {
               server = "nami.int.scarey.me";
               path = "/mnt/nami-01/media";

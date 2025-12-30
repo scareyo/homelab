@@ -42,6 +42,8 @@ spec:
           volumeMounts:
             - mountPath: /config
               name: config
+            - mountPath: /mnt/media
+              name: media
       securityContext:
         fsGroup: 65534
         fsGroupChangePolicy: OnRootMismatch
@@ -51,3 +53,8 @@ spec:
         - name: config
           persistentVolumeClaim:
             claimName: config
+        - name: media
+          nfs:
+            path: /mnt/nami-01/media
+            readOnly: false
+            server: nami.int.scarey.me

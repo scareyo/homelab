@@ -42,7 +42,7 @@ spec:
           volumeMounts:
             - mountPath: /config
               name: config
-            - mountPath: /media
+            - mountPath: /mnt/media
               name: media
       securityContext:
         fsGroup: 65534

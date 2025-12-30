@@ -34,6 +34,15 @@ in
               size = "4Gi";
             };
           };
+          media = {
+            type = "nfs";
+            path = "/mnt/media";
+            config = {
+              server = "nami.int.scarey.me";
+              path = "/mnt/nami-01/media";
+              readOnly = false;
+            };
+          };
         };
 
         route = {
