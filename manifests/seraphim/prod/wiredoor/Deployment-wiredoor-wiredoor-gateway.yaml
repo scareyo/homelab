@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/instance: wiredoor
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: wiredoor-gateway
+    app.kubernetes.io/part-of: wiredoor
+    app.kubernetes.io/version: 1.1.2
+    helm.sh/chart: wiredoor-gateway-1.0.1
+  name: wiredoor-wiredoor-gateway
+  namespace: wiredoor
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: wiredoor
+      app.kubernetes.io/name: wiredoor-gateway
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/instance: wiredoor
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: wiredoor-gateway
+        app.kubernetes.io/part-of: wiredoor
+        app.kubernetes.io/version: 1.1.2
+        helm.sh/chart: wiredoor-gateway-1.0.1
+    spec:
+      containers:
+        - envFrom:
+            - secretRef:
+                name: wiredoor
+          image: wiredoor/wiredoor-cli:v1.1.2
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - /usr/bin/wiredoor status --health
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            timeoutSeconds: 1
+          name: wiredoor-gateway
+          readinessProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - /usr/bin/wiredoor status --health
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: 100m
+              memory: 128Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+          securityContext:
+            capabilities:
+              add:
+                - NET_ADMIN
+      securityContext: {}
