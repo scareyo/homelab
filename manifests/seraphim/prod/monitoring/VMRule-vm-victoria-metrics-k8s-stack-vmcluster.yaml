@@ -7,7 +7,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: victoria-metrics-k8s-stack
     app.kubernetes.io/version: v0.28.1
-    helm.sh/chart: victoria-metrics-k8s-stack-0.66.0
+    helm.sh/chart: victoria-metrics-k8s-stack-0.66.1
   name: vm-victoria-metrics-k8s-stack-vmcluster
   namespace: monitoring
 spec:

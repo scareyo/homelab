@@ -11,6 +11,6 @@ metadata:
     app.kubernetes.io/name: victoria-metrics-k8s-stack
     app.kubernetes.io/version: v1.132.0
     grafana_dashboard: "1"
-    helm.sh/chart: victoria-metrics-k8s-stack-0.66.0
+    helm.sh/chart: victoria-metrics-k8s-stack-0.66.1
   name: vm-victoria-metrics-k8s-stack-victoriametrics-operator
   namespace: monitoring
