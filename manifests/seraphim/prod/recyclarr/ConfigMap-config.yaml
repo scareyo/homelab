@@ -9,6 +9,9 @@ data:
         include:
           - template: sonarr-quality-definition-series
           - template: sonarr-v4-custom-formats-web-2160p
+          - template: sonarr-quality-definition-anime
+          - template: sonarr-v4-quality-profile-anime
+          - template: sonarr-v4-custom-formats-anime
 
         quality_profiles:
           - name: WEB-2160p
