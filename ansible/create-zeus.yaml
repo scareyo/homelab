@@ -1,0 +1,46 @@
+# Playbook: Provision Wiredoor VPS
+#   - Install Pangolin on a Hetzner Cloud VPS
+---
+- name: Provision Cloud Machines
+  hosts: localhost
+  connection: local
+  tasks:
+    - name: Create Zeus
+      hetzner.hcloud.server:
+        name: zeus
+        api_token: "{{ lookup('secret', '/hcloud', 'API_TOKEN') }}"
+        server_type: cpx11
+        image: debian-13
+        location: ash
+        ssh_keys:
+          - scarey
+        state: started
+      register: zeus
+
+    - name: Update inventory
+      ansible.builtin.add_host:
+        name: zeus
+        ansible_host: "{{ zeus.hcloud_server.ipv4_address }}"
+
+    - name: Delete existing Wiredoor DNS record
+      community.general.cloudflare_dns:
+        zone: vegapunk.cloud
+        record: pangolin
+        type: A
+        api_token: "{{ lookup('secret', '/cloudflare', 'WIREDOOR_API_TOKEN') }}"
+        state: absent
+
+    - name: Create Wiredoor DNS record
+      community.general.cloudflare_dns:
+        zone: vegapunk.cloud
+        record: pangolin
+        type: A
+        value: "{{ zeus.hcloud_server.ipv4_address }}"
+        api_token: "{{ lookup('secret', '/cloudflare', 'WIREDOOR_API_TOKEN') }}"
+
+    - name: Wait for zeus to become available
+      ansible.builtin.wait_for:
+        port: 22
+        host: "{{ hostvars['zeus']['ansible_host'] }}"
+        search_regex: OpenSSH
+        timeout: 300

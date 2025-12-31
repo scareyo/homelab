@@ -37,4 +37,3 @@ seraphim:
     worker:
       hosts:
         s-shark:
-        zeus:

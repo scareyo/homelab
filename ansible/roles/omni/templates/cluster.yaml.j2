@@ -72,6 +72,8 @@ patches:
             - interface: enp89s0
               dhcp: false
               routes: []
+        sysctls:
+          net.ipv4.ip_forward: 1
 systemExtensions:
   - siderolabs/i915
   - siderolabs/intel-ucode
