@@ -18,6 +18,9 @@ in
         keys = [
           { source = "/homepage/JELLYFIN_API_KEY"; dest = "jellyfin-api-key"; }
           { source = "/homepage/SEERR_API_KEY"; dest = "seerr-api-key"; }
+          { source = "/qbittorrent/URL"; dest = "qbittorrent-url"; }
+          { source = "/qbittorrent/USERNAME"; dest = "qbittorrent-username"; }
+          { source = "/qbittorrent/PASSWORD"; dest = "qbittorrent-password"; }
           { source = "/sonarr/API_KEY"; dest = "sonarr-api-key"; }
           { source = "/radarr/API_KEY"; dest = "radarr-api-key"; }
         ];
@@ -36,6 +39,24 @@ in
               secretKeyRef = {
                 name = "integrations";
                 key = "jellyfin-api-key";
+              };
+            };
+            HOMEPAGE_VAR_QBITTORRENT_URL = {
+              secretKeyRef = {
+                name = "integrations";
+                key = "qbittorrent-url";
+              };
+            };
+            HOMEPAGE_VAR_QBITTORRENT_USERNAME = {
+              secretKeyRef = {
+                name = "integrations";
+                key = "qbittorrent-username";
+              };
+            };
+            HOMEPAGE_VAR_QBITTORRENT_PASSWORD = {
+              secretKeyRef = {
+                name = "integrations";
+                key = "qbittorrent-password";
               };
             };
             HOMEPAGE_VAR_RADARR_API_KEY = {
@@ -133,6 +154,19 @@ in
                             url: http://radarr.radarr
                             key: "{{HOMEPAGE_VAR_RADARR_API_KEY}}"
                             enableQueue: true
+                  - Seedbox:
+                      - qBittorrent:
+                          icon: qbittorrent
+                          description: Download client
+                          href: "{{HOMEPAGE_VAR_QBITTORRENT_URL}}"
+                          siteMonitor: "{{HOMEPAGE_VAR_QBITTORRENT_URL}}"
+                          widget:
+                            type: qbittorrent
+                            url: "{{HOMEPAGE_VAR_QBITTORRENT_URL}}"
+                            username: "{{HOMEPAGE_VAR_QBITTORRENT_USERNAME}}"
+                            password: "{{HOMEPAGE_VAR_QBITTORRENT_PASSWORD}}"
+                            enableLeechProgress: true
+                            enableLeechSize: true
                 '';
                 "widgets.yaml" = ''
                   - logo:

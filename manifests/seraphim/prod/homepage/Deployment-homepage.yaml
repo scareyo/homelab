@@ -33,6 +33,21 @@ spec:
                 secretKeyRef:
                   key: jellyfin-api-key
                   name: integrations
+            - name: HOMEPAGE_VAR_QBITTORRENT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: qbittorrent-password
+                  name: integrations
+            - name: HOMEPAGE_VAR_QBITTORRENT_URL
+              valueFrom:
+                secretKeyRef:
+                  key: qbittorrent-url
+                  name: integrations
+            - name: HOMEPAGE_VAR_QBITTORRENT_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  key: qbittorrent-username
+                  name: integrations
             - name: HOMEPAGE_VAR_RADARR_API_KEY
               valueFrom:
                 secretKeyRef:
