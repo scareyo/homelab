@@ -1,0 +1,8 @@
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  annotations: null
+  name: metrics-server-issuer
+  namespace: kube-system
+spec:
+  selfSigned: {}
