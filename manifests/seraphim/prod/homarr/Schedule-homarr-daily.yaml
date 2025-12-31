@@ -1,0 +1,16 @@
+apiVersion: velero.io/v1
+kind: Schedule
+metadata:
+  name: homarr-daily
+  namespace: velero
+spec:
+  schedule: 0 4 * * *
+  template:
+    includedNamespaces:
+      - homarr
+    includedResources:
+      - pv
+      - pvc
+    snapshotMoveData: true
+    snapshotVolumes: true
+    ttl: 168h0m0s

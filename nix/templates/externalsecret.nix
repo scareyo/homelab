@@ -22,6 +22,18 @@
               description = "Password length";
             };
 
+            symbols = lib.mkOption {
+              type = lib.types.nullOr lib.types.int;
+              default = null;
+              description = "Password number of symbols";
+            };
+
+            noUpper = lib.mkOption {
+              type = lib.types.bool;
+              default = false;
+              description = "Password contains no uppercase";
+            };
+
             dest = lib.mkOption {
               type = lib.types.str;
               description = "Destination key on the generated Secret";
@@ -94,7 +106,8 @@
           spec = {
             length = x.length;
             allowRepeat = true;
-            noUpper = false;
+            noUpper = x.noUpper;
+            symbols = lib.mkIf (x.symbols != null) x.symbols;
           };
         };
       }) (builtins.filter (x: x.type == "password") cfg.keys));
