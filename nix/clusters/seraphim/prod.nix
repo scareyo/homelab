@@ -37,6 +37,7 @@
     rook.enable = true;
     seerr.enable = true;
     sonarr.enable = true;
+    unpackerr.enable = true;
     velero.enable = true;
   };
 }

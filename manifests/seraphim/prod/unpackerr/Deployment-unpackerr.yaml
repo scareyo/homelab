@@ -1,0 +1,79 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/component: main
+    app.kubernetes.io/instance: unpackerr
+    app.kubernetes.io/name: unpackerr
+    app.kubernetes.io/part-of: unpackerr
+    app.kubernetes.io/version: 0.14.5
+  name: unpackerr
+  namespace: unpackerr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: unpackerr
+      app.kubernetes.io/name: unpackerr
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: main
+        app.kubernetes.io/instance: unpackerr
+        app.kubernetes.io/name: unpackerr
+        app.kubernetes.io/part-of: unpackerr
+        app.kubernetes.io/version: 0.14.5
+    spec:
+      containers:
+        - env:
+            - name: UN_RADARR_0_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: radarr-api-key
+                  name: unpackerr
+            - name: UN_RADARR_0_DELETE_DELAY
+              value: -1s
+            - name: UN_RADARR_0_SYNCTHING
+              value: "true"
+            - name: UN_RADARR_0_URL
+              value: http://radarr.radarr
+            - name: UN_SONARR_0_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: sonarr-api-key
+                  name: unpackerr
+            - name: UN_SONARR_0_DELETE_DELAY
+              value: -1s
+            - name: UN_SONARR_0_SYNCTHING
+              value: "true"
+            - name: UN_SONARR_0_URL
+              value: http://sonarr.sonarr
+          image: ghcr.io/unpackerr/unpackerr:0.14.5
+          name: unpackerr
+          ports:
+            - containerPort: 9696
+              name: http
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+          volumeMounts:
+            - mountPath: /config
+              name: config
+            - mountPath: /mnt/media/downloads
+              name: downloads
+      securityContext:
+        fsGroup: 65534
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 1000
+        runAsUser: 1000
+      volumes:
+        - emptyDir: {}
+          name: config
+        - name: downloads
+          nfs:
+            path: /mnt/nami-01/media/downloads
+            readOnly: false
+            server: nami.int.scarey.me
