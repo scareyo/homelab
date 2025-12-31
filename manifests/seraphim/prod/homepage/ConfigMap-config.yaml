@@ -2,18 +2,54 @@ apiVersion: v1
 data:
   bookmarks.yaml: |
     - Developer:
-        - Github:
-          - abbr: GH
-            href: https://github.com/
+        - scareyo/homelab:
+            - icon: github
+              description: My k8s homelab infrastructure
+              href: https://github.com/scareyo/homelab
   custom.css: ""
   custom.js: ""
   docker.yaml: ""
   kubernetes.yaml: |
     mode: cluster
   proxmox.yaml: ""
-  services.yaml: "- My First Group:\n    - My First Service:\n        href: http://localhost/\n        description: Homepage is awesome\n\n- My Second Group:\n    - My Second Service:\n        href: http://localhost/\n        description: Homepage is the best\n\n- My Third Group:\n    - My Third Service:\n        href: http://localhost/\n        description: Homepage is \U0001F60E\n"
-  settings.yaml: ""
+  services.yaml: |
+    - Media:
+        - Jellyfin:
+            icon: jellyfin
+            description: Watch movies and shows
+            href: https://jellyfin.vegapunk.cloud
+            widget:
+              type: jellyfin
+              url: http://jellyfin.jellyfin
+              key: "{{HOMEPAGE_VAR_JELLYFIN_API_KEY}}"
+              enableBlocks: true
+              enableNowPlaying: true
+              enableUser: true
+              enableMediaControl: false
+              showEpisodeNumber: true
+              expandOneStreamToTwoRows: false
+        - Seerr:
+            icon: jellyseerr
+            description: Requeset movies and shows
+            href: https://seerr.vegapunk.cloud
+            widget:
+              type: jellyseerr
+              url: http://seerr.seerr
+              key: "{{HOMEPAGE_VAR_SEERR_API_KEY}}"
+  settings.yaml: |
+    title: vegapunk.cloud
+    headerStyle: underlined
+    theme: dark
+    #background:
+    #  image: https://images.alphacoders.com/134/thumb-1920-1344005.jpeg
+    #  blur: sm
+    layout:
+      Media:
+        style: row
+        columns: 4
   widgets.yaml: |
+    - logo:
+        icon: google
     - kubernetes:
         cluster:
           show: true
@@ -26,15 +62,20 @@ data:
           cpu: true
           memory: true
           showLabel: true
-    - resources:
-        backend: resources
-        expanded: true
-        cpu: true
-        memory: true
-        network: default
-    - search:
-        provider: duckduckgo
-        target: _blank
+    - datetime:
+        text_size: xl
+        format:
+          timeStyle: short
+          hourCycle: h23
+    - openmeteo:
+        label: Boston
+        latitude: 42.361145
+        longitude: -71.057083
+        timezone: America/New_York
+        units: imperial
+        cache: 5
+        format:
+          maximumFractionDigits: 0
 kind: ConfigMap
 metadata:
   labels:

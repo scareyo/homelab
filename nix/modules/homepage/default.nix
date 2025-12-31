@@ -14,6 +14,13 @@ in
       namespace = namespace;
       createNamespace = true;
 
+      templates.externalSecret.integrations = {
+        keys = [
+          { source = "/homepage/JELLYFIN_API_KEY"; dest = "jellyfin-api-key"; }
+          { source = "/homepage/SEERR_API_KEY"; dest = "seerr-api-key"; }
+        ];
+      };
+
       templates.app.homepage = {
         inherit namespace;
 
@@ -23,6 +30,18 @@ in
           port = 3000;
           env = {
             HOMEPAGE_ALLOWED_HOSTS = "home.vegapunk.cloud";
+            HOMEPAGE_VAR_JELLYFIN_API_KEY = {
+              secretKeyRef = {
+                name = "integrations";
+                key = "jellyfin-api-key";
+              };
+            };
+            HOMEPAGE_VAR_SEERR_API_KEY = {
+              secretKeyRef = {
+                name = "integrations";
+                key = "seerr-api-key";
+              };
+            };
           };
         };
 
@@ -35,29 +54,53 @@ in
                 "kubernetes.yaml" = ''
                   mode: cluster
                 '';
+                "settings.yaml" = ''
+                  title: vegapunk.cloud
+                  headerStyle: underlined
+                  theme: dark
+                  #background:
+                  #  image: https://images.alphacoders.com/134/thumb-1920-1344005.jpeg
+                  #  blur: sm
+                  layout:
+                    Media:
+                      style: row
+                      columns: 4
+                '';
                 "bookmarks.yaml" = ''
                   - Developer:
-                      - Github:
-                        - abbr: GH
-                          href: https://github.com/
+                      - scareyo/homelab:
+                          - icon: github
+                            description: My k8s homelab infrastructure
+                            href: https://github.com/scareyo/homelab
                 '';
                 "services.yaml" = ''
-                  - My First Group:
-                      - My First Service:
-                          href: http://localhost/
-                          description: Homepage is awesome
-
-                  - My Second Group:
-                      - My Second Service:
-                          href: http://localhost/
-                          description: Homepage is the best
-
-                  - My Third Group:
-                      - My Third Service:
-                          href: http://localhost/
-                          description: Homepage is 😎
+                  - Media:
+                      - Jellyfin:
+                          icon: jellyfin
+                          description: Watch movies and shows
+                          href: https://jellyfin.vegapunk.cloud
+                          widget:
+                            type: jellyfin
+                            url: http://jellyfin.jellyfin
+                            key: "{{HOMEPAGE_VAR_JELLYFIN_API_KEY}}"
+                            enableBlocks: true
+                            enableNowPlaying: true
+                            enableUser: true
+                            enableMediaControl: false
+                            showEpisodeNumber: true
+                            expandOneStreamToTwoRows: false
+                      - Seerr:
+                          icon: jellyseerr
+                          description: Requeset movies and shows
+                          href: https://seerr.vegapunk.cloud
+                          widget:
+                            type: jellyseerr
+                            url: http://seerr.seerr
+                            key: "{{HOMEPAGE_VAR_SEERR_API_KEY}}"
                 '';
                 "widgets.yaml" = ''
+                  - logo:
+                      icon: google
                   - kubernetes:
                       cluster:
                         show: true
@@ -70,21 +113,25 @@ in
                         cpu: true
                         memory: true
                         showLabel: true
-                  - resources:
-                      backend: resources
-                      expanded: true
-                      cpu: true
-                      memory: true
-                      network: default
-                  - search:
-                      provider: duckduckgo
-                      target: _blank
+                  - datetime:
+                      text_size: xl
+                      format:
+                        timeStyle: short
+                        hourCycle: h23
+                  - openmeteo:
+                      label: Boston
+                      latitude: 42.361145
+                      longitude: -71.057083
+                      timezone: America/New_York
+                      units: imperial
+                      cache: 5
+                      format:
+                        maximumFractionDigits: 0
                 '';
                 "docker.yaml" = "";
                 "custom.css" = "";
                 "custom.js" = "";
                 "proxmox.yaml" = "";
-                "settings.yaml" = "";
               };
             };
           };
