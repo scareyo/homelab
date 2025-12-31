@@ -124,7 +124,7 @@ in
                             enableUser: true
                             enableMediaControl: false
                             showEpisodeNumber: true
-                            expandOneStreamToTwoRows: false
+                            expandOneStreamToTwoRows: true
                       - Seerr:
                           icon: jellyseerr
                           description: Requeset movies and shows
