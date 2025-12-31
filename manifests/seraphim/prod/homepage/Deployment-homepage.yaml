@@ -33,10 +33,20 @@ spec:
                 secretKeyRef:
                   key: jellyfin-api-key
                   name: integrations
+            - name: HOMEPAGE_VAR_RADARR_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: radarr-api-key
+                  name: integrations
             - name: HOMEPAGE_VAR_SEERR_API_KEY
               valueFrom:
                 secretKeyRef:
                   key: seerr-api-key
+                  name: integrations
+            - name: HOMEPAGE_VAR_SONARR_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: sonarr-api-key
                   name: integrations
           image: ghcr.io/gethomepage/homepage:v1.8.0
           name: homepage

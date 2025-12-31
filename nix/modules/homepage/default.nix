@@ -18,6 +18,8 @@ in
         keys = [
           { source = "/homepage/JELLYFIN_API_KEY"; dest = "jellyfin-api-key"; }
           { source = "/homepage/SEERR_API_KEY"; dest = "seerr-api-key"; }
+          { source = "/sonarr/API_KEY"; dest = "sonarr-api-key"; }
+          { source = "/radarr/API_KEY"; dest = "radarr-api-key"; }
         ];
       };
 
@@ -36,10 +38,22 @@ in
                 key = "jellyfin-api-key";
               };
             };
+            HOMEPAGE_VAR_RADARR_API_KEY = {
+              secretKeyRef = {
+                name = "integrations";
+                key = "radarr-api-key";
+              };
+            };
             HOMEPAGE_VAR_SEERR_API_KEY = {
               secretKeyRef = {
                 name = "integrations";
                 key = "seerr-api-key";
+              };
+            };
+            HOMEPAGE_VAR_SONARR_API_KEY = {
+              secretKeyRef = {
+                name = "integrations";
+                key = "sonarr-api-key";
               };
             };
           };
@@ -79,6 +93,7 @@ in
                           icon: jellyfin
                           description: Watch movies and shows
                           href: https://jellyfin.vegapunk.cloud
+                          siteMonitor: http://jellyfin.jellyfin
                           widget:
                             type: jellyfin
                             url: http://jellyfin.jellyfin
@@ -93,10 +108,31 @@ in
                           icon: jellyseerr
                           description: Requeset movies and shows
                           href: https://seerr.vegapunk.cloud
+                          siteMonitor: http://seerr.seerr
                           widget:
                             type: jellyseerr
                             url: http://seerr.seerr
                             key: "{{HOMEPAGE_VAR_SEERR_API_KEY}}"
+                      - Sonarr:
+                          icon: sonarr
+                          description: Monitor show releases
+                          href: https://sonarr.vegapunk.cloud
+                          siteMonitor: http://sonarr.sonarr
+                          widget:
+                            type: sonarr
+                            url: http://sonarr.sonarr
+                            key: "{{HOMEPAGE_VAR_SONARR_API_KEY}}"
+                            enableQueue: true
+                      - Radarr:
+                          icon: radarr
+                          description: Monitor movie releases
+                          href: https://radarr.vegapunk.cloud
+                          siteMonitor: http://radarr.radarr
+                          widget:
+                            type: radarr
+                            url: http://radarr.radarr
+                            key: "{{HOMEPAGE_VAR_RADARR_API_KEY}}"
+                            enableQueue: true
                 '';
                 "widgets.yaml" = ''
                   - logo:
