@@ -5,8 +5,8 @@ metadata:
     app.kubernetes.io/instance: homarr
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: homarr
-    app.kubernetes.io/version: v1.46.0
-    helm.sh/chart: homarr-8.5.0
+    app.kubernetes.io/version: v1.48.0
+    helm.sh/chart: homarr-8.7.0
   name: homarr
   namespace: homarr
 spec:
