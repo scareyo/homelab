@@ -1,0 +1,32 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "10"
+  labels:
+    app.kubernetes.io/component: main
+    app.kubernetes.io/instance: komga
+    app.kubernetes.io/name: komga
+    app.kubernetes.io/part-of: komga
+    app.kubernetes.io/version: 1.23.0
+  name: komga
+  namespace: komga
+spec:
+  hostnames:
+    - komga.vegapunk.cloud
+  parentRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: internal
+      namespace: gateway
+  rules:
+    - backendRefs:
+        - group: ""
+          kind: Service
+          name: komga
+          port: 80
+          weight: 1
+      matches:
+        - path:
+            type: PathPrefix
+            value: /
