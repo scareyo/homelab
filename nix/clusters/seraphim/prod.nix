@@ -26,6 +26,7 @@
     homarr.enable = false;
     homepage.enable = true;
     jellyfin.enable = true;
+    komga.enable = true;
     metrics-server.enable = true;
     monitoring.enable = true;
     newt.enable = true;
