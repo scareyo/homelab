@@ -17,6 +17,7 @@
   vegapunk = {
     argocd.enable = true;
     cert-manager.enable = true;
+    calibre.enable = true;
     cilium.enable = true;
     cnpg.enable = true;
     external-dns.enable = true;

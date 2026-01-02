@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/component: main
+    app.kubernetes.io/instance: calibre
+    app.kubernetes.io/name: calibre
+    app.kubernetes.io/part-of: calibre
+    app.kubernetes.io/version: 0.6.25
+  name: calibre
+  namespace: calibre
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: calibre
+      app.kubernetes.io/name: calibre
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: main
+        app.kubernetes.io/instance: calibre
+        app.kubernetes.io/name: calibre
+        app.kubernetes.io/part-of: calibre
+        app.kubernetes.io/version: 0.6.25
+    spec:
+      containers:
+        - env: []
+          image: ghcr.io/linuxserver/calibre-web:0.6.25
+          name: calibre
+          ports:
+            - containerPort: 8083
+              name: http
+          securityContext: {}
+          volumeMounts:
+            - mountPath: /config
+              name: config
+            - mountPath: /mnt/books
+              name: media
+      securityContext: {}
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: config
+        - name: media
+          nfs:
+            path: /mnt/nami-01/media/books
+            readOnly: false
+            server: nami.int.scarey.me
