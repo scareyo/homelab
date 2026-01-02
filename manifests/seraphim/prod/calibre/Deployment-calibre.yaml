@@ -45,5 +45,5 @@ spec:
         - name: media
           nfs:
             path: /mnt/nami-01/media/books
-            readOnly: false
+            readOnly: true
             server: nami.int.scarey.me

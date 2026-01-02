@@ -21,9 +21,6 @@ in
           image = "ghcr.io/linuxserver/calibre-web";
           version = "0.6.25";
           port = 8083;
-          env = {
-            #S6_YES_I_WANT_A_WORLD_WRITABLE_RUN_BECAUSE_KUBERNETES = "1";
-          };
         };
 
         persistence = {
@@ -40,7 +37,7 @@ in
             config = {
               server = "nami.int.scarey.me";
               path = "/mnt/nami-01/media/books";
-              readOnly = false;
+              readOnly = true;
             };
           };
         };
@@ -56,8 +53,39 @@ in
         };
       };
 
+      templates.app.calibre-import = {
+        inherit namespace;
+
+        workload = {
+          type = "cronjob";
+          image = "ghcr.io/linuxserver/calibre";
+          version = "8.16.2";
+          command = ["/bin/bash"];
+          args = [
+            "-c"
+            ''
+              find /mnt/media/downloads -name '*.epub' -exec calibredb add --with-library /mnt/media/books/metadata.db {} \;
+            ''
+          ];
+        };
+
+        persistence = {
+          media = {
+            type = "nfs";
+            path = "/mnt/media";
+            config = {
+              server = "nami.int.scarey.me";
+              path = "/mnt/nami-01/media";
+              readOnly = false;
+            };
+          };
+        };
+      };
+
       resources.deployments.calibre.spec.template.spec.containers.calibre.securityContext = lib.mkForce {};
       resources.deployments.calibre.spec.template.spec.securityContext = lib.mkForce {};
+      resources.cronJobs.calibre-import.spec.jobTemplate.spec.template.spec.containers.calibre-import.securityContext = lib.mkForce {};
+      resources.cronJobs.calibre-import.spec.jobTemplate.spec.template.spec.securityContext = lib.mkForce {};
 
       #templates.externalSecret.oidc = {
       #  keys = [

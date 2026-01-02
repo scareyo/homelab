@@ -1,0 +1,47 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  labels:
+    app.kubernetes.io/component: main
+    app.kubernetes.io/instance: calibre-import
+    app.kubernetes.io/name: calibre-import
+    app.kubernetes.io/part-of: calibre
+    app.kubernetes.io/version: 8.16.2
+  name: calibre-import
+  namespace: calibre
+spec:
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/component: main
+            app.kubernetes.io/instance: calibre-import
+            app.kubernetes.io/name: calibre-import
+            app.kubernetes.io/part-of: calibre
+            app.kubernetes.io/version: 8.16.2
+        spec:
+          containers:
+            - args:
+                - -c
+                - |
+                  find /mnt/media/downloads -name '*.epub' -exec calibredb add --with-library /mnt/media/books/metadata.db {} \;
+              command:
+                - /bin/bash
+              env: []
+              image: ghcr.io/linuxserver/calibre:8.16.2
+              name: calibre-import
+              ports: []
+              securityContext: {}
+              volumeMounts:
+                - mountPath: /mnt/media
+                  name: media
+          restartPolicy: OnFailure
+          securityContext: {}
+          volumes:
+            - name: media
+              nfs:
+                path: /mnt/nami-01/media
+                readOnly: false
+                server: nami.int.scarey.me
+  schedule: 0 0 * * *

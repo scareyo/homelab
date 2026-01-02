@@ -27,6 +27,12 @@ lib.types.submodule {
       description = "Workload container port";
     };
 
+    command = lib.mkOption {
+      type = lib.types.nullOr (lib.types.listOf lib.types.str);
+      default = null;
+      description = "Workload container command";
+    };
+
     args = lib.mkOption {
       type = lib.types.nullOr (lib.types.listOf lib.types.str);
       default = null;

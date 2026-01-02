@@ -9,6 +9,7 @@ let
       containers.${name} = {
         image = "${workload.image}:${workload.version}";
 
+        command = workload.command;
         args = workload.args;
 
         env = builtins.mapAttrs
