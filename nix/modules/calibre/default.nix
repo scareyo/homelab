@@ -19,7 +19,7 @@ in
 
         workload = {
           image = "ghcr.io/linuxserver/calibre-web";
-          version = "0.6.25";
+          version = "2021.12.16";
           port = 8083;
         };
 
