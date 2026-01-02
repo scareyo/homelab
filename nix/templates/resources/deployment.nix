@@ -9,6 +9,7 @@ let
       containers.${name} = {
         image = "${workload.image}:${workload.version}";
 
+        command = workload.command;
         args = workload.args;
 
         env = builtins.mapAttrs
@@ -71,7 +72,7 @@ in {
   };
   spec = {
   } // lib.optionalAttrs (workload.type == "cronjob") {
-    schedule = "0 0 * * *";
+    schedule = workload.schedule;
     jobTemplate = {
       spec.template = template;
     };

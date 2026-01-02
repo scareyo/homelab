@@ -40,6 +40,7 @@ let
     image = image;
     version = version;
     port = 8080;
+    command = null;
     args = [
       "--http-address=0.0.0.0:8080"
       "--metrics-address=0.0.0.0:8081"
