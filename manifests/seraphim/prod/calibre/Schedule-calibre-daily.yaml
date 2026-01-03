@@ -1,0 +1,22 @@
+apiVersion: velero.io/v1
+kind: Schedule
+metadata:
+  labels:
+    app.kubernetes.io/component: main
+    app.kubernetes.io/instance: calibre
+    app.kubernetes.io/name: calibre
+    app.kubernetes.io/part-of: calibre
+    app.kubernetes.io/version: dev
+  name: calibre-daily
+  namespace: velero
+spec:
+  schedule: 0 4 * * *
+  template:
+    includedNamespaces:
+      - calibre
+    includedResources:
+      - pv
+      - pvc
+    snapshotMoveData: true
+    snapshotVolumes: true
+    ttl: 168h0m0s

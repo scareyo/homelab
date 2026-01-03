@@ -1,0 +1,22 @@
+apiVersion: velero.io/v1
+kind: Schedule
+metadata:
+  labels:
+    app.kubernetes.io/component: main
+    app.kubernetes.io/instance: lazylibrarian
+    app.kubernetes.io/name: lazylibrarian
+    app.kubernetes.io/part-of: lazylibrarian
+    app.kubernetes.io/version: f42cfc3f-ls233
+  name: lazylibrarian-daily
+  namespace: velero
+spec:
+  schedule: 0 4 * * *
+  template:
+    includedNamespaces:
+      - lazylibrarian
+    includedResources:
+      - pv
+      - pvc
+    snapshotMoveData: true
+    snapshotVolumes: true
+    ttl: 168h0m0s

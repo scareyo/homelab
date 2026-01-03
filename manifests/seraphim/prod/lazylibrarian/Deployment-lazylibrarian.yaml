@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/component: main
+    app.kubernetes.io/instance: lazylibrarian
+    app.kubernetes.io/name: lazylibrarian
+    app.kubernetes.io/part-of: lazylibrarian
+    app.kubernetes.io/version: f42cfc3f-ls233
+  name: lazylibrarian
+  namespace: lazylibrarian
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: lazylibrarian
+      app.kubernetes.io/name: lazylibrarian
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: main
+        app.kubernetes.io/instance: lazylibrarian
+        app.kubernetes.io/name: lazylibrarian
+        app.kubernetes.io/part-of: lazylibrarian
+        app.kubernetes.io/version: f42cfc3f-ls233
+    spec:
+      containers:
+        - env: []
+          image: ghcr.io/linuxserver/lazylibrarian:f42cfc3f-ls233
+          name: lazylibrarian
+          ports:
+            - containerPort: 5299
+              name: http
+          securityContext: {}
+          volumeMounts:
+            - mountPath: /config
+              name: config
+            - mountPath: /mnt/media
+              name: media
+      securityContext: {}
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: config
+        - name: media
+          nfs:
+            path: /mnt/nami-01/media
+            readOnly: false
+            server: nami.int.scarey.me
