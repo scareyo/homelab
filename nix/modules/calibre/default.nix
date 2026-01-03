@@ -72,6 +72,45 @@ in
         };
       };
 
+      templates.app.calibre-import = {
+        inherit namespace;
+
+        workload = {
+          type = "cronjob";
+          image = "debian";
+          version = "12";
+          command = ["find"];
+          args = [
+            "/mnt/downloads"
+            "-name"
+            "*.epub"
+            "-exec"
+            "cp" "{}" "/mnt/incoming" "\;"
+          ];
+        };
+
+        persistence = {
+          downloads = {
+            type = "nfs";
+            path = "/mnt/downloads";
+            config = {
+              server = "nami.int.scarey.me";
+              path = "/mnt/nami-01/media/downloads";
+              readOnly = true;
+            };
+          };
+          incoming = {
+            type = "nfs";
+            path = "/mnt/incoming";
+            config = {
+              server = "nami.int.scarey.me";
+              path = "/mnt/nami-01/media/books/incoming";
+              readOnly = false;
+            };
+          };
+        };
+      };
+
       resources.deployments.calibre.spec.template.spec.containers.calibre.securityContext = lib.mkForce {};
       resources.deployments.calibre.spec.template.spec.securityContext = lib.mkForce {};
 

@@ -72,7 +72,7 @@ in {
   };
   spec = {
   } // lib.optionalAttrs (workload.type == "cronjob") {
-    schedule = "0 0 * * *";
+    schedule = workload.schedule;
     jobTemplate = {
       spec.template = template;
     };
