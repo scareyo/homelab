@@ -27,6 +27,7 @@
     homepage.enable = true;
     jellyfin.enable = true;
     komga.enable = true;
+    mariadb.enable = true;
     metrics-server.enable = true;
     monitoring.enable = true;
     newt.enable = true;

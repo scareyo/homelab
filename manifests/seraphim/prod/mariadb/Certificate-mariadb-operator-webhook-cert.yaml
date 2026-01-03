@@ -1,0 +1,22 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  labels:
+    app.kubernetes.io/instance: mariadb-operator
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: mariadb-operator-webhook
+    app.kubernetes.io/version: 25.10.3
+    helm.sh/chart: mariadb-operator-25.10.3
+  name: mariadb-operator-webhook-cert
+spec:
+  commonName: mariadb-operator-webhook.mariadb.svc
+  dnsNames:
+    - mariadb-operator-webhook.mariadb.svc.cluster.local
+    - mariadb-operator-webhook.mariadb.svc
+    - mariadb-operator-webhook.mariadb
+    - mariadb-operator-webhook
+  issuerRef:
+    kind: Issuer
+    name: mariadb-operator-selfsigned-issuer
+  revisionHistoryLimit: 3
+  secretName: mariadb-operator-webhook-cert

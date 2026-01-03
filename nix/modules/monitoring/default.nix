@@ -25,6 +25,10 @@ in
         values = (import ./values.nix { inherit lib; }).victoria-logs-collector;
       };
 
+      helm.releases.prometheus-operator-crds = {
+        chart = charts.prometheus-operator-crds;
+      };
+
       templates.app.grafana.route = {
         serviceName = "vm-grafana";
       };
