@@ -17,7 +17,6 @@
   vegapunk = {
     argocd.enable = true;
     cert-manager.enable = true;
-    calibre.enable = true;
     cilium.enable = true;
     cnpg.enable = true;
     external-dns.enable = true;
@@ -28,7 +27,6 @@
     homepage.enable = true;
     jellyfin.enable = true;
     komga.enable = true;
-    lazylibrarian.enable = true;
     metrics-server.enable = true;
     monitoring.enable = true;
     newt.enable = true;
