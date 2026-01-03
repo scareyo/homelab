@@ -1,0 +1,15 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: calibre-dl
+  namespace: argocd
+spec:
+  destination:
+    namespace: calibre-dl
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    path: ./manifests/seraphim/prod/calibre-dl
+    repoURL: https://github.com/scareyo/homelab.git
+    targetRevision: main
+  syncPolicy: {}

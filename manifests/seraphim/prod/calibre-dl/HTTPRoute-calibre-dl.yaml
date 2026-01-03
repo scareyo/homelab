@@ -5,15 +5,15 @@ metadata:
     argocd.argoproj.io/sync-wave: "10"
   labels:
     app.kubernetes.io/component: main
-    app.kubernetes.io/instance: calibre
-    app.kubernetes.io/name: calibre
-    app.kubernetes.io/part-of: calibre
+    app.kubernetes.io/instance: calibre-dl
+    app.kubernetes.io/name: calibre-dl
+    app.kubernetes.io/part-of: calibre-dl
     app.kubernetes.io/version: dev
-  name: calibre
-  namespace: calibre
+  name: calibre-dl
+  namespace: calibre-dl
 spec:
   hostnames:
-    - calibre.vegapunk.cloud
+    - calibre-dl.vegapunk.cloud
   parentRefs:
     - group: gateway.networking.k8s.io
       kind: Gateway
@@ -23,7 +23,7 @@ spec:
     - backendRefs:
         - group: ""
           kind: Service
-          name: calibre
+          name: calibre-dl
           port: 80
           weight: 1
       matches:

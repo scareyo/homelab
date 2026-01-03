@@ -6,7 +6,7 @@ let
 in
 {
   options = {
-    vegapunk.calibre.enable = lib.mkEnableOption "Enable Calibre-Web";
+    vegapunk.calibre.enable = lib.mkEnableOption "Enable Calibre-Web-Automated";
   };
 
   config = lib.mkIf cfg.enable {
@@ -18,9 +18,19 @@ in
         inherit namespace;
 
         workload = {
-          image = "ghcr.io/linuxserver/calibre-web";
-          version = "0.6.25";
+          image = "ghcr.io/crocodilestick/calibre-web-automated";
+          version = "dev";
           port = 8083;
+          env = {
+            TZ = "America/New_York";
+            NETWORK_SHARE_MODE = "true";
+            HARDCOVER_TOKEN = {
+              secretKeyRef = {
+                key = "hardcover-api-key";
+                name = "calibre";
+              };
+            };
+          };
         };
 
         persistence = {
@@ -31,13 +41,22 @@ in
               size = "4Gi";
             };
           };
-          media = {
+          library = {
             type = "nfs";
-            path = "/mnt/books";
+            path = "/calibre-library";
             config = {
               server = "nami.int.scarey.me";
-              path = "/mnt/nami-01/media/books";
-              readOnly = true;
+              path = "/mnt/nami-01/media/books/calibre";
+              readOnly = false;
+            };
+          };
+          ingest = {
+            type = "nfs";
+            path = "/cwa-book-ingest";
+            config = {
+              server = "nami.int.scarey.me";
+              path = "/mnt/nami-01/media/books/incoming";
+              readOnly = false;
             };
           };
         };
@@ -53,46 +72,16 @@ in
         };
       };
 
-      templates.app.calibre-import = {
-        inherit namespace;
-
-        workload = {
-          type = "cronjob";
-          image = "ghcr.io/linuxserver/calibre";
-          version = "8.16.2";
-          command = ["/bin/bash"];
-          args = [
-            "-c"
-            ''
-              find /mnt/media/downloads -name '*.epub' -exec calibredb add --with-library /mnt/media/books/metadata.db {} \;
-            ''
-          ];
-        };
-
-        persistence = {
-          media = {
-            type = "nfs";
-            path = "/mnt/media";
-            config = {
-              server = "nami.int.scarey.me";
-              path = "/mnt/nami-01/media";
-              readOnly = false;
-            };
-          };
-        };
-      };
-
       resources.deployments.calibre.spec.template.spec.containers.calibre.securityContext = lib.mkForce {};
       resources.deployments.calibre.spec.template.spec.securityContext = lib.mkForce {};
-      resources.cronJobs.calibre-import.spec.jobTemplate.spec.template.spec.containers.calibre-import.securityContext = lib.mkForce {};
-      resources.cronJobs.calibre-import.spec.jobTemplate.spec.template.spec.securityContext = lib.mkForce {};
 
-      #templates.externalSecret.oidc = {
-      #  keys = [
-      #    { source = "/calibre/OIDC_CLIENT_ID"; dest = "client-id"; }
-      #    { source = "/calibre/OIDC_CLIENT_SECRET"; dest = "client-secret"; }
-      #  ];
-      #};
+      templates.externalSecret.calibre = {
+        keys = [
+          { source = "/calibre/HARDCOVER_API_KEY"; dest = "hardcover-api-key"; }
+          #{ source = "/calibre/OIDC_CLIENT_ID"; dest = "client-id"; }
+          #{ source = "/calibre/OIDC_CLIENT_SECRET"; dest = "client-secret"; }
+        ];
+      };
     };
   };
 }

@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/component: main
+    app.kubernetes.io/instance: calibre-dl
+    app.kubernetes.io/name: calibre-dl
+    app.kubernetes.io/part-of: calibre-dl
+    app.kubernetes.io/version: dev
+  name: calibre-dl
+  namespace: calibre-dl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: calibre-dl
+      app.kubernetes.io/name: calibre-dl
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: main
+        app.kubernetes.io/instance: calibre-dl
+        app.kubernetes.io/name: calibre-dl
+        app.kubernetes.io/part-of: calibre-dl
+        app.kubernetes.io/version: dev
+    spec:
+      containers:
+        - env:
+            - name: TZ
+              value: America/New_York
+          image: ghcr.io/calibrain/calibre-web-automated-book-downloader:dev
+          name: calibre-dl
+          ports:
+            - containerPort: 8084
+              name: http
+          securityContext: {}
+          volumeMounts:
+            - mountPath: /config
+              name: config
+            - mountPath: /cwa-book-ingest
+              name: ingest
+      securityContext: {}
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: config
+        - name: ingest
+          nfs:
+            path: /mnt/nami-01/media/books/incoming
+            readOnly: false
+            server: nami.int.scarey.me

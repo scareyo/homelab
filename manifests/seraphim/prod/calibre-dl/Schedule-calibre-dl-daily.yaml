@@ -3,17 +3,17 @@ kind: Schedule
 metadata:
   labels:
     app.kubernetes.io/component: main
-    app.kubernetes.io/instance: calibre
-    app.kubernetes.io/name: calibre
-    app.kubernetes.io/part-of: calibre
+    app.kubernetes.io/instance: calibre-dl
+    app.kubernetes.io/name: calibre-dl
+    app.kubernetes.io/part-of: calibre-dl
     app.kubernetes.io/version: dev
-  name: calibre-daily
+  name: calibre-dl-daily
   namespace: velero
 spec:
   schedule: 0 4 * * *
   template:
     includedNamespaces:
-      - calibre
+      - calibre-dl
     includedResources:
       - pv
       - pvc

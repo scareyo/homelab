@@ -3,12 +3,12 @@ kind: PersistentVolumeClaim
 metadata:
   labels:
     app.kubernetes.io/component: main
-    app.kubernetes.io/instance: calibre
-    app.kubernetes.io/name: calibre
-    app.kubernetes.io/part-of: calibre
+    app.kubernetes.io/instance: calibre-dl
+    app.kubernetes.io/name: calibre-dl
+    app.kubernetes.io/part-of: calibre-dl
     app.kubernetes.io/version: dev
   name: config
-  namespace: calibre
+  namespace: calibre-dl
 spec:
   accessModes:
     - ReadWriteOnce
