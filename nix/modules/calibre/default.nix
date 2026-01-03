@@ -78,7 +78,7 @@ in
         workload = {
           type = "cronjob";
           image = "debian";
-          version = "12";
+          version = "13";
           command = ["find"];
           args = [
             "/mnt/downloads"

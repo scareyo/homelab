@@ -6,7 +6,7 @@ metadata:
     app.kubernetes.io/instance: calibre-import
     app.kubernetes.io/name: calibre-import
     app.kubernetes.io/part-of: calibre
-    app.kubernetes.io/version: "12"
+    app.kubernetes.io/version: "13"
   name: calibre-import
   namespace: calibre
 spec:
@@ -19,7 +19,7 @@ spec:
             app.kubernetes.io/instance: calibre-import
             app.kubernetes.io/name: calibre-import
             app.kubernetes.io/part-of: calibre
-            app.kubernetes.io/version: "12"
+            app.kubernetes.io/version: "13"
         spec:
           containers:
             - args:
@@ -34,7 +34,7 @@ spec:
               command:
                 - find
               env: []
-              image: debian:12
+              image: debian:13
               name: calibre-import
               ports: []
               securityContext:
