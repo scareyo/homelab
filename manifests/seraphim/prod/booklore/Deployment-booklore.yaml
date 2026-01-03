@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/component: main
+    app.kubernetes.io/instance: booklore
+    app.kubernetes.io/name: booklore
+    app.kubernetes.io/part-of: booklore
+    app.kubernetes.io/version: v1.16.3
+  name: booklore
+  namespace: booklore
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: booklore
+      app.kubernetes.io/name: booklore
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: main
+        app.kubernetes.io/instance: booklore
+        app.kubernetes.io/name: booklore
+        app.kubernetes.io/part-of: booklore
+        app.kubernetes.io/version: v1.16.3
+    spec:
+      containers:
+        - env:
+            - name: BOOKLORE_PORT
+              value: "6060"
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: mariadb
+            - name: DATABASE_URL
+              value: jdbc:mariadb://booklore-db-mariadb-cluster:3306/booklore
+            - name: DATABASE_USERNAME
+              value: booklore
+            - name: TZ
+              value: America/New_York
+          image: ghcr.io/booklore-app/booklore:v1.16.3
+          name: booklore
+          ports:
+            - containerPort: 6060
+              name: http
+          securityContext: {}
+          volumeMounts:
+            - mountPath: /app/data
+              name: config
+            - mountPath: /bookdrop
+              name: downloads
+            - mountPath: /mnt/books
+              name: media
+      securityContext: {}
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: config
+        - name: downloads
+          nfs:
+            path: /mnt/nami-01/media/downloads
+            readOnly: false
+            server: nami.int.scarey.me
+        - name: media
+          nfs:
+            path: /mnt/nami-01/media/books
+            readOnly: false
+            server: nami.int.scarey.me

@@ -1,0 +1,20 @@
+apiVersion: k8s.mariadb.com/v1alpha1
+kind: MariaDB
+metadata:
+  labels:
+    app.kubernetes.io/instance: booklore-db
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: mariadb-cluster
+    app.kubernetes.io/version: 0.0.0
+    helm.sh/chart: mariadb-cluster-25.10.3
+  name: booklore-db-mariadb-cluster
+  namespace: booklore
+spec:
+  galera:
+    enabled: true
+  replicas: 3
+  rootPasswordSecretKeyRef:
+    key: root-password
+    name: mariadb
+  storage:
+    size: 64Gi

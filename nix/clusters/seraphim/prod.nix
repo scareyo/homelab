@@ -16,6 +16,7 @@
 
   vegapunk = {
     argocd.enable = true;
+    booklore.enable = true;
     cert-manager.enable = true;
     cilium.enable = true;
     cnpg.enable = true;
