@@ -98,8 +98,29 @@ in
                   #  blur: sm
                   layout:
                     Media:
+                      tab: Media
                       style: row
-                      columns: 4
+                      columns: 2
+                      disableCollapse: true
+                      useEqualHeights: true
+                    Media2:
+                      tab: Media
+                      style: row
+                      columns: 2
+                      disableCollapse: true
+                      header: false
+                    Downloads:
+                      tab: Media
+                      style: row
+                      columns: 2
+                      disableCollapse: true
+                    Clients:
+                      tab: Media
+                      header: false
+                      disableCollapse: true
+                        
+                    System:
+                      tab: System
                 '';
                 "bookmarks.yaml" = ''
                   - Developer:
@@ -120,11 +141,10 @@ in
                             url: http://jellyfin.jellyfin
                             key: "{{HOMEPAGE_VAR_JELLYFIN_API_KEY}}"
                             enableBlocks: true
-                            enableNowPlaying: true
+                            enableNowPlaying: false
                             enableUser: true
                             enableMediaControl: false
                             showEpisodeNumber: true
-                            expandOneStreamToTwoRows: true
                       - Seerr:
                           icon: jellyseerr
                           description: Requeset movies and shows
@@ -134,6 +154,18 @@ in
                             type: jellyseerr
                             url: http://seerr.seerr
                             key: "{{HOMEPAGE_VAR_SEERR_API_KEY}}"
+                  - Media2:
+                      - Booklore:
+                          icon: book-lore
+                          description: Read books
+                          href: https://booklore.vegapunk.cloud
+                          siteMonitor: http://booklore.booklore
+                      - Account:
+                          icon: pocket-id
+                          description: Manage your account
+                          href: https://id.vegapunk.cloud
+                          siteMonitor: http://pocket-id.pocket-id
+                  - Downloads:
                       - Sonarr:
                           icon: sonarr
                           description: Monitor show releases
@@ -154,7 +186,7 @@ in
                             url: http://radarr.radarr
                             key: "{{HOMEPAGE_VAR_RADARR_API_KEY}}"
                             enableQueue: true
-                  - Seedbox:
+                  - Clients:
                       - qBittorrent:
                           icon: qbittorrent
                           description: Download client
@@ -165,8 +197,13 @@ in
                             url: "{{HOMEPAGE_VAR_QBITTORRENT_URL}}"
                             username: "{{HOMEPAGE_VAR_QBITTORRENT_USERNAME}}"
                             password: "{{HOMEPAGE_VAR_QBITTORRENT_PASSWORD}}"
-                            enableLeechProgress: true
+                            enableLeechProgress: false
                             enableLeechSize: true
+                  - System:
+                      - UniFi:
+                          icon: unifi
+                          description: UniFi Site Manager
+                          href: "https://unifi.ui.com"
                 '';
                 "widgets.yaml" = ''
                   - logo:

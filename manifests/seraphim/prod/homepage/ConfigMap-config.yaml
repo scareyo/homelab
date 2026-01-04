@@ -24,11 +24,10 @@ data:
               url: http://jellyfin.jellyfin
               key: "{{HOMEPAGE_VAR_JELLYFIN_API_KEY}}"
               enableBlocks: true
-              enableNowPlaying: true
+              enableNowPlaying: false
               enableUser: true
               enableMediaControl: false
               showEpisodeNumber: true
-              expandOneStreamToTwoRows: true
         - Seerr:
             icon: jellyseerr
             description: Requeset movies and shows
@@ -38,6 +37,18 @@ data:
               type: jellyseerr
               url: http://seerr.seerr
               key: "{{HOMEPAGE_VAR_SEERR_API_KEY}}"
+    - Media2:
+        - Booklore:
+            icon: book-lore
+            description: Read books
+            href: https://booklore.vegapunk.cloud
+            siteMonitor: http://booklore.booklore
+        - Account:
+            icon: pocket-id
+            description: Manage your account
+            href: https://id.vegapunk.cloud
+            siteMonitor: http://pocket-id.pocket-id
+    - Downloads:
         - Sonarr:
             icon: sonarr
             description: Monitor show releases
@@ -58,7 +69,7 @@ data:
               url: http://radarr.radarr
               key: "{{HOMEPAGE_VAR_RADARR_API_KEY}}"
               enableQueue: true
-    - Seedbox:
+    - Clients:
         - qBittorrent:
             icon: qbittorrent
             description: Download client
@@ -69,19 +80,14 @@ data:
               url: "{{HOMEPAGE_VAR_QBITTORRENT_URL}}"
               username: "{{HOMEPAGE_VAR_QBITTORRENT_USERNAME}}"
               password: "{{HOMEPAGE_VAR_QBITTORRENT_PASSWORD}}"
-              enableLeechProgress: true
+              enableLeechProgress: false
               enableLeechSize: true
-  settings.yaml: |
-    title: vegapunk.cloud
-    headerStyle: underlined
-    theme: dark
-    #background:
-    #  image: https://images.alphacoders.com/134/thumb-1920-1344005.jpeg
-    #  blur: sm
-    layout:
-      Media:
-        style: row
-        columns: 4
+    - System:
+        - UniFi:
+            icon: unifi
+            description: UniFi Site Manager
+            href: "https://unifi.ui.com"
+  settings.yaml: "title: vegapunk.cloud\nheaderStyle: underlined\ntheme: dark\n#background:\n#  image: https://images.alphacoders.com/134/thumb-1920-1344005.jpeg\n#  blur: sm\nlayout:\n  Media:\n    tab: Media\n    style: row\n    columns: 2\n    disableCollapse: true\n    useEqualHeights: true\n  Media2:\n    tab: Media\n    style: row\n    columns: 2\n    disableCollapse: true\n    header: false\n  Downloads:\n    tab: Media\n    style: row\n    columns: 2\n    disableCollapse: true\n  Clients:\n    tab: Media\n    header: false\n    disableCollapse: true\n      \n  System:\n    tab: System\n"
   widgets.yaml: |
     - logo:
         icon: google
