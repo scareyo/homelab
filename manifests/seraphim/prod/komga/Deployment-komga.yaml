@@ -68,7 +68,7 @@ spec:
           volumeMounts:
             - mountPath: /config
               name: config
-            - mountPath: /mnt/books
+            - mountPath: /mnt/manga
               name: media
       securityContext:
         fsGroup: 65534
@@ -81,6 +81,6 @@ spec:
             claimName: config
         - name: media
           nfs:
-            path: /mnt/nami-01/media/books
+            path: /mnt/nami-01/media/manga
             readOnly: false
             server: nami.int.scarey.me

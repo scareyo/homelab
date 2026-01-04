@@ -88,7 +88,7 @@ in
               size = "4Gi";
             };
           };
-          media = {
+          books = {
             type = "nfs";
             path = "/mnt/books";
             config = {

@@ -56,10 +56,10 @@ in
           };
           media = {
             type = "nfs";
-            path = "/mnt/books";
+            path = "/mnt/manga";
             config = {
               server = "nami.int.scarey.me";
-              path = "/mnt/nami-01/media/books";
+              path = "/mnt/nami-01/media/manga";
               readOnly = false;
             };
           };

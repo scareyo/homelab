@@ -46,24 +46,24 @@ spec:
               name: http
           securityContext: {}
           volumeMounts:
+            - mountPath: /mnt/books
+              name: books
             - mountPath: /app/data
               name: config
             - mountPath: /bookdrop
               name: downloads
-            - mountPath: /mnt/books
-              name: media
       securityContext: {}
       volumes:
+        - name: books
+          nfs:
+            path: /mnt/nami-01/media/books
+            readOnly: false
+            server: nami.int.scarey.me
         - name: config
           persistentVolumeClaim:
             claimName: config
         - name: downloads
           nfs:
             path: /mnt/nami-01/media/downloads
-            readOnly: false
-            server: nami.int.scarey.me
-        - name: media
-          nfs:
-            path: /mnt/nami-01/media/books
             readOnly: false
             server: nami.int.scarey.me
