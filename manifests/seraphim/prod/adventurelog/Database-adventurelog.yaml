@@ -1,0 +1,12 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: adventurelog
+  namespace: adventurelog
+spec:
+  cluster:
+    name: adventurelog
+  extensions:
+    - name: postgis
+  name: app
+  owner: app

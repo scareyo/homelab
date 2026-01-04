@@ -7022,6 +7022,312 @@ let
       };
 
     };
+    "postgresql.cnpg.io.v1.Database" = {
+
+      options = {
+        "apiVersion" = mkOption {
+          description = "APIVersion defines the versioned schema of this representation of an object.\nServers should convert recognized schemas to the latest internal value, and\nmay reject unrecognized values.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources";
+          type = (types.nullOr types.str);
+        };
+        "kind" = mkOption {
+          description = "Kind is a string value representing the REST resource this object represents.\nServers may infer this from the endpoint the client submits requests to.\nCannot be updated.\nIn CamelCase.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds";
+          type = (types.nullOr types.str);
+        };
+        "metadata" = mkOption {
+          description = "Standard object's metadata. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata";
+          type = (globalSubmoduleOf "io.k8s.apimachinery.pkg.apis.meta.v1.ObjectMeta");
+        };
+        "spec" = mkOption {
+          description = "Specification of the desired Database.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status";
+          type = (submoduleOf "postgresql.cnpg.io.v1.DatabaseSpec");
+        };
+        "status" = mkOption {
+          description = "Most recently observed status of the Database. This data may not be up to\ndate. Populated by the system. Read-only.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status";
+          type = (types.nullOr (submoduleOf "postgresql.cnpg.io.v1.DatabaseStatus"));
+        };
+      };
+
+      config = {
+        "apiVersion" = mkOverride 1002 null;
+        "kind" = mkOverride 1002 null;
+        "status" = mkOverride 1002 null;
+      };
+
+    };
+    "postgresql.cnpg.io.v1.DatabaseSpec" = {
+
+      options = {
+        "allowConnections" = mkOption {
+          description = "Maps to the `ALLOW_CONNECTIONS` parameter of `CREATE DATABASE` and\n`ALTER DATABASE`. If false then no one can connect to this database.";
+          type = (types.nullOr types.bool);
+        };
+        "builtinLocale" = mkOption {
+          description = "Maps to the `BUILTIN_LOCALE` parameter of `CREATE DATABASE`. This\nsetting cannot be changed. Specifies the locale name when the\nbuiltin provider is used. This option requires `localeProvider` to\nbe set to `builtin`. Available from PostgreSQL 17.";
+          type = (types.nullOr types.str);
+        };
+        "cluster" = mkOption {
+          description = "The name of the PostgreSQL cluster hosting the database.";
+          type = (submoduleOf "postgresql.cnpg.io.v1.DatabaseSpecCluster");
+        };
+        "collationVersion" = mkOption {
+          description = "Maps to the `COLLATION_VERSION` parameter of `CREATE DATABASE`. This\nsetting cannot be changed.";
+          type = (types.nullOr types.str);
+        };
+        "connectionLimit" = mkOption {
+          description = "Maps to the `CONNECTION LIMIT` clause of `CREATE DATABASE` and\n`ALTER DATABASE`. How many concurrent connections can be made to\nthis database. -1 (the default) means no limit.";
+          type = (types.nullOr types.int);
+        };
+        "databaseReclaimPolicy" = mkOption {
+          description = "The policy for end-of-life maintenance of this database.";
+          type = (types.nullOr types.str);
+        };
+        "encoding" = mkOption {
+          description = "Maps to the `ENCODING` parameter of `CREATE DATABASE`. This setting\ncannot be changed. Character set encoding to use in the database.";
+          type = (types.nullOr types.str);
+        };
+        "ensure" = mkOption {
+          description = "Ensure the PostgreSQL database is `present` or `absent` - defaults to \"present\".";
+          type = (types.nullOr types.str);
+        };
+        "extensions" = mkOption {
+          description = "The list of extensions to be managed in the database";
+          type = (
+            types.nullOr (
+              coerceAttrsOfSubmodulesToListByKey "postgresql.cnpg.io.v1.DatabaseSpecExtensions" "name" [ ]
+            )
+          );
+          apply = attrsToList;
+        };
+        "icuLocale" = mkOption {
+          description = "Maps to the `ICU_LOCALE` parameter of `CREATE DATABASE`. This\nsetting cannot be changed. Specifies the ICU locale when the ICU\nprovider is used. This option requires `localeProvider` to be set to\n`icu`. Available from PostgreSQL 15.";
+          type = (types.nullOr types.str);
+        };
+        "icuRules" = mkOption {
+          description = "Maps to the `ICU_RULES` parameter of `CREATE DATABASE`. This setting\ncannot be changed. Specifies additional collation rules to customize\nthe behavior of the default collation. This option requires\n`localeProvider` to be set to `icu`. Available from PostgreSQL 16.";
+          type = (types.nullOr types.str);
+        };
+        "isTemplate" = mkOption {
+          description = "Maps to the `IS_TEMPLATE` parameter of `CREATE DATABASE` and `ALTER\nDATABASE`. If true, this database is considered a template and can\nbe cloned by any user with `CREATEDB` privileges.";
+          type = (types.nullOr types.bool);
+        };
+        "locale" = mkOption {
+          description = "Maps to the `LOCALE` parameter of `CREATE DATABASE`. This setting\ncannot be changed. Sets the default collation order and character\nclassification in the new database.";
+          type = (types.nullOr types.str);
+        };
+        "localeCType" = mkOption {
+          description = "Maps to the `LC_CTYPE` parameter of `CREATE DATABASE`. This setting\ncannot be changed.";
+          type = (types.nullOr types.str);
+        };
+        "localeCollate" = mkOption {
+          description = "Maps to the `LC_COLLATE` parameter of `CREATE DATABASE`. This\nsetting cannot be changed.";
+          type = (types.nullOr types.str);
+        };
+        "localeProvider" = mkOption {
+          description = "Maps to the `LOCALE_PROVIDER` parameter of `CREATE DATABASE`. This\nsetting cannot be changed. This option sets the locale provider for\ndatabases created in the new cluster. Available from PostgreSQL 16.";
+          type = (types.nullOr types.str);
+        };
+        "name" = mkOption {
+          description = "The name of the database to create inside PostgreSQL. This setting cannot be changed.";
+          type = types.str;
+        };
+        "owner" = mkOption {
+          description = "Maps to the `OWNER` parameter of `CREATE DATABASE`.\nMaps to the `OWNER TO` command of `ALTER DATABASE`.\nThe role name of the user who owns the database inside PostgreSQL.";
+          type = types.str;
+        };
+        "schemas" = mkOption {
+          description = "The list of schemas to be managed in the database";
+          type = (
+            types.nullOr (
+              coerceAttrsOfSubmodulesToListByKey "postgresql.cnpg.io.v1.DatabaseSpecSchemas" "name" [ ]
+            )
+          );
+          apply = attrsToList;
+        };
+        "tablespace" = mkOption {
+          description = "Maps to the `TABLESPACE` parameter of `CREATE DATABASE`.\nMaps to the `SET TABLESPACE` command of `ALTER DATABASE`.\nThe name of the tablespace (in PostgreSQL) that will be associated\nwith the new database. This tablespace will be the default\ntablespace used for objects created in this database.";
+          type = (types.nullOr types.str);
+        };
+        "template" = mkOption {
+          description = "Maps to the `TEMPLATE` parameter of `CREATE DATABASE`. This setting\ncannot be changed. The name of the template from which to create\nthis database.";
+          type = (types.nullOr types.str);
+        };
+      };
+
+      config = {
+        "allowConnections" = mkOverride 1002 null;
+        "builtinLocale" = mkOverride 1002 null;
+        "collationVersion" = mkOverride 1002 null;
+        "connectionLimit" = mkOverride 1002 null;
+        "databaseReclaimPolicy" = mkOverride 1002 null;
+        "encoding" = mkOverride 1002 null;
+        "ensure" = mkOverride 1002 null;
+        "extensions" = mkOverride 1002 null;
+        "icuLocale" = mkOverride 1002 null;
+        "icuRules" = mkOverride 1002 null;
+        "isTemplate" = mkOverride 1002 null;
+        "locale" = mkOverride 1002 null;
+        "localeCType" = mkOverride 1002 null;
+        "localeCollate" = mkOverride 1002 null;
+        "localeProvider" = mkOverride 1002 null;
+        "schemas" = mkOverride 1002 null;
+        "tablespace" = mkOverride 1002 null;
+        "template" = mkOverride 1002 null;
+      };
+
+    };
+    "postgresql.cnpg.io.v1.DatabaseSpecCluster" = {
+
+      options = {
+        "name" = mkOption {
+          description = "Name of the referent.\nThis field is effectively required, but due to backwards compatibility is\nallowed to be empty. Instances of this type with an empty value here are\nalmost certainly wrong.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names";
+          type = (types.nullOr types.str);
+        };
+      };
+
+      config = {
+        "name" = mkOverride 1002 null;
+      };
+
+    };
+    "postgresql.cnpg.io.v1.DatabaseSpecExtensions" = {
+
+      options = {
+        "ensure" = mkOption {
+          description = "Specifies whether an extension/schema should be present or absent in\nthe database. If set to `present`, the extension/schema will be\ncreated if it does not exist. If set to `absent`, the\nextension/schema will be removed if it exists.";
+          type = (types.nullOr types.str);
+        };
+        "name" = mkOption {
+          description = "Name of the extension/schema";
+          type = types.str;
+        };
+        "schema" = mkOption {
+          description = "The name of the schema in which to install the extension's objects,\nin case the extension allows its contents to be relocated. If not\nspecified (default), and the extension's control file does not\nspecify a schema either, the current default object creation schema\nis used.";
+          type = (types.nullOr types.str);
+        };
+        "version" = mkOption {
+          description = "The version of the extension to install. If empty, the operator will\ninstall the default version (whatever is specified in the\nextension's control file)";
+          type = (types.nullOr types.str);
+        };
+      };
+
+      config = {
+        "ensure" = mkOverride 1002 null;
+        "schema" = mkOverride 1002 null;
+        "version" = mkOverride 1002 null;
+      };
+
+    };
+    "postgresql.cnpg.io.v1.DatabaseSpecSchemas" = {
+
+      options = {
+        "ensure" = mkOption {
+          description = "Specifies whether an extension/schema should be present or absent in\nthe database. If set to `present`, the extension/schema will be\ncreated if it does not exist. If set to `absent`, the\nextension/schema will be removed if it exists.";
+          type = (types.nullOr types.str);
+        };
+        "name" = mkOption {
+          description = "Name of the extension/schema";
+          type = types.str;
+        };
+        "owner" = mkOption {
+          description = "The role name of the user who owns the schema inside PostgreSQL.\nIt maps to the `AUTHORIZATION` parameter of `CREATE SCHEMA` and the\n`OWNER TO` command of `ALTER SCHEMA`.";
+          type = (types.nullOr types.str);
+        };
+      };
+
+      config = {
+        "ensure" = mkOverride 1002 null;
+        "owner" = mkOverride 1002 null;
+      };
+
+    };
+    "postgresql.cnpg.io.v1.DatabaseStatus" = {
+
+      options = {
+        "applied" = mkOption {
+          description = "Applied is true if the database was reconciled correctly";
+          type = (types.nullOr types.bool);
+        };
+        "extensions" = mkOption {
+          description = "Extensions is the status of the managed extensions";
+          type = (
+            types.nullOr (
+              coerceAttrsOfSubmodulesToListByKey "postgresql.cnpg.io.v1.DatabaseStatusExtensions" "name" [ ]
+            )
+          );
+          apply = attrsToList;
+        };
+        "message" = mkOption {
+          description = "Message is the reconciliation output message";
+          type = (types.nullOr types.str);
+        };
+        "observedGeneration" = mkOption {
+          description = "A sequence number representing the latest\ndesired state that was synchronized";
+          type = (types.nullOr types.int);
+        };
+        "schemas" = mkOption {
+          description = "Schemas is the status of the managed schemas";
+          type = (
+            types.nullOr (
+              coerceAttrsOfSubmodulesToListByKey "postgresql.cnpg.io.v1.DatabaseStatusSchemas" "name" [ ]
+            )
+          );
+          apply = attrsToList;
+        };
+      };
+
+      config = {
+        "applied" = mkOverride 1002 null;
+        "extensions" = mkOverride 1002 null;
+        "message" = mkOverride 1002 null;
+        "observedGeneration" = mkOverride 1002 null;
+        "schemas" = mkOverride 1002 null;
+      };
+
+    };
+    "postgresql.cnpg.io.v1.DatabaseStatusExtensions" = {
+
+      options = {
+        "applied" = mkOption {
+          description = "True of the object has been installed successfully in\nthe database";
+          type = types.bool;
+        };
+        "message" = mkOption {
+          description = "Message is the object reconciliation message";
+          type = (types.nullOr types.str);
+        };
+        "name" = mkOption {
+          description = "The name of the object";
+          type = types.str;
+        };
+      };
+
+      config = {
+        "message" = mkOverride 1002 null;
+      };
+
+    };
+    "postgresql.cnpg.io.v1.DatabaseStatusSchemas" = {
+
+      options = {
+        "applied" = mkOption {
+          description = "True of the object has been installed successfully in\nthe database";
+          type = types.bool;
+        };
+        "message" = mkOption {
+          description = "Message is the object reconciliation message";
+          type = (types.nullOr types.str);
+        };
+        "name" = mkOption {
+          description = "The name of the object";
+          type = types.str;
+        };
+      };
+
+      config = {
+        "message" = mkOverride 1002 null;
+      };
+
+    };
 
   };
 in
@@ -7039,6 +7345,16 @@ in
         );
         default = { };
       };
+      "postgresql.cnpg.io"."v1"."Database" = mkOption {
+        description = "Database is the Schema for the databases API";
+        type = (
+          types.attrsOf (
+            submoduleForDefinition "postgresql.cnpg.io.v1.Database" "databases" "Database" "postgresql.cnpg.io"
+              "v1"
+          )
+        );
+        default = { };
+      };
 
     }
     // {
@@ -7047,6 +7363,16 @@ in
         type = (
           types.attrsOf (
             submoduleForDefinition "postgresql.cnpg.io.v1.Cluster" "clusters" "Cluster" "postgresql.cnpg.io"
+              "v1"
+          )
+        );
+        default = { };
+      };
+      "databases" = mkOption {
+        description = "Database is the Schema for the databases API";
+        type = (
+          types.attrsOf (
+            submoduleForDefinition "postgresql.cnpg.io.v1.Database" "databases" "Database" "postgresql.cnpg.io"
               "v1"
           )
         );
@@ -7069,10 +7395,18 @@ in
         kind = "Cluster";
         attrName = "clusters";
       }
+      {
+        name = "databases";
+        group = "postgresql.cnpg.io";
+        version = "v1";
+        kind = "Database";
+        attrName = "databases";
+      }
     ];
 
     resources = {
       "postgresql.cnpg.io"."v1"."Cluster" = mkAliasDefinitions options.resources."clusters";
+      "postgresql.cnpg.io"."v1"."Database" = mkAliasDefinitions options.resources."databases";
 
     };
 
@@ -7083,6 +7417,12 @@ in
         group = "postgresql.cnpg.io";
         version = "v1";
         kind = "Cluster";
+        default.metadata.namespace = lib.mkDefault config.namespace;
+      }
+      {
+        group = "postgresql.cnpg.io";
+        version = "v1";
+        kind = "Database";
         default.metadata.namespace = lib.mkDefault config.namespace;
       }
     ];

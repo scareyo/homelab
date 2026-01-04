@@ -15,6 +15,7 @@
   #nixidy.defaults.syncPolicy.autoSync.enable = true;
 
   vegapunk = {
+    adventurelog.enable = true;
     argocd.enable = true;
     booklore.enable = true;
     cert-manager.enable = true;

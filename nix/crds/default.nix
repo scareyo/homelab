@@ -42,6 +42,7 @@ let
       };
       crds = [
         "config/crd/bases/postgresql.cnpg.io_clusters.yaml"
+        "config/crd/bases/postgresql.cnpg.io_databases.yaml"
       ];
     };
 

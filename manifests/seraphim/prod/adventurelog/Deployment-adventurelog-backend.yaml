@@ -1,0 +1,92 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/component: main
+    app.kubernetes.io/instance: adventurelog-backend
+    app.kubernetes.io/name: adventurelog-backend
+    app.kubernetes.io/part-of: adventurelog
+    app.kubernetes.io/version: v0.11.0
+  name: adventurelog-backend
+  namespace: adventurelog
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: adventurelog-backend
+      app.kubernetes.io/name: adventurelog-backend
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: main
+        app.kubernetes.io/instance: adventurelog-backend
+        app.kubernetes.io/name: adventurelog-backend
+        app.kubernetes.io/part-of: adventurelog
+        app.kubernetes.io/version: v0.11.0
+    spec:
+      containers:
+        - env:
+            - name: CSRF_TRUSTED_ORIGINS
+              value: https://adventurelog.vegapunk.cloud,https://adventurelog-backend.vegapunk.cloud
+            - name: DEBUG
+              value: "True"
+            - name: DISABLE_REGISTRATION
+              value: "True"
+            - name: DJANGO_ADMIN_EMAIL
+              valueFrom:
+                secretKeyRef:
+                  key: django-admin-email
+                  name: adventurelog
+            - name: DJANGO_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: django-admin-password
+                  name: adventurelog
+            - name: DJANGO_ADMIN_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  key: django-admin-username
+                  name: adventurelog
+            - name: FRONTEND_URL
+              value: https://adventurelog.vegapunk.cloud
+            - name: PGHOST
+              valueFrom:
+                secretKeyRef:
+                  key: host
+                  name: adventurelog-app
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  key: dbname
+                  name: adventurelog-app
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: adventurelog-app
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  key: username
+                  name: adventurelog-app
+            - name: PUBLIC_URL
+              value: https://adventurelog-backend.vegapunk.cloud
+            - name: SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: adventurelog-app
+          image: ghcr.io/seanmorley15/adventurelog-backend:v0.11.0
+          name: adventurelog-backend
+          ports:
+            - containerPort: 8000
+              name: http
+          securityContext: {}
+          volumeMounts:
+            - mountPath: /code/media
+              name: config
+      securityContext: {}
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: config
