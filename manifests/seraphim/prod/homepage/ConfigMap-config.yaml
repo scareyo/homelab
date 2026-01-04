@@ -37,6 +37,15 @@ data:
               type: jellyseerr
               url: http://seerr.seerr
               key: "{{HOMEPAGE_VAR_SEERR_API_KEY}}"
+        - Komga:
+            icon: komga
+            description: Read comics and manga
+            href: https://komga.vegapunk.cloud
+            siteMonitor: http://komga.komga
+            widget:
+              type: komga
+              url: http://komga.komga
+              key: "{{HOMEPAGE_VAR_KOMGA_API_KEY}}"
     - Media2:
         - Booklore:
             icon: book-lore
@@ -87,7 +96,7 @@ data:
             icon: unifi
             description: UniFi Site Manager
             href: "https://unifi.ui.com"
-  settings.yaml: "title: vegapunk.cloud\nheaderStyle: underlined\ntheme: dark\n#background:\n#  image: https://images.alphacoders.com/134/thumb-1920-1344005.jpeg\n#  blur: sm\nlayout:\n  Media:\n    tab: Media\n    style: row\n    columns: 2\n    disableCollapse: true\n    useEqualHeights: true\n  Media2:\n    tab: Media\n    style: row\n    columns: 2\n    disableCollapse: true\n    header: false\n  Downloads:\n    tab: Media\n    style: row\n    columns: 2\n    disableCollapse: true\n  Clients:\n    tab: Media\n    header: false\n    disableCollapse: true\n      \n  System:\n    tab: System\n"
+  settings.yaml: "title: vegapunk.cloud\nheaderStyle: underlined\ntheme: dark\n#background:\n#  image: https://images.alphacoders.com/134/thumb-1920-1344005.jpeg\n#  blur: sm\nlayout:\n  Media:\n    tab: Media\n    style: row\n    columns: 3\n    disableCollapse: true\n    useEqualHeights: true\n  Media2:\n    tab: Media\n    style: row\n    columns: 2\n    disableCollapse: true\n    header: false\n  Downloads:\n    tab: Media\n    style: row\n    columns: 2\n    disableCollapse: true\n  Clients:\n    tab: Media\n    header: false\n    disableCollapse: true\n      \n  System:\n    tab: System\n"
   widgets.yaml: |
     - logo:
         icon: google

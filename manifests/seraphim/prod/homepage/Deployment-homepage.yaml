@@ -33,6 +33,11 @@ spec:
                 secretKeyRef:
                   key: jellyfin-api-key
                   name: integrations
+            - name: HOMEPAGE_VAR_KOMGA_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: komga-api-key
+                  name: integrations
             - name: HOMEPAGE_VAR_QBITTORRENT_PASSWORD
               valueFrom:
                 secretKeyRef:

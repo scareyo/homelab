@@ -17,6 +17,7 @@ in
       templates.externalSecret.integrations = {
         keys = [
           { source = "/homepage/JELLYFIN_API_KEY"; dest = "jellyfin-api-key"; }
+          { source = "/homepage/KOMGA_API_KEY"; dest = "komga-api-key"; }
           { source = "/homepage/SEERR_API_KEY"; dest = "seerr-api-key"; }
           { source = "/qbittorrent/URL"; dest = "qbittorrent-url"; }
           { source = "/qbittorrent/USERNAME"; dest = "qbittorrent-username"; }
@@ -39,6 +40,12 @@ in
               secretKeyRef = {
                 name = "integrations";
                 key = "jellyfin-api-key";
+              };
+            };
+            HOMEPAGE_VAR_KOMGA_API_KEY = {
+              secretKeyRef = {
+                name = "integrations";
+                key = "komga-api-key";
               };
             };
             HOMEPAGE_VAR_QBITTORRENT_URL = {
@@ -100,7 +107,7 @@ in
                     Media:
                       tab: Media
                       style: row
-                      columns: 2
+                      columns: 3
                       disableCollapse: true
                       useEqualHeights: true
                     Media2:
@@ -154,6 +161,15 @@ in
                             type: jellyseerr
                             url: http://seerr.seerr
                             key: "{{HOMEPAGE_VAR_SEERR_API_KEY}}"
+                      - Komga:
+                          icon: komga
+                          description: Read comics and manga
+                          href: https://komga.vegapunk.cloud
+                          siteMonitor: http://komga.komga
+                          widget:
+                            type: komga
+                            url: http://komga.komga
+                            key: "{{HOMEPAGE_VAR_KOMGA_API_KEY}}"
                   - Media2:
                       - Booklore:
                           icon: book-lore
