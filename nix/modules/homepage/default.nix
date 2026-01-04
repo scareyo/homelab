@@ -100,6 +100,7 @@ in
                   title: vegapunk.cloud
                   headerStyle: underlined
                   theme: dark
+                  disableCollapse: true
                   #background:
                   #  image: https://images.alphacoders.com/134/thumb-1920-1344005.jpeg
                   #  blur: sm
@@ -108,29 +109,25 @@ in
                       tab: Media
                       style: row
                       columns: 3
-                      disableCollapse: true
                       useEqualHeights: true
                     Media2:
                       tab: Media
                       style: row
                       columns: 2
-                      disableCollapse: true
                       header: false
                     Downloads:
                       tab: Media
+                    Downloads2:
+                      tab: Media
                       style: row
                       columns: 2
-                      disableCollapse: true
-                    Clients:
-                      tab: Media
                       header: false
-                      disableCollapse: true
                         
                     System:
                       tab: System
                 '';
                 "bookmarks.yaml" = ''
-                  - Developer:
+                  - Bookmarks:
                       - scareyo/homelab:
                           - icon: github
                             description: My k8s homelab infrastructure
@@ -182,6 +179,19 @@ in
                           href: https://id.vegapunk.cloud
                           siteMonitor: http://pocket-id.pocket-id
                   - Downloads:
+                      - qBittorrent:
+                          icon: qbittorrent
+                          description: Download client
+                          href: "{{HOMEPAGE_VAR_QBITTORRENT_URL}}"
+                          siteMonitor: "{{HOMEPAGE_VAR_QBITTORRENT_URL}}"
+                          widget:
+                            type: qbittorrent
+                            url: "{{HOMEPAGE_VAR_QBITTORRENT_URL}}"
+                            username: "{{HOMEPAGE_VAR_QBITTORRENT_USERNAME}}"
+                            password: "{{HOMEPAGE_VAR_QBITTORRENT_PASSWORD}}"
+                            enableLeechProgress: false
+                            enableLeechSize: true
+                  - Downloads2:
                       - Sonarr:
                           icon: sonarr
                           description: Monitor show releases
@@ -202,19 +212,6 @@ in
                             url: http://radarr.radarr
                             key: "{{HOMEPAGE_VAR_RADARR_API_KEY}}"
                             enableQueue: true
-                  - Clients:
-                      - qBittorrent:
-                          icon: qbittorrent
-                          description: Download client
-                          href: "{{HOMEPAGE_VAR_QBITTORRENT_URL}}"
-                          siteMonitor: "{{HOMEPAGE_VAR_QBITTORRENT_URL}}"
-                          widget:
-                            type: qbittorrent
-                            url: "{{HOMEPAGE_VAR_QBITTORRENT_URL}}"
-                            username: "{{HOMEPAGE_VAR_QBITTORRENT_USERNAME}}"
-                            password: "{{HOMEPAGE_VAR_QBITTORRENT_PASSWORD}}"
-                            enableLeechProgress: false
-                            enableLeechSize: true
                   - System:
                       - UniFi:
                           icon: unifi

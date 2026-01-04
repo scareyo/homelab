@@ -1,7 +1,7 @@
 apiVersion: v1
 data:
   bookmarks.yaml: |
-    - Developer:
+    - Bookmarks:
         - scareyo/homelab:
             - icon: github
               description: My k8s homelab infrastructure
@@ -58,6 +58,19 @@ data:
             href: https://id.vegapunk.cloud
             siteMonitor: http://pocket-id.pocket-id
     - Downloads:
+        - qBittorrent:
+            icon: qbittorrent
+            description: Download client
+            href: "{{HOMEPAGE_VAR_QBITTORRENT_URL}}"
+            siteMonitor: "{{HOMEPAGE_VAR_QBITTORRENT_URL}}"
+            widget:
+              type: qbittorrent
+              url: "{{HOMEPAGE_VAR_QBITTORRENT_URL}}"
+              username: "{{HOMEPAGE_VAR_QBITTORRENT_USERNAME}}"
+              password: "{{HOMEPAGE_VAR_QBITTORRENT_PASSWORD}}"
+              enableLeechProgress: false
+              enableLeechSize: true
+    - Downloads2:
         - Sonarr:
             icon: sonarr
             description: Monitor show releases
@@ -78,25 +91,12 @@ data:
               url: http://radarr.radarr
               key: "{{HOMEPAGE_VAR_RADARR_API_KEY}}"
               enableQueue: true
-    - Clients:
-        - qBittorrent:
-            icon: qbittorrent
-            description: Download client
-            href: "{{HOMEPAGE_VAR_QBITTORRENT_URL}}"
-            siteMonitor: "{{HOMEPAGE_VAR_QBITTORRENT_URL}}"
-            widget:
-              type: qbittorrent
-              url: "{{HOMEPAGE_VAR_QBITTORRENT_URL}}"
-              username: "{{HOMEPAGE_VAR_QBITTORRENT_USERNAME}}"
-              password: "{{HOMEPAGE_VAR_QBITTORRENT_PASSWORD}}"
-              enableLeechProgress: false
-              enableLeechSize: true
     - System:
         - UniFi:
             icon: unifi
             description: UniFi Site Manager
             href: "https://unifi.ui.com"
-  settings.yaml: "title: vegapunk.cloud\nheaderStyle: underlined\ntheme: dark\n#background:\n#  image: https://images.alphacoders.com/134/thumb-1920-1344005.jpeg\n#  blur: sm\nlayout:\n  Media:\n    tab: Media\n    style: row\n    columns: 3\n    disableCollapse: true\n    useEqualHeights: true\n  Media2:\n    tab: Media\n    style: row\n    columns: 2\n    disableCollapse: true\n    header: false\n  Downloads:\n    tab: Media\n    style: row\n    columns: 2\n    disableCollapse: true\n  Clients:\n    tab: Media\n    header: false\n    disableCollapse: true\n      \n  System:\n    tab: System\n"
+  settings.yaml: "title: vegapunk.cloud\nheaderStyle: underlined\ntheme: dark\ndisableCollapse: true\n#background:\n#  image: https://images.alphacoders.com/134/thumb-1920-1344005.jpeg\n#  blur: sm\nlayout:\n  Media:\n    tab: Media\n    style: row\n    columns: 3\n    useEqualHeights: true\n  Media2:\n    tab: Media\n    style: row\n    columns: 2\n    header: false\n  Downloads:\n    tab: Media\n  Downloads2:\n    tab: Media\n    style: row\n    columns: 2\n    header: false\n      \n  System:\n    tab: System\n"
   widgets.yaml: |
     - logo:
         icon: google
