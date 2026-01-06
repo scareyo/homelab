@@ -27,6 +27,7 @@
     gateway.enable = true;
     homarr.enable = false;
     homepage.enable = true;
+    iiff.enable = true;
     jellyfin.enable = true;
     komga.enable = true;
     mariadb.enable = true;

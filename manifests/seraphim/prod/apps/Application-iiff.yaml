@@ -1,0 +1,15 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: iiff
+  namespace: argocd
+spec:
+  destination:
+    namespace: iiff
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    path: ./manifests/seraphim/prod/iiff
+    repoURL: https://github.com/scareyo/homelab.git
+    targetRevision: main
+  syncPolicy: {}

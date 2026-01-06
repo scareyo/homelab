@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/component: main
+    app.kubernetes.io/instance: iiff
+    app.kubernetes.io/name: iiff
+    app.kubernetes.io/part-of: iiff
+    app.kubernetes.io/version: 0.2.0
+  name: iiff
+  namespace: iiff
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: iiff
+      app.kubernetes.io/name: iiff
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: main
+        app.kubernetes.io/instance: iiff
+        app.kubernetes.io/name: iiff
+        app.kubernetes.io/part-of: iiff
+        app.kubernetes.io/version: 0.2.0
+    spec:
+      containers:
+        - env:
+            - name: IIFF_TMDB_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: api-key
+                  name: iiff
+          image: ghcr.io/scareyo/itsfrierenfriday:0.2.0
+          name: iiff
+          ports:
+            - containerPort: 8080
+              name: http
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+      securityContext:
+        fsGroup: 65534
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 1000
+        runAsUser: 1000
