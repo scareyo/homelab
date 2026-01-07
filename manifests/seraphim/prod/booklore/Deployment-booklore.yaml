@@ -6,7 +6,7 @@ metadata:
     app.kubernetes.io/instance: booklore
     app.kubernetes.io/name: booklore
     app.kubernetes.io/part-of: booklore
-    app.kubernetes.io/version: v1.16.3
+    app.kubernetes.io/version: v1.16.5
   name: booklore
   namespace: booklore
 spec:
@@ -22,7 +22,7 @@ spec:
         app.kubernetes.io/instance: booklore
         app.kubernetes.io/name: booklore
         app.kubernetes.io/part-of: booklore
-        app.kubernetes.io/version: v1.16.3
+        app.kubernetes.io/version: v1.16.5
     spec:
       containers:
         - env:
@@ -39,7 +39,7 @@ spec:
               value: booklore
             - name: TZ
               value: America/New_York
-          image: ghcr.io/booklore-app/booklore:v1.16.3
+          image: ghcr.io/booklore-app/booklore:v1.16.5
           name: booklore
           ports:
             - containerPort: 6060
