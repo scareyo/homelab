@@ -72,7 +72,7 @@ in
           env = {
             TZ = "America/New_York";
             BOOKLORE_PORT = "6060";
-            DATABASE_URL = "jdbc:mariadb://booklore-db-mariadb-cluster:3306/booklore";
+            DATABASE_URL = "jdbc:mariadb://booklore-db-mariadb-cluster-primary:3306/booklore";
             DATABASE_USERNAME = "booklore";
             DATABASE_PASSWORD = {
               secretKeyRef = {

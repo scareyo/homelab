@@ -34,7 +34,7 @@ spec:
                   key: password
                   name: mariadb
             - name: DATABASE_URL
-              value: jdbc:mariadb://booklore-db-mariadb-cluster:3306/booklore
+              value: jdbc:mariadb://booklore-db-mariadb-cluster-primary:3306/booklore
             - name: DATABASE_USERNAME
               value: booklore
             - name: TZ
