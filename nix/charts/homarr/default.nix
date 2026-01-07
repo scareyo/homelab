@@ -1,6 +1,6 @@
 {
   repo = "https://homarr-labs.github.io/charts";
   chart = "homarr";
-  version = "8.5.0";
-  chartHash = "sha256-atj/OypP+niFmQEWfu1YafxRg7X8XAxprZBv2qIf4BI=";
+  version = "8.8.1";
+  chartHash = "sha256-giNJn8C8kCF2XaHR+A2dXMFzUoEd9QdI/CHZKOwYDy4=";
 }
