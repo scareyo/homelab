@@ -19,6 +19,9 @@ in
         values = {
           mariadb = {
             storage.size = "64Gi";
+            replicas = 3;
+            replication.enabled = true;
+            galera.enabled = false;
           };
           databases = [
             {

@@ -11,8 +11,10 @@ metadata:
   namespace: booklore
 spec:
   galera:
-    enabled: true
+    enabled: false
   replicas: 3
+  replication:
+    enabled: true
   rootPasswordSecretKeyRef:
     key: root-password
     name: mariadb
