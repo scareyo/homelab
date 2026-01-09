@@ -6,7 +6,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: mariadb-cluster
     app.kubernetes.io/version: 0.0.0
-    helm.sh/chart: mariadb-cluster-25.10.3
+    helm.sh/chart: mariadb-cluster-25.10.4
   name: booklore-db-mariadb-cluster
   namespace: booklore
 spec:
@@ -16,7 +16,8 @@ spec:
   replication:
     enabled: true
   rootPasswordSecretKeyRef:
-    key: root-password
-    name: mariadb
+    generate: true
+    key: root
+    name: booklore-db-mariadb-cluster-root
   storage:
     size: 64Gi
