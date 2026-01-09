@@ -12,7 +12,7 @@ version=$(sed -n 's/.*version\s*=\s*"\([^"]*\)".*/\1/p' $file)
 
 echo "[update-hash] getting hash for $chart $version from $repo"
 
-url=$(curl -s "$repo/index.yaml" | yq ".entries[\"$chart\"][] | select(.version == \"$version\").urls[0]")
+url=$(curl -Ls "$repo/index.yaml" | yq ".entries[\"$chart\"][] | select(.version == \"$version\").urls[0]")
 if [[ "$url" != http://* && "$url" != https://* ]]; then
   url="$repo/$url"
 fi
