@@ -16,8 +16,8 @@ spec:
   replication:
     enabled: true
   rootPasswordSecretKeyRef:
-    generate: true
-    key: root
-    name: booklore-db-mariadb-cluster-root
+    generate: false
+    key: root-password
+    name: mariadb
   storage:
     size: 64Gi

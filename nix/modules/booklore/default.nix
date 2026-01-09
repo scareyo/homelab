@@ -22,6 +22,11 @@ in
             replicas = 3;
             replication.enabled = true;
             galera.enabled = false;
+            rootPasswordSecretKeyRef = {
+              name = "mariadb";
+              key = "root-password";
+              generate = false;
+            };
           };
           databases = [
             {
