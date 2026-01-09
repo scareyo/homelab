@@ -20,9 +20,20 @@
   "packageRules": [
     {
       "matchManagers": ["regex"],
+      "matchDatasources": ["helm"],
       "postUpgradeTasks": {
         "commands": [
           "./scripts/update-hash.sh {{{packageFile}}}",
+          "./scripts/generate-manifests.sh"
+        ],
+        "executionMode": "update"
+      }
+    },
+    {
+      "matchManagers": ["regex"],
+      "matchDatasources": ["docker"],
+      "postUpgradeTasks": {
+        "commands": [
           "./scripts/generate-manifests.sh"
         ],
         "executionMode": "update"
