@@ -8,7 +8,7 @@ metadata:
     app.kubernetes.io/instance: booklore
     app.kubernetes.io/name: booklore
     app.kubernetes.io/part-of: booklore
-    app.kubernetes.io/version: v1.16.5
+    app.kubernetes.io/version: v1.17.0
   name: booklore
   namespace: booklore
 spec:
