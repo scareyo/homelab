@@ -6,7 +6,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: mariadb-cluster
     app.kubernetes.io/version: 0.0.0
-    helm.sh/chart: mariadb-cluster-25.10.3
+    helm.sh/chart: mariadb-cluster-25.10.4
   name: booklore-db-mariadb-cluster-booklore
   namespace: booklore
 spec:
