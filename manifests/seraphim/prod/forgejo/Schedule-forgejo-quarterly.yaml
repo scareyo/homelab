@@ -1,0 +1,16 @@
+apiVersion: velero.io/v1
+kind: Schedule
+metadata:
+  name: forgejo-quarterly
+  namespace: velero
+spec:
+  schedule: 0 0 1 1,4,7,10 *
+  template:
+    includedNamespaces:
+      - forgejo
+    includedResources:
+      - pv
+      - pvc
+    snapshotMoveData: true
+    snapshotVolumes: true
+    ttl: 8760h0m0s
