@@ -18,8 +18,8 @@ in
         inherit namespace;
 
         workload = {
-          image = "ghcr.io/scareyo/itsfrierenfriday";
-          version = "0.2.0";
+          image = "dev.vegapunk.cloud/scarey/is-it-frieren-friday";
+          version = "0.1.0";
           port = 8080;
           env = {
             IIFF_TMDB_API_KEY = {
