@@ -45,7 +45,23 @@ lib.types.submodule {
         };
       };
       default = {};
-      description = "Name of the referenced service";
+      description = "Auth settings";
+    };
+
+    anubis = lib.mkOption {
+      type = lib.types.submodule {
+        options = {
+          enable = lib.mkEnableOption "Enable Anubis";
+
+          secret = lib.mkOption {
+            type = lib.types.str;
+            default = "anubis";
+            description = "Secret containing Anubis signing key";
+          };
+        };
+      };
+      default = {};
+      description = "Anubis settings";
     };
   };
 }

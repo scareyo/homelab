@@ -45,6 +45,10 @@
         inherit lib; inherit name; inherit namespace; inherit route;
       };
 
+      anubis = import ./resources/anubis.nix {
+        inherit lib; inherit name; inherit namespace; inherit route;
+      };
+
       labels = lib.mkIf (workload != null) {
         "app.kubernetes.io/name" = name;
         "app.kubernetes.io/instance" =  name;
@@ -64,6 +68,8 @@
           });
       } // lib.optionalAttrs (route != null && route.auth.enable) {
         oauth2-proxy = oauth2-proxy.deployment;
+      } // lib.optionalAttrs (route != null && route.anubis.enable) {
+        anubis = anubis.deployment;
       };
 
       cronJobs = {
@@ -85,6 +91,8 @@
           });
       } // lib.optionalAttrs (route != null && route.auth.enable) {
         oauth2-proxy = oauth2-proxy.service;
+      } // lib.optionalAttrs (route != null && route.anubis.enable) {
+        anubis = anubis.service;
       };
       
       configMaps = lib.mkMerge [(lib.mkIf (persistence != null)

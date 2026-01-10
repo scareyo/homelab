@@ -41,6 +41,7 @@
             name = name;
           } // lib.optionalAttrs route.auth.enable {
             name = "oauth2-proxy";
+            port = 80;
           })
         ];
       }

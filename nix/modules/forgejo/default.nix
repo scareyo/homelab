@@ -26,6 +26,7 @@ in
           hostname = "dev.vegapunk.cloud";
           serviceName = "forgejo-http";
           servicePort = 3000;
+          anubis.enable = true;
         };
 
         backup = {
@@ -50,6 +51,12 @@ in
         keys = [
           { source = "/forgejo/ADMIN_USERNAME"; dest = "username"; }
           { source = "/forgejo/ADMIN_PASSWORD"; dest = "password"; }
+        ];
+      };
+
+      templates.externalSecret.anubis = {
+        keys = [
+          { source = "/forgejo/ANUBIS_ED25519_PRIVATE_KEY_HEX"; dest = "key"; }
         ];
       };
 
