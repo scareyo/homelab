@@ -2,6 +2,10 @@
 
 # Updates the hash of a given nix chart file
 
+log () {
+  echo "[update-hash] $1"
+}
+
 set -e
 
 file=$1
@@ -10,15 +14,22 @@ repo=$(sed -n 's/.*repo\s*=\s*"\([^"]*\)".*/\1/p' $file)
 chart=$(sed -n 's/.*chart\s*=\s*"\([^"]*\)".*/\1/p' $file)
 version=$(sed -n 's/.*version\s*=\s*"\([^"]*\)".*/\1/p' $file)
 
-echo "[update-hash] getting hash for $chart $version from $repo"
+log "getting hash for $chart $version from $repo"
 
-url=$(curl -Ls "$repo/index.yaml" | yq ".entries[\"$chart\"][] | select(.version == \"$version\").urls[0]")
-if [[ "$url" != http://* && "$url" != https://* ]]; then
-  url="$repo/$url"
+tmpdir=$(mktemp -d -t homelab-update-hash.XXXXXXXXXX)
+
+if [[ "$repo" == http://* || "$repo" == https://* ]]; then
+  flags="--repo $repo $chart"
 fi
 
-hash=$(nix hash convert --hash-algo sha256 "$(nix-prefetch-url --unpack "$url")")
+if [[ "$repo" == oci://* ]]; then
+  flags="$repo/$chart"
+fi
 
-echo "[update-hash] writing new hash $hash to $file"
+helm pull $flags --version $version -d $tmpdir --untar
+
+hash=$(nix-hash --type sha256 --sri $tmpdir/$chart)
+
+log "writing new hash $hash to $file"
 
 sed -i "s|chartHash\s*=\s*\"[^\"]*\"|chartHash = \"$hash\"|" "$file"

@@ -47,6 +47,7 @@
             kubectl
             kubectl-rook-ceph
             kubelogin-oidc
+            kubernetes-helm
             talosctl
             velero
 
