@@ -13,6 +13,8 @@
       database = {
         DB_TYPE = "postgres";
       };
+
+      webhook.ALLOWED_HOST_LIST = "ci.vegapunk.cloud";
     };
     oauth = [
       {
