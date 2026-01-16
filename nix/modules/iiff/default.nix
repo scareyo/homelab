@@ -19,7 +19,7 @@ in
 
         workload = {
           image = "dev.vegapunk.cloud/scarey/is-it-frieren-friday";
-          version = "0.1.0";
+          version = "dev";
           port = 8080;
           env = {
             IIFF_TMDB_API_KEY = {

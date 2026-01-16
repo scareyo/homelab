@@ -6,7 +6,7 @@ metadata:
     app.kubernetes.io/instance: iiff
     app.kubernetes.io/name: iiff
     app.kubernetes.io/part-of: iiff
-    app.kubernetes.io/version: 0.1.0
+    app.kubernetes.io/version: dev
   name: iiff
   namespace: iiff
 spec:
