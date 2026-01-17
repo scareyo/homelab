@@ -15,6 +15,8 @@
       };
 
       webhook.ALLOWED_HOST_LIST = "ci.vegapunk.cloud";
+
+      actions.ENABLED = false;
     };
     oauth = [
       {
