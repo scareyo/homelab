@@ -22,6 +22,7 @@
       WOODPECKER_HOST = "https://ci.vegapunk.cloud";
       WOODPECKER_OPEN = "true";
       WOODPECKER_ADMIN = "administrator";
+      WOODPECKER_PLUGINS_PRIVILEGED = "woodpeckerci/plugin-docker-buildx";
 
       WOODPECKER_FORGEJO = "true";
       WOODPECKER_FORGEJO_URL = "https://dev.vegapunk.cloud";
