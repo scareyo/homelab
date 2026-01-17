@@ -64,6 +64,18 @@
           ];
         };
 
+        # Scripts
+        packages.generate-manifests = pkgs.writeShellApplication {
+          name = "generate-manifests";
+          text = builtins.readFile ./scripts/generate-manifests.sh;
+        };
+
+        packages.update-hash = pkgs.writeShellApplication {
+          name = "update-hash";
+          text = builtins.readFile ./scripts/update-hash.sh;
+        };
+
+        # Nixidy
         packages.nixidy = nixidy.packages.${system}.default;
 
         packages.crds = pkgs.callPackage ./nix/crds {

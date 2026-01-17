@@ -23,8 +23,8 @@
       "matchDatasources": ["helm"],
       "postUpgradeTasks": {
         "commands": [
-          "./scripts/update-hash.sh {{{packageFile}}}",
-          "./scripts/generate-manifests.sh"
+          "nix run .#update-hash {{{packageFile}}}",
+          "nix run .#generate-manifests"
         ],
         "executionMode": "update"
       }
@@ -34,7 +34,7 @@
       "matchDatasources": ["docker"],
       "postUpgradeTasks": {
         "commands": [
-          "./scripts/generate-manifests.sh"
+          "nix run .#generate-manifests"
         ],
         "executionMode": "update"
       }
