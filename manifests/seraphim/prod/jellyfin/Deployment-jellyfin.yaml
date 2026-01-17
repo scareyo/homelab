@@ -42,6 +42,8 @@ spec:
               name: cache
             - mountPath: /config
               name: config
+            - mountPath: /mnt/media/livetv
+              name: livetv
             - mountPath: /mnt/media/movies
               name: movies
             - mountPath: /mnt/media/shows
@@ -57,6 +59,11 @@ spec:
         - name: config
           persistentVolumeClaim:
             claimName: config
+        - name: livetv
+          nfs:
+            path: /mnt/nami-01/media/livetv
+            readOnly: false
+            server: nami.int.scarey.me
         - name: movies
           nfs:
             path: /mnt/nami-01/media/movies

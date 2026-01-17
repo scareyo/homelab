@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/component: main
+    app.kubernetes.io/instance: zap2xml
+    app.kubernetes.io/name: zap2xml
+    app.kubernetes.io/part-of: jellyfin
+    app.kubernetes.io/version: v2.2.0
+  name: zap2xml
+  namespace: jellyfin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: zap2xml
+      app.kubernetes.io/name: zap2xml
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: main
+        app.kubernetes.io/instance: zap2xml
+        app.kubernetes.io/name: zap2xml
+        app.kubernetes.io/part-of: jellyfin
+        app.kubernetes.io/version: v2.2.0
+    spec:
+      containers:
+        - env:
+            - name: OUTPUT_FILE
+              value: /mnt/media/livetv/xmltv.xml
+            - name: POSTAL_CODE
+              value: "02215"
+          image: ghcr.io/jef/zap2xml:v2.2.0
+          name: zap2xml
+          ports: []
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+          volumeMounts:
+            - mountPath: /mnt/media/livetv
+              name: livetv
+      securityContext:
+        fsGroup: 65534
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 1000
+        runAsUser: 1000
+      volumes:
+        - name: livetv
+          nfs:
+            path: /mnt/nami-01/media/livetv
+            readOnly: false
+            server: nami.int.scarey.me

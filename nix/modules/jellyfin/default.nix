@@ -53,6 +53,15 @@ in
               readOnly = true;
             };
           };
+          livetv = {
+            type = "nfs";
+            path = "/mnt/media/livetv";
+            config = {
+              server = "nami.int.scarey.me";
+              path = "/mnt/nami-01/media/livetv";
+              readOnly = false;
+            };
+          };
         };
 
         route = {};
@@ -62,6 +71,30 @@ in
             restore = true;
             schedule = "0 4 * * *";
             ttl = "168h0m0s"; # 1 week
+          };
+        };
+      };
+      templates.app.zap2xml = {
+        inherit namespace;
+
+        workload = {
+          image = "ghcr.io/jef/zap2xml";
+          version = "v2.2.0";
+          env = {
+            POSTAL_CODE = "02215";
+            OUTPUT_FILE = "/mnt/media/livetv/xmltv.xml";
+          };
+        };
+
+        persistence = {
+          livetv = {
+            type = "nfs";
+            path = "/mnt/media/livetv";
+            config = {
+              server = "nami.int.scarey.me";
+              path = "/mnt/nami-01/media/livetv";
+              readOnly = false;
+            };
           };
         };
       };
