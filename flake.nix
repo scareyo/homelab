@@ -58,6 +58,7 @@
 
         devShells.renovate = pkgs.mkShell {
           packages = with pkgs; [
+            kubernetes-helm
             renovate
             yq-go
             nixidy.packages.${system}.default

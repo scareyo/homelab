@@ -23,8 +23,7 @@ in
         data."config.json" = ''
           {
             "allowedCommands": [
-              "update-hash.sh",
-              "generate-manifests.sh"
+              "nix"
             ]
           }
         '';
