@@ -6,7 +6,7 @@ metadata:
     app.kubernetes.io/instance: oauth2-proxy-sonarr
     app.kubernetes.io/name: oauth2-proxy
     app.kubernetes.io/part-of: sonarr
-    app.kubernetes.io/version: v7.13.0
+    app.kubernetes.io/version: v7.14.1
   name: oauth2-proxy
   namespace: sonarr
 spec:
