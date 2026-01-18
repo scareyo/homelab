@@ -1,6 +1,6 @@
 {
   repo = "oci://code.forgejo.org/forgejo-helm";
   chart = "forgejo";
-  version = "15.1.0";
-  chartHash = "sha256-AIRH4yFUrNaJ9l2aA5peu4sXRgtrgDHBFinpFLrmENM=";
+  version = "16.0.1";
+  chartHash = "sha256-i59IwFSSsb00J9M1GX7jbL6B7DRNjwizlbV2DPP4KAM=";
 }
