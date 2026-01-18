@@ -2,7 +2,7 @@
 
 let
   image = "quay.io/oauth2-proxy/oauth2-proxy";
-  version = "v7.14.1";
+  version = "v7.14.2";
   hostname = (if route.hostname == null then "${name}.vegapunk.cloud" else route.hostname);
 
   labels = {

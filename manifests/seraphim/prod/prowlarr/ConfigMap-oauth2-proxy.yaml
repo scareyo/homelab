@@ -18,6 +18,6 @@ metadata:
     app.kubernetes.io/instance: oauth2-proxy-prowlarr
     app.kubernetes.io/name: oauth2-proxy
     app.kubernetes.io/part-of: prowlarr
-    app.kubernetes.io/version: v7.14.1
+    app.kubernetes.io/version: v7.14.2
   name: oauth2-proxy
   namespace: prowlarr
