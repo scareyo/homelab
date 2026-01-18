@@ -6,7 +6,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: victoria-logs-collector
     app.kubernetes.io/version: v1.43.1
-    helm.sh/chart: victoria-logs-collector-0.2.4
+    helm.sh/chart: victoria-logs-collector-0.2.6
   name: vl-collector-victoria-logs-collector
   namespace: monitoring
 spec:
@@ -32,6 +32,7 @@ spec:
             - --kubernetesCollector.includePodLabels
             - --kubernetesCollector.msgField=message.msg,message,msg
             - --kubernetesCollector.timeField=message.time,message.ts,message.timestamp,m,time,ts,timestamp
+            - --loggerFormat=json
             - --remoteWrite.headers="AccountID:0^^ProjectID:0"
             - --remoteWrite.url=http://vlsingle-victoria-logs:9428/insert/native
             - --tmpDataPath=/vl-collector

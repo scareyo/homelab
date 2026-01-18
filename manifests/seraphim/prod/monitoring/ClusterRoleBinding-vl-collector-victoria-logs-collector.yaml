@@ -6,7 +6,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: victoria-logs-collector
     app.kubernetes.io/version: v1.43.1
-    helm.sh/chart: victoria-logs-collector-0.2.4
+    helm.sh/chart: victoria-logs-collector-0.2.6
   name: vl-collector-victoria-logs-collector
 roleRef:
   apiGroup: rbac.authorization.k8s.io
