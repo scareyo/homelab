@@ -19,7 +19,7 @@ in
 
         workload = {
           image = "ghcr.io/jellyfin/jellyfin";
-          version = "10.11.5";
+          version = "10.11.6";
           port = 8096;
         };
 
