@@ -8,7 +8,7 @@ metadata:
     app.kubernetes.io/instance: homepage
     app.kubernetes.io/name: homepage
     app.kubernetes.io/part-of: homepage
-    app.kubernetes.io/version: v1.8.0
+    app.kubernetes.io/version: v1.9.0
   name: homepage
   namespace: homepage
 spec:
