@@ -5,4 +5,6 @@
 set -e
 
 nixidy switch .#seraphim
+gitleaks dir ./manifests
+trufflehog filesystem ./manifests
 git add manifests/*
