@@ -1,6 +1,6 @@
 {
   repo = "https://piraeus.io/helm-charts";
   chart = "snapshot-controller";
-  version = "4.2.0";
-  chartHash = "sha256-PPYzp+13/3IhM1w9EOgaiGN1xyts2pJafAiZwZnmH88=";
+  version = "5.0.2";
+  chartHash = "sha256-yUiQE0havQQhahzmw9ACjxfc29bBct8acIjKb+oA7gE=";
 }

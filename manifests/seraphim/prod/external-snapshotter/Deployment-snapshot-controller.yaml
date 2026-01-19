@@ -6,7 +6,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: snapshot-controller
     app.kubernetes.io/version: v8.4.0
-    helm.sh/chart: snapshot-controller-4.2.0
+    helm.sh/chart: snapshot-controller-5.0.2
   name: snapshot-controller
   namespace: kube-system
 spec:
@@ -24,6 +24,7 @@ spec:
     spec:
       containers:
         - args:
+            - --feature-gates=CSIVolumeGroupSnapshot=true
             - --http-endpoint=:8080
             - --leader-election=true
             - --leader-election-namespace=$(NAMESPACE)
