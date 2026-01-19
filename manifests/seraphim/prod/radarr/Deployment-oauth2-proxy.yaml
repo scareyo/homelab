@@ -6,7 +6,7 @@ metadata:
     app.kubernetes.io/instance: oauth2-proxy-radarr
     app.kubernetes.io/name: oauth2-proxy
     app.kubernetes.io/part-of: radarr
-    app.kubernetes.io/version: v7.14.1
+    app.kubernetes.io/version: v7.14.2
   name: oauth2-proxy
   namespace: radarr
 spec:
@@ -22,7 +22,7 @@ spec:
         app.kubernetes.io/instance: oauth2-proxy-radarr
         app.kubernetes.io/name: oauth2-proxy
         app.kubernetes.io/part-of: radarr
-        app.kubernetes.io/version: v7.14.1
+        app.kubernetes.io/version: v7.14.2
     spec:
       containers:
         - args:
@@ -45,7 +45,7 @@ spec:
                 secretKeyRef:
                   key: cookie-secret
                   name: oidc
-          image: quay.io/oauth2-proxy/oauth2-proxy:v7.14.1
+          image: quay.io/oauth2-proxy/oauth2-proxy:v7.14.2
           name: oauth2-proxy
           ports:
             - containerPort: 8080
