@@ -12,6 +12,7 @@ let
       };
       crds = [
         "deploy/crds/cert-manager.io_clusterissuers.yaml"
+        "deploy/crds/cert-manager.io_issuers.yaml"
       ];
     };
 

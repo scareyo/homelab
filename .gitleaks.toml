@@ -1,0 +1,9 @@
+[extend]
+useDefault = true
+
+[[allowlists]]
+ description = "Allowlist for oauth_0 checksum"
+ regexTarget = "line"
+ regexes = [
+  '''checksum/oauth_0:'''
+ ]
