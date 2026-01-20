@@ -30,6 +30,7 @@
     homepage.enable = true;
     iiff.enable = true;
     jellyfin.enable = true;
+    kgateway.enable = true;
     komga.enable = true;
     mariadb.enable = true;
     metrics-server.enable = true;

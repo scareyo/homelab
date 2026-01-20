@@ -1,0 +1,7 @@
+{
+  controller = {
+    extraEnv = {
+      KGW_ENABLE_GATEWAY_API_EXPERIMENTAL_FEATURES = "true";
+    };
+  };
+}
