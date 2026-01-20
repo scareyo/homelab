@@ -5,6 +5,6 @@
 set -e
 
 nixidy switch .#seraphim
-gitleaks dir ./manifests
+gitleaks dir ./manifests --config .gitleaks.toml
 trufflehog filesystem ./manifests
 git add manifests/*
