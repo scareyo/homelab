@@ -1,0 +1,32 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "10"
+  labels:
+    app.kubernetes.io/component: main
+    app.kubernetes.io/instance: attic
+    app.kubernetes.io/name: attic
+    app.kubernetes.io/part-of: attic
+    app.kubernetes.io/version: 9736e87439be1b5d40cad1dff004e1d845f8b9e7
+  name: attic
+  namespace: attic
+spec:
+  hostnames:
+    - cache.vegapunk.cloud
+  parentRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: internal
+      namespace: gateway
+  rules:
+    - backendRefs:
+        - group: ""
+          kind: Service
+          name: attic
+          port: 80
+          weight: 1
+      matches:
+        - path:
+            type: PathPrefix
+            value: /

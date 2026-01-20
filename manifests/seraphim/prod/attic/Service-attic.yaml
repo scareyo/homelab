@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/component: main
+    app.kubernetes.io/instance: attic
+    app.kubernetes.io/name: attic
+    app.kubernetes.io/part-of: attic
+    app.kubernetes.io/version: 9736e87439be1b5d40cad1dff004e1d845f8b9e7
+  name: attic
+  namespace: attic
+spec:
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: http
+  selector:
+    app.kubernetes.io/name: attic

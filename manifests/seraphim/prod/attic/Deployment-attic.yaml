@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/component: main
+    app.kubernetes.io/instance: attic
+    app.kubernetes.io/name: attic
+    app.kubernetes.io/part-of: attic
+    app.kubernetes.io/version: 9736e87439be1b5d40cad1dff004e1d845f8b9e7
+  name: attic
+  namespace: attic
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: attic
+      app.kubernetes.io/name: attic
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: main
+        app.kubernetes.io/instance: attic
+        app.kubernetes.io/name: attic
+        app.kubernetes.io/part-of: attic
+        app.kubernetes.io/version: 9736e87439be1b5d40cad1dff004e1d845f8b9e7
+    spec:
+      containers:
+        - env:
+            - name: ATTIC_SERVER_DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  key: uri
+                  name: attic-app
+            - name: ATTIC_SERVER_TOKEN_RS256_SECRET_BASE64
+              valueFrom:
+                secretKeyRef:
+                  key: token
+                  name: attic
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  key: AWS_ACCESS_KEY_ID
+                  name: attic-obc
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: AWS_SECRET_ACCESS_KEY
+                  name: attic-obc
+          image: ghcr.io/zhaofengli/attic:9736e87439be1b5d40cad1dff004e1d845f8b9e7
+          name: attic
+          ports:
+            - containerPort: 8080
+              name: http
+          securityContext: {}
+          volumeMounts:
+            - mountPath: /var/empty/.config/attic
+              name: config
+      securityContext: {}
+      volumes:
+        - configMap:
+            name: config
+          name: config

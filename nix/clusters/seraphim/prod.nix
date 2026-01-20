@@ -17,6 +17,7 @@
   vegapunk = {
     adventurelog.enable = true;
     argocd.enable = true;
+    attic.enable = true;
     booklore.enable = true;
     cert-manager.enable = true;
     cilium.enable = true;

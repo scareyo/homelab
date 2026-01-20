@@ -26,6 +26,8 @@
       in {
         devShells.default = pkgs.mkShell {
           packages = with pkgs; [
+            attic-client
+            attic-server
             dnsmasq
             gitleaks
             infisicalsdk
