@@ -19,7 +19,6 @@
   k8sServiceHost = "localhost";
   k8sServicePort = 7445;
   bgpControlPlane.enabled = true;
-  gatewayAPI.enabled = true;
 
   hubble = {
     relay.enabled = true;

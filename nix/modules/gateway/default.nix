@@ -2,6 +2,7 @@
 
 let
   cfg = config.vegapunk.gateway;
+  namespace = "gateway";
 in
 {
   options = {
@@ -10,7 +11,7 @@ in
   
   config = lib.mkIf cfg.enable {
     applications.gateway = {
-      namespace = "gateway";
+      inherit namespace;
       createNamespace = true;
 
       resources = import ./resources.nix;

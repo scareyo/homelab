@@ -7,7 +7,7 @@
       };
     };
     spec = {
-      gatewayClassName = "cilium";
+      gatewayClassName = "kgateway";
       infrastructure.annotations."lbipam.cilium.io/ips" = "10.10.21.11";
       listeners = [
         {
