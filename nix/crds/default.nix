@@ -74,6 +74,7 @@ let
         "config/crd/standard/gateway.networking.k8s.io_gatewayclasses.yaml"
         "config/crd/standard/gateway.networking.k8s.io_gateways.yaml"
         "config/crd/standard/gateway.networking.k8s.io_httproutes.yaml"
+        "config/crd/experimental/gateway.networking.k8s.io_tcproutes.yaml"
       ];
     };
 

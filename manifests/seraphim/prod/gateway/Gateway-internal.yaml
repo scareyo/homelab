@@ -12,6 +12,8 @@ spec:
       lbipam.cilium.io/ips: 10.10.21.11
   listeners:
     - allowedRoutes:
+        kinds:
+          - kind: HTTPRoute
         namespaces:
           from: All
       hostname: '*.vegapunk.cloud'
@@ -22,3 +24,11 @@ spec:
         certificateRefs:
           - name: cloud-vegapunk-apps-tls
         mode: Terminate
+    - allowedRoutes:
+        kinds:
+          - kind: TCPRoute
+        namespaces:
+          from: All
+      name: cloud-vegapunk-dev-ssh
+      port: 22
+      protocol: TCP

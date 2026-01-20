@@ -66,6 +66,25 @@ in
           { source = "/forgejo/OIDC_CLIENT_SECRET"; dest = "secret"; }
         ];
       };
+
+      resources."gateway.networking.k8s.io".v1alpha2.TCPRoute.forgejo-ssh = {
+        spec = {
+          parentRefs = [
+            {
+              name = "internal";
+              namespace = "gateway";
+              sectionName = "cloud-vegapunk-dev-ssh";
+            }
+          ];
+          rules = [
+            {
+              backendRefs = [
+                { group = ""; kind = "Service"; name = "forgejo-ssh"; port = 22; }
+              ];
+            }
+          ];
+        };
+      };
     };
   };
 }

@@ -15,13 +15,29 @@
           port = 443;
           name = "cloud-vegapunk-apps-https";
           hostname = "*.vegapunk.cloud";
-          allowedRoutes.namespaces.from = "All";
+          allowedRoutes = {
+            namespaces.from = "All";
+            kinds = [
+              { kind = "HTTPRoute"; }
+            ];
+          };
           tls = {
             mode = "Terminate";
             certificateRefs = [
               {
                 name = "cloud-vegapunk-apps-tls";
               }
+            ];
+          };
+        }
+        {
+          protocol = "TCP";
+          port = 22;
+          name = "cloud-vegapunk-dev-ssh";
+          allowedRoutes = {
+            namespaces.from = "All";
+            kinds = [
+              { kind = "TCPRoute"; }
             ];
           };
         }
