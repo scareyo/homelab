@@ -26,7 +26,6 @@
     external-snapshotter.enable = true;
     forgejo.enable = true;
     gateway.enable = true;
-    homarr.enable = false;
     homepage.enable = true;
     iiff.enable = true;
     jellyfin.enable = true;
