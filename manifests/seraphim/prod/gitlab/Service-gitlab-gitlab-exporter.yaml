@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: gitlab-exporter
+    chart: gitlab-exporter-9.8.2
+    heritage: Helm
+    release: gitlab
+  name: gitlab-gitlab-exporter
+  namespace: gitlab
+spec:
+  ports:
+    - name: http-metrics
+      port: 9168
+      protocol: TCP
+      targetPort: http-metrics
+  selector:
+    app: gitlab-exporter
+    release: gitlab
+  type: ClusterIP

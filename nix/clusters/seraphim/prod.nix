@@ -27,6 +27,7 @@
     external-snapshotter.enable = true;
     forgejo.enable = true;
     gateway.enable = true;
+    gitlab.enable = true;
     homepage.enable = true;
     iiff.enable = true;
     jellyfin.enable = true;

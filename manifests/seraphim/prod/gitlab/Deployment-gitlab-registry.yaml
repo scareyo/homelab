@@ -1,0 +1,203 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: registry
+    app.kubernetes.io/name: gitlab
+    app.kubernetes.io/version: v18.8.2
+    chart: registry-0.7.0
+    heritage: Helm
+    release: gitlab
+  name: gitlab-registry
+  namespace: gitlab
+spec:
+  selector:
+    matchLabels:
+      app: registry
+      release: gitlab
+  template:
+    metadata:
+      annotations:
+        checksum/configmap: f5f3dff6d88d18eae2341b3a8f8926ccd9e862ed0c7e777edb68055846d9ef5d
+        cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
+      labels:
+        app: registry
+        app.kubernetes.io/name: gitlab
+        app.kubernetes.io/version: v18.8.2
+        chart: registry-0.7.0
+        heritage: Helm
+        release: gitlab
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app: registry
+                    release: gitlab
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+      automountServiceAccountToken: false
+      containers:
+        - env:
+            - name: GODEBUG
+              value: tlsmlkem=0,tlskyber=0
+            - name: TZ
+              value: UTC
+          image: registry.gitlab.com/gitlab-org/build/cng/gitlab-container-registry:v4.33.0-gitlab
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - /bin/bash
+                  - -c
+                  - sleep 5
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /debug/health
+              port: debug
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          name: registry
+          ports:
+            - containerPort: 5000
+              name: http
+            - containerPort: 5001
+              name: debug
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /debug/health
+              port: debug
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            requests:
+              cpu: 50m
+              memory: 32Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            runAsNonRoot: true
+            runAsUser: 1000
+          volumeMounts:
+            - mountPath: /etc/docker/registry/
+              name: registry-server-config
+              readOnly: true
+            - mountPath: /etc/ssl/certs/
+              name: etc-ssl-certs
+              readOnly: true
+            - mountPath: /etc/pki/ca-trust/extracted/pem
+              name: etc-pki-ca-trust-extracted-pem
+              readOnly: true
+      initContainers:
+        - env:
+            - name: TZ
+              value: UTC
+          image: registry.gitlab.com/gitlab-org/build/cng/certificates:v18.8.2
+          name: certificates
+          resources:
+            requests:
+              cpu: 50m
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            runAsNonRoot: true
+            runAsUser: 1000
+          volumeMounts:
+            - mountPath: /etc/ssl/certs
+              name: etc-ssl-certs
+              readOnly: false
+            - mountPath: /etc/pki/ca-trust/extracted/pem
+              name: etc-pki-ca-trust-extracted-pem
+              readOnly: false
+            - mountPath: /usr/local/share/ca-certificates
+              name: custom-ca-certificates
+              readOnly: true
+        - args:
+            - sh
+            - /config/configure
+          env:
+            - name: CONFIG_TEMPLATE_DIRECTORY
+              value: /templates
+            - name: CONFIG_DIRECTORY
+              value: /registry
+            - name: TZ
+              value: UTC
+          image: registry.gitlab.com/gitlab-org/build/cng/gitlab-base:v18.8.2
+          name: configure
+          resources:
+            requests:
+              cpu: 50m
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            runAsNonRoot: true
+            runAsUser: 1000
+          volumeMounts:
+            - mountPath: /config
+              name: registry-secrets
+            - mountPath: /templates
+              name: registry-server-config-templates
+              readOnly: true
+            - mountPath: /registry
+              name: registry-server-config
+      securityContext:
+        fsGroup: 1000
+        runAsUser: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      terminationGracePeriodSeconds: 30
+      volumes:
+        - configMap:
+            items:
+              - key: config.yml.tpl
+                path: config.yml.tpl
+            name: gitlab-registry
+          name: registry-server-config-templates
+        - emptyDir:
+            medium: Memory
+          name: registry-server-config
+        - name: registry-secrets
+          projected:
+            sources:
+              - configMap:
+                  name: gitlab-registry
+              - secret:
+                  items:
+                    - key: registry-auth.crt
+                      path: certificate.crt
+                  name: gitlab-registry-secret
+              - secret:
+                  items:
+                    - key: secret
+                      path: httpSecret
+                  name: gitlab-registry-httpsecret
+              - secret:
+                  name: gitlab-minio-secret
+        - emptyDir:
+            medium: Memory
+          name: etc-ssl-certs
+        - emptyDir:
+            medium: Memory
+          name: etc-pki-ca-trust-extracted-pem
+        - name: custom-ca-certificates
+          projected:
+            defaultMode: 288
+            sources:
+              - secret:
+                  name: gitlab-wildcard-tls-ca

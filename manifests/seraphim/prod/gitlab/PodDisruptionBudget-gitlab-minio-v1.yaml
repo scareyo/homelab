@@ -1,0 +1,17 @@
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  labels:
+    app: minio
+    chart: minio-0.4.3
+    heritage: Helm
+    release: gitlab
+  name: gitlab-minio-v1
+  namespace: gitlab
+spec:
+  maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: minio
+      component: app
+      release: gitlab

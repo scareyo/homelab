@@ -1,0 +1,64 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  annotations:
+    helm.sh/hook: pre-upgrade
+    helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation
+    helm.sh/hook-weight: "-10"
+  labels:
+    app: gitlab
+    chart: gitlab-9.8.2
+    heritage: Helm
+    release: gitlab
+  name: gitlab-gitlab-upgrade-check
+  namespace: gitlab
+spec:
+  backoffLimit: 2
+  template:
+    metadata:
+      labels:
+        app: gitlab
+        chart: gitlab-9.8.2
+        heritage: Helm
+        release: gitlab
+    spec:
+      containers:
+        - command:
+            - /bin/sh
+            - /scripts/runcheck
+          env:
+            - name: GITLAB_VERSION
+              value: 18.8.2
+            - name: CHART_VERSION
+              value: 9.8.2
+          image: registry.gitlab.com/gitlab-org/build/cng/gitlab-base:v18.8.2
+          name: run-check
+          resources:
+            requests:
+              cpu: 50m
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            runAsNonRoot: true
+            runAsUser: 65534
+          volumeMounts:
+            - mountPath: /chart-info
+              name: chart-info
+            - mountPath: /scripts
+              name: scripts
+      restartPolicy: Never
+      securityContext:
+        fsGroup: 65534
+        runAsUser: 65534
+        seccompProfile:
+          type: RuntimeDefault
+      volumes:
+        - configMap:
+            name: gitlab-gitlab-chart-info
+            optional: true
+          name: chart-info
+        - configMap:
+            name: gitlab-gitlab-upgrade-check
+          name: scripts

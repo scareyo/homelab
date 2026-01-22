@@ -1,0 +1,45 @@
+apiVersion: v1
+data:
+  config.yaml: |
+    agent:
+      kubernetes_api:
+        listen:
+          address: :8154
+        url_path_prefix: /k8s-proxy
+        websocket_token_secret_file: /etc/kas/.gitlab_kas_websocket_token_secret
+      listen:
+        address: :8150
+        websocket: true
+    api:
+      listen:
+        address: :8153
+        authentication_secret_file: /etc/kas/.gitlab_kas_secret
+    gitlab:
+      address: http://gitlab-webservice-default.gitlab.svc:8181
+      authentication_secret_file: /etc/kas/.gitlab_kas_secret
+      external_url: https://gitlab.vegapunk.cloud
+    observability:
+      listen:
+        address: :8151
+      liveness_probe:
+        url_path: /liveness
+      readiness_probe:
+        url_path: /readiness
+    private_api:
+      listen:
+        address: :8155
+        authentication_secret_file: /etc/kas/.gitlab_kas_private_api_secret
+    redis:
+      database_index: 0
+      password_file: /etc/kas/redis/redis-password
+      server:
+        address: gitlab-redis-master.gitlab.svc:6379
+kind: ConfigMap
+metadata:
+  labels:
+    app: kas
+    chart: kas-9.8.2
+    heritage: Helm
+    release: gitlab
+  name: gitlab-kas
+  namespace: gitlab
