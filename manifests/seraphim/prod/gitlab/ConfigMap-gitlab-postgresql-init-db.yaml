@@ -1,0 +1,43 @@
+apiVersion: v1
+data:
+  enable_extensions.sh: |
+    [[ -n "${POSTGRES_POSTGRES_PASSWORD_FILE:-}" ]] && POSTGRES_POSTGRES_PASSWORD=$(cat ${POSTGRES_POSTGRES_PASSWORD_FILE})
+    PGPASSWORD=${POSTGRES_POSTGRES_PASSWORD} psql -d gitlabhq_production -U postgres -c 'CREATE EXTENSION IF NOT EXISTS amcheck; CREATE EXTENSION IF NOT EXISTS pg_trgm; CREATE EXTENSION IF NOT EXISTS btree_gist;'
+  init_registry.sh: |
+    [[ -n "${POSTGRES_POSTGRES_PASSWORD_FILE:-}" ]] && POSTGRES_POSTGRES_PASSWORD=$(cat ${POSTGRES_POSTGRES_PASSWORD_FILE})
+
+    # Read registry database password from mounted secret file
+    REGISTRY_PASSWORD_FILE="/etc/gitlab/postgres/registry_database_password"
+    if [[ -f "${REGISTRY_PASSWORD_FILE}" ]]; then
+      REGISTRY_PASSWORD=$(cat ${REGISTRY_PASSWORD_FILE})
+    else
+      echo "ERROR: Registry database password file not found at ${REGISTRY_PASSWORD_FILE}"
+      exit 1
+    fi
+
+    # Create registry user if it doesn't exist
+    PGPASSWORD=${POSTGRES_POSTGRES_PASSWORD} psql -U postgres -tc "SELECT 1 FROM pg_user WHERE usename = 'registry'" | grep -q 1 || \
+    (echo "Creating registry user..." && PGPASSWORD=${POSTGRES_POSTGRES_PASSWORD} psql -U postgres -c "CREATE USER \"registry\" WITH CREATEDB PASSWORD '${REGISTRY_PASSWORD}';")
+
+    # Create registry database if it doesn't exist
+    PGPASSWORD=${POSTGRES_POSTGRES_PASSWORD} psql -U postgres -lqt | cut -d \| -f 1 | grep -qw "registry" || \
+    (echo "Creating registry database..." && PGPASSWORD=${POSTGRES_POSTGRES_PASSWORD} psql -U postgres -c "CREATE DATABASE \"registry\" WITH OWNER \"registry\";")
+
+    # Grant necessary privileges to registry user
+    echo "Granting privileges..."
+    PGPASSWORD=${POSTGRES_POSTGRES_PASSWORD} psql -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE \"registry\" TO \"registry\";"
+    # Leave this here - This line denotes end of block to the parser.
+  init_revision.sh: |
+    if [[ ! -f "$POSTGRESQL_VOLUME_DIR/.gitlab_1_scripts_initialized" ]] ; then
+      rm -f "$POSTGRESQL_VOLUME_DIR/.user_scripts_initialized"
+      touch "$POSTGRESQL_VOLUME_DIR/.gitlab_1_scripts_initialized"
+    fi
+kind: ConfigMap
+metadata:
+  labels:
+    app: gitlab
+    chart: gitlab-9.8.2
+    heritage: Helm
+    release: gitlab
+  name: gitlab-postgresql-init-db
+  namespace: gitlab

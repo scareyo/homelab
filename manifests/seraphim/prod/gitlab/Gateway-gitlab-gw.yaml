@@ -1,0 +1,63 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  labels:
+    app: gitlab
+    chart: gitlab-9.8.2
+    heritage: Helm
+    release: gitlab
+  name: gitlab-gw
+  namespace: gitlab
+spec:
+  gatewayClassName: internal
+  listeners:
+    - allowedRoutes:
+        namespaces:
+          from: Same
+      hostname: gitlab.example.com
+      name: gitlab-web
+      port: 443
+      protocol: HTTPS
+      tls:
+        certificateRefs:
+          - name: gitlab-tls
+        mode: Terminate
+    - allowedRoutes:
+        namespaces:
+          from: Same
+      hostname: registry.example.com
+      name: registry-web
+      port: 443
+      protocol: HTTPS
+      tls:
+        certificateRefs:
+          - name: registry-tls
+        mode: Terminate
+    - allowedRoutes:
+        namespaces:
+          from: Same
+      hostname: kas.example.com
+      name: kas-web
+      port: 443
+      protocol: HTTPS
+      tls:
+        certificateRefs:
+          - name: kas-tls
+        mode: Terminate
+    - allowedRoutes:
+        namespaces:
+          from: Same
+      name: gitlab-ssh
+      port: 22
+      protocol: TCP
+    - allowedRoutes:
+        namespaces:
+          from: Same
+      hostname: minio.example.com
+      name: minio-web
+      port: 443
+      protocol: HTTPS
+      tls:
+        certificateRefs:
+          - name: minio-tls
+        mode: Terminate

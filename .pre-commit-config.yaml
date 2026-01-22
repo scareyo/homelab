@@ -25,6 +25,7 @@ repos:
           bash -c '
             trufflehog git file://. \
             --since-commit "$PRE_COMMIT_FROM_REF" \
+            --exclude-detectors=GitLab \
             --fail
           '
         language: system

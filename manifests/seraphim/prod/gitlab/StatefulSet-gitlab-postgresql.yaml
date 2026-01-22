@@ -1,0 +1,230 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    app.kubernetes.io/component: primary
+    app.kubernetes.io/instance: gitlab
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: postgresql
+    app.kubernetes.io/version: 16.1.0
+    helm.sh/chart: postgresql-13.4.4
+  name: gitlab-postgresql
+  namespace: gitlab
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: primary
+      app.kubernetes.io/instance: gitlab
+      app.kubernetes.io/name: postgresql
+  serviceName: gitlab-postgresql-hl
+  template:
+    metadata:
+      annotations:
+        postgresql.gitlab/init-revision: "1"
+      labels:
+        app.kubernetes.io/component: primary
+        app.kubernetes.io/instance: gitlab
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: postgresql
+        app.kubernetes.io/version: 16.1.0
+        helm.sh/chart: postgresql-13.4.4
+      name: gitlab-postgresql
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/component: primary
+                    app.kubernetes.io/instance: gitlab
+                    app.kubernetes.io/name: postgresql
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+      automountServiceAccountToken: false
+      containers:
+        - env:
+            - name: BITNAMI_DEBUG
+              value: "false"
+            - name: POSTGRESQL_PORT_NUMBER
+              value: "5432"
+            - name: POSTGRESQL_VOLUME_DIR
+              value: /bitnami/postgresql
+            - name: PGDATA
+              value: /bitnami/postgresql/data
+            - name: POSTGRES_USER
+              value: gitlab
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: postgresql-password
+                  name: gitlab-postgresql-password
+            - name: POSTGRES_POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: postgresql-postgres-password
+                  name: gitlab-postgresql-password
+            - name: POSTGRES_DATABASE
+              value: gitlabhq_production
+            - name: POSTGRESQL_ENABLE_LDAP
+              value: "no"
+            - name: POSTGRESQL_ENABLE_TLS
+              value: "no"
+            - name: POSTGRESQL_LOG_HOSTNAME
+              value: "false"
+            - name: POSTGRESQL_LOG_CONNECTIONS
+              value: "false"
+            - name: POSTGRESQL_LOG_DISCONNECTIONS
+              value: "false"
+            - name: POSTGRESQL_PGAUDIT_LOG_CATALOG
+              value: "off"
+            - name: POSTGRESQL_CLIENT_MIN_MESSAGES
+              value: error
+            - name: POSTGRESQL_SHARED_PRELOAD_LIBRARIES
+              value: pgaudit
+          image: docker.io/bitnamilegacy/postgresql:16.6.0
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - exec pg_isready -U "gitlab" -d "dbname=gitlabhq_production" -h 127.0.0.1 -p 5432
+            failureThreshold: 6
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          name: postgresql
+          ports:
+            - containerPort: 5432
+              name: tcp-postgresql
+          readinessProbe:
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - -e
+                - |
+                  exec pg_isready -U "gitlab" -d "dbname=gitlabhq_production" -h 127.0.0.1 -p 5432
+            failureThreshold: 6
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          resources:
+            limits: {}
+            requests:
+              cpu: 250m
+              memory: 256Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            privileged: false
+            readOnlyRootFilesystem: false
+            runAsNonRoot: true
+            runAsUser: 1001
+            seccompProfile:
+              type: RuntimeDefault
+          volumeMounts:
+            - mountPath: /docker-entrypoint-initdb.d/
+              name: custom-init-scripts
+            - mountPath: /dev/shm
+              name: dshm
+            - mountPath: /bitnami/postgresql
+              name: data
+            - mountPath: /docker-entrypoint-preinitdb.d/init_revision.sh
+              name: custom-init-scripts
+              subPath: init_revision.sh
+            - mountPath: /etc/gitlab/postgres/registry_database_password
+              name: registry-database-password
+              readOnly: true
+              subPath: database_password
+        - env:
+            - name: DATA_SOURCE_URI
+              value: 127.0.0.1:5432/gitlabhq_production?sslmode=disable
+            - name: DATA_SOURCE_PASS
+              valueFrom:
+                secretKeyRef:
+                  key: postgresql-password
+                  name: gitlab-postgresql-password
+            - name: DATA_SOURCE_USER
+              value: gitlab
+          image: docker.io/bitnamilegacy/postgres-exporter:0.15.0-debian-11-r7
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 6
+            httpGet:
+              path: /
+              port: http-metrics
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          name: metrics
+          ports:
+            - containerPort: 9187
+              name: http-metrics
+          readinessProbe:
+            failureThreshold: 6
+            httpGet:
+              path: /
+              port: http-metrics
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          resources:
+            limits: {}
+            requests: {}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            privileged: false
+            readOnlyRootFilesystem: false
+            runAsNonRoot: true
+            runAsUser: 1001
+            seccompProfile:
+              type: RuntimeDefault
+      hostIPC: false
+      hostNetwork: false
+      securityContext:
+        fsGroup: 1001
+        fsGroupChangePolicy: Always
+        supplementalGroups: []
+        sysctls: []
+      serviceAccountName: gitlab-postgresql
+      volumes:
+        - configMap:
+            name: gitlab-postgresql-init-db
+          name: custom-init-scripts
+        - name: registry-database-password
+          projected:
+            sources:
+              - secret:
+                  items:
+                    - key: password
+                      path: database_password
+                  name: gitlab-registry-database-password
+        - emptyDir:
+            medium: Memory
+          name: dshm
+  updateStrategy:
+    rollingUpdate: {}
+    type: RollingUpdate
+  volumeClaimTemplates:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: data
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 8Gi

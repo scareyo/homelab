@@ -1,0 +1,16 @@
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  labels:
+    app: registry
+    chart: registry-0.7.0
+    heritage: Helm
+    release: gitlab
+  name: gitlab-registry-v1
+  namespace: gitlab
+spec:
+  maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: registry
+      release: gitlab

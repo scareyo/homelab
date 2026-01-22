@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    gitlab.com/prometheus_port: "9187"
+    gitlab.com/prometheus_scrape: "true"
+    prometheus.io/port: "9187"
+    prometheus.io/scrape: "true"
+  labels:
+    app.kubernetes.io/component: metrics
+    app.kubernetes.io/instance: gitlab
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: postgresql
+    app.kubernetes.io/version: 16.1.0
+    helm.sh/chart: postgresql-13.4.4
+  name: gitlab-postgresql-metrics
+  namespace: gitlab
+spec:
+  ports:
+    - name: http-metrics
+      port: 9187
+      targetPort: http-metrics
+  selector:
+    app.kubernetes.io/component: primary
+    app.kubernetes.io/instance: gitlab
+    app.kubernetes.io/name: postgresql
+  sessionAffinity: None
+  type: ClusterIP

@@ -1,0 +1,22 @@
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  labels:
+    app: kas
+    chart: kas-9.8.2
+    heritage: Helm
+    release: gitlab
+  name: gitlab-kas
+  namespace: gitlab
+spec:
+  maxReplicas: 10
+  metrics:
+    - resource:
+        name: cpu
+        targetAverageValue: 100m
+      type: Resource
+  minReplicas: 2
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: gitlab-kas
