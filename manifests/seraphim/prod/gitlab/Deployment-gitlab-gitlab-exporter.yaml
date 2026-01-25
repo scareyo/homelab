@@ -19,7 +19,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config: eb0cddbf5b4a3301f4f4f961bb08ebb0cbd95db9733a6acf188efb30ff7ca6c5
+        checksum/config: c4af02d01f97fa1b2a646603aeda0ba53d39cc1dda842f8b48283398f8323756
         gitlab.com/prometheus_path: /metrics
         gitlab.com/prometheus_port: "9168"
         gitlab.com/prometheus_scrape: "true"
@@ -194,17 +194,17 @@ spec:
                   items:
                     - key: password
                       path: postgres/psql-password-ci
-                  name: gitlab-app
+                  name: gitlab-pg-app
               - secret:
                   items:
                     - key: password
                       path: postgres/psql-password-main
-                  name: gitlab-app
+                  name: gitlab-pg-app
               - secret:
                   items:
-                    - key: secret
+                    - key: password
                       path: redis/redis-password
-                  name: gitlab-redis-secret
+                  name: gitlab-vk
         - emptyDir:
             medium: Memory
           name: gitlab-exporter-secrets

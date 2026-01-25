@@ -33,7 +33,7 @@ data:
       database_index: 0
       password_file: /etc/kas/redis/redis-password
       server:
-        address: gitlab-redis-master.gitlab.svc:6379
+        address: gitlab-vk:6379
 kind: ConfigMap
 metadata:
   labels:

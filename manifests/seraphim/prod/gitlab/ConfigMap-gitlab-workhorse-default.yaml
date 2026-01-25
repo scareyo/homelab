@@ -16,7 +16,7 @@ data:
     shutdown_timeout = "61s"
     [redis]
     DB = 0
-    URL = "redis://gitlab-redis-master.gitlab.svc:6379"
+    URL = "redis://gitlab-vk:6379"
     Password = {% file.Read "/etc/gitlab/redis/redis-password" | strings.TrimSpace | data.ToJSON %}
     {%- $supported_providers := slice "AWS" "AzureRM" "Google" -%}
     {%- $connection := coll.Dict "provider" "" -%}

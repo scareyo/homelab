@@ -1,10 +1,10 @@
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
-  name: gitlab
+  name: gitlab-pg
   namespace: gitlab
 spec:
   imageName: ghcr.io/cloudnative-pg/postgresql:18
   instances: 3
   storage:
-    size: 256Gi
+    size: 16Gi

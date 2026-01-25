@@ -10,12 +10,24 @@
     };
     hosts.domain = "vegapunk.cloud";
 
+    hpa.apiVersion = "autoscaling/v2";
+    pdb.apiVersion = "policy/v1";
+
     psql = {
-      host = "gitlab-rw";
+      host = "gitlab-pg-rw";
+      database = "app";
       username = "app";
       password = {
         useSecret = true;
-        secret = "gitlab-app";
+        secret = "gitlab-pg-app";
+        key = "password";
+      };
+    };
+
+    redis = {
+      host = "gitlab-vk";
+      auth = {
+        secret = "gitlab-vk";
         key = "password";
       };
     };
@@ -25,4 +37,7 @@
 
   nginx-ingress.enabled = false;
   postgresql.install = false;
+  redis.install = false;
+
+  upgradeCheck.enabled = false;
 }

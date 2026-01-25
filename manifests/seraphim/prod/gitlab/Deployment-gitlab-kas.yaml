@@ -18,7 +18,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config: a555f3d3b3f2513678dc7131d0d95f626181115ccc2ffe1a5228459fbc56ee05
+        checksum/config: 796d5cb4d89093db6b22de4659adbd644b10eea97ce0b17ff8c0c3788890f11d
         cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
         gitlab.com/prometheus_path: /metrics
         gitlab.com/prometheus_port: "8151"
@@ -167,6 +167,6 @@ spec:
                   name: gitlab-kas-websocket-token
               - secret:
                   items:
-                    - key: secret
+                    - key: password
                       path: redis/redis-password
-                  name: gitlab-redis-secret
+                  name: gitlab-vk

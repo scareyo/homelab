@@ -21,7 +21,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config: 0f891e8fe547eab812969abd6f1447a0bb3f12dbde41548deec518796f5f5bc6
+        checksum/config: efb7e984ce993499444e87f8728f687152fa881ed9d9370eb5cf1867f5404a93
         cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
       labels:
         app: toolbox
@@ -206,19 +206,19 @@ spec:
                   name: gitlab-gitaly-secret
               - secret:
                   items:
-                    - key: secret
+                    - key: password
                       path: redis/redis-password
-                  name: gitlab-redis-secret
+                  name: gitlab-vk
               - secret:
                   items:
                     - key: password
                       path: postgres/psql-password-ci
-                  name: gitlab-app
+                  name: gitlab-pg-app
               - secret:
                   items:
                     - key: password
                       path: postgres/psql-password-main
-                  name: gitlab-app
+                  name: gitlab-pg-app
               - secret:
                   items:
                     - key: registry-auth.key

@@ -20,7 +20,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/configmap: ccc2093dd2a5c61f94c0d18dbf9bf89177079fcbba3a3b98579f03df707c41fc
+        checksum/configmap: d6738c1621b44e350069c50a37fab6715913a75711acfba1d625e6803ba6ea9f
         cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
         gitlab.com/prometheus_path: /metrics
         gitlab.com/prometheus_port: "3807"
@@ -272,19 +272,19 @@ spec:
                   name: gitlab-gitaly-secret
               - secret:
                   items:
-                    - key: secret
+                    - key: password
                       path: redis/redis-password
-                  name: gitlab-redis-secret
+                  name: gitlab-vk
               - secret:
                   items:
                     - key: password
                       path: postgres/psql-password-ci
-                  name: gitlab-app
+                  name: gitlab-pg-app
               - secret:
                   items:
                     - key: password
                       path: postgres/psql-password-main
-                  name: gitlab-app
+                  name: gitlab-pg-app
               - secret:
                   items:
                     - key: registry-auth.key

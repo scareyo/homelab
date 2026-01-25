@@ -42,15 +42,21 @@ in
       #  };
       #};
 
-      templates.postgres.gitlab = {
+      templates.postgres.gitlab-pg = {
         instances = 3;
-        size = "256Gi";
+        size = "16Gi";
+      };
+
+      templates.valkey.gitlab-vk = {
+        instances = 1;
+        replicas = 2;
+        size = "2Gi";
       };
 
       resources."gateway.networking.k8s.io".v1.Gateway.gitlab-gw = {
         metadata = {
           annotations = lib.mkForce {
-            "cert-manager.io/cluster-issuer" = "letsencrypt-staging";
+            "cert-manager.io/cluster-issuer" = "letsencrypt-production";
           };
         };
       };

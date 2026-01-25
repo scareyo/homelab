@@ -6,7 +6,7 @@ metadata:
     chart: migrations-9.8.2
     heritage: Helm
     release: gitlab
-  name: gitlab-migrations-b2f0e41
+  name: gitlab-migrations-1ea745b
   namespace: gitlab
 spec:
   activeDeadlineSeconds: 3600
@@ -148,19 +148,19 @@ spec:
                   name: gitlab-gitaly-secret
               - secret:
                   items:
-                    - key: secret
+                    - key: password
                       path: redis/redis-password
-                  name: gitlab-redis-secret
+                  name: gitlab-vk
               - secret:
                   items:
                     - key: password
                       path: postgres/psql-password-ci
-                  name: gitlab-app
+                  name: gitlab-pg-app
               - secret:
                   items:
                     - key: password
                       path: postgres/psql-password-main
-                  name: gitlab-app
+                  name: gitlab-pg-app
               - secret:
                   items:
                     - key: accesskey

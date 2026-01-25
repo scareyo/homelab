@@ -6,7 +6,7 @@ metadata:
     chart: minio-0.4.3
     heritage: Helm
     release: gitlab
-  name: gitlab-minio-create-buckets-2f53250
+  name: gitlab-minio-create-buckets-c459919
   namespace: gitlab
 spec:
   activeDeadlineSeconds: 600

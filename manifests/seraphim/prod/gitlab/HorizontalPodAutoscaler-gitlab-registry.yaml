@@ -1,4 +1,4 @@
-apiVersion: autoscaling/v2beta1
+apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   labels:
@@ -9,11 +9,16 @@ metadata:
   name: gitlab-registry
   namespace: gitlab
 spec:
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 300
   maxReplicas: 10
   metrics:
     - resource:
         name: cpu
-        targetAverageUtilization: 75
+        target:
+          averageUtilization: 75
+          type: Utilization
       type: Resource
   minReplicas: 2
   scaleTargetRef:
