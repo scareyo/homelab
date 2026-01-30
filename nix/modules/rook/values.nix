@@ -2,6 +2,7 @@
   cephImage = {
     repository = "quay.io/ceph/ceph";
     tag = "v19.2.3";
+    imagePullPolicy = "IfNotPresent";
   };
   cephClusterSpec = {
     mgr.modules = [
