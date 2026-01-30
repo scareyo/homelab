@@ -4,8 +4,8 @@ metadata:
   labels:
     app.kubernetes.io/instance: vm
     app.kubernetes.io/name: grafana
-    app.kubernetes.io/version: 12.3.0
-    helm.sh/chart: grafana-10.1.5
+    app.kubernetes.io/version: 12.3.1
+    helm.sh/chart: grafana-10.5.12
   name: vm-grafana
   namespace: monitoring
 spec:
@@ -20,14 +20,14 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config: 1593ab3f718bafd88f43d3e1ae04a0f597ac0f9d562bb467f4b421fbefcbf781
+        checksum/config: 84b592dc5916a56f6254570a9f11c4cf231b5a69a2dd7ac1c6cf7a0fed7ebf60
         checksum/sc-dashboard-provider-config: 89ec8c9c059a6a61286174130a15d183be69b7a486acc8437afbaf5d790a0ddd
         kubectl.kubernetes.io/default-container: grafana
       labels:
         app.kubernetes.io/instance: vm
         app.kubernetes.io/name: grafana
-        app.kubernetes.io/version: 12.3.0
-        helm.sh/chart: grafana-10.1.5
+        app.kubernetes.io/version: 12.3.1
+        helm.sh/chart: grafana-10.5.12
     spec:
       automountServiceAccountToken: true
       containers:
@@ -46,7 +46,7 @@ spec:
               value: http://localhost:3000/api/admin/provisioning/dashboards/reload
             - name: REQ_METHOD
               value: POST
-          image: quay.io/kiwigrid/k8s-sidecar:1.30.10
+          image: quay.io/kiwigrid/k8s-sidecar:2.5.0
           imagePullPolicy: IfNotPresent
           name: grafana-sc-dashboard
           securityContext:
@@ -59,6 +59,34 @@ spec:
           volumeMounts:
             - mountPath: /var/lib/grafana/dashboards
               name: sc-dashboard-volume
+        - env:
+            - name: METHOD
+              value: WATCH
+            - name: LABEL
+              value: grafana_datasource
+            - name: LABEL_VALUE
+              value: "1"
+            - name: FOLDER
+              value: /etc/grafana/provisioning/datasources
+            - name: RESOURCE
+              value: both
+            - name: REQ_URL
+              value: http://localhost:3000/api/admin/provisioning/datasources/reload
+            - name: REQ_METHOD
+              value: POST
+          image: quay.io/kiwigrid/k8s-sidecar:2.5.0
+          imagePullPolicy: IfNotPresent
+          name: grafana-sc-datasources
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            seccompProfile:
+              type: RuntimeDefault
+          volumeMounts:
+            - mountPath: /etc/grafana/provisioning/datasources
+              name: sc-datasources-volume
         - env:
             - name: POD_IP
               valueFrom:
@@ -77,15 +105,17 @@ spec:
               value: /var/lib/grafana/plugins
             - name: GF_PATHS_PROVISIONING
               value: /etc/grafana/provisioning
+            - name: GF_UNIFIED_STORAGE_INDEX_PATH
+              value: /var/lib/grafana-search/bleve
             - name: GF_SECURITY_DISABLE_INITIAL_ADMIN_CREATION
               value: "true"
-          image: docker.io/grafana/grafana:12.3.0
+          image: docker.io/grafana/grafana:12.3.1
           imagePullPolicy: IfNotPresent
           livenessProbe:
             failureThreshold: 10
             httpGet:
               path: /api/health
-              port: 3000
+              port: grafana
             initialDelaySeconds: 60
             timeoutSeconds: 30
           name: grafana
@@ -105,12 +135,13 @@ spec:
           readinessProbe:
             httpGet:
               path: /api/health
-              port: 3000
+              port: grafana
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
               drop:
                 - ALL
+            privileged: false
             seccompProfile:
               type: RuntimeDefault
           volumeMounts:
@@ -119,6 +150,8 @@ spec:
               subPath: grafana.ini
             - mountPath: /var/lib/grafana
               name: storage
+            - mountPath: /var/lib/grafana-search
+              name: search
             - mountPath: /etc/grafana/provisioning/datasources/victoria-logs.yaml
               name: config
               subPath: victoria-logs.yaml
@@ -133,31 +166,6 @@ spec:
               name: oidc
               readOnly: true
       enableServiceLinks: true
-      initContainers:
-        - env:
-            - name: METHOD
-              value: LIST
-            - name: LABEL
-              value: grafana_datasource
-            - name: LABEL_VALUE
-              value: "1"
-            - name: FOLDER
-              value: /etc/grafana/provisioning/datasources
-            - name: RESOURCE
-              value: both
-          image: quay.io/kiwigrid/k8s-sidecar:1.30.10
-          imagePullPolicy: IfNotPresent
-          name: grafana-init-sc-datasources
-          securityContext:
-            allowPrivilegeEscalation: false
-            capabilities:
-              drop:
-                - ALL
-            seccompProfile:
-              type: RuntimeDefault
-          volumeMounts:
-            - mountPath: /etc/grafana/provisioning/datasources
-              name: sc-datasources-volume
       securityContext:
         fsGroup: 472
         runAsGroup: 472
@@ -171,6 +179,8 @@ spec:
           name: config
         - emptyDir: {}
           name: storage
+        - emptyDir: {}
+          name: search
         - emptyDir: {}
           name: sc-dashboard-volume
         - configMap:
