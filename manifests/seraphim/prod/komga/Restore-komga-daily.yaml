@@ -8,7 +8,7 @@ metadata:
     app.kubernetes.io/instance: komga
     app.kubernetes.io/name: komga
     app.kubernetes.io/part-of: komga
-    app.kubernetes.io/version: 1.23.6
+    app.kubernetes.io/version: 1.24.1
   name: komga-daily
   namespace: velero
 spec:
