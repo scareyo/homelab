@@ -5,7 +5,9 @@ metadata:
   namespace: rook-ceph
 spec:
   cephVersion:
+    allowUnsupported: false
     image: quay.io/ceph/ceph:v19.2.3
+    imagePullPolicy: null
   cleanupPolicy:
     allowUninstallWithVolumes: false
     confirmation: ""
