@@ -1,6 +1,9 @@
 {
+  cephImage = {
+    repository = "quay.io/ceph/ceph";
+    tag = "v19.2.3";
+  };
   cephClusterSpec = {
-    cephVersion.image = "quay.io/ceph/ceph:v19.2.3";
     mgr.modules = [
       {
         name = "rook";
