@@ -58,28 +58,40 @@
           ];
         };
 
-        devShells.renovate = pkgs.mkShell {
-          packages = with pkgs; [
-            kubernetes-helm
-            renovate
-            yq-go
-            nixidy.packages.${system}.default
-          ];
+        # Renovate
+        apps.renovate = {
+          type = "app";
+          program = "${pkgs.renovate}/bin/renovate";
         };
 
-        # Scripts
-        packages.generate-manifests = pkgs.writeShellApplication {
-          name = "generate-manifests";
-          text = builtins.readFile ./scripts/generate-manifests.sh;
+        apps.generate-manifests = {
+          type = "app";
+          program = pkgs.writeShellApplication {
+            name = "generate-manifests";
+
+            runtimeInputs = [
+              pkgs.gitleaks
+              pkgs.trufflehog
+              nixidy.packages.${system}.default
+            ];
+
+            text = builtins.readFile ./scripts/generate-manifests.sh;
+          };
         };
 
-        packages.update-hash = pkgs.writeShellApplication {
-          name = "update-hash";
-          text = builtins.readFile ./scripts/update-hash.sh;
-        };
+        apps.update-hash = {
+          type = "app";
+          program = pkgs.writeShellApplication {
+            name = "update-hash";
 
-        # Nixidy
-        packages.nixidy = nixidy.packages.${system}.default;
+            runtimeInputs = [
+              pkgs.gnused
+              pkgs.kubernetes-helm
+            ];
+
+            text = builtins.readFile ./scripts/update-hash.sh;
+          };
+        };
 
         packages.crds = pkgs.callPackage ./nix/crds {
           generators = nixidy.packages.${system}.generators;

@@ -33,8 +33,8 @@
       "matchFileNames": ["**/nix/charts/*/default.nix"],
       "postUpgradeTasks": {
         "commands": [
-          "nix run .#update-hash {{{packageFile}}}",
-          "nix run .#generate-manifests"
+          "nix run github:scareyo/homelab#update-hash {{{packageFile}}}",
+          "nix run github:scareyo/homelab#generate-manifests"
         ],
         "executionMode": "update"
       }
@@ -45,7 +45,7 @@
       "matchDatasources": ["docker"],
       "postUpgradeTasks": {
         "commands": [
-          "nix run .#generate-manifests"
+          "nix run github:scareyo/homelab#generate-manifests"
         ],
         "executionMode": "update"
       }

@@ -42,7 +42,7 @@ in
                   "/bin/sh" "-c"
                   ''
                     echo 'experimental-features = nix-command flakes' >> /etc/nix/nix.conf && \
-                    nix develop github:scareyo/homelab#renovate --command renovate scareyo/homelab
+                    nix run github:scareyo/homelab#renovate -- scareyo/homelab
                   ''
                 ];
                 env = [
