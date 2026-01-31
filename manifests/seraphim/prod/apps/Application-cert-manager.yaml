@@ -7,7 +7,7 @@ spec:
   destination:
     namespace: cert-manager
     server: https://kubernetes.default.svc
-  project: default
+  project: system
   source:
     path: ./manifests/seraphim/prod/cert-manager
     repoURL: https://github.com/scareyo/homelab.git

@@ -7,7 +7,7 @@ spec:
   destination:
     namespace: rook-ceph
     server: https://kubernetes.default.svc
-  project: default
+  project: system
   source:
     path: ./manifests/seraphim/prod/rook
     repoURL: https://github.com/scareyo/homelab.git

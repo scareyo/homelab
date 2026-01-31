@@ -7,7 +7,7 @@ spec:
   destination:
     namespace: velero
     server: https://kubernetes.default.svc
-  project: default
+  project: system
   source:
     path: ./manifests/seraphim/prod/velero
     repoURL: https://github.com/scareyo/homelab.git

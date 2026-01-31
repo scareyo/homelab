@@ -7,7 +7,7 @@ spec:
   destination:
     namespace: sonarr
     server: https://kubernetes.default.svc
-  project: default
+  project: media
   source:
     path: ./manifests/seraphim/prod/sonarr
     repoURL: https://github.com/scareyo/homelab.git

@@ -12,7 +12,7 @@ spec:
       jqPathExpressions:
         - .spec.updateStrategy.rollingUpdate.maxUnavailable
       kind: StatefulSet
-  project: default
+  project: system
   source:
     path: ./manifests/seraphim/prod/pocket-id
     repoURL: https://github.com/scareyo/homelab.git

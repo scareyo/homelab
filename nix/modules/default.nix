@@ -1,12 +1,26 @@
 let
-  entries = builtins.readDir ./.;
+  projects = builtins.readDir ./.;
 
-  modules = builtins.filter (name:
-    entries.${name} == "directory"
-    && builtins.pathExists (./. + "/${name}/default.nix")
-  ) (builtins.attrNames entries);
-
-  imports = map (name: ./. + "/${name}") modules;
+  imports =
+    builtins.concatLists (
+      map (project:
+        let
+          projectDir = ./. + "/${project}";
+        in
+          if projects.${project} == "directory" then
+            let
+              apps = builtins.readDir projectDir;
+            in
+              map (app: projectDir + "/${app}") (
+                builtins.filter (app:
+                  apps.${app} == "directory"
+                  && builtins.pathExists (projectDir + "/${app}/default.nix")
+                ) (builtins.attrNames apps)
+              )
+          else
+            []
+      ) (builtins.attrNames projects)
+    );
 in
 {
   imports = imports ++ [

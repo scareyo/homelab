@@ -7,7 +7,7 @@ spec:
   destination:
     namespace: woodpecker
     server: https://kubernetes.default.svc
-  project: default
+  project: development
   source:
     path: ./manifests/seraphim/prod/woodpecker
     repoURL: https://github.com/scareyo/homelab.git

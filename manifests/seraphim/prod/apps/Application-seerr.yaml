@@ -7,7 +7,7 @@ spec:
   destination:
     namespace: seerr
     server: https://kubernetes.default.svc
-  project: default
+  project: media
   source:
     path: ./manifests/seraphim/prod/seerr
     repoURL: https://github.com/scareyo/homelab.git

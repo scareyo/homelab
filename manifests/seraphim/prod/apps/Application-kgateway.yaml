@@ -7,7 +7,7 @@ spec:
   destination:
     namespace: kgateway-system
     server: https://kubernetes.default.svc
-  project: default
+  project: system
   source:
     path: ./manifests/seraphim/prod/kgateway
     repoURL: https://github.com/scareyo/homelab.git

@@ -7,7 +7,7 @@ spec:
   destination:
     namespace: prowlarr
     server: https://kubernetes.default.svc
-  project: default
+  project: media
   source:
     path: ./manifests/seraphim/prod/prowlarr
     repoURL: https://github.com/scareyo/homelab.git

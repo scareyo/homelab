@@ -12,7 +12,7 @@ spec:
       jqPathExpressions:
         - .spec.insecureSkipTLSVerify
       kind: APIService
-  project: default
+  project: system
   source:
     path: ./manifests/seraphim/prod/metrics-server
     repoURL: https://github.com/scareyo/homelab.git

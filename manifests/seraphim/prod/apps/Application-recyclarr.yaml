@@ -7,7 +7,7 @@ spec:
   destination:
     namespace: recyclarr
     server: https://kubernetes.default.svc
-  project: default
+  project: media
   source:
     path: ./manifests/seraphim/prod/recyclarr
     repoURL: https://github.com/scareyo/homelab.git

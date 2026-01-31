@@ -7,7 +7,7 @@ spec:
   destination:
     namespace: forgejo
     server: https://kubernetes.default.svc
-  project: default
+  project: development
   source:
     path: ./manifests/seraphim/prod/forgejo
     repoURL: https://github.com/scareyo/homelab.git

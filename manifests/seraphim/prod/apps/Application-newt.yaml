@@ -7,7 +7,7 @@ spec:
   destination:
     namespace: newt
     server: https://kubernetes.default.svc
-  project: default
+  project: system
   source:
     path: ./manifests/seraphim/prod/newt
     repoURL: https://github.com/scareyo/homelab.git

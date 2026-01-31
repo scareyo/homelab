@@ -7,7 +7,7 @@ spec:
   destination:
     namespace: iiff
     server: https://kubernetes.default.svc
-  project: default
+  project: general
   source:
     path: ./manifests/seraphim/prod/iiff
     repoURL: https://github.com/scareyo/homelab.git
