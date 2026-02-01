@@ -85,6 +85,11 @@ in
                           assign_scores_to:
                             - name: UHD Bluray + WEB
                             - name: Remux + WEB 1080p
+
+                      media_naming:
+                        movie:
+                          rename: true
+                          standard: standard
                   sonarr:
                     web-2160p-v4:
                       base_url: http://sonarr.sonarr
@@ -125,6 +130,15 @@ in
                             - 7c3a61a9c6cb04f52f1544be6d44a026 # DV Boost
                           assign_scores_to:
                             - name: WEB-2160p
+
+                      media_naming:
+                        series: jellyfin-tvdb
+                        season: default
+                        episodes:
+                          rename: true
+                          standard: default
+                          daily: default
+                          anime: default
                 '';
               };
             };
