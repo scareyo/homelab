@@ -52,6 +52,9 @@ in
             enable = true;
             banner = "Sonarr";
             logo = "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/sonarr.svg";
+            skipAuthRoutes = [
+              "^/api/v3"
+            ];
           };
         };
 

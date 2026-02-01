@@ -43,6 +43,9 @@ in
             enable = true;
             banner = "Prowlarr";
             logo = "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/prowlarr.svg";
+            skipAuthRoutes = [
+              "^/api/v1"
+            ];
           };
         };
 

@@ -52,6 +52,9 @@ in
             enable = true;
             banner = "Radarr";
             logo = "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/radarr.svg";
+            skipAuthRoutes = [
+              "^/api/v3"
+            ];
           };
         };
 

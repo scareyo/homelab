@@ -29,6 +29,7 @@ spec:
             - --http-address=0.0.0.0:8080
             - --metrics-address=0.0.0.0:8081
             - --config=/etc/oauth2_proxy/oauth2_proxy.cfg
+            - --skip-auth-route=^/api/v3
           env:
             - name: OAUTH2_PROXY_CLIENT_ID
               valueFrom:

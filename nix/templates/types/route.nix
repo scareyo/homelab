@@ -42,6 +42,12 @@ lib.types.submodule {
             default = "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/oauth2-proxy.svg";
             description = "OAuth2-Proxy application icon";
           };
+
+          skipAuthRoutes = lib.mkOption {
+            type = lib.types.listOf lib.types.str;
+            default = [];
+            description = "List of path regex that will bypass authentication";
+          };
         };
       };
       default = {};
