@@ -45,7 +45,9 @@ let
       "--http-address=0.0.0.0:8080"
       "--metrics-address=0.0.0.0:8081"
       "--config=/etc/oauth2_proxy/oauth2_proxy.cfg"
-    ] ++ map (route: "--skip-auth-route=${route}") route.auth.skipAuthRoutes;
+    ]
+    ++ lib.optional (route.requestTimeout != null) "--upstream-timeout=${route.requestTimeout}"
+    ++ map (route: "--skip-auth-route=${route}") route.auth.skipAuthRoutes;
     env = {
       OAUTH2_PROXY_CLIENT_ID = {
         secretKeyRef = {
