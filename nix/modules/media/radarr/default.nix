@@ -48,6 +48,7 @@ in
         };
 
         route = {
+          requestTimeout = "120s";
           auth = {
             enable = true;
             banner = "Radarr";
