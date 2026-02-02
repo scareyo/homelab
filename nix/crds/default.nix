@@ -91,19 +91,6 @@ let
       ];
     };
 
-    valkey = generators.fromCRD {
-      name = "valkey";
-      src = pkgs.fetchFromGitHub {
-        owner = "hyperspike";
-        repo = "valkey-operator";
-        rev = "v0.0.61";
-        hash = "sha256-GV0nui0zOVNpZPOqwSmqZQ6yILgypBOx2Ome+cZeMcI=";
-      };
-      crds = [
-        "config/crd/bases/hyperspike.io_valkeys.yaml"
-      ];
-    };
-
     velero = generators.fromCRD {
       name = "velero";
       src = pkgs.fetchFromGitHub {

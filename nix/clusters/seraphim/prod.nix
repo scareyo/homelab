@@ -45,7 +45,6 @@
     seerr.enable = true;
     sonarr.enable = true;
     unpackerr.enable = true;
-    valkey.enable = true;
     velero.enable = true;
     woodpecker.enable = true;
   };

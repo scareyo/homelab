@@ -36,7 +36,6 @@ in
     ../generated/external-secrets.nix
     ../generated/gateway-api.nix
     ../generated/rook.nix
-    ../generated/valkey.nix
     ../generated/velero.nix
     ../generated/victoria-metrics.nix
   ];
