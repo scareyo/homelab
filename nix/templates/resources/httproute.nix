@@ -21,7 +21,7 @@
       (if route.hostname == null then "${name}.vegapunk.cloud" else route.hostname)
     ];
     rules = [
-      {
+      ({
         matches = [
           {
             path = {
@@ -44,7 +44,9 @@
             port = 80;
           })
         ];
-      }
+      } // lib.optionalAttrs (route.requestTimeout != null) {
+        timeouts.request = route.requestTimeout;
+      })
     ];
   };
 }

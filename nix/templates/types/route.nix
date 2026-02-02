@@ -26,6 +26,12 @@ lib.types.submodule {
       description = "Port of the referenced service";
     };
 
+    requestTimeout = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      description = "Duration before requests timeout";
+    };
+
     auth = lib.mkOption {
       type = lib.types.submodule {
         options = {
