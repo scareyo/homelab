@@ -105,8 +105,17 @@
         oauth2-proxy = oauth2-proxy.configMap;
       })];
 
+      core.v1.PersistentVolume = lib.mkIf (persistence != null)
+        (lib.mapAttrs (name: p: lib.mkIf (p.type == "pvc" && p.config.nfs.enable)
+          (import ./resources/pv.nix {
+            inherit lib;
+            inherit labels;
+            inherit name;
+            inherit persistence;
+          })) persistence);
+
       core.v1.PersistentVolumeClaim = lib.mkIf (persistence != null)
-        (lib.mapAttrs (name: pvc: lib.mkIf (pvc.type == "pvc")
+        (lib.mapAttrs (name: p: lib.mkIf (p.type == "pvc")
           (import ./resources/pvc.nix {
             inherit lib;
             inherit labels;

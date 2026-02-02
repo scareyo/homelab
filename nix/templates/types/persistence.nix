@@ -53,6 +53,26 @@ let
         default = null;
         description = "Persistence PVC storage class";
       };
+
+      nfs = lib.mkOption {
+        type = lib.types.submodule {
+          options = {
+            enable = lib.mkEnableOption "Enable NFS";
+            server = lib.mkOption {
+              type = lib.types.nullOr lib.types.str;
+              default = null;
+              description = "NFS server";
+            };
+            path = lib.mkOption {
+              type = lib.types.nullOr lib.types.str;
+              default = null;
+              description = "NFS remote path";
+            };
+          };
+        };
+        default = {};
+        description = "NFS settings";
+      };
     };
   };
 in lib.types.submodule ({ config, ... }: {

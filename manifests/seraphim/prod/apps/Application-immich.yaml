@@ -1,0 +1,15 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: immich
+  namespace: argocd
+spec:
+  destination:
+    namespace: immich
+    server: https://kubernetes.default.svc
+  project: general
+  source:
+    path: ./manifests/seraphim/prod/immich
+    repoURL: https://github.com/scareyo/homelab.git
+    targetRevision: main
+  syncPolicy: {}

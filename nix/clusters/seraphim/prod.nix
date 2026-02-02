@@ -29,6 +29,7 @@
     gateway.enable = true;
     homepage.enable = true;
     iiff.enable = true;
+    immich.enable = true;
     jellyfin.enable = true;
     kgateway.enable = true;
     komga.enable = true;
