@@ -34,6 +34,12 @@
         default = null;
         description = "Database to create";
       };
+
+      sharedPreloadLibraries = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [];
+        description = "List of shared_preload_libraries";
+      };
     };
 
     output = { name, config, ...  }: let
@@ -47,6 +53,8 @@
           instances = cfg.instances;
           storage.size = cfg.size;
           imageName = cfg.image;
+        } // lib.optionalAttrs (cfg.sharedPreloadLibraries != []) {
+          postgresql.shared_preload_libraries = cfg.sharedPreloadLibraries;
         };
       };
       "postgresql.cnpg.io".v1.Database.${name} = lib.mkIf (cfg.database != null) {

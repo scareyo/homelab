@@ -61,6 +61,7 @@ in
         instances = 3;
         image = "ghcr.io/tensorchord/cloudnative-vectorchord:17.5-0.4.3";
         size = "8Gi";
+        sharedPreloadLibraries = ["vchord.so"];
         database.extensions = [
           "cube"
           "earthdistance"
