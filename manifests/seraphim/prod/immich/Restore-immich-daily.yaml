@@ -1,0 +1,12 @@
+apiVersion: velero.io/v1
+kind: Restore
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "-10"
+  name: immich-daily
+  namespace: velero
+spec:
+  includedResources:
+    - pvc
+  restorePVs: true
+  scheduleName: immich-daily

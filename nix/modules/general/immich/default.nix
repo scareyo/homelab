@@ -38,34 +38,29 @@ in
           library = {
             type = "pvc";
             config = {
-              size = "100Gi";
-              accessMode = [ "ReadWriteMany" ];
-              nfs = {
-                enable = true;
-                server = "nami.int.scarey.me";
-                path = "/mnt/nami-01/media/photos";
-              };
+              size = "1Ti";
             };
           };
         };
 
-        #backup = {
-        #  daily = {
-        #    restore = true;
-        #    schedule = "0 4 * * *";
-        #    ttl = "168h0m0s"; # 1 week
-        #  };
+        backup = {
+          daily = {
+            restore = true;
+            schedule = "0 4 * * *";
+            ttl = "168h0m0s"; # 1 week
+            location = "garage";
+          };
         #  quarterly = {
         #    schedule = "0 0 1 1,4,7,10 *";
         #    ttl = "8760h0m0s"; # 1 year
         #  };
-        #};
+        };
       };
 
       templates.postgres.immich-pg = {
         instances = 3;
         image = "ghcr.io/tensorchord/cloudnative-vectorchord:17.5-0.4.3";
-        size = "32Gi";
+        size = "8Gi";
         database.extensions = [
           "cube"
           "earthdistance"

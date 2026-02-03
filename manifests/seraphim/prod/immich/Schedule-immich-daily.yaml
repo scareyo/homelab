@@ -1,19 +1,19 @@
 apiVersion: velero.io/v1
 kind: Schedule
 metadata:
-  name: forgejo-daily
+  name: immich-daily
   namespace: velero
 spec:
   schedule: 0 4 * * *
   template:
     includedNamespaces:
-      - forgejo
+      - immich
     includedResources:
       - pv
       - pvc
     snapshotMoveData: true
     snapshotVolumes: true
-    storageLocation: default
+    storageLocation: garage
     ttl: 168h0m0s
     volumeSnapshotLocations:
-      - default
+      - garage

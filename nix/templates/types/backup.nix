@@ -25,5 +25,11 @@ lib.types.submodule {
       description = "Duration to keep backups";
       example = "12h30m45s";
     };
+
+    location = lib.mkOption {
+      type = lib.types.str;
+      description = "Location to store backups";
+      default = "default";
+    };
   };
 }

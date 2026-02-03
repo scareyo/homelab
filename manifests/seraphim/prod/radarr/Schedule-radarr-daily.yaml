@@ -19,4 +19,7 @@ spec:
       - pvc
     snapshotMoveData: true
     snapshotVolumes: true
+    storageLocation: default
     ttl: 168h0m0s
+    volumeSnapshotLocations:
+      - default

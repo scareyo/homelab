@@ -20,6 +20,9 @@
       ];
       snapshotVolumes = true;
       snapshotMoveData = true;
+
+      storageLocation = backup.location;
+      volumeSnapshotLocations = [ backup.location ];
     };
   };
 }
