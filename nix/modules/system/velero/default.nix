@@ -27,6 +27,12 @@ in
         ];
       };
 
+      templates.externalSecret.garage = {
+        keys = [
+          { source = "/velero/GARAGE_KEY"; dest = "key"; }
+        ];
+      };
+
       resources = {
         namespaces.velero = {
           metadata.labels."pod-security.kubernetes.io/enforce" = lib.mkForce "privileged";

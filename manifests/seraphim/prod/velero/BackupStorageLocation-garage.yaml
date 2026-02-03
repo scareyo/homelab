@@ -1,0 +1,22 @@
+apiVersion: velero.io/v1
+kind: BackupStorageLocation
+metadata:
+  labels:
+    app.kubernetes.io/instance: velero
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: velero
+    helm.sh/chart: velero-11.3.2
+  name: garage
+  namespace: velero
+spec:
+  accessMode: ReadWrite
+  config:
+    checksumAlgorithm: ""
+    region: garage
+    s3Url: http://nami.int.scarey.me:30188
+  credential:
+    key: key
+    name: garage
+  objectStorage:
+    bucket: cloud-vegapunk-velero
+  provider: aws

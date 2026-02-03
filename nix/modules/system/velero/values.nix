@@ -16,6 +16,7 @@
     backupSyncPeriod = "1h";
     backupStorageLocation = [
       {
+        #name = "backblaze";
         provider = "aws";
         bucket = "cloud-vegapunk-velero";
         credential = {
@@ -28,10 +29,25 @@
           checksumAlgorithm = "";
         };
       }
+      {
+        name = "garage";
+        provider = "aws";
+        bucket = "cloud-vegapunk-velero";
+        credential = {
+          name = "garage";
+          key = "key";
+        };
+        config = {
+          region = "garage";
+          s3Url = "http://nami.int.scarey.me:30188";
+          checksumAlgorithm = "";
+        };
+      }
     ];
     features = "EnableCSI";
     volumeSnapshotLocation = [
       {
+        #name = "backblaze";
         provider = "aws";
         credential = {
           name = "backblaze";
@@ -39,6 +55,17 @@
         };
         config = {
           region = "us-east-005";
+        };
+      }
+      {
+        name = "garage";
+        provider = "aws";
+        credential = {
+          name = "garage";
+          key = "key";
+        };
+        config = {
+          region = "garage";
         };
       }
     ];
