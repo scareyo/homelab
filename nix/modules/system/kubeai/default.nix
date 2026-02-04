@@ -18,6 +18,9 @@ in
 
       helm.releases.kubeai = {
         chart = charts.kubeai;
+        values = {
+          secrets.huggingface.name = "huggingface";
+        };
       };
 
       templates.app.kubeai.route = {
@@ -26,6 +29,12 @@ in
 
       templates.app.chat.route = {
         serviceName = "open-webui";
+      };
+
+      templates.externalSecret.huggingface = {
+        keys = [
+          { source = "/kubeai/HUGGING_FACE_TOKEN"; dest = "token"; }
+        ];
       };
     };
   };

@@ -5,7 +5,7 @@ data:
       alibaba: kubeai-alibaba
       aws: kubeai-aws
       gcp: kubeai-gcp
-      huggingface: kubeai-huggingface
+      huggingface: huggingface
     resourceProfiles:
       amd-gpu-mi300x:
         imageName: amd-gpu
