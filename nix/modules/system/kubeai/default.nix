@@ -19,6 +19,14 @@ in
       helm.releases.kubeai = {
         chart = charts.kubeai;
       };
+
+      templates.app.kubeai.route = {
+        serviceName = "kubeai";
+      };
+
+      templates.app.chat.route = {
+        serviceName = "open-webui";
+      };
     };
   };
 }
