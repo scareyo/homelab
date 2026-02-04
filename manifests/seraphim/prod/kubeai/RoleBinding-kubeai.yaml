@@ -1,0 +1,18 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  labels:
+    app.kubernetes.io/instance: kubeai
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: kubeai
+    app.kubernetes.io/version: v0.23.1
+    helm.sh/chart: kubeai-0.23.1
+  name: kubeai
+  namespace: kubeai
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: kubeai
+subjects:
+  - kind: ServiceAccount
+    name: kubeai

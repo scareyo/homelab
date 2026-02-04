@@ -33,6 +33,7 @@
     jellyfin.enable = true;
     kgateway.enable = true;
     komga.enable = true;
+    kubeai.enable = true;
     mariadb.enable = true;
     metrics-server.enable = true;
     monitoring.enable = true;
