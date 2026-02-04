@@ -37,6 +37,7 @@
     metrics-server.enable = true;
     monitoring.enable = true;
     newt.enable = true;
+    nvidia.enable = true;
     pocket-id.enable = true;
     prowlarr.enable = true;
     radarr.enable = true;
