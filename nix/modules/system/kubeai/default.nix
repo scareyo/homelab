@@ -14,6 +14,8 @@ in
     applications.kubeai = {
       inherit namespace project;
 
+      createNamespace = true;
+
       helm.releases.kubeai = {
         chart = charts.kubeai;
       };
