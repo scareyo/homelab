@@ -23,6 +23,13 @@ in
         };
       };
 
+      helm.releases.models = {
+        chart = charts.kubeai-models;
+        values = {
+          catalog."deepseek-r1-distill-qwen-1.5b-rtx4070".enabled = true;
+        };
+      };
+
       templates.app.kubeai.route = {
         serviceName = "kubeai";
       };
