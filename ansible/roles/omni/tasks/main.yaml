@@ -26,7 +26,8 @@
       "name": "{{ item }}",
       "disk": "{{ hostvars[item].omni_os_disk | default('') | quote }}",
       "groups": {{ hostvars[item].group_names | to_json }},
-      "platform": .spec.platformmetadata.platform
+      "platform": .spec.platformmetadata.platform,
+      "class": .metadata.labels.class
     }'
   changed_when: false
   loop: "{{ groups[omni_cluster_name] }}"

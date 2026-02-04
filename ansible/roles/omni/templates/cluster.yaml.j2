@@ -65,6 +65,13 @@ patches:
   - name: metal
     inline:
       machine:
+        sysctls:
+          net.ipv4.ip_forward: 1
+{% endif %}
+{% if machine.class == "MS-01" %}
+  - name: ms-01
+    inline:
+      machine:
         network:
           interfaces:
             - interface: enp3s0f0np0
@@ -72,11 +79,26 @@ patches:
             - interface: enp89s0
               dhcp: false
               routes: []
-        sysctls:
-          net.ipv4.ip_forward: 1
 systemExtensions:
   - siderolabs/i915
   - siderolabs/intel-ucode
   - siderolabs/mei
+{% endif %}
+{% if machine.class == "GPU" %}
+  - name: gpu
+    inline:
+      machine:
+        kernel:
+          modules:
+            - name: nvidia
+            - name: nvidia_uvm
+            - name: nvidia_drm
+            - name: nvidia_modeset
+        sysctls:
+          net.core.bpf_jit_harden: 1
+systemExtensions:
+  - siderolabs/amd-ucode
+  - siderolabs/nvidia-open-gpu-kernel-modules
+  - siderolabs/nvidia-container-toolkit
 {% endif %}
 {% endfor %}
