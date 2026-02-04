@@ -109,6 +109,15 @@ data:
           nvidia.com/gpu: "1"
         requests:
           nvidia.com/gpu: "1"
+      rtx3080:
+        imageName: nvidia-gpu
+        limits:
+          nvidia.com/gpu: "1"
+        nodeSelector:
+          kubernetes.io/hostname: s-flamingo
+        requests:
+          nvidia.com/gpu: "1"
+        runtimeClassName: nvidia
     cacheProfiles:
       {}
     modelServers:

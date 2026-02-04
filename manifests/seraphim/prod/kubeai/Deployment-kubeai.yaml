@@ -18,7 +18,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config: c3bef9315388f2cceef63f34f22cc441021252e66c0df637bbefc86b7e77ec63
+        checksum/config: 193ae1a3cfde7882152585e6099215c2446127c527b1aa4db063c99f12778cdd
       labels:
         app.kubernetes.io/instance: kubeai
         app.kubernetes.io/managed-by: Helm
