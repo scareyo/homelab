@@ -2,7 +2,7 @@
 
 let
   cfg = config.vegapunk.nvidia;
-  namespace = "kube-system";
+  namespace = "nvidia";
   project = "system";
 in
 {
@@ -14,14 +14,21 @@ in
     applications.nvidia = {
       inherit namespace project;
 
+      createNamespace = true;
+
       helm.releases.nvdp = {
         chart = charts.nvidia-device-plugin;
         values = {
           runtimeClassName = "nvidia";
+          gfd.enabled = true;
         };
       };
 
       resources = {
+        namespaces.${namespace} = {
+          metadata.labels."pod-security.kubernetes.io/enforce" = lib.mkForce "privileged";
+        };
+
         "node.k8s.io".v1.RuntimeClass.nvidia = {
           handler = "nvidia";
           scheduling.nodeSelector = {
