@@ -1,0 +1,11 @@
+apiVersion: kubeai.org/v1
+kind: Model
+metadata:
+  name: qwen2.5-7b-instruct-awq
+spec:
+  engine: VLLM
+  features:
+    - TextGeneration
+  minReplicas: 0
+  resourceProfile: rtx3080:1
+  url: hf://Qwen/Qwen2.5-7B-Instruct-AWQ

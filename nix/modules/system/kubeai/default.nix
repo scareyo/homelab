@@ -33,15 +33,21 @@ in
               runtimeClassName = "nvidia";
             };
           };
+          metrics.prometheusOperator.vLLMPodMonitor.enabled = true;
         };
       };
 
       helm.releases.models = {
         chart = charts.kubeai-models;
         values = {
-          catalog."deepseek-r1-distill-qwen-1.5b-rtx4070" = {
-            enabled = true;
-            resourceProfile = "rtx3080:1";
+          catalog = {
+            "qwen2.5-7b-instruct-awq" = {
+              enabled = true;
+              resourceProfile = "rtx3080:1";
+              features = ["TextGeneration"];
+              url = "hf://Qwen/Qwen2.5-7B-Instruct-AWQ";
+              engine = "VLLM";
+            };
           };
         };
       };

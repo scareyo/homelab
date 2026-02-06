@@ -1,0 +1,16 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  labels:
+    app.kubernetes.io/instance: kubeai
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: kubeai
+    app.kubernetes.io/version: v0.23.1
+    helm.sh/chart: kubeai-0.23.1
+  name: kubeai-vllm
+spec:
+  podMetricsEndpoints:
+    - port: http
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: vllm
