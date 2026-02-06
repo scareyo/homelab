@@ -16,24 +16,17 @@ in
 
       createNamespace = true;
 
-      helm.releases.nvdp = {
-        chart = charts.nvidia-device-plugin;
+      helm.releases.gpu-operator = {
+        chart = charts.nvidia-gpu-operator;
         values = {
-          runtimeClassName = "nvidia";
-          gfd.enabled = true;
+          driver.enabled = false;
+          dcgmExporter.serviceMonitor.enabled = true;
         };
       };
 
       resources = {
         namespaces.${namespace} = {
           metadata.labels."pod-security.kubernetes.io/enforce" = lib.mkForce "privileged";
-        };
-
-        "node.k8s.io".v1.RuntimeClass.nvidia = {
-          handler = "nvidia";
-          scheduling.nodeSelector = {
-            "kubernetes.io/hostname" = "s-flamingo";
-          };
         };
       };
     };
