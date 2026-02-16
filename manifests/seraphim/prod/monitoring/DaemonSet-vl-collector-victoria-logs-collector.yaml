@@ -5,8 +5,8 @@ metadata:
     app.kubernetes.io/instance: vl-collector
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: victoria-logs-collector
-    app.kubernetes.io/version: v1.44.0
-    helm.sh/chart: victoria-logs-collector-0.2.8
+    app.kubernetes.io/version: v1.45.0
+    helm.sh/chart: victoria-logs-collector-0.2.9
   name: vl-collector-victoria-logs-collector
   namespace: monitoring
 spec:
@@ -36,7 +36,7 @@ spec:
             - --remoteWrite.headers="AccountID:0^^ProjectID:0"
             - --remoteWrite.url=http://vlsingle-victoria-logs:9428/insert/native
             - --tmpDataPath=/var/lib/vl-collector
-          image: victoriametrics/vlagent:v1.44.0
+          image: victoriametrics/vlagent:v1.45.0
           imagePullPolicy: IfNotPresent
           name: vlagent
           ports:
