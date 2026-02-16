@@ -6,7 +6,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: valkey
     app.kubernetes.io/version: 9.0.1
-    helm.sh/chart: valkey-0.9.0
+    helm.sh/chart: valkey-0.9.3
   name: valkey
   namespace: immich
 spec:
@@ -20,7 +20,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/initconfig: b9be2d3f18e241f0e649012059e4da9e
+        checksum/initconfig: 085c7380f8b46ec02c949176200b2290
       labels:
         app.kubernetes.io/instance: valkey
         app.kubernetes.io/name: valkey
