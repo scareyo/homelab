@@ -5,8 +5,8 @@ metadata:
     app.kubernetes.io/instance: cnpg
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: cloudnative-pg
-    app.kubernetes.io/version: 1.28.0
-    helm.sh/chart: cloudnative-pg-0.27.0
+    app.kubernetes.io/version: 1.28.1
+    helm.sh/chart: cloudnative-pg-0.27.1
   name: cnpg-cloudnative-pg
   namespace: cnpg
 spec:
@@ -18,9 +18,9 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config: 6b43adce2519f9d078dcf969975991014bd908851aa3f8014d9703c57d18612a
-        checksum/monitoring-config: 738cb78fd49c813ad88def881c122f3f76178d093e49f97d3326840263ca7383
-        checksum/rbac: ff4a88f323342095a0528490f70990b117b3d9c59a8dcd3b8f8b9fe3f67cf075
+        checksum/config: b02a4bb5a450ffe4e4f13b4aa856f69b3a1ddaf07dd39fe930b22d540cc1581a
+        checksum/monitoring-config: 7b38f2a507f801ae26d4e8e4b5be6e85139229880e0b41389f51d71316608b6c
+        checksum/rbac: 1a6f5da907b8a4bebeb74a74d28b9c54d1dc9b2a5b9d658ddcda7a9c3e056a6e
       labels:
         app.kubernetes.io/instance: cnpg
         app.kubernetes.io/name: cloudnative-pg
@@ -36,19 +36,19 @@ spec:
             - /manager
           env:
             - name: OPERATOR_IMAGE_NAME
-              value: ghcr.io/cloudnative-pg/cloudnative-pg:1.28.0
+              value: ghcr.io/cloudnative-pg/cloudnative-pg:1.28.1
             - name: OPERATOR_NAMESPACE
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
             - name: MONITORING_QUERIES_CONFIGMAP
               value: cnpg-default-monitoring
-          image: ghcr.io/cloudnative-pg/cloudnative-pg:1.28.0
+          image: ghcr.io/cloudnative-pg/cloudnative-pg:1.28.1
           imagePullPolicy: IfNotPresent
           livenessProbe:
             httpGet:
               path: /readyz
-              port: 9443
+              port: webhook-server
               scheme: HTTPS
             initialDelaySeconds: 3
           name: manager
@@ -62,7 +62,7 @@ spec:
           readinessProbe:
             httpGet:
               path: /readyz
-              port: 9443
+              port: webhook-server
               scheme: HTTPS
             initialDelaySeconds: 3
           resources: {}
@@ -80,7 +80,7 @@ spec:
             failureThreshold: 6
             httpGet:
               path: /readyz
-              port: 9443
+              port: webhook-server
               scheme: HTTPS
             periodSeconds: 5
           volumeMounts:
