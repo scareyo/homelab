@@ -8,7 +8,7 @@ metadata:
     app.kubernetes.io/instance: adventurelog-backend
     app.kubernetes.io/name: adventurelog-backend
     app.kubernetes.io/part-of: adventurelog
-    app.kubernetes.io/version: v0.11.0
+    app.kubernetes.io/version: v0.12.0
   name: adventurelog-backend
   namespace: adventurelog
 spec:
