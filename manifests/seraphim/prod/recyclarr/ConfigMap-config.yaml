@@ -96,6 +96,6 @@ metadata:
     app.kubernetes.io/instance: recyclarr
     app.kubernetes.io/name: recyclarr
     app.kubernetes.io/part-of: recyclarr
-    app.kubernetes.io/version: 7.5.2
+    app.kubernetes.io/version: 8.5.0
   name: config
   namespace: recyclarr
