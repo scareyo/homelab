@@ -74,7 +74,7 @@ in
 
         workload = {
           image = "ghcr.io/booklore-app/booklore";
-          version = "v1.18.5";
+          version = "v2.2.1";
           port = 6060;
           env = {
             TZ = "America/New_York";
