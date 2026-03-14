@@ -58,7 +58,8 @@ data:
       - "*"
   statusbadge.enabled: "false"
   timeout.hard.reconciliation: 0s
-  timeout.reconciliation: 180s
+  timeout.reconciliation: 120s
+  timeout.reconciliation.jitter: 60s
   url: https://argocd.vegapunk.cloud
 kind: ConfigMap
 metadata:
@@ -68,7 +69,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: argocd-cm
     app.kubernetes.io/part-of: argocd
-    app.kubernetes.io/version: v3.3.0
-    helm.sh/chart: argo-cd-9.4.2
+    app.kubernetes.io/version: v3.3.3
+    helm.sh/chart: argo-cd-9.4.10
   name: argocd-cm
   namespace: argocd
