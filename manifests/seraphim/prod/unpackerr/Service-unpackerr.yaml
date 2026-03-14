@@ -6,7 +6,7 @@ metadata:
     app.kubernetes.io/instance: unpackerr
     app.kubernetes.io/name: unpackerr
     app.kubernetes.io/part-of: unpackerr
-    app.kubernetes.io/version: 0.14.5
+    app.kubernetes.io/version: 0.15.2
   name: unpackerr
   namespace: unpackerr
 spec:

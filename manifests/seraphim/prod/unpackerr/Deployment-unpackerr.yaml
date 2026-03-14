@@ -6,7 +6,7 @@ metadata:
     app.kubernetes.io/instance: unpackerr
     app.kubernetes.io/name: unpackerr
     app.kubernetes.io/part-of: unpackerr
-    app.kubernetes.io/version: 0.14.5
+    app.kubernetes.io/version: 0.15.2
   name: unpackerr
   namespace: unpackerr
 spec:
@@ -22,7 +22,7 @@ spec:
         app.kubernetes.io/instance: unpackerr
         app.kubernetes.io/name: unpackerr
         app.kubernetes.io/part-of: unpackerr
-        app.kubernetes.io/version: 0.14.5
+        app.kubernetes.io/version: 0.15.2
     spec:
       containers:
         - env:
@@ -48,7 +48,7 @@ spec:
               value: "true"
             - name: UN_SONARR_0_URL
               value: http://sonarr.sonarr
-          image: ghcr.io/unpackerr/unpackerr:0.14.5
+          image: ghcr.io/unpackerr/unpackerr:0.15.2
           name: unpackerr
           ports:
             - containerPort: 9696
