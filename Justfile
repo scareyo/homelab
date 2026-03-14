@@ -7,3 +7,6 @@ play playbook:
 [working-directory: 'ansible']
 ansible-lint:
   ansible-lint
+
+build:
+  nixidy switch .#seraphim
