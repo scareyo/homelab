@@ -9,7 +9,7 @@ metadata:
     app.kubernetes.io/instance: velero
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: velero
-    helm.sh/chart: velero-11.3.2
+    helm.sh/chart: velero-11.4.0
   name: velero-upgrade-crds
   namespace: velero
 spec:
@@ -25,7 +25,7 @@ spec:
             - /velero install --crds-only --dry-run -o yaml | /tmp/kubectl apply -f -
           command:
             - /tmp/sh
-          image: velero/velero:v1.17.1
+          image: docker.io/velero/velero:v1.17.1
           imagePullPolicy: IfNotPresent
           name: velero
           volumeMounts:
