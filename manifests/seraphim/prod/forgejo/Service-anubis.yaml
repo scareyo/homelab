@@ -6,7 +6,7 @@ metadata:
     app.kubernetes.io/instance: anubis-forgejo
     app.kubernetes.io/name: anubis
     app.kubernetes.io/part-of: forgejo
-    app.kubernetes.io/version: v1.24.0
+    app.kubernetes.io/version: v1.25.0
   name: anubis
   namespace: forgejo
 spec:

@@ -2,7 +2,7 @@
 
 let
   image = "ghcr.io/techarohq/anubis";
-  version = "v1.24.0";
+  version = "v1.25.0";
 
   labels = {
     "app.kubernetes.io/name" = "anubis";
