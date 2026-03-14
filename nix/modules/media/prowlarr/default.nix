@@ -21,7 +21,7 @@ in
 
         workload = {
           image = "ghcr.io/home-operations/prowlarr";
-          version = "2.3.2";
+          version = "2.3.3";
           port = 9696;
           env = {
             PROWLARR__AUTH__METHOD = "External";
