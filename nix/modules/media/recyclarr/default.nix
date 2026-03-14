@@ -22,7 +22,7 @@ in
         workload = {
           type = "cronjob";
           image = "ghcr.io/recyclarr/recyclarr";
-          version = "7.5.2";
+          version = "8.5.0";
           args = [
             "sync"
             "--config"
