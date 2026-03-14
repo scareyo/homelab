@@ -14,6 +14,7 @@ spec:
   externalLabels: {}
   extraArgs:
     promscrape.dropOriginalLabels: "true"
+    promscrape.maxScrapeSize: "67108864"
     promscrape.streamParse: "true"
   image:
     tag: v1.137.0

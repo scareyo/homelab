@@ -1,6 +1,9 @@
 { lib }:
 {
   victoria-metrics-k8s-stack = {
+    vmagent.spec.extraArgs = {
+      "promscrape.maxScrapeSize" = "67108864";
+    };
     grafana = {
       "grafana.ini" = {
         server.root_url = "https://grafana.vegapunk.cloud";
