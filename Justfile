@@ -8,5 +8,8 @@ play playbook:
 ansible-lint:
   ansible-lint
 
+init:
+  pre-commit install -t pre-commit -t pre-push
+
 build:
   nixidy switch .#seraphim
