@@ -21,7 +21,7 @@ in
 
         workload = {
           image = "ghcr.io/unpackerr/unpackerr";
-          version = "0.14.5";
+          version = "0.15.2";
           port = 9696;
           env = {
             UN_SONARR_0_URL = "http://sonarr.sonarr";
