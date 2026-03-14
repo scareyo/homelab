@@ -1,0 +1,20 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  labels:
+    app.kubernetes.io/instance: newt
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: newt
+    app.kubernetes.io/version: 1.10.1
+    helm.sh/chart: newt-1.2.0
+  name: newt-newt
+  namespace: newt
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - pods
+    verbs:
+      - get
+      - list
+      - watch
