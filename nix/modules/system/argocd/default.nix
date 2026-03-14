@@ -16,6 +16,8 @@ in
 
       createNamespace = true;
 
+      syncPolicy.syncOptions.serverSideApply = true;
+
       helm.releases.argocd = {
         chart = charts.argo-cd;
         values = import ./values.nix;
