@@ -16,6 +16,8 @@ in
 
       createNamespace = true;
 
+      syncPolicy.syncOptions.serverSideApply = true;
+
       helm.releases.kgateway-crds = {
         chart = charts.kgateway-crds;
       };

@@ -12,4 +12,6 @@ spec:
     path: ./manifests/seraphim/prod/kgateway
     repoURL: https://github.com/scareyo/homelab.git
     targetRevision: main
-  syncPolicy: {}
+  syncPolicy:
+    syncOptions:
+      - ServerSideApply=true
