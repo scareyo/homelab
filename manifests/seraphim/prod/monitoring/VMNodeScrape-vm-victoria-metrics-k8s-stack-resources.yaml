@@ -19,6 +19,8 @@ spec:
       regex: (uid)
     - action: labeldrop
       regex: (id|name)
+    - action: labeldrop
+      regex: (feature_node.*)
     - action: drop
       regex: (rest_client_request_duration_seconds_bucket|rest_client_request_duration_seconds_sum|rest_client_request_duration_seconds_count)
       source_labels:

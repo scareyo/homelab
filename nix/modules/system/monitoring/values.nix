@@ -4,6 +4,25 @@
     vmagent.spec.extraArgs = {
       "promscrape.maxScrapeSize" = "67108864";
     };
+    kubelet.vmScrape.spec.metricRelabelConfigs = [
+      {
+        action = "labeldrop";
+        regex = "(uid)";
+      }
+      {
+        action = "labeldrop";
+        regex = "(id|name)";
+      }
+      {
+        action = "labeldrop";
+        regex = "(feature_node.*)";
+      }
+      {
+        action = "drop";
+        source_labels = [ "__name__" ];
+        regex = "(rest_client_request_duration_seconds_bucket|rest_client_request_duration_seconds_sum|rest_client_request_duration_seconds_count)";
+      }
+    ];
     kubeControllerManager.vmScrape.spec.endpoints = [
       {
         bearerTokenFile = "/var/run/secrets/kubernetes.io/serviceaccount/token";
