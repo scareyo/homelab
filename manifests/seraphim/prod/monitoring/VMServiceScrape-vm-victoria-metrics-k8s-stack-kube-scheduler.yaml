@@ -16,6 +16,7 @@ spec:
       scheme: https
       tlsConfig:
         caFile: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+        insecureSkipVerify: true
   jobLabel: jobLabel
   namespaceSelector:
     matchNames:

@@ -4,6 +4,29 @@
     vmagent.spec.extraArgs = {
       "promscrape.maxScrapeSize" = "67108864";
     };
+    kubeControllerManager.vmScrape.spec.endpoints = [
+      {
+        bearerTokenFile = "/var/run/secrets/kubernetes.io/serviceaccount/token";
+        port = "http-metrics";
+        scheme = "https";
+        tlsConfig = {
+          caFile = "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt";
+          serverName = "kubernetes";
+          insecureSkipVerify = true;
+        };
+      }
+    ];
+    kubeScheduler.vmScrape.spec.endpoints = [
+      {
+        bearerTokenFile = "/var/run/secrets/kubernetes.io/serviceaccount/token";
+        port = "http-metrics";
+        scheme = "https";
+        tlsConfig = {
+          caFile = "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt";
+          insecureSkipVerify = true;
+        };
+      }
+    ];
     grafana = {
       "grafana.ini" = {
         server.root_url = "https://grafana.vegapunk.cloud";
