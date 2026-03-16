@@ -5,9 +5,9 @@ metadata:
     app.kubernetes.io/instance: velero
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: velero
-    app.kubernetes.io/version: 1.17.1
+    app.kubernetes.io/version: 1.18.0
     component: velero
-    helm.sh/chart: velero-11.4.0
+    helm.sh/chart: velero-12.0.0
   name: velero
   namespace: velero
 spec:
@@ -28,8 +28,8 @@ spec:
         app.kubernetes.io/instance: velero
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: velero
-        app.kubernetes.io/version: 1.17.1
-        helm.sh/chart: velero-11.4.0
+        app.kubernetes.io/version: 1.18.0
+        helm.sh/chart: velero-12.0.0
         name: velero
     spec:
       automountServiceAccountToken: true
@@ -52,7 +52,7 @@ spec:
                   fieldPath: metadata.namespace
             - name: LD_LIBRARY_PATH
               value: /plugins
-          image: docker.io/velero/velero:v1.17.1
+          image: docker.io/velero/velero:v1.18.0
           imagePullPolicy: IfNotPresent
           livenessProbe:
             failureThreshold: 5
