@@ -85,5 +85,8 @@ in {
       };
     };
     template = template;
+    strategy = lib.mkIf (workload.strategy != null) {
+      type = workload.strategy;
+    };
   };
 }

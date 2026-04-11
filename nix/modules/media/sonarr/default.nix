@@ -26,6 +26,7 @@ in
           env = {
             SONARR__AUTH__METHOD = "External";
           };
+          strategy = "Recreate";
         };
 
         persistence = {

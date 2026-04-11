@@ -59,5 +59,11 @@ lib.types.submodule {
       default = "0 0 * * *";
       description = "Workload CronJob schedule";
     };
+
+    strategy = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      description = "Workload Deployment strategy";
+    };
   };
 }

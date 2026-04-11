@@ -35,6 +35,7 @@ let
       };
     };
     dnsPolicy = null;
+    strategy = null;
   };
 in {
   deployment = (import ./deployment.nix {
