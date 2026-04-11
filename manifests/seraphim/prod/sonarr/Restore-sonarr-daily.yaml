@@ -8,7 +8,7 @@ metadata:
     app.kubernetes.io/instance: sonarr
     app.kubernetes.io/name: sonarr
     app.kubernetes.io/part-of: sonarr
-    app.kubernetes.io/version: 4.0.16
+    app.kubernetes.io/version: 4.0.17
   name: sonarr-daily
   namespace: velero
 spec:

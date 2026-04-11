@@ -6,7 +6,7 @@ metadata:
     app.kubernetes.io/instance: sonarr
     app.kubernetes.io/name: sonarr
     app.kubernetes.io/part-of: sonarr
-    app.kubernetes.io/version: 4.0.16
+    app.kubernetes.io/version: 4.0.17
   name: sonarr
   namespace: sonarr
 spec:
@@ -22,13 +22,13 @@ spec:
         app.kubernetes.io/instance: sonarr
         app.kubernetes.io/name: sonarr
         app.kubernetes.io/part-of: sonarr
-        app.kubernetes.io/version: 4.0.16
+        app.kubernetes.io/version: 4.0.17
     spec:
       containers:
         - env:
             - name: SONARR__AUTH__METHOD
               value: External
-          image: ghcr.io/home-operations/sonarr:4.0.16
+          image: ghcr.io/home-operations/sonarr:4.0.17
           name: sonarr
           ports:
             - containerPort: 8989

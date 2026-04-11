@@ -21,7 +21,7 @@ in
 
         workload = {
           image = "ghcr.io/home-operations/sonarr";
-          version = "4.0.16";
+          version = "4.0.17";
           port = 8989;
           env = {
             SONARR__AUTH__METHOD = "External";
