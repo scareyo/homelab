@@ -5,8 +5,8 @@ metadata:
     app.kubernetes.io/instance: vl-collector
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: victoria-logs-collector
-    app.kubernetes.io/version: v1.48.0
-    helm.sh/chart: victoria-logs-collector-0.2.12
+    app.kubernetes.io/version: v1.49.0
+    helm.sh/chart: victoria-logs-collector-0.2.15
   name: vl-collector-victoria-logs-collector
   namespace: monitoring
 spec:
@@ -31,12 +31,13 @@ spec:
             - --kubernetesCollector.includePodAnnotations=false
             - --kubernetesCollector.includePodLabels
             - --kubernetesCollector.msgField=message.msg,message,msg
+            - --kubernetesCollector.streamFields=kubernetes.container_name,kubernetes.pod_name,kubernetes.pod_namespace
             - --kubernetesCollector.timeField=message.time,message.ts,message.timestamp,m,time,ts,timestamp
             - --loggerFormat=json
             - --remoteWrite.headers="AccountID:0^^ProjectID:0"
             - --remoteWrite.url=http://vlsingle-victoria-logs:9428/insert/native
             - --tmpDataPath=/var/lib/vl-collector
-          image: victoriametrics/vlagent:v1.48.0
+          image: victoriametrics/vlagent:v1.49.0
           imagePullPolicy: IfNotPresent
           name: vlagent
           ports:
