@@ -5,8 +5,8 @@ metadata:
     app.kubernetes.io/instance: kubeai
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kubeai
-    app.kubernetes.io/version: v0.23.1
-    helm.sh/chart: kubeai-0.23.1
+    app.kubernetes.io/version: v0.23.2
+    helm.sh/chart: kubeai-0.23.2
   name: kubeai-vllm
 spec:
   podMetricsEndpoints:
