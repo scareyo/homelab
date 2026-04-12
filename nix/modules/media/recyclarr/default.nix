@@ -50,96 +50,119 @@ in
             path = "/cfg";
             config = {
               data = {
-                "recyclarr.yaml" = ''
-                  radarr:
-                    uhd-bluray-web:
-                      base_url: http://radarr.radarr
-                      api_key: !env_var RADARR_API_KEY
+                "recyclarr.yaml" = builtins.readFile ./config.yaml;
+                #"recyclarr.yaml" = ''
+                #  radarr:
+                #    vegapunk:
+                #      base_url: http://radarr.radarr
+                #      api_key: !env_var RADARR_API_KEY
 
-                      include:
-                        - template: radarr-quality-definition-movie
-                        - template: radarr-quality-profile-uhd-bluray-web
-                        - template: radarr-custom-formats-uhd-bluray-web
-                        - template: radarr-quality-profile-remux-web-1080p
-                        - template: radarr-custom-formats-remux-web-1080p
+                #      quality_definition:
+                #        type: movie
 
-                      custom_formats:
-                        # Movie Versions
-                        - trash_ids:
-                            - 570bc9ebecd92723d2d21500f4be314c # Remaster
-                            - eca37840c13c6ef2dd0262b141a5482f # 4K Remaster
-                            - 9f6cbff8cfe4ebbc1bde14c7b7bec0de # IMAX Enhanced
-                          assign_scores_to:
-                            - name: UHD Bluray + WEB
-                            - name: Remux + WEB 1080p
+                #      quality_profiles:
+                #        - trash_id: 64fb5f9858489bdac2af690e27c8f42f  # UHD Bluray + WEB
+                #          reset_unmatched_scores:
+                #            enabled: true
 
-                        - trash_ids:
-                            - 923b6abef9b17f937fab56cfcf89e1f1 # DV (w/o HDR fallback)
-                            - b337d6812e06c200ec9a2d3cfa9d20a7 # DV Boost
-                            - caa37d0df9c348912df1fb1d88f9273a # HDR10+ Boost
-                          assign_scores_to:
-                            - name: UHD Bluray + WEB
+                #        - trash_id: 9ca12ea80aa55ef916e3751f4b874151  # Remux + WEB 1080p
+                #          reset_unmatched_scores:
+                #            enabled: true
 
-                        - trash_ids:
-                            - 25c12f78430a3a23413652cbd1d48d77 # SDR (no WEBDL)
-                          assign_scores_to:
-                            - name: UHD Bluray + WEB
-                            - name: Remux + WEB 1080p
+                #      custom_format_groups:
+                #        add:
+                #          - trash_id: ff204bbcecdd487d1cefcefdbf0c278d  # [Required] Golden Rule UHD
+                #            assign_scores_to:
+                #              - trash_id: 64fb5f9858489bdac2af690e27c8f42f  # UHD Bluray + WEB
+                #            select:
+                #              - 839bea857ed2c0a8e084f3cbdbd65ecb  # x265 (no HDR/DV)
 
-                      media_naming:
-                        movie:
-                          rename: true
-                          standard: standard
-                  sonarr:
-                    web-2160p-v4:
-                      base_url: http://sonarr.sonarr
-                      api_key: !env_var SONARR_API_KEY
+                #          - trash_id: f8bf8eab4617f12dfdbd16303d8da245  # [Required] Golden Rule HD
+                #            assign_scores_to:
+                #              - trash_id: 9ca12ea80aa55ef916e3751f4b874151  # Remux + WEB 1080p
+                #            select:
+                #              - dc98083864ea246d05a42df0d05f81cc  # x265 (HD)
 
-                      include:
-                        - template: sonarr-quality-definition-series
-                        - template: sonarr-v4-custom-formats-web-2160p
-                        - template: sonarr-quality-definition-anime
-                        - template: sonarr-v4-quality-profile-anime
-                        - template: sonarr-v4-custom-formats-anime
+                #      custom_formats:
+                #        # Movie Versions
+                #        - trash_ids:
+                #            - 570bc9ebecd92723d2d21500f4be314c # Remaster
+                #            - eca37840c13c6ef2dd0262b141a5482f # 4K Remaster
+                #            - 9f6cbff8cfe4ebbc1bde14c7b7bec0de # IMAX Enhanced
+                #          assign_scores_to:
+                #            - trash_id: 64fb5f9858489bdac2af690e27c8f42f  # UHD Bluray + WEB
+                #            - trash_id: 9ca12ea80aa55ef916e3751f4b874151  # Remux + WEB 1080p
 
-                      quality_profiles:
-                        - name: WEB-2160p
-                          reset_unmatched_scores:
-                            enabled: true
-                          upgrade:
-                            allowed: true
-                            until_quality: WEB 2160p
-                            until_score: 10000
-                          min_format_score: 0
-                          quality_sort: top
-                          qualities:
-                            - name: WEB 2160p
-                              qualities:
-                                - WEBDL-2160p
-                                - WEBRip-2160p
-                            - name: WEB 1080p
-                              qualities:
-                                - WEBDL-1080p
-                                - WEBRip-1080p
+                #        - trash_ids:
+                #            - 923b6abef9b17f937fab56cfcf89e1f1 # DV (w/o HDR fallback)
+                #            - b337d6812e06c200ec9a2d3cfa9d20a7 # DV Boost
+                #            - caa37d0df9c348912df1fb1d88f9273a # HDR10+ Boost
+                #          assign_scores_to:
+                #            - trash_id: 64fb5f9858489bdac2af690e27c8f42f  # UHD Bluray + WEB
 
-                      custom_formats:
-                        # HDR Formats
-                        - trash_ids:
-                            - 9b27ab6498ec0f31a3353992e19434ca # DV (w/o HDR fallback)
-                            - 0c4b99df9206d2cfac3c05ab897dd62a # HDR10+ Boost
-                            - 7c3a61a9c6cb04f52f1544be6d44a026 # DV Boost
-                          assign_scores_to:
-                            - name: WEB-2160p
+                #        - trash_ids:
+                #            - 25c12f78430a3a23413652cbd1d48d77 # SDR (no WEBDL)
+                #          assign_scores_to:
+                #            - trash_id: 64fb5f9858489bdac2af690e27c8f42f  # UHD Bluray + WEB
+                #            - trash_id: 9ca12ea80aa55ef916e3751f4b874151  # Remux + WEB 1080p
 
-                      media_naming:
-                        series: jellyfin-tvdb
-                        season: default
-                        episodes:
-                          rename: true
-                          standard: default
-                          daily: default
-                          anime: default
-                '';
+                #      media_naming:
+                #        movie:
+                #          rename: true
+                #          standard: standard
+                #  sonarr:
+                #    vegapunk:
+                #      base_url: http://sonarr.sonarr
+                #      api_key: !env_var SONARR_API_KEY
+
+                #      quality_definition:
+                #        type: series
+
+                #      include:
+                #        - template: sonarr-quality-definition-series
+                #        - template: sonarr-v4-custom-formats-web-2160p
+                #        - template: sonarr-quality-definition-anime
+                #        - template: sonarr-v4-quality-profile-anime
+                #        - template: sonarr-v4-custom-formats-anime
+
+                #      quality_profiles:
+                #        - name: WEB-2160p
+                #          reset_unmatched_scores:
+                #            enabled: true
+                #          upgrade:
+                #            allowed: true
+                #            until_quality: WEB 2160p
+                #            until_score: 10000
+                #          min_format_score: 0
+                #          quality_sort: top
+                #          qualities:
+                #            - name: WEB 2160p
+                #              qualities:
+                #                - WEBDL-2160p
+                #                - WEBRip-2160p
+                #            - name: WEB 1080p
+                #              qualities:
+                #                - WEBDL-1080p
+                #                - WEBRip-1080p
+
+                #      custom_formats:
+                #        # HDR Formats
+                #        - trash_ids:
+                #            - 9b27ab6498ec0f31a3353992e19434ca # DV (w/o HDR fallback)
+                #            - 0c4b99df9206d2cfac3c05ab897dd62a # HDR10+ Boost
+                #            - 7c3a61a9c6cb04f52f1544be6d44a026 # DV Boost
+                #          assign_scores_to:
+                #            - name: WEB-2160p
+
+                #      media_naming:
+                #        series: jellyfin-tvdb
+                #        season: default
+                #        episodes:
+                #          rename: true
+                #          standard: default
+                #          daily: default
+                #          anime: default
+                #'';
               };
             };
           };
