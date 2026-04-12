@@ -170,11 +170,6 @@ in
                             url: http://komga.komga
                             key: "{{HOMEPAGE_VAR_KOMGA_API_KEY}}"
                   - Media2:
-                      - Booklore:
-                          icon: book-lore
-                          description: Read books
-                          href: https://booklore.vegapunk.cloud
-                          siteMonitor: http://booklore.booklore
                       - Account:
                           icon: pocket-id
                           description: Manage your account

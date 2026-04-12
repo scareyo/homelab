@@ -18,7 +18,6 @@
     adventurelog.enable = true;
     argocd.enable = true;
     attic.enable = true;
-    booklore.enable = true;
     cert-manager.enable = true;
     cilium.enable = true;
     cnpg.enable = true;
@@ -34,7 +33,6 @@
     kgateway.enable = true;
     komga.enable = true;
     kubeai.enable = true;
-    mariadb.enable = true;
     metrics-server.enable = true;
     monitoring.enable = true;
     newt.enable = true;
