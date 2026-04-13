@@ -5,5 +5,8 @@
     provider = "postgres";
     connectionString = "postgres://";
   };
+
+  secret.create = false;
+
   persistence.data.enabled = true;
 }
