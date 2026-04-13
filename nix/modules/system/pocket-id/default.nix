@@ -26,6 +26,12 @@ in
         size = "32Gi";
       };
 
+      templates.externalSecret.pocket-id = {
+        keys = [
+          { source = "/pocket-id/ENCRYPTION_KEY"; dest = "ENCRYPTION_KEY"; }
+        ];
+      };
+
       templates.app.pocket-id = {
         inherit namespace;
 
