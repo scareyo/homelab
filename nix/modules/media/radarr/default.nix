@@ -26,6 +26,7 @@ in
           env = {
             RADARR__AUTH__METHOD = "External";
           };
+          strategy = "Recreate";
         };
 
         persistence = {
