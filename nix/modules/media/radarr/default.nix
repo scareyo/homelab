@@ -21,7 +21,7 @@ in
 
         workload = {
           image = "ghcr.io/home-operations/radarr";
-          version = "6.1.1";
+          version = "6.1.2";
           port = 7878;
           env = {
             RADARR__AUTH__METHOD = "External";
