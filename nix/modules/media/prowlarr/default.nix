@@ -26,6 +26,7 @@ in
           env = {
             PROWLARR__AUTH__METHOD = "External";
           };
+          strategy = "Recreate";
         };
 
         persistence = {
