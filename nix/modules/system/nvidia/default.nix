@@ -21,6 +21,11 @@ in
         values = {
           driver.enabled = false;
           dcgmExporter.serviceMonitor.enabled = true;
+          operator = {
+            repository = "dev.vegapunk.cloud/scarey";
+            image = "gpu-operator";
+            version = "4485e9d4b589089370819bddb2cfa396cdd12b78";
+          };
           validator = {
             repository = "dev.vegapunk.cloud/scarey";
             image = "gpu-operator";

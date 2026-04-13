@@ -34,7 +34,7 @@ spec:
             - --filepath=/opt/gpu-operator/nfd-api-crds.yaml
           command:
             - /usr/bin/manage-crds
-          image: nvcr.io/nvidia/gpu-operator:v26.3.0
+          image: dev.vegapunk.cloud/scarey/gpu-operator:4485e9d4b589089370819bddb2cfa396cdd12b78
           imagePullPolicy: IfNotPresent
           name: upgrade-crd
       restartPolicy: OnFailure

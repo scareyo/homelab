@@ -57,7 +57,7 @@ spec:
                   fieldPath: metadata.namespace
             - name: DRIVER_MANAGER_IMAGE
               value: nvcr.io/nvidia/cloud-native/k8s-driver-manager:v0.10.0
-          image: nvcr.io/nvidia/gpu-operator:v26.3.0
+          image: dev.vegapunk.cloud/scarey/gpu-operator:4485e9d4b589089370819bddb2cfa396cdd12b78
           imagePullPolicy: IfNotPresent
           livenessProbe:
             httpGet:
