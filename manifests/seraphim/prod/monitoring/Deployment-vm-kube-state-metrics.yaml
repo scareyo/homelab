@@ -8,7 +8,7 @@ metadata:
     app.kubernetes.io/name: kube-state-metrics
     app.kubernetes.io/part-of: kube-state-metrics
     app.kubernetes.io/version: 2.18.0
-    helm.sh/chart: kube-state-metrics-7.2.1
+    helm.sh/chart: kube-state-metrics-7.2.2
   name: vm-kube-state-metrics
   namespace: monitoring
 spec:
@@ -29,7 +29,7 @@ spec:
         app.kubernetes.io/name: kube-state-metrics
         app.kubernetes.io/part-of: kube-state-metrics
         app.kubernetes.io/version: 2.18.0
-        helm.sh/chart: kube-state-metrics-7.2.1
+        helm.sh/chart: kube-state-metrics-7.2.2
     spec:
       automountServiceAccountToken: true
       containers:
