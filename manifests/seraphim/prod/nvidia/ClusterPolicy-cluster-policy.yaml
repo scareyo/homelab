@@ -171,13 +171,17 @@ spec:
     enabled: false
     mode: kubevirt
   toolkit:
-    enabled: true
+    enabled: false
     image: container-toolkit
     imagePullPolicy: IfNotPresent
     installDir: /usr/local/nvidia
     repository: nvcr.io/nvidia/k8s
     version: v1.19.0
   validator:
+    driver:
+      env:
+        - name: DISABLE_DEV_CHAR_SYMLINK_CREATION
+          value: "true"
     image: gpu-operator
     imagePullPolicy: IfNotPresent
     plugin:
