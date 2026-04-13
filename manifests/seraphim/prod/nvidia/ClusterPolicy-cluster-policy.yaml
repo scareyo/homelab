@@ -182,8 +182,8 @@ spec:
     imagePullPolicy: IfNotPresent
     plugin:
       env: []
-    repository: nvcr.io/nvidia
-    version: v26.3.0
+    repository: dev.vegapunk.cloud/scarey
+    version: 4485e9d4b589089370819bddb2cfa396cdd12b78
   vfioManager:
     driverManager:
       image: k8s-driver-manager
