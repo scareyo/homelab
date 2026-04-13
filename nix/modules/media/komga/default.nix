@@ -46,6 +46,7 @@ in
             SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_POCKETID_USERNAMEATTRIBUTE = "preferred_username";
             SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_POCKETID_ISSUERURI = "https://id.vegapunk.cloud";
           };
+          strategy = "Recreate";
         };
 
         persistence = {
