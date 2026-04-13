@@ -5,8 +5,8 @@ metadata:
     app.kubernetes.io/instance: kubeai
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kubeai
-    app.kubernetes.io/version: v0.23.1
-    helm.sh/chart: kubeai-0.23.1
+    app.kubernetes.io/version: v0.23.2
+    helm.sh/chart: kubeai-0.23.2
   name: kubeai
   namespace: kubeai
 spec:
@@ -18,13 +18,13 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config: 193ae1a3cfde7882152585e6099215c2446127c527b1aa4db063c99f12778cdd
+        checksum/config: 6686cff62f9003805bf9563565e7cd86a49a42bc433c64be18b87aabf7612e20
       labels:
         app.kubernetes.io/instance: kubeai
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: kubeai
-        app.kubernetes.io/version: v0.23.1
-        helm.sh/chart: kubeai-0.23.1
+        app.kubernetes.io/version: v0.23.2
+        helm.sh/chart: kubeai-0.23.2
     spec:
       containers:
         - args: []
@@ -37,7 +37,7 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
-          image: ghcr.io/kubeai-project/kubeai:v0.23.1
+          image: ghcr.io/kubeai-project/kubeai:v0.23.2
           imagePullPolicy: IfNotPresent
           livenessProbe:
             httpGet:
