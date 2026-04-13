@@ -5,8 +5,8 @@ metadata:
     app.kubernetes.io/instance: gpu-operator
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: node-feature-discovery
-    app.kubernetes.io/version: v0.18.2
-    helm.sh/chart: node-feature-discovery-0.18.2
+    app.kubernetes.io/version: v0.18.3
+    helm.sh/chart: node-feature-discovery-0.18.3
     role: gc
   name: gpu-operator-node-feature-discovery-gc
   namespace: nvidia
@@ -34,7 +34,7 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: spec.nodeName
-          image: registry.k8s.io/nfd/node-feature-discovery:v0.18.2
+          image: registry.k8s.io/nfd/node-feature-discovery:v0.18.3
           imagePullPolicy: IfNotPresent
           livenessProbe:
             httpGet:

@@ -5,8 +5,8 @@ metadata:
     app.kubernetes.io/instance: gpu-operator
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: node-feature-discovery
-    app.kubernetes.io/version: v0.18.2
-    helm.sh/chart: node-feature-discovery-0.18.2
+    app.kubernetes.io/version: v0.18.3
+    helm.sh/chart: node-feature-discovery-0.18.3
     role: master
   name: gpu-operator-node-feature-discovery-master
   namespace: nvidia
@@ -20,7 +20,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config: 3cf1626ceeba16c1e19aed018eb54853e1266724f3857e538462a4540a29ebc2
+        checksum/config: 4a602eca4a5035a22419b0c62ac3391e4ad1a6e52683c415d256018acfd00b86
       labels:
         app.kubernetes.io/instance: gpu-operator
         app.kubernetes.io/name: node-feature-discovery
@@ -48,7 +48,7 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: spec.nodeName
-          image: registry.k8s.io/nfd/node-feature-discovery:v0.18.2
+          image: registry.k8s.io/nfd/node-feature-discovery:v0.18.3
           imagePullPolicy: IfNotPresent
           livenessProbe:
             httpGet:

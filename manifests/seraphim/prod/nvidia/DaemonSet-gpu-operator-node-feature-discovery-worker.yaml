@@ -5,8 +5,8 @@ metadata:
     app.kubernetes.io/instance: gpu-operator
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: node-feature-discovery
-    app.kubernetes.io/version: v0.18.2
-    helm.sh/chart: node-feature-discovery-0.18.2
+    app.kubernetes.io/version: v0.18.3
+    helm.sh/chart: node-feature-discovery-0.18.3
     role: worker
   name: gpu-operator-node-feature-discovery-worker
   namespace: nvidia
@@ -19,7 +19,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config: 5ddeaa1e8ffe7916b10c3ca5f0b402201286487c3c503208758ffdf8f2abc3e4
+        checksum/config: 65e4b831be1835d908036a8a12b4c4d724561fbe16443cbb258a9b56d5b898b9
       labels:
         app.kubernetes.io/instance: gpu-operator
         app.kubernetes.io/name: node-feature-discovery
@@ -44,7 +44,7 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.uid
-          image: registry.k8s.io/nfd/node-feature-discovery:v0.18.2
+          image: registry.k8s.io/nfd/node-feature-discovery:v0.18.3
           imagePullPolicy: IfNotPresent
           livenessProbe:
             httpGet:
@@ -105,10 +105,6 @@ spec:
       securityContext: {}
       serviceAccountName: node-feature-discovery
       tolerations:
-        - effect: NoSchedule
-          key: node-role.kubernetes.io/master
-          operator: Equal
-          value: ""
         - effect: NoSchedule
           key: node-role.kubernetes.io/control-plane
           operator: Equal
