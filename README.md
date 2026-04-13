@@ -30,7 +30,10 @@ Zeus is a Hetzner Cloud VPS used to expose cluster applications to the internet.
     - `4011/udp (DHCP)`
     - `8080/tcp (HTTP)`
 
-4. `HCLOUD_TOKEN` environment variable is set
+4. Environment variables set:
+
+    - `INFISICAL_UNIVERSAL_AUTH_CLIENT_ID`
+    - `INFISICAL_UNIVERSAL_AUTH_CLIENT_SECRET`
 
 ### Seraphim
 
