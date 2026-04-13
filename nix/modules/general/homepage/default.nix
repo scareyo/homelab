@@ -34,7 +34,7 @@ in
 
         workload = {
           image = "ghcr.io/gethomepage/homepage";
-          version = "v1.11.0";
+          version = "v1.12.3";
           port = 3000;
           env = {
             HOMEPAGE_ALLOWED_HOSTS = "home.vegapunk.cloud";
