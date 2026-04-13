@@ -31,7 +31,7 @@ in
             type = "pvc";
             path = "/config";
             config = {
-              size = "4Gi";
+              size = "8Gi";
             };
           };
           cache = {
