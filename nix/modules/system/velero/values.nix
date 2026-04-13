@@ -71,9 +71,5 @@
     ];
   };
   deployNodeAgent = true;
-  kubectl = {
-    # TODO: https://github.com/vmware-tanzu/helm-charts/issues/698
-    image.tag = "1.33.4";
-  };
   credentials.useSecret = false;
 }
