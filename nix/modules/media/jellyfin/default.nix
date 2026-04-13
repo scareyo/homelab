@@ -23,6 +23,7 @@ in
           image = "ghcr.io/jellyfin/jellyfin";
           version = "10.11.8";
           port = 8096;
+          strategy = "Recreate";
         };
 
         persistence = {
