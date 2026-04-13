@@ -54,6 +54,13 @@ in
           { source = "/woodpecker/FORGEJO_SECRET"; dest = "secret"; }
         ];
       };
+
+      # FIXME: don't do this
+      resources = {
+        namespaces.woodpecker = {
+          metadata.labels."pod-security.kubernetes.io/enforce" = lib.mkForce "privileged";
+        };
+      };
     };
   };
 }
