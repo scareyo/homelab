@@ -9,8 +9,8 @@ metadata:
     app.kubernetes.io/instance: vm
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: victoria-metrics-k8s-stack
-    app.kubernetes.io/version: v1.139.0
+    app.kubernetes.io/version: v1.140.0
     grafana_dashboard: "1"
-    helm.sh/chart: victoria-metrics-k8s-stack-0.72.6
+    helm.sh/chart: victoria-metrics-k8s-stack-0.73.0
   name: vm-victoria-metrics-k8s-stack-kubernetes-scheduler
   namespace: monitoring
