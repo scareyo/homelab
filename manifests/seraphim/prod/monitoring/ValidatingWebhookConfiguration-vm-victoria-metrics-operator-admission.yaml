@@ -4,15 +4,12 @@ metadata:
   annotations:
     cert-manager.io/inject-ca-from: monitoring/vm-victoria-metrics-operator-validation
     certmanager.k8s.io/inject-ca-from: monitoring/vm-victoria-metrics-operator-validation
-    helm.sh/hook: post-install,post-upgrade
-    helm.sh/hook-delete-policy: before-hook-creation
-    helm.sh/hook-weight: "5"
   labels:
     app.kubernetes.io/instance: vm
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: victoria-metrics-operator
     app.kubernetes.io/version: v0.68.4
-    helm.sh/chart: victoria-metrics-operator-0.59.5
+    helm.sh/chart: victoria-metrics-operator-0.60.0
   name: vm-victoria-metrics-operator-admission
 webhooks:
   - admissionReviewVersions:

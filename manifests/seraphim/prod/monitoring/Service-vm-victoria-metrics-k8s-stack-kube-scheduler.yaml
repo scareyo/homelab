@@ -2,13 +2,12 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: vm-victoria-metrics-k8s-stack-kube-scheduler
+    app.kubernetes.io/component: kube-scheduler
     app.kubernetes.io/instance: vm
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: victoria-metrics-k8s-stack
     app.kubernetes.io/version: v1.140.0
-    helm.sh/chart: victoria-metrics-k8s-stack-0.73.0
-    jobLabel: kube-scheduler
+    helm.sh/chart: victoria-metrics-k8s-stack-0.74.1
   name: vm-victoria-metrics-k8s-stack-kube-scheduler
   namespace: kube-system
 spec:
