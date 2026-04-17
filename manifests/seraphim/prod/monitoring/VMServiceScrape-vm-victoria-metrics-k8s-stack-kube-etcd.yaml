@@ -6,7 +6,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: victoria-metrics-k8s-stack
     app.kubernetes.io/version: v1.140.0
-    helm.sh/chart: victoria-metrics-k8s-stack-0.73.0
+    helm.sh/chart: victoria-metrics-k8s-stack-0.74.1
   name: vm-victoria-metrics-k8s-stack-kube-etcd
   namespace: monitoring
 spec:
@@ -16,13 +16,12 @@ spec:
       scheme: https
       tlsConfig:
         caFile: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
-  jobLabel: jobLabel
+  jobLabel: app.kubernetes.io/component
   namespaceSelector:
     matchNames:
       - kube-system
   selector:
     matchLabels:
-      app: vm-victoria-metrics-k8s-stack-kube-etcd
+      app.kubernetes.io/component: kube-etcd
       app.kubernetes.io/instance: vm
       app.kubernetes.io/name: victoria-metrics-k8s-stack
-      jobLabel: kube-etcd

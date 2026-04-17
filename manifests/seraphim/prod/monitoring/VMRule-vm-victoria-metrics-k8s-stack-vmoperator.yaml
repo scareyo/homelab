@@ -2,12 +2,12 @@ apiVersion: operator.victoriametrics.com/v1beta1
 kind: VMRule
 metadata:
   labels:
-    app: victoria-metrics-k8s-stack
+    app.kubernetes.io/component: vmalert
     app.kubernetes.io/instance: vm
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: victoria-metrics-k8s-stack
     app.kubernetes.io/version: v0.28.1
-    helm.sh/chart: victoria-metrics-k8s-stack-0.73.0
+    helm.sh/chart: victoria-metrics-k8s-stack-0.74.1
   name: vm-victoria-metrics-k8s-stack-vmoperator
   namespace: monitoring
 spec:

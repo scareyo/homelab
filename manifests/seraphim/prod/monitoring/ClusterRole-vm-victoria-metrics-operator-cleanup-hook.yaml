@@ -10,7 +10,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: victoria-metrics-operator
     app.kubernetes.io/version: v0.68.4
-    helm.sh/chart: victoria-metrics-operator-0.59.5
+    helm.sh/chart: victoria-metrics-operator-0.60.0
   name: vm-victoria-metrics-operator-cleanup-hook
   namespace: monitoring
 rules:
