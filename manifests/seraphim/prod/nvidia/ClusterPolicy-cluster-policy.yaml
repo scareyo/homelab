@@ -6,26 +6,23 @@ metadata:
     app.kubernetes.io/instance: gpu-operator
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: gpu-operator
-    app.kubernetes.io/version: v26.3.0
-    helm.sh/chart: gpu-operator-v26.3.0
+    app.kubernetes.io/version: v26.3.1
+    helm.sh/chart: gpu-operator-v26.3.1
   name: cluster-policy
 spec:
   ccManager:
     defaultMode: "on"
     enabled: true
-    env:
-      - name: CC_CAPABLE_DEVICE_IDS
-        value: 0x2339,0x2331,0x2330,0x2324,0x2322,0x233d
     image: k8s-cc-manager
     imagePullPolicy: IfNotPresent
     repository: nvcr.io/nvidia/cloud-native
-    version: v0.3.0
+    version: v0.4.0
   cdi:
     enabled: true
   daemonsets:
     labels:
       app.kubernetes.io/managed-by: gpu-operator
-      helm.sh/chart: gpu-operator-v26.3.0
+      helm.sh/chart: gpu-operator-v26.3.1
     priorityClassName: system-node-critical
     rollingUpdate:
       maxUnavailable: "1"
@@ -113,7 +110,7 @@ spec:
     image: gdrdrv
     imagePullPolicy: IfNotPresent
     repository: nvcr.io/nvidia/cloud-native
-    version: v2.5.1
+    version: v2.5.2
   gds:
     enabled: false
     image: nvidia-fs
@@ -137,7 +134,7 @@ spec:
     image: nvidia-sandbox-device-plugin
     imagePullPolicy: IfNotPresent
     repository: nvcr.io/nvidia/cloud-native
-    version: v0.0.2
+    version: v0.0.3
   mig:
     strategy: single
   migManager:
@@ -155,7 +152,7 @@ spec:
     image: gpu-operator
     imagePullPolicy: IfNotPresent
     repository: nvcr.io/nvidia
-    version: v26.3.0
+    version: v26.3.1
   operator:
     runtimeClass: nvidia
   psa:

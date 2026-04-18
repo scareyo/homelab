@@ -10,8 +10,8 @@ metadata:
     app.kubernetes.io/instance: gpu-operator
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: gpu-operator
-    app.kubernetes.io/version: v26.3.0
-    helm.sh/chart: gpu-operator-v26.3.0
+    app.kubernetes.io/version: v26.3.1
+    helm.sh/chart: gpu-operator-v26.3.1
   name: gpu-operator-upgrade-crd
   namespace: nvidia
 spec:
@@ -22,8 +22,8 @@ spec:
         app.kubernetes.io/instance: gpu-operator
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: gpu-operator
-        app.kubernetes.io/version: v26.3.0
-        helm.sh/chart: gpu-operator-v26.3.0
+        app.kubernetes.io/version: v26.3.1
+        helm.sh/chart: gpu-operator-v26.3.1
       name: gpu-operator-upgrade-crd
     spec:
       containers:
