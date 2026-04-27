@@ -70,8 +70,15 @@ in
           };
         };
         configMaps = {
-          dashboard-argocd = import ./dashboards/argocd.nix;
-          dashboard-external-secrets = import ./dashboards/argocd.nix;
+          dashboards = {
+            metadata = {
+              labels.grafana_dashboard = "1";
+            };
+            data = {
+              "argocd.json" = builtins.readFile ./dashboards/argocd.json;
+              "external-secrets.json" = builtins.readFile ./dashboards/external-secrets.json;
+            };
+          };
         };
       };
     };
