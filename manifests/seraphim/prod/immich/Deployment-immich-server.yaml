@@ -50,6 +50,8 @@ spec:
                 secretKeyRef:
                   key: username
                   name: immich-pg-app
+            - name: IMMICH_CONFIG_FILE
+              value: /config/immich-config.yaml
             - name: IMMICH_MACHINE_LEARNING_URL
               value: http://immich-machine-learning:3003
             - name: REDIS_HOSTNAME
@@ -86,6 +88,8 @@ spec:
             periodSeconds: 10
             timeoutSeconds: 1
           volumeMounts:
+            - mountPath: /config
+              name: config
             - mountPath: /data
               name: data
       dnsPolicy: ClusterFirst
@@ -95,6 +99,9 @@ spec:
       hostPID: false
       serviceAccountName: default
       volumes:
+        - name: config
+          secret:
+            secretName: config
         - name: data
           persistentVolumeClaim:
             claimName: library

@@ -70,25 +70,21 @@ in
         ];
       };
 
-      #templates.externalSecret.admin = {
-      #  keys = [
-      #    { source = "/immich/ADMIN_USERNAME"; dest = "username"; }
-      #    { source = "/immich/ADMIN_PASSWORD"; dest = "password"; }
-      #  ];
-      #};
-
-      #templates.externalSecret.anubis = {
-      #  keys = [
-      #    { source = "/immich/ANUBIS_ED25519_PRIVATE_KEY_HEX"; dest = "key"; }
-      #  ];
-      #};
-
-      #templates.externalSecret.oidc = {
-      #  keys = [
-      #    { source = "/immich/OIDC_CLIENT_ID"; dest = "key"; }
-      #    { source = "/immich/OIDC_CLIENT_SECRET"; dest = "secret"; }
-      #  ];
-      #};
+      templates.externalSecret.config = {
+        keys = [
+          { source = "/immich/OIDC_CLIENT_ID"; dest = "key"; }
+          { source = "/immich/OIDC_CLIENT_SECRET"; dest = "secret"; }
+        ];
+        templates = {
+          "immich-config.yaml" = ''
+            oauth:
+              enabled: true
+              clientId: "{{ .key }}"
+              clientSecret: "{{ .secret }}"
+              issuerUrl: "https://id.vegapunk.cloud"
+          '';
+        };
+      };
     };
   };
 }

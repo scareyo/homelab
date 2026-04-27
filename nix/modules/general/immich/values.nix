@@ -1,5 +1,9 @@
 {
-  immich.persistence.library.existingClaim = "library";
+  immich = {
+    configurationKind = "Secret";
+    existingConfiguration = "config";
+    persistence.library.existingClaim = "library";
+  };
 
   controllers.main.containers.main.env = {
     REDIS_HOSTNAME = "valkey";

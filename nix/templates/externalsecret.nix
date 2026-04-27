@@ -36,6 +36,12 @@
         default = false;
         description = "Merge with existing secret";
       };
+
+      templates = lib.mkOption {
+        type = lib.types.nullOr (lib.types.attrsOf lib.types.str);
+        description = "Templated secrets";
+        default = null;
+      };
     };
 
     output = { name, config, ...  }: let
@@ -54,6 +60,10 @@
             name = "infisical";
           };
           target.creationPolicy = lib.mkIf cfg.merge "Merge";
+          target.template = lib.mkIf (cfg.templates != null) {
+            engineVersion = "v2";
+            data = cfg.templates;
+          };
           data =
             if builtins.length providerKeys == 0 then 
               null 
