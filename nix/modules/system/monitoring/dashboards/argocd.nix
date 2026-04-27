@@ -2,7 +2,7 @@
   metadata = {
     labels.grafana_dashboard = "1";
   };
-  data."dashboard.json" = ''
+  data."argocd.json" = ''
     {
       "annotations": {
         "list": [
