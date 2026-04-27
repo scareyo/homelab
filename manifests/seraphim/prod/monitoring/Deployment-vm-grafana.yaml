@@ -42,6 +42,8 @@ spec:
               value: /var/lib/grafana/dashboards/default
             - name: RESOURCE
               value: both
+            - name: NAMESPACE
+              value: ALL
             - name: REQ_URL
               value: http://localhost:3000/api/admin/provisioning/dashboards/reload
             - name: REQ_METHOD

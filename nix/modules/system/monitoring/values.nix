@@ -76,6 +76,7 @@
           readOnly = true;
         }
       ];
+      sidecar.dashboards.searchNamespace = "ALL";
       plugins = [
         "victoriametrics-logs-datasource"
       ];

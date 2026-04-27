@@ -20,6 +20,14 @@ in
 
       helm.releases.cnpg = {
         chart = charts.cloudnative-pg;
+        values = {
+          monitoring = {
+            podMonitorEnabled = true;
+            grafanaDashboard = {
+              create = true;
+            };
+          };
+        };
       };
     };
   };
