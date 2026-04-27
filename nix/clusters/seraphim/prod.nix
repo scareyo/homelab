@@ -11,6 +11,7 @@
     "--api-versions gateway.networking.k8s.io/v1/GatewayClass"
     "--api-versions monitoring.coreos.com/v1"
     "--api-versions monitoring.coreos.com/v1/PodMonitor"
+    "--api-versions monitoring.coreos.com/v1/ServiceMonitor"
   ];
 
   #nixidy.defaults.syncPolicy.autoSync.enable = true;

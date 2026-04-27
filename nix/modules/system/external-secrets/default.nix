@@ -20,6 +20,9 @@ in
 
       helm.releases.external-secrets = {
         chart = charts.external-secrets;
+        values = {
+          serviceMonitor.enabled = true;
+        };
       };
 
       resources = import ./resources.nix;

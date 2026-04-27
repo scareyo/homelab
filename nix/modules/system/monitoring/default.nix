@@ -70,7 +70,8 @@ in
           };
         };
         configMaps = {
-          argocd = import ./dashboards/argocd.nix;
+          dashboard-argocd = import ./dashboards/argocd.nix;
+          dashboard-external-secrets = import ./dashboards/argocd.nix;
         };
       };
     };
