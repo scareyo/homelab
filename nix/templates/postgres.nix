@@ -53,6 +53,7 @@
           instances = cfg.instances;
           storage.size = cfg.size;
           imageName = cfg.image;
+          monitoring.enablePodMonitor = true;
         } // lib.optionalAttrs (cfg.sharedPreloadLibraries != []) {
           postgresql.shared_preload_libraries = cfg.sharedPreloadLibraries;
         };
