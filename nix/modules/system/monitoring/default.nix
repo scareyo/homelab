@@ -69,6 +69,9 @@ in
             };
           };
         };
+        configMaps = {
+          argocd = import ./dashboards/argocd.nix;
+        };
       };
     };
   };
