@@ -50,10 +50,6 @@ in
             ttl = "168h0m0s"; # 1 week
             location = "garage";
           };
-        #  quarterly = {
-        #    schedule = "0 0 1 1,4,7,10 *";
-        #    ttl = "8760h0m0s"; # 1 year
-        #  };
         };
       };
 
@@ -82,6 +78,8 @@ in
               clientId: "{{ .key }}"
               clientSecret: "{{ .secret }}"
               issuerUrl: "https://id.vegapunk.cloud"
+            passwordLogin:
+              enabled: false
           '';
         };
       };

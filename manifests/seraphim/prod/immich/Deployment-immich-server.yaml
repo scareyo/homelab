@@ -50,6 +50,8 @@ spec:
                 secretKeyRef:
                   key: username
                   name: immich-pg-app
+            - name: IMMICH_ALLOW_SETUP
+              value: "false"
             - name: IMMICH_CONFIG_FILE
               value: /config/immich-config.yaml
             - name: IMMICH_MACHINE_LEARNING_URL

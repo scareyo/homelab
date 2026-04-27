@@ -6,6 +6,7 @@
   };
 
   controllers.main.containers.main.env = {
+    IMMICH_ALLOW_SETUP = "false";
     REDIS_HOSTNAME = "valkey";
     DB_HOSTNAME = {
       valueFrom.secretKeyRef = {
