@@ -25,4 +25,10 @@
       g, argocd_viewer, role:readonly
     '';
   };
+  controller = {
+    metrics = {
+      enabled = true;
+      serviceMonitor.enabled = true;
+    };
+  };
 }

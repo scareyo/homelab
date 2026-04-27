@@ -9,6 +9,7 @@
 
   nixidy.defaults.helm.extraOpts = [
     "--api-versions gateway.networking.k8s.io/v1/GatewayClass"
+    "--api-versions monitoring.coreos.com/v1"
     "--api-versions monitoring.coreos.com/v1/PodMonitor"
   ];
 
