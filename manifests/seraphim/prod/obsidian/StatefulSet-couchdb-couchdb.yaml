@@ -1,0 +1,122 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    app: couchdb
+    chart: couchdb-4.6.3
+    heritage: Helm
+    release: couchdb
+  name: couchdb-couchdb
+  namespace: obsidian
+spec:
+  podManagementPolicy: Parallel
+  replicas: 3
+  selector:
+    matchLabels:
+      app: couchdb
+      release: couchdb
+  serviceName: couchdb-couchdb
+  template:
+    metadata:
+      annotations:
+        checksum/config: 1a132cd769ebd0c7a6683aafc92b234d9f9b58e90ce85b7f91743e925c3a16e5
+        checksum/secret: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+      labels:
+        app: couchdb
+        release: couchdb
+    spec:
+      containers:
+        - env:
+            - name: COUCHDB_USER
+              valueFrom:
+                secretKeyRef:
+                  key: adminUsername
+                  name: couchdb
+            - name: COUCHDB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: adminPassword
+                  name: couchdb
+            - name: COUCHDB_SECRET
+              valueFrom:
+                secretKeyRef:
+                  key: cookieAuthSecret
+                  name: couchdb
+            - name: COUCHDB_ERLANG_COOKIE
+              valueFrom:
+                secretKeyRef:
+                  key: erlangCookie
+                  name: couchdb
+            - name: ERL_FLAGS
+              value: ' -name couchdb '
+          image: couchdb:3.5.1
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /_up
+              port: 5984
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          name: couchdb
+          ports:
+            - containerPort: 5984
+              name: couchdb
+            - containerPort: 4369
+              name: epmd
+            - containerPort: 9100
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /_up
+              port: 5984
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources: {}
+          volumeMounts:
+            - mountPath: /opt/couchdb/etc/default.d
+              name: config-storage
+            - mountPath: /opt/couchdb/data
+              name: database-storage
+      initContainers:
+        - command:
+            - sh
+            - -c
+            - cp /tmp/chart.ini /default.d; cp /tmp/seedlist.ini /default.d; ls -lrt /default.d;
+          image: busybox:latest
+          imagePullPolicy: Always
+          name: init-copy
+          resources: {}
+          volumeMounts:
+            - mountPath: /tmp/
+              name: config
+            - mountPath: /default.d
+              name: config-storage
+      serviceAccountName: couchdb-couchdb
+      volumes:
+        - emptyDir: {}
+          name: config-storage
+        - configMap:
+            items:
+              - key: inifile
+                path: chart.ini
+              - key: seedlistinifile
+                path: seedlist.ini
+            name: couchdb-couchdb
+          name: config
+  volumeClaimTemplates:
+    - metadata:
+        labels:
+          app: couchdb
+          release: couchdb
+        name: database-storage
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 10Gi

@@ -1,0 +1,15 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: obsidian
+  namespace: argocd
+spec:
+  destination:
+    namespace: obsidian
+    server: https://kubernetes.default.svc
+  project: general
+  source:
+    path: ./manifests/seraphim/prod/obsidian
+    repoURL: https://github.com/scareyo/homelab.git
+    targetRevision: main
+  syncPolicy: {}

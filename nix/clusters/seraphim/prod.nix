@@ -39,6 +39,7 @@
     monitoring.enable = true;
     newt.enable = true;
     nvidia.enable = true;
+    obsidian.enable = true;
     pocket-id.enable = true;
     prowlarr.enable = true;
     radarr.enable = true;

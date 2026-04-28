@@ -1,0 +1,31 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  labels:
+    app: couchdb
+    chart: couchdb-4.6.3
+    heritage: Helm
+    release: couchdb
+  name: couchdb-couchdb
+  namespace: obsidian
+spec:
+  ingress:
+    - ports:
+        - port: 5984
+          protocol: TCP
+    - from:
+        - podSelector:
+            matchLabels:
+              app: couchdb
+              release: couchdb
+      ports:
+        - port: 9100
+          protocol: TCP
+        - port: 4369
+          protocol: TCP
+  podSelector:
+    matchLabels:
+      app: couchdb
+      release: couchdb
+  policyTypes:
+    - Ingress
