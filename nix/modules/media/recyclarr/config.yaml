@@ -22,6 +22,8 @@ radarr:
               - WEBDL-2160p
               - WEBRip-2160p
 
+          - name: Remux-2160p
+
           - name: Remux-1080p
             qualities:
               - Bluray-1080p
