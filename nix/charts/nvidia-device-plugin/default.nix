@@ -1,6 +1,6 @@
 {
   repo = "https://nvidia.github.io/k8s-device-plugin";
   chart = "nvidia-device-plugin";
-  version = "0.19.0";
-  chartHash = "sha256-u2f9y8pyNDitrbFwRHift35We4Wk/NS9vyVOnmUTjyM=";
+  version = "0.19.2";
+  chartHash = "sha256-ikQX0EZTbWbKPl31kZjJ0YiUGj1ILdtvGqTVaCWT1NM=";
 }
