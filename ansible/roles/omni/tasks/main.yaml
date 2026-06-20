@@ -46,14 +46,14 @@
     mode: "0600"
 
 - name: Validate cluster definition
-  ansible.builtin.command: "omnictl cluster template validate -f {{ role_path }}/files/data/cluster.yaml"
+  ansible.builtin.command: "omnictl cluster template validate -f {{ role_path }}/files/data/cluster.yaml --allowed-dir ../"
   changed_when: false
 
 - name: Sync cluster
-  ansible.builtin.command: "omnictl cluster template sync -f {{ role_path }}/files/data/cluster.yaml"
+  ansible.builtin.command: "omnictl cluster template sync -f {{ role_path }}/files/data/cluster.yaml --allowed-dir ../"
   register: omni_cmd
   changed_when: omni_cmd.stdout != ''
 
 - name: Wait for healthy cluster
-  ansible.builtin.command: "omnictl cluster template status --wait 30m -f {{ role_path }}/files/data/cluster.yaml"
+  ansible.builtin.command: "omnictl cluster template status --wait 30m -f {{ role_path }}/files/data/cluster.yaml --allowed-dir ../"
   changed_when: false
