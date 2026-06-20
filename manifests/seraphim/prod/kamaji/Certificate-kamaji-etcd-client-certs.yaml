@@ -1,0 +1,25 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: kamaji-etcd-client-certs
+  namespace: kamaji-system
+spec:
+  commonName: root
+  duration: 2160h
+  isCA: false
+  issuerRef:
+    group: cert-manager.io
+    kind: Issuer
+    name: kamaji-etcd-ca
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  renewBefore: 168h
+  secretName: kamaji-etcd-client-certs
+  subject:
+    organizations:
+      - system:masters
+  usages:
+    - signing
+    - key encipherment
+    - client auth

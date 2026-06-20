@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/instance: kamaji
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: kamaji-etcd
+    app.kubernetes.io/version: 3.5.17
+    helm.sh/chart: kamaji-etcd-0.15.0
+    prometheus.io/metrics: "true"
+  name: kamaji-etcd-client
+  namespace: kamaji-system
+spec:
+  ports:
+    - name: client
+      port: 2379
+    - name: metrics
+      port: 2381
+  selector:
+    app.kubernetes.io/instance: kamaji
+    app.kubernetes.io/name: kamaji-etcd
+  type: ClusterIP

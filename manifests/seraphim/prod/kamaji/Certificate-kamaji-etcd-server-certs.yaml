@@ -1,0 +1,39 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: kamaji-etcd-server-certs
+  namespace: kamaji-system
+spec:
+  commonName: kamaji-etcd
+  dnsNames:
+    - kamaji-etcd-0.kamaji-etcd.kamaji-system.svc.cluster.local
+    - kamaji-etcd-1.kamaji-etcd.kamaji-system.svc.cluster.local
+    - kamaji-etcd-2.kamaji-etcd.kamaji-system.svc.cluster.local
+    - kamaji-etcd-client.kamaji-system.svc.cluster.local
+    - etcd-server.kamaji-system.svc.cluster.local
+    - etcd-server.kamaji-system.svc
+    - etcd-server
+  duration: 2160h
+  ipAddresses:
+    - 127.0.0.1
+  isCA: false
+  issuerRef:
+    group: cert-manager.io
+    kind: Issuer
+    name: kamaji-etcd-ca
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  renewBefore: 168h
+  secretName: kamaji-etcd-server-certs
+  secretTemplate:
+    labels:
+      kamaji-etcd.clastix.io/etcd: kamaji-etcd
+  subject:
+    organizations:
+      - kamaji-etcd
+  usages:
+    - signing
+    - key encipherment
+    - server auth
+    - client auth

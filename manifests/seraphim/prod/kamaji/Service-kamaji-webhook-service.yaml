@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/component: webhook
+    app.kubernetes.io/instance: webhook-service
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: kamaji
+    app.kubernetes.io/version: latest
+    helm.sh/chart: kamaji-0.0.0_latest
+  name: kamaji-webhook-service
+  namespace: kamaji-system
+spec:
+  ports:
+    - name: webhook-server
+      port: 443
+      protocol: TCP
+      targetPort: webhook-server
+  selector:
+    app.kubernetes.io/component: controller-manager
+    app.kubernetes.io/instance: kamaji
+    app.kubernetes.io/name: kamaji

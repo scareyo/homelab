@@ -1,0 +1,74 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  annotations:
+    helm.sh/hook: post-install
+    helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation,hook-failed
+    helm.sh/hook-weight: "10"
+  labels:
+    app.kubernetes.io/instance: kamaji
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: kamaji-etcd
+    app.kubernetes.io/version: 3.5.17
+    helm.sh/chart: kamaji-etcd-0.15.0
+  name: kamaji-etcd-setup-2
+  namespace: kamaji-system
+spec:
+  backoffLimit: 12
+  template:
+    metadata:
+      name: kamaji
+    spec:
+      containers:
+        - command:
+            - bash
+            - -c
+            - |-
+              etcdctl member list -w table
+              if etcdctl user get root &>/dev/null; then
+                echo "User already exists, nothing to do"
+              else
+                etcdctl user add --no-password=true root &&
+                etcdctl role add root &&
+                etcdctl user grant-role root root &&
+                etcdctl auth enable
+              fi
+          env:
+            - name: ETCDCTL_ENDPOINTS
+              value: https://kamaji-etcd-0.kamaji-etcd.kamaji-system.svc.cluster.local:2379
+            - name: ETCDCTL_CACERT
+              value: /opt/certs/ca/ca.crt
+            - name: ETCDCTL_CERT
+              value: /opt/certs/root-certs/tls.crt
+            - name: ETCDCTL_KEY
+              value: /opt/certs/root-certs/tls.key
+          image: quay.io/coreos/etcd:v3.5.6
+          imagePullPolicy: IfNotPresent
+          name: etcd-client
+          volumeMounts:
+            - mountPath: /opt/certs/root-certs
+              name: root-certs
+            - mountPath: /opt/certs/ca
+              name: ca
+      initContainers:
+        - command:
+            - sh
+            - -c
+            - kubectl --namespace=kamaji-system rollout status sts/kamaji-etcd --timeout=300s
+          image: clastix/kubectl:v1.36
+          name: kubectl
+      nodeSelector:
+        kubernetes.io/os: linux
+      restartPolicy: Never
+      securityContext:
+        fsGroup: 1000
+        runAsGroup: 1000
+        runAsUser: 1000
+      serviceAccountName: kamaji-etcd
+      volumes:
+        - name: root-certs
+          secret:
+            secretName: kamaji-etcd-client-certs
+        - name: ca
+          secret:
+            secretName: kamaji-etcd-server-certs

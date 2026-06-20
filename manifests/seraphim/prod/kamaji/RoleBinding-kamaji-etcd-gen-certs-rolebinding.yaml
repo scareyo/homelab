@@ -1,0 +1,23 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  annotations:
+    helm.sh/hook: pre-install,post-install,pre-delete
+    helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation,hook-failed
+    helm.sh/hook-weight: "5"
+  labels:
+    app.kubernetes.io/instance: kamaji
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: kamaji-etcd
+    app.kubernetes.io/version: 3.5.17
+    helm.sh/chart: kamaji-etcd-0.15.0
+  name: kamaji-etcd-gen-certs-rolebinding
+  namespace: kamaji-system
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: kamaji-etcd-gen-certs-role
+subjects:
+  - kind: ServiceAccount
+    name: kamaji-etcd
+    namespace: kamaji-system

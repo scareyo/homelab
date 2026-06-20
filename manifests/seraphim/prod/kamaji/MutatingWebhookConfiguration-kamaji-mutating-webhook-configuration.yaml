@@ -1,0 +1,34 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  annotations:
+    cert-manager.io/inject-ca-from: kamaji-system/kamaji-serving-cert
+  labels:
+    app.kubernetes.io/component: controller-manager
+    app.kubernetes.io/instance: mutating-webhook-configuration
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: kamaji
+    app.kubernetes.io/version: latest
+    helm.sh/chart: kamaji-0.0.0_latest
+  name: kamaji-mutating-webhook-configuration
+webhooks:
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: kamaji-webhook-service
+        namespace: kamaji-system
+        path: /mutate-kamaji-clastix-io-v1alpha1-tenantcontrolplane
+    failurePolicy: Fail
+    name: mtenantcontrolplane.kb.io
+    rules:
+      - apiGroups:
+          - kamaji.clastix.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - tenantcontrolplanes
+    sideEffects: None

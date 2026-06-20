@@ -1,0 +1,39 @@
+apiVersion: kamaji.clastix.io/v1alpha1
+kind: DataStore
+metadata:
+  labels:
+    app.kubernetes.io/instance: kamaji
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: kamaji-etcd
+    app.kubernetes.io/version: 3.5.17
+    helm.sh/chart: kamaji-etcd-0.15.0
+  name: default
+spec:
+  driver: etcd
+  endpoints:
+    - kamaji-etcd-0.kamaji-etcd.kamaji-system.svc.cluster.local:2379
+    - kamaji-etcd-1.kamaji-etcd.kamaji-system.svc.cluster.local:2379
+    - kamaji-etcd-2.kamaji-etcd.kamaji-system.svc.cluster.local:2379
+  tlsConfig:
+    certificateAuthority:
+      certificate:
+        secretReference:
+          keyPath: tls.crt
+          name: kamaji-etcd-ca
+          namespace: kamaji-system
+      privateKey:
+        secretReference:
+          keyPath: tls.key
+          name: kamaji-etcd-ca
+          namespace: kamaji-system
+    clientCertificate:
+      certificate:
+        secretReference:
+          keyPath: tls.crt
+          name: kamaji-etcd-client-certs
+          namespace: kamaji-system
+      privateKey:
+        secretReference:
+          keyPath: tls.key
+          name: kamaji-etcd-client-certs
+          namespace: kamaji-system

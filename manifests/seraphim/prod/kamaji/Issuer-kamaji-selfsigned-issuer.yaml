@@ -1,0 +1,14 @@
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  labels:
+    app.kubernetes.io/component: issuer
+    app.kubernetes.io/instance: kamaji
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: kamaji
+    app.kubernetes.io/version: latest
+    helm.sh/chart: kamaji-0.0.0_latest
+  name: kamaji-selfsigned-issuer
+  namespace: kamaji-system
+spec:
+  selfSigned: {}

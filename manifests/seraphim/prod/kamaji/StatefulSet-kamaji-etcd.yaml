@@ -1,0 +1,126 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    app.kubernetes.io/instance: kamaji
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: kamaji-etcd
+    app.kubernetes.io/version: 3.5.17
+    helm.sh/chart: kamaji-etcd-0.15.0
+  name: kamaji-etcd
+  namespace: kamaji-system
+spec:
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: Retain
+  replicas: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: kamaji
+      app.kubernetes.io/name: kamaji-etcd
+  serviceName: kamaji-etcd
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/instance: kamaji
+        app.kubernetes.io/name: kamaji-etcd
+        application: kamaji-etcd
+      name: etcd
+    spec:
+      containers:
+        - command:
+            - etcd
+            - --data-dir=/var/run/etcd
+            - --name=$(POD_NAME)
+            - --initial-cluster-state=new
+            - --initial-cluster=kamaji-etcd-0=https://kamaji-etcd-0.kamaji-etcd.kamaji-system.svc.cluster.local:2380,kamaji-etcd-1=https://kamaji-etcd-1.kamaji-etcd.kamaji-system.svc.cluster.local:2380,kamaji-etcd-2=https://kamaji-etcd-2.kamaji-etcd.kamaji-system.svc.cluster.local:2380
+            - --initial-advertise-peer-urls=https://$(POD_NAME).kamaji-etcd.$(POD_NAMESPACE).svc.cluster.local:2380
+            - --advertise-client-urls=https://$(POD_NAME).kamaji-etcd.$(POD_NAMESPACE).svc.cluster.local:2379
+            - --initial-cluster-token=kamaji
+            - --listen-client-urls=https://0.0.0.0:2379
+            - --listen-metrics-urls=http://0.0.0.0:2381
+            - --listen-peer-urls=https://0.0.0.0:2380
+            - --client-cert-auth=true
+            - --peer-client-cert-auth=true
+            - --trusted-ca-file=/etc/etcd/pki/ca.crt
+            - --cert-file=/etc/etcd/pki/server.pem
+            - --key-file=/etc/etcd/pki/server-key.pem
+            - --peer-trusted-ca-file=/etc/etcd/pki/ca.crt
+            - --peer-cert-file=/etc/etcd/pki/peer.pem
+            - --peer-key-file=/etc/etcd/pki/peer-key.pem
+            - --auto-compaction-mode=periodic
+            - --auto-compaction-retention=5m
+            - --snapshot-count=10000
+            - --quota-backend-bytes=8589934592
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          image: quay.io/coreos/etcd:v3.5.17
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /livez
+              port: 2381
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 15
+          name: etcd
+          ports:
+            - containerPort: 2379
+              name: client
+            - containerPort: 2380
+              name: peer
+            - containerPort: 2381
+              name: metrics
+          resources:
+            limits: {}
+            requests: {}
+          securityContext:
+            allowPrivilegeEscalation: false
+          volumeMounts:
+            - mountPath: /var/run/etcd
+              name: data
+            - mountPath: /etc/etcd/pki
+              name: certs
+      nodeSelector:
+        kubernetes.io/os: linux
+      priorityClassName: system-cluster-critical
+      securityContext: {}
+      volumes:
+        - name: certs
+          projected:
+            sources:
+              - secret:
+                  items:
+                    - key: ca.crt
+                      path: ca.crt
+                    - key: tls.crt
+                      path: server.pem
+                    - key: tls.key
+                      path: server-key.pem
+                  name: kamaji-etcd-server-certs
+              - secret:
+                  items:
+                    - key: tls.crt
+                      path: peer.pem
+                    - key: tls.key
+                      path: peer-key.pem
+                  name: kamaji-etcd-peer-certs
+  volumeClaimTemplates:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: data
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 8Gi

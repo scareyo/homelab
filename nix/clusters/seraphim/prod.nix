@@ -32,6 +32,7 @@
     iiff.enable = true;
     immich.enable = true;
     jellyfin.enable = true;
+    kamaji.enable = true;
     kgateway.enable = true;
     komga.enable = true;
     kubeai.enable = true;

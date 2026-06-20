@@ -1,0 +1,17 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kamaji
+  namespace: argocd
+spec:
+  destination:
+    namespace: kamaji-system
+    server: https://kubernetes.default.svc
+  project: system
+  source:
+    path: ./manifests/seraphim/prod/kamaji
+    repoURL: https://github.com/scareyo/homelab.git
+    targetRevision: main
+  syncPolicy:
+    syncOptions:
+      - ServerSideApply=true

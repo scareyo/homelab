@@ -1,0 +1,8 @@
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: kamaji-etcd-ca
+  namespace: kamaji-system
+spec:
+  ca:
+    secretName: kamaji-etcd-ca
