@@ -21,7 +21,7 @@ in
 
         workload = {
           image = "ghcr.io/seanmorley15/adventurelog-backend";
-          version = "v0.12.0";
+          version = "v0.12.1";
           port = 8000;
           env = {
             PUBLIC_URL = "https://adventurelog-backend.vegapunk.cloud";
