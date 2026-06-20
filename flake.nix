@@ -45,6 +45,7 @@
             # Kubernetes
             argocd
             cilium-cli
+            clusterctl
             k9s
             kubectl
             kubectl-rook-ceph

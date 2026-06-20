@@ -22,6 +22,7 @@
     attic.enable = true;
     cert-manager.enable = true;
     cilium.enable = true;
+    cluster-api.enable = true;
     cnpg.enable = true;
     external-dns.enable = true;
     external-secrets.enable = true;
