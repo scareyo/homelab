@@ -17,7 +17,7 @@ in
         src = pkgs.fetchFromGitHub {
           owner = "kubernetes-sigs";
           repo = "gateway-api";
-          rev = "v1.4.0";
+          rev = "v1.5.0";
           hash = "sha256-osM8BRqFw5he93yTTTQb/q9iVvT6oWkCb731n/C6bq4=";
         };
         crdFiles = [
