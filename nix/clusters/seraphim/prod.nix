@@ -53,6 +53,8 @@
     velero.enable = true;
     woodpecker.enable = true;
 
+    tenant-test.enable = true;
+
     operators = {
       enable = true;
       kubevirt.enable = true;

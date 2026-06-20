@@ -1,0 +1,28 @@
+apiVersion: kamaji.clastix.io/v1alpha1
+kind: TenantControlPlane
+metadata:
+  labels:
+    tenant.clastix.io: tenant-test
+  name: tenant-test
+  namespace: tenant-test
+spec:
+  controlPlane:
+    deployment:
+      additionalMetadata:
+        labels:
+          tenant.clastix.io: tenant-test
+      replicas: 3
+    service:
+      additionalMetadata:
+        annotations:
+          lbipam.cilium.io/ips: 10.10.21.20
+        labels:
+          tenant.clastix.io: tenant-test
+      serviceType: LoadBalancer
+  dataStore: default
+  kubernetes:
+    kubelet:
+      cgroupfs: systemd
+    version: v1.35.0
+  networkProfile:
+    port: 6443
