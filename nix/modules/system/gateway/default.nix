@@ -18,7 +18,7 @@ in
           owner = "kubernetes-sigs";
           repo = "gateway-api";
           rev = "v1.5.0";
-          hash = "sha256-osM8BRqFw5he93yTTTQb/q9iVvT6oWkCb731n/C6bq4=";
+          hash = "sha256-Zl0U1mIcVMq1bcfINLMFRU3XlWCOalHzsl5hELWbkcY=";
         };
         crdFiles = [
           "config/crd/standard/gateway.networking.k8s.io_gateways.yaml"
