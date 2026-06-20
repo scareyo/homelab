@@ -51,5 +51,10 @@
     unpackerr.enable = true;
     velero.enable = true;
     woodpecker.enable = true;
+
+    operators = {
+      enable = true;
+      kubevirt.enable = true;
+    };
   };
 }
