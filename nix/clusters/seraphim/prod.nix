@@ -35,11 +35,9 @@
     kamaji.enable = true;
     kgateway.enable = true;
     komga.enable = true;
-    kubeai.enable = true;
     metrics-server.enable = true;
     monitoring.enable = true;
     newt.enable = true;
-    nvidia.enable = true;
     obsidian.enable = true;
     pocket-id.enable = true;
     prowlarr.enable = true;
