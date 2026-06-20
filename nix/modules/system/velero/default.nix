@@ -1,9 +1,10 @@
-{ charts, config, lib, ... }:
+{ charts, config, generators, lib, ... }:
 
 let
   cfg = config.vegapunk.velero;
   namespace = "velero";
   project = "system";
+  chart = charts.velero;
 in
 {
   options = {
@@ -11,13 +12,21 @@ in
   };
   
   config = lib.mkIf cfg.enable {
+    nixidy.applicationImports = [
+      (generators.fromChartCRDModule {
+        inherit chart;
+        name = "velero";
+        kindFilter = [ "Restore" "Schedule" ];
+      })
+    ];
+
     applications.velero = {
       inherit namespace project;
 
       createNamespace = true;
 
       helm.releases.velero = {
-        chart = charts.velero;
+        inherit chart;
         values = import ./values.nix;
       };
 

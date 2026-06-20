@@ -1,5 +1,5 @@
 {
-  "cert-manager.io".v1.ClusterIssuer.letsencrypt-staging = {
+  clusterIssuers.letsencrypt-staging = {
     metadata = {
       name = "letsencrypt-staging";
       annotations = {
@@ -23,7 +23,7 @@
     };
   };
 
-  "cert-manager.io".v1.ClusterIssuer.letsencrypt-production = {
+  clusterIssuers.letsencrypt-production = {
     metadata = {
       name = "letsencrypt-production";
       annotations = {

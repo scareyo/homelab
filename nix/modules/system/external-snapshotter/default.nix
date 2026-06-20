@@ -26,7 +26,7 @@ in
         };
       };
 
-      resources."cert-manager.io".v1.Issuer.external-snapshotter = {
+      resources.issuers.external-snapshotter = {
         metadata = {
           labels = {
             "app.kubernetes.io/instance" = "snapshot-controller";

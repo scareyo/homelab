@@ -1,9 +1,10 @@
-{ charts, config, lib, ... }:
+{ charts, config, generators, lib, ... }:
 
 let
   cfg = config.vegapunk.cert-manager;
   namespace = "cert-manager";
   project = "system";
+  chart = charts.cert-manager;
 in
 {
   options = {
@@ -11,13 +12,22 @@ in
   };
   
   config = lib.mkIf cfg.enable {
+    nixidy.applicationImports = [
+      (generators.fromChartCRDModule {
+        inherit chart;
+        name = "cert-manager";
+        kindFilter = [ "ClusterIssuer" "Issuer" ];
+        extraOpts = [ "--set" "crds.enabled=true"];
+      })
+    ];
+
     applications.cert-manager = {
       inherit namespace project;
 
       createNamespace = true;
 
       helm.releases.cert-manager = {
-        chart = charts.cert-manager;
+        inherit chart;
         values = import ./values.nix;
       };
 

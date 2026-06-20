@@ -45,7 +45,7 @@
     output = { name, config, ...  }: let
       cfg = config;
     in {
-      "postgresql.cnpg.io".v1.Cluster.${name} = {
+      clusters.${name} = {
         metadata = {
           name = name;
         };
@@ -58,7 +58,7 @@
           postgresql.shared_preload_libraries = cfg.sharedPreloadLibraries;
         };
       };
-      "postgresql.cnpg.io".v1.Database.${name} = lib.mkIf (cfg.database != null) {
+      databases.${name} = lib.mkIf (cfg.database != null) {
         metadata = {
           name = name;
         };

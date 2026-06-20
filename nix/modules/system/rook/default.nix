@@ -1,9 +1,10 @@
-{ charts, config, lib, ... }:
+{ charts, config, generators, lib, ... }:
 
 let
   cfg = config.vegapunk.rook;
   namespace = "rook-ceph";
   project = "system";
+  chart = charts.rook-ceph;
 in
 {
   options = {
@@ -11,6 +12,14 @@ in
   };
   
   config = lib.mkIf cfg.enable {
+    nixidy.applicationImports = [
+      (generators.fromChartCRDModule {
+        inherit chart;
+        name = "rook-ceph";
+        kindFilter = [ "ObjectBucketClaim" ];
+      })
+    ];
+
     applications.rook = {
       inherit namespace project;
 
@@ -19,7 +28,7 @@ in
       syncPolicy.syncOptions.serverSideApply = true;
 
       helm.releases.rook-ceph = {
-        chart = charts.rook-ceph;
+        inherit chart;
       };
 
       helm.releases.rook-ceph-cluster = {

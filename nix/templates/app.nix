@@ -105,7 +105,7 @@
         oauth2-proxy = oauth2-proxy.configMap;
       })];
 
-      core.v1.PersistentVolume = lib.mkIf (persistence != null)
+      persistentVolumes = lib.mkIf (persistence != null)
         (lib.mapAttrs (name: p: lib.mkIf (p.type == "pvc" && p.config.nfs.enable)
           (import ./resources/pv.nix {
             inherit lib;
@@ -114,7 +114,7 @@
             inherit persistence;
           })) persistence);
 
-      core.v1.PersistentVolumeClaim = lib.mkIf (persistence != null)
+      persistentVolumeClaims = lib.mkIf (persistence != null)
         (lib.mapAttrs (name: p: lib.mkIf (p.type == "pvc")
           (import ./resources/pvc.nix {
             inherit lib;
@@ -123,7 +123,7 @@
             inherit persistence;
           })) persistence);
 
-      "gateway.networking.k8s.io".v1.HTTPRoute.${name} = lib.mkIf (route != null) 
+      httpRoutes.${name} = lib.mkIf (route != null) 
         (import ./resources/httproute.nix {
           inherit lib;
           inherit labels;
@@ -131,7 +131,7 @@
           inherit route;
         });
 
-      "velero.io".v1.Restore = lib.mkIf (backup != null)
+      restores = lib.mkIf (backup != null)
         (lib.mapAttrs (name: backup: lib.mkIf (backup.restore)
           (import ./resources/restore.nix {
             inherit labels;
@@ -140,7 +140,7 @@
             inherit backup;
           })) backup);
 
-      "velero.io".v1.Schedule = lib.mkIf (backup != null)
+      schedules = lib.mkIf (backup != null)
         (lib.mapAttrs (name: backup:
           (import ./resources/schedule.nix {
             inherit labels;

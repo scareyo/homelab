@@ -1,9 +1,10 @@
-{ charts, config, lib, ... }:
+{ charts, config, generators, lib, ... }:
 
 let
   cfg = config.vegapunk.monitoring;
   namespace = "monitoring";
   project = "system";
+  chart = charts.victoria-metrics-k8s-stack;
 in
 {
   options = {
@@ -11,6 +12,14 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    nixidy.applicationImports = [
+      (generators.fromChartCRDModule {
+        inherit chart;
+        name = "victoria-metrics-operator";
+        kindFilter = [];
+      })
+    ];
+
     applications.monitoring = {
       inherit namespace project;
 
@@ -62,7 +71,7 @@ in
         namespaces.monitoring = {
           metadata.labels."pod-security.kubernetes.io/enforce" = lib.mkForce "privileged";
         };
-        "operator.victoriametrics.com".v1.VLSingle.victoria-logs = {
+        vlSingles.victoria-logs = {
           spec = {
             storage = {
               resources.requests.storage = "100Gi";

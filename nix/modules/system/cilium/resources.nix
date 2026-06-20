@@ -1,5 +1,5 @@
 {
-  "cilium.io".v2.CiliumBGPAdvertisement.default = {
+  ciliumBGPAdvertisements.default = {
     metadata = {
       name = "default";
       labels = {
@@ -21,7 +21,7 @@
     };
   };
 
-  "cilium.io".v2.CiliumBGPClusterConfig.default = {
+  ciliumBGPClusterConfigs.default = {
     metadata = {
       name = "default";
     };
@@ -43,7 +43,7 @@
     };
   };
 
-  "cilium.io".v2.CiliumBGPPeerConfig.default = {
+  ciliumBGPPeerConfigs.default = {
     metadata = {
       name = "default";
     };
@@ -62,7 +62,7 @@
     };
   };
 
-  "cilium.io".v2.CiliumLoadBalancerIPPool.default = {
+  ciliumLoadBalancerIPPools.default = {
     metadata = {
       name = "default";
       labels.bgp = "default";

@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, generators, lib, pkgs, ... }:
 
 let
   cfg = config.vegapunk.gateway;
@@ -11,6 +11,23 @@ in
   };
   
   config = lib.mkIf cfg.enable {
+    nixidy.applicationImports = [
+      (generators.fromCRDModule {
+        name = "gateway-api";
+        src = pkgs.fetchFromGitHub {
+          owner = "kubernetes-sigs";
+          repo = "gateway-api";
+          rev = "v1.4.0";
+          hash = "sha256-osM8BRqFw5he93yTTTQb/q9iVvT6oWkCb731n/C6bq4=";
+        };
+        crdFiles = [
+          "config/crd/standard/gateway.networking.k8s.io_gateways.yaml"
+          "config/crd/standard/gateway.networking.k8s.io_httproutes.yaml"
+          "config/crd/experimental/gateway.networking.k8s.io_tcproutes.yaml"
+        ];
+      })
+    ];
+
     applications.gateway = {
       inherit namespace project;
 

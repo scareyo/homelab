@@ -1,5 +1,5 @@
 {
-  "external-secrets.io".v1.ClusterSecretStore.infisical = {
+  clusterSecretStores.infisical = {
     metadata = {
       name = "infisical";
       annotations = {

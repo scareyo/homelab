@@ -1,5 +1,5 @@
 {
-  "gateway.networking.k8s.io".v1.Gateway.internal = {
+  gateways.internal = {
     metadata = {
       name = "internal";
       annotations = {

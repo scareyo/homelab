@@ -50,7 +50,7 @@
       providerKeys = builtins.filter(x: x.type == "provider") cfg.keys;
       passwordKeys = builtins.filter(x: x.type == "password") cfg.keys;
     in {
-      "external-secrets.io".v1.ExternalSecret.${name} = {
+      externalSecrets.${name} = {
         metadata = {
           name = "${name}";
         };
@@ -97,7 +97,7 @@
         };
       };
 
-      "generators.external-secrets.io".v1alpha1.Password = builtins.listToAttrs (map (x: {
+      passwords = builtins.listToAttrs (map (x: {
         name = x.dest;
         value = {
           metadata.name = x.dest;

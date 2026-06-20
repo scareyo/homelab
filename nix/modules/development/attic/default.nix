@@ -105,7 +105,7 @@ in
       resources.deployments.attic.spec.template.spec.containers.attic.securityContext = lib.mkForce {};
       resources.deployments.attic.spec.template.spec.securityContext = lib.mkForce {};
 
-      resources."objectbucket.io".v1alpha1.ObjectBucketClaim.attic-obc = {
+      resources.objectBucketClaims.attic-obc = {
         spec = {
           bucketName = "attic";
           storageClassName = "ceph-bucket";

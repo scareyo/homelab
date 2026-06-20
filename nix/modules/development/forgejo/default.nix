@@ -69,7 +69,7 @@ in
         ];
       };
 
-      resources."gateway.networking.k8s.io".v1alpha2.TCPRoute.forgejo-ssh = {
+      resources.tcpRoutes.forgejo-ssh = {
         spec = {
           parentRefs = [
             {
