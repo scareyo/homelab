@@ -3,7 +3,3 @@ kind: CoreProvider
 metadata:
   name: cluster-api
   namespace: capi-system
-spec:
-  manager:
-    featureGates:
-      ClusterTopology: true

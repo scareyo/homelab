@@ -30,9 +30,9 @@ in
       };
 
       resources.coreProviders.cluster-api = {
-        spec.manager.featureGates = {
-          ClusterTopology = true;
-        };
+        #spec.manager.featureGates = {
+        #  ClusterTopology = true;
+        #};
       };
       resources.controlPlaneProviders.kamaji = {};
       resources.infrastructureProviders.kubevirt = {};
