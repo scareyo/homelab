@@ -1,15 +1,15 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: operators
+  name: kubevirt
   namespace: argocd
 spec:
   destination:
-    namespace: operators
+    namespace: kubevirt-hyperconverged
     server: https://kubernetes.default.svc
   project: system
   source:
-    path: ./manifests/seraphim/prod/operators
+    path: ./manifests/seraphim/prod/kubevirt
     repoURL: https://github.com/scareyo/homelab.git
     targetRevision: main
   syncPolicy: {}

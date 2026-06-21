@@ -3,4 +3,6 @@ kind: Namespace
 metadata:
   annotations:
     argocd.argoproj.io/sync-options: Prune=false
-  name: tenant-test
+  labels:
+    pod-security.kubernetes.io/enforce: privileged
+  name: kubevirt-hyperconverged

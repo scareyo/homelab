@@ -36,6 +36,7 @@
     kamaji.enable = true;
     kgateway.enable = true;
     komga.enable = true;
+    kubevirt.enable = true;
     metrics-server.enable = true;
     monitoring.enable = true;
     newt.enable = true;
@@ -51,12 +52,5 @@
     unpackerr.enable = true;
     velero.enable = true;
     woodpecker.enable = true;
-
-    tenant-test.enable = true;
-
-    operators = {
-      enable = true;
-      kubevirt.enable = true;
-    };
   };
 }

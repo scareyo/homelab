@@ -26,6 +26,7 @@ in
         ];
       })
     ];
+
     applications.operators = {
       inherit namespace project;
 
