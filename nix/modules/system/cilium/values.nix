@@ -20,6 +20,9 @@
   k8sServicePort = 7445;
   bgpControlPlane.enabled = true;
 
+  # Enabled so kubevirt VMs can reach pod network
+  socketLB.hostNamespaceOnly = true;
+
   hubble = {
     relay.enabled = true;
     ui.enabled = true;
