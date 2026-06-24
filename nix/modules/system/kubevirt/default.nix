@@ -43,7 +43,9 @@ in
 
       resources.cdis.cdi = {};
 
-      resources.kubeVirts.kubevirt = {};
+      resources.kubeVirts.kubevirt.spec.configuration.developerConfiguration.featureGates = [
+        "BlockVolume"
+      ];
 
       resources = {
         namespaces.${namespace} = {

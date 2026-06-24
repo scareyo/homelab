@@ -3,4 +3,8 @@ kind: KubeVirt
 metadata:
   name: kubevirt
   namespace: kubevirt-hyperconverged
-spec: {}
+spec:
+  configuration:
+    developerConfiguration:
+      featureGates:
+        - BlockVolume
