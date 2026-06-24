@@ -21,7 +21,7 @@ in
 
         workload = {
           image = "ghcr.io/jellyfin/jellyfin";
-          version = "10.11.8";
+          version = "10.11.11";
           port = 8096;
           strategy = "Recreate";
         };
