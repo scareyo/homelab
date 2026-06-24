@@ -21,7 +21,7 @@ in
 
         workload = {
           image = "ghcr.io/gotson/komga";
-          version = "1.24.3";
+          version = "1.24.4";
           port = 25600;
           env = {
             KOMGA_OAUTH2ACCOUNTCREATION = "true";

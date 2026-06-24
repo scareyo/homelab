@@ -6,7 +6,7 @@ metadata:
     app.kubernetes.io/instance: komga
     app.kubernetes.io/name: komga
     app.kubernetes.io/part-of: komga
-    app.kubernetes.io/version: 1.24.3
+    app.kubernetes.io/version: 1.24.4
   name: komga
   namespace: komga
 spec:
@@ -24,7 +24,7 @@ spec:
         app.kubernetes.io/instance: komga
         app.kubernetes.io/name: komga
         app.kubernetes.io/part-of: komga
-        app.kubernetes.io/version: 1.24.3
+        app.kubernetes.io/version: 1.24.4
     spec:
       containers:
         - env:
@@ -56,7 +56,7 @@ spec:
               value: '{baseUrl}/{action}/oauth2/code/{registrationId}'
             - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_POCKETID_SCOPE
               value: openid,email,profile
-          image: ghcr.io/gotson/komga:1.24.3
+          image: ghcr.io/gotson/komga:1.24.4
           name: komga
           ports:
             - containerPort: 25600
