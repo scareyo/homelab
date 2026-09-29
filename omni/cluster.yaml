@@ -70,3 +70,4 @@ systemExtensions:
   - siderolabs/intel-ucode
   - siderolabs/mei
   - siderolabs/xe
+  - siderolabs/zfs

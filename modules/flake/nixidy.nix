@@ -16,6 +16,7 @@
           ../../clusters/seraphim.nix
           config.flake.modules.nixidy.argocd
           config.flake.modules.nixidy.cilium
+          config.flake.modules.nixidy.openebs
         ];
       };
     };

@@ -1,0 +1,15 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: openebs
+  namespace: argocd
+spec:
+  destination:
+    namespace: openebs
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    path: ./manifests/seraphim/openebs
+    repoURL: https://knot1.tangled.sh/did:plc:jkfcue6cc7extm56pyw4lgoc
+    targetRevision: main
+  syncPolicy: {}

@@ -1,0 +1,103 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: localpv-provisioner
+    chart: localpv-provisioner-4.6.0
+    component: localpv-provisioner
+    heritage: Helm
+    openebs.io/component-name: openebs-localpv-provisioner
+    release: openebs
+  name: openebs-localpv-provisioner
+  namespace: openebs
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: localpv-provisioner
+      component: localpv-provisioner
+      release: openebs
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: localpv-provisioner
+        chart: localpv-provisioner-4.6.0
+        component: localpv-provisioner
+        heritage: Helm
+        name: openebs-localpv-provisioner
+        openebs.io/component-name: openebs-localpv-provisioner
+        openebs.io/logging: "true"
+        release: openebs
+    spec:
+      containers:
+        - env:
+            - name: OPENEBS_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+            - name: OPENEBS_SERVICE_ACCOUNT
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.serviceAccountName
+            - name: OPENEBS_IO_ENABLE_ANALYTICS
+              value: "true"
+            - name: OPENEBS_IO_ANALYTICS_STATE_CM
+              value: openebs-localpv-provisioner-analytics-state
+            - name: OPENEBS_IO_BASE_PATH
+              value: /var/openebs/local
+            - name: OPENEBS_IO_WORKER_THREADS
+              value: "4"
+            - name: OPENEBS_IO_IMAGE_PULL_POLICY
+              value: IfNotPresent
+            - name: OPENEBS_IO_HELPER_IMAGE
+              value: docker.io/openebs/linux-utils:4.6.0
+            - name: OPENEBS_IO_HELPER_POD_HOST_NETWORK
+              value: "false"
+            - name: OPENEBS_IO_INSTALLER_TYPE
+              value: localpv-charts-helm-helperpod
+            - name: OPENEBS_IO_HELPER_POD_TIMEOUT_SECS
+              value: "120"
+            - name: LEADER_ELECTION_ENABLED
+              value: "true"
+            - name: OPENEBS_IO_HEALTH_PROBE_BIND_ADDRESS
+              value: :8081
+          image: docker.io/openebs/provisioner-localpv:4.6.0
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: healthz
+            initialDelaySeconds: 1
+            periodSeconds: 30
+            timeoutSeconds: 5
+          name: openebs-localpv-provisioner
+          ports:
+            - containerPort: 8081
+              name: healthz
+              protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /readyz
+              port: healthz
+            initialDelaySeconds: 1
+            periodSeconds: 20
+            timeoutSeconds: 5
+      securityContext: {}
+      serviceAccountName: openebs-localpv-provisioner
+      tolerations:
+        - effect: NoExecute
+          key: node.kubernetes.io/unreachable
+          operator: Exists
+          tolerationSeconds: 5
+        - effect: NoExecute
+          key: node.kubernetes.io/not-ready
+          operator: Exists
+          tolerationSeconds: 5

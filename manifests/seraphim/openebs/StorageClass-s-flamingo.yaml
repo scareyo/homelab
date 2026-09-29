@@ -1,0 +1,16 @@
+allowedTopologies:
+  - matchLabelExpressions:
+      - key: kubernetes.io/hostname
+        values:
+          - s-flamingo
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: s-flamingo
+parameters:
+  compression: "off"
+  dedup: "off"
+  fstype: zfs
+  poolname: s-flamingo
+  recordsize: 128k
+provisioner: zfs.csi.openebs.io
