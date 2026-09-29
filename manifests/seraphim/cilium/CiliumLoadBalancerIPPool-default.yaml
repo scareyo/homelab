@@ -1,0 +1,10 @@
+apiVersion: cilium.io/v2
+kind: CiliumLoadBalancerIPPool
+metadata:
+  labels:
+    bgp: default
+  name: default
+spec:
+  allowFirstLastIPs: "No"
+  blocks:
+    - cidr: 10.10.21.0/24

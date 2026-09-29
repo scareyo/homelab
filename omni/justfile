@@ -1,0 +1,14 @@
+default:
+  @just --list
+
+sync:
+  mkdir -p manifests
+  yq eval-all '.' $(ls ../manifests/seraphim/argocd/*.yaml) > manifests/argocd.yaml
+  yq eval-all '.' $(ls ../manifests/seraphim/cilium/*.yaml | grep -v '/Cilium') > manifests/cilium.yaml
+  omnictl cluster template sync -f cluster.yaml
+
+kubeconfig:
+  omnictl kubeconfig ../.kube/config -f -m=false -c seraphim
+
+talosconfig:
+  omnictl talosconfig ../.talos/config -f -m=false -c seraphim

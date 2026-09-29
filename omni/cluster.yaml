@@ -1,0 +1,72 @@
+---
+kind: Cluster
+name: seraphim
+talos:
+  version: v1.14.1
+kubernetes:
+  version: v1.37.0
+  manifests:
+    - name: argocd
+      file: manifests/argocd.yaml
+      mode: one-time
+    - name: cilium
+      file: manifests/cilium.yaml
+      mode: one-time
+patches:
+  - name: disable-default-cni
+    inline:
+      apiVersion: v1alpha1
+      kind: KubeFlannelCNIConfig
+      $patch: delete
+---
+kind: ControlPlane
+machines:
+  - b2107c00-66a0-11ef-911b-e24494d5a600
+  - 0bfc3d80-65de-11ef-a60b-c244053fa300
+  - c9bc1600-6648-11ef-809d-08f808ecb600
+patches:
+  - name: disable-kube-proxy
+    inline:
+      apiVersion: v1alpha1
+      kind: KubeProxyConfig
+      enabled: false
+---
+kind: Workers
+machines:
+  - 37e3e700-660f-11ef-b0c5-9568df4bde00
+  - 152ea05a-a20e-43f0-8c04-9c6b00b10389
+---
+kind: Machine
+name: b2107c00-66a0-11ef-911b-e24494d5a600
+systemExtensions:
+  - siderolabs/i915
+  - siderolabs/intel-ucode
+  - siderolabs/mei
+---
+kind: Machine
+name: 0bfc3d80-65de-11ef-a60b-c244053fa300
+systemExtensions:
+  - siderolabs/i915
+  - siderolabs/intel-ucode
+  - siderolabs/mei
+---
+kind: Machine
+name: c9bc1600-6648-11ef-809d-08f808ecb600
+systemExtensions:
+  - siderolabs/i915
+  - siderolabs/intel-ucode
+  - siderolabs/mei
+---
+kind: Machine
+name: 37e3e700-660f-11ef-b0c5-9568df4bde00
+systemExtensions:
+  - siderolabs/i915
+  - siderolabs/intel-ucode
+  - siderolabs/mei
+---
+kind: Machine
+name: 152ea05a-a20e-43f0-8c04-9c6b00b10389
+systemExtensions:
+  - siderolabs/intel-ucode
+  - siderolabs/mei
+  - siderolabs/xe
