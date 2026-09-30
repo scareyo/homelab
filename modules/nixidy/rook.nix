@@ -75,6 +75,13 @@
                 mgr.disabled = false;
                 osd.disabled = false;
               };
+              # FIXME: remove these once on Linux kernel 7+ and using AES256K
+              muteHealthWarning = {
+                AUTH_INSECURE_ROTATING_SERVICE_KEY_TYPE.policy = "mute";
+                AUTH_INSECURE_CLIENT_KEY_TYPE.policy = "mute";
+                AUTH_INSECURE_KEYS_ALLOWED.policy = "mute";
+                AUTH_INSECURE_KEYS_CREATABLE.policy = "mute";
+              };
             };
           };
           cephBlockPoolsVolumeSnapshotClass = {
