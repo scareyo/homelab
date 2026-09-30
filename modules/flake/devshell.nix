@@ -21,20 +21,7 @@
         talosctl
         velero
 
-        ((pkgs.omnictl.override {
-          buildGoModule = pkgs.buildGo127Module;
-        }).overrideAttrs (finalAttrs: previousAttrs: rec {
-          version = "1.12.1";
-
-          src = fetchFromGitHub {
-            owner = "siderolabs";
-            repo = "omni";
-            rev = "v${version}";
-            hash = "sha256-nERNdWZLCw/7o03MH7y+PpglA72Yf/llKvSJNQeLS1k=";
-          };
-
-          vendorHash = "sha256-2bHYQdNMZPNpw7DzYBSHU044dx9cWU95Cwf5zev4Aqg=";
-        }))
+        omnictl
 
         inputs.nixidy.packages.${system}.default
       ];
