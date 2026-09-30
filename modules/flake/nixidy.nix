@@ -17,6 +17,7 @@
           config.flake.modules.nixidy.argocd
           config.flake.modules.nixidy.cilium
           config.flake.modules.nixidy.openebs
+          config.flake.modules.nixidy.rook
         ];
       };
     };

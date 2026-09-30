@@ -1,0 +1,17 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: rook
+  namespace: argocd
+spec:
+  destination:
+    namespace: rook-ceph
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    path: ./manifests/seraphim/rook
+    repoURL: https://knot1.tangled.sh/did:plc:jkfcue6cc7extm56pyw4lgoc
+    targetRevision: main
+  syncPolicy:
+    syncOptions:
+      - ServerSideApply=true
