@@ -1,5 +1,7 @@
 {
   flake.modules.nixidy.rook = { generators, lib, ... }: let
+    namespace = "rook-ceph";
+    project = "default";
     chart.rook-ceph = lib.helm.downloadHelmChart {
       repo = "https://charts.rook.io/release";
       chart = "rook-ceph";
@@ -12,6 +14,12 @@
       version = "v1.20.8";
       chartHash = "sha256-55Qf/20zr/CtzkOK2fm/KupZKyw/vZNagWMz/n84/8w=";
     };
+    chart.ceph-csi-drivers = lib.helm.downloadHelmChart {
+      repo = "https://ceph.github.io/ceph-csi-operator";
+      chart = "ceph-csi-drivers";
+      version = "1.0.5";
+      chartHash = "sha256-p1rN64p2U4CFDQLmt08N6rFXluy8b0Bq4UothoeH5F8=";
+    };
   in {
     nixidy.applicationImports = [
       (generators.fromChartCRDModule {
@@ -22,8 +30,7 @@
     ];
 
     applications.rook = {
-      namespace = "rook-ceph";
-      project = "default";
+      inherit namespace project;
 
       createNamespace = true;
 
@@ -73,6 +80,18 @@
           cephBlockPoolsVolumeSnapshotClass = {
             enabled = true;
             labels."velero.io/csi-volumesnapshot-class" = "true";
+          };
+        };
+      };
+
+      helm.releases.ceph-csi-drivers = {
+        chart = chart.ceph-csi-drivers;
+        values = {
+          drivers = {
+            rbd.name = "${namespace}.rbd.csi.ceph.com";
+            cephfs.name = "${namespace}.cephfs.csi.ceph.com";
+            nvmeof.enabled = false;
+            nfs.enabled = false;
           };
         };
       };
