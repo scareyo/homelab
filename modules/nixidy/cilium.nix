@@ -1,5 +1,14 @@
 {
-  flake.modules.nixidy.cilium = { generators, lib, pkgs, ... }: {
+  flake.modules.nixidy.cilium = { generators, lib, pkgs, ... }: let
+    namespace = "kube-system";
+    project = "default";
+    chart = lib.helm.downloadHelmChart {
+      repo = "https://helm.cilium.io";
+      chart = "cilium";
+      version = "1.20.2";
+      chartHash = "sha256-B6yOW8FluRJEF+/bvVvsobW6zUhE2WYE1lprZI/s95U=";
+    };
+  in {
     nixidy.applicationImports = [
       (generators.fromCRDModule {
         name = "cilium";
@@ -19,16 +28,10 @@
     ];
 
     applications.cilium = {
-      namespace = "kube-system";
-      project = "default";
+      inherit namespace project;
 
       helm.releases.cilium = {
-        chart = lib.helm.downloadHelmChart {
-          repo = "https://helm.cilium.io";
-          chart = "cilium";
-          version = "1.20.2";
-          chartHash = "sha256-B6yOW8FluRJEF+/bvVvsobW6zUhE2WYE1lprZI/s95U=";
-        };
+        inherit chart;
 
         values = {
           ipam.mode = "kubernetes";

@@ -1,18 +1,21 @@
 {
-  flake.modules.nixidy.openebs = { lib, ... }: {
+  flake.modules.nixidy.openebs = { lib, ... }: let
+    namespace = "openebs";
+    project = "default";
+    chart = lib.helm.downloadHelmChart {
+      repo = "https://openebs.github.io/openebs";
+      chart = "openebs";
+      version = "4.6.1";
+      chartHash = "sha256-cHd2Vz4eqX40Uhuxoum1F+JQF8T8m2tsskJUzlhhpLo=";
+    };
+  in {
     applications.openebs = {
-      namespace = "openebs";
-      project = "default";
+      inherit namespace project;
 
       createNamespace = true;
 
       helm.releases.openebs = {
-        chart = lib.helm.downloadHelmChart {
-          repo = "https://openebs.github.io/openebs";
-          chart = "openebs";
-          version = "4.6.1";
-          chartHash = "sha256-cHd2Vz4eqX40Uhuxoum1F+JQF8T8m2tsskJUzlhhpLo=";
-        };
+        inherit chart;
 
         values = {
           alloy.enabled = false;
