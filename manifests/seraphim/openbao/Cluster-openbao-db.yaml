@@ -1,0 +1,12 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: openbao-db
+  namespace: openbao
+spec:
+  imageName: ghcr.io/cloudnative-pg/postgresql:18
+  instances: 3
+  monitoring:
+    enablePodMonitor: true
+  storage:
+    size: 32Gi

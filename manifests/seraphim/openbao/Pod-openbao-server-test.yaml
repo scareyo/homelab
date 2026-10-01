@@ -30,11 +30,19 @@ spec:
       env:
         - name: VAULT_ADDR
           value: http://openbao.openbao.svc:8200
+        - name: PGSSLMODE
+          value: verify-full
+        - name: PGSSLROOTCERT
+          value: /pgssl/ca.crt
       image: quay.io/openbao/openbao:2.7.0
       imagePullPolicy: IfNotPresent
       name: openbao-server-test
       securityContext:
         allowPrivilegeEscalation: false
+      volumeMounts:
+        - mountPath: /pgssl
+          name: openbao-db-ca
+          readOnly: true
   restartPolicy: Never
   securityContext:
     fsGroup: 1000
@@ -43,3 +51,7 @@ spec:
     runAsUser: 100
     seccompProfile:
       type: RuntimeDefault
+  volumes:
+    - name: openbao-db-ca
+      secret:
+        secretName: openbao-db-ca

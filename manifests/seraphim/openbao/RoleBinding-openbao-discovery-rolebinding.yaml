@@ -1,0 +1,18 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  labels:
+    app.kubernetes.io/instance: openbao
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: openbao
+    helm.sh/chart: openbao-0.30.0
+  name: openbao-discovery-rolebinding
+  namespace: openbao
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: openbao-discovery-role
+subjects:
+  - kind: ServiceAccount
+    name: openbao
+    namespace: openbao

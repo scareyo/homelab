@@ -1,0 +1,21 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  labels:
+    app.kubernetes.io/instance: openbao
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: openbao
+    helm.sh/chart: openbao-0.30.0
+  name: openbao-discovery-role
+  namespace: openbao
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - pods
+    verbs:
+      - get
+      - watch
+      - list
+      - update
+      - patch

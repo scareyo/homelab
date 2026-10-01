@@ -9,7 +9,7 @@ metadata:
   namespace: openbao
 spec:
   podManagementPolicy: OrderedReady
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app.kubernetes.io/instance: openbao
@@ -72,6 +72,15 @@ spec:
               value: https://$(HOSTNAME).openbao-internal:8201
             - name: HOME
               value: /home/openbao
+            - name: BAO_PG_CONNECTION_URL
+              valueFrom:
+                secretKeyRef:
+                  key: fqdn-uri
+                  name: openbao-db-app
+            - name: PGSSLMODE
+              value: verify-full
+            - name: PGSSLROOTCERT
+              value: /pgssl/ca.crt
           image: quay.io/openbao/openbao:2.7.0
           imagePullPolicy: IfNotPresent
           lifecycle:
@@ -103,10 +112,11 @@ spec:
           securityContext:
             allowPrivilegeEscalation: false
           volumeMounts:
-            - mountPath: /openbao/data
-              name: data
             - mountPath: /openbao/config
               name: config
+            - mountPath: /pgssl
+              name: openbao-db-ca
+              readOnly: true
             - mountPath: /home/openbao
               name: home
       hostNetwork: false
@@ -123,18 +133,10 @@ spec:
         - configMap:
             name: openbao-config
           name: config
+        - name: openbao-db-ca
+          secret:
+            secretName: openbao-db-ca
         - emptyDir: {}
           name: home
   updateStrategy:
     type: OnDelete
-  volumeClaimTemplates:
-    - apiVersion: v1
-      kind: PersistentVolumeClaim
-      metadata:
-        name: data
-      spec:
-        accessModes:
-          - ReadWriteOnce
-        resources:
-          requests:
-            storage: 10Gi
