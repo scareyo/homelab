@@ -1,0 +1,15 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: gateway
+  namespace: argocd
+spec:
+  destination:
+    namespace: gateway
+    server: https://kubernetes.default.svc
+  project: system
+  source:
+    path: ./manifests/seraphim/gateway
+    repoURL: https://knot1.tangled.sh/did:plc:jkfcue6cc7extm56pyw4lgoc
+    targetRevision: main
+  syncPolicy: {}

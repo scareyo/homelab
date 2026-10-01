@@ -1,0 +1,17 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: agentgateway
+  namespace: argocd
+spec:
+  destination:
+    namespace: agentgateway-system
+    server: https://kubernetes.default.svc
+  project: system
+  source:
+    path: ./manifests/seraphim/agentgateway
+    repoURL: https://knot1.tangled.sh/did:plc:jkfcue6cc7extm56pyw4lgoc
+    targetRevision: main
+  syncPolicy:
+    syncOptions:
+      - ServerSideApply=true
