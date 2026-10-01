@@ -1,7 +1,7 @@
 {
   flake.modules.apps.openebs = { lib, ... }: let
     namespace = "openebs";
-    project = "default";
+    project = "system";
     chart = lib.helm.downloadHelmChart {
       repo = "https://openebs.github.io/openebs";
       chart = "openebs";

@@ -1,7 +1,7 @@
 {
   flake.modules.apps.cilium = { generators, lib, pkgs, ... }: let
     namespace = "kube-system";
-    project = "default";
+    project = "system";
     chart = lib.helm.downloadHelmChart {
       repo = "https://helm.cilium.io";
       chart = "cilium";

@@ -1,7 +1,7 @@
 {
   flake.modules.apps.argocd = { lib, ... }: let
     namespace = "argocd";
-    project = "default";
+    project = "system";
     chart = lib.helm.downloadHelmChart {
       repo = "https://argoproj.github.io/argo-helm";
       chart = "argo-cd";
@@ -18,6 +18,14 @@
 
       helm.releases.argocd = {
         inherit chart;
+      };
+
+      resources.appProjects = {
+        system.spec = {
+          sourceRepos = [ "*" ];
+          destinations = [{ namespace = "*"; server = "*"; }];
+          clusterResourceWhitelist = [{ group = "*"; kind = "*"; }];
+        };
       };
     };
   };

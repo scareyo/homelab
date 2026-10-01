@@ -1,7 +1,7 @@
 {
   flake.modules.apps.cnpg = { generators, lib, ... }: let
     namespace = "cnpg";
-    project = "default";
+    project = "system";
     chart = lib.helm.downloadHelmChart {
       repo = "oci://ghcr.io/cloudnative-pg/charts";
       chart = "cloudnative-pg";

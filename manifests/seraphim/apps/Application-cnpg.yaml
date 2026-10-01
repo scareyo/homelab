@@ -7,7 +7,7 @@ spec:
   destination:
     namespace: cnpg
     server: https://kubernetes.default.svc
-  project: default
+  project: system
   source:
     path: ./manifests/seraphim/cnpg
     repoURL: https://knot1.tangled.sh/did:plc:jkfcue6cc7extm56pyw4lgoc

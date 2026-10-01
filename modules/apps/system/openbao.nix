@@ -1,7 +1,7 @@
 {
   flake.modules.apps.openbao = { lib, ... }: let
     namespace = "openbao";
-    project = "default";
+    project = "system";
     chart = lib.helm.downloadHelmChart {
       repo = "https://openbao.github.io/openbao-helm";
       chart = "openbao";

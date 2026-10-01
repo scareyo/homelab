@@ -1,7 +1,7 @@
 {
   flake.modules.apps.rook = { generators, lib, ... }: let
     namespace = "rook-ceph";
-    project = "default";
+    project = "system";
     chart.rook-ceph = lib.helm.downloadHelmChart {
       repo = "https://charts.rook.io/release";
       chart = "rook-ceph";
