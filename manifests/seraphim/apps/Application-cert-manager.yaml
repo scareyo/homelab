@@ -1,0 +1,15 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cert-manager
+  namespace: argocd
+spec:
+  destination:
+    namespace: cert-manager
+    server: https://kubernetes.default.svc
+  project: system
+  source:
+    path: ./manifests/seraphim/cert-manager
+    repoURL: https://knot1.tangled.sh/did:plc:jkfcue6cc7extm56pyw4lgoc
+    targetRevision: main
+  syncPolicy: {}
