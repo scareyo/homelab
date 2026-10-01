@@ -1,5 +1,5 @@
 {
-  flake.modules.nixidy.argocd = { lib, ... }: let
+  flake.modules.apps.argocd = { lib, ... }: let
     namespace = "argocd";
     project = "default";
     chart = lib.helm.downloadHelmChart {

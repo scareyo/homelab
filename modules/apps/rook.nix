@@ -1,5 +1,5 @@
 {
-  flake.modules.nixidy.rook = { generators, lib, ... }: let
+  flake.modules.apps.rook = { generators, lib, ... }: let
     namespace = "rook-ceph";
     project = "default";
     chart.rook-ceph = lib.helm.downloadHelmChart {

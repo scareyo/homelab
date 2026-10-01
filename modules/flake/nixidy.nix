@@ -13,7 +13,7 @@
 
       envs = {
         seraphim.modules = [ ../../clusters/seraphim.nix ]
-          ++ builtins.attrValues config.flake.modules.nixidy
+          ++ builtins.attrValues config.flake.modules.apps
           ++ builtins.attrValues config.flake.modules.templates;
       };
     };

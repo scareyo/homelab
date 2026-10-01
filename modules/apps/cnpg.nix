@@ -1,5 +1,5 @@
 {
-  flake.modules.nixidy.cnpg = { generators, lib, ... }: let
+  flake.modules.apps.cnpg = { generators, lib, ... }: let
     namespace = "cnpg";
     project = "default";
     chart = lib.helm.downloadHelmChart {

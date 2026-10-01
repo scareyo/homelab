@@ -1,5 +1,5 @@
 {
-  flake.modules.nixidy.cilium = { generators, lib, pkgs, ... }: let
+  flake.modules.apps.cilium = { generators, lib, pkgs, ... }: let
     namespace = "kube-system";
     project = "default";
     chart = lib.helm.downloadHelmChart {

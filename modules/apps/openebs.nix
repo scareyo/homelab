@@ -1,5 +1,5 @@
 {
-  flake.modules.nixidy.openebs = { lib, ... }: let
+  flake.modules.apps.openebs = { lib, ... }: let
     namespace = "openebs";
     project = "default";
     chart = lib.helm.downloadHelmChart {
