@@ -12,15 +12,9 @@
       inherit pkgs;
 
       envs = {
-        seraphim.modules = [
-          ../../clusters/seraphim.nix
-          config.flake.modules.nixidy.argocd
-          config.flake.modules.nixidy.cilium
-          config.flake.modules.nixidy.cnpg
-          config.flake.modules.nixidy.openbao
-          config.flake.modules.nixidy.openebs
-          config.flake.modules.nixidy.rook
-        ];
+        seraphim.modules = [ ../../clusters/seraphim.nix ]
+          ++ builtins.attrValues config.flake.modules.nixidy
+          ++ builtins.attrValues config.flake.modules.templates;
       };
     };
   };

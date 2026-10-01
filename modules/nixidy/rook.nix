@@ -108,11 +108,7 @@
       #  servicePort = 7000;
       #};
 
-      resources = {
-        namespaces.rook-ceph = {
-          metadata.labels."pod-security.kubernetes.io/enforce" = lib.mkForce "privileged";
-        };
-      };
+      templates.privileged.rook-ceph = {};
     };
   };
 }

@@ -49,9 +49,7 @@
         ];
       };
 
-      resources.namespaces.openebs = {
-        metadata.labels."pod-security.kubernetes.io/enforce" = lib.mkForce "privileged";
-      };
+      templates.privileged.openebs = {};
     };
   };
 }
