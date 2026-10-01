@@ -1,0 +1,116 @@
+{
+  flake.modules.templates.externalsecret = { lib, ... }: {
+    templates.externalSecret = {
+      options = {
+        keys = lib.mkOption {
+          type = lib.types.listOf (lib.types.submodule {
+            options = {
+              type = lib.mkOption {
+                type = lib.types.str;
+                default = "provider";
+                description = "Secret type";
+              };
+
+              source-key = lib.mkOption {
+                type = lib.types.str;
+                description = "Source key on the secret provider";
+              };
+
+              source-property = lib.mkOption {
+                type = lib.types.str;
+                description = "Source property on the secret provider";
+              };
+
+              length = lib.mkOption {
+                type = lib.types.int;
+                description = "Password length";
+              };
+
+              dest = lib.mkOption {
+                type = lib.types.str;
+                description = "Destination key on the generated Secret";
+              };
+            };
+          });
+          description = "A list of secrets to include in the generated Secret";
+        };
+
+        merge = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = "Merge with existing secret";
+        };
+
+        templates = lib.mkOption {
+          type = lib.types.nullOr (lib.types.attrsOf lib.types.str);
+          description = "Templated secrets";
+          default = null;
+        };
+      };
+
+      output = { name, config, ...  }: let
+        cfg = config;
+
+        providerKeys = builtins.filter(x: x.type == "provider") cfg.keys;
+        passwordKeys = builtins.filter(x: x.type == "password") cfg.keys;
+      in {
+        externalSecrets.${name} = {
+          metadata = {
+            name = "${name}";
+          };
+          spec = {
+            secretStoreRef = {
+              kind = "ClusterSecretStore";
+              name = "openbao";
+            };
+            target.creationPolicy = lib.mkIf cfg.merge "Merge";
+            target.template = lib.mkIf (cfg.templates != null) {
+              engineVersion = "v2";
+              data = cfg.templates;
+            };
+            data =
+              if builtins.length providerKeys == 0 then 
+                null 
+              else map (x: {
+                secretKey = "${x.dest}";
+                remoteRef = {
+                  key = "${x.source-key}";
+                  property = "${x.source-property}";
+                };
+              }) providerKeys;
+            dataFrom = 
+              if builtins.length passwordKeys == 0 then 
+                null 
+              else map (x: {
+                sourceRef.generatorRef = {
+                  apiVersion = "generators.external-secrets.io/v1alpha1";
+                  kind = "Password";
+                  name = "${x.dest}";
+                };
+                rewrite = [
+                  {
+                    regexp = {
+                      source = "password";
+                      target = "${x.dest}";
+                    };
+                  }
+                ];
+              }) passwordKeys;
+          };
+        };
+
+        passwords = builtins.listToAttrs (map (x: {
+          name = x.dest;
+          value = {
+            metadata.name = x.dest;
+            spec = {
+              length = x.length;
+              allowRepeat = true;
+              noUpper = false;
+            };
+          };
+        }) (builtins.filter (x: x.type == "password") cfg.keys));
+      };
+    };
+  };
+}

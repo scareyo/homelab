@@ -36,7 +36,7 @@
           provider.vault = {
             server = "http://openbao.openbao.svc.cluster.local:8200";
             namespace = "seraphim";
-            path = "secret";
+            path = "kv";
             version = "v2";
             auth.kubernetes = {
               mountPath = "kubernetes";
