@@ -1,5 +1,5 @@
 {
-  flake.modules.apps.openbao = { lib, ... }: let
+  flake.modules.apps.openbao = { generators, lib, ... }: let
     namespace = "openbao";
     project = "system";
     charts.openbao = {
@@ -16,6 +16,14 @@
     };
     chart = lib.mapAttrs (_: lib.helm.downloadHelmChart) charts;
   in {
+    nixidy.applicationImports = [
+      (generators.fromChartCRDModule {
+        chart = chart.vault-config-operator;
+        name = "vault-config-operator";
+        kindFilter = [ "JWTOIDCAuthEngineConfig" ];
+      })
+    ];
+
     applications.openbao = {
       inherit namespace project;
 
@@ -62,6 +70,9 @@
 
       helm.releases.vault-config-operator = {
         chart = chart.vault-config-operator;
+        values = {
+          enableCertManager = true;
+        };
       };
 
       templates.app.openbao.route = {
@@ -69,6 +80,24 @@
       };
 
       templates.postgres.openbao-db = {};
+
+      resources.pocketIDOIDCClients.openbao = {
+        spec = {
+          name = "OpenBao"; 
+          description = "Manage, store, and distribute sensitive data";
+          callbackUrls = [ "https://openbao.vegapunk.cloud/oidc/callback" ];
+        };
+      };
+
+      resources.jwtoidcAuthEngineConfigs.oidc.spec = {
+        path = "oidc";
+        OIDCDiscoveryURL = "https://id.vegapunk.cloud";
+        OIDCCredentials = {
+          secret.name = "openbao-oidc-credentials";
+          usernameKey = "client_id";
+          passwordKey = "client_secret";
+        };
+      };
     };
   };
 }

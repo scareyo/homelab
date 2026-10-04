@@ -1,0 +1,12 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: vault-config-operator-webhook-service-cert
+spec:
+  dnsNames:
+    - vault-config-operator-webhook-service.openbao.svc
+    - vault-config-operator-webhook-service.openbao.svc.cluster.local
+  issuerRef:
+    kind: Issuer
+    name: selfsigned-issuer
+  secretName: vault-config-operator-webhook-service-cert

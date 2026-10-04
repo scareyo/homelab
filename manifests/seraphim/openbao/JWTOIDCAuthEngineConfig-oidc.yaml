@@ -1,0 +1,13 @@
+apiVersion: redhatcop.redhat.io/v1alpha1
+kind: JWTOIDCAuthEngineConfig
+metadata:
+  name: oidc
+  namespace: openbao
+spec:
+  OIDCCredentials:
+    passwordKey: client_secret
+    secret:
+      name: openbao-oidc-credentials
+    usernameKey: client_id
+  OIDCDiscoveryURL: https://id.vegapunk.cloud
+  path: oidc

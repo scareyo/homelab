@@ -1,0 +1,10 @@
+apiVersion: pocketid.internal/v1alpha1
+kind: PocketIDOIDCClient
+metadata:
+  name: openbao
+  namespace: openbao
+spec:
+  callbackUrls:
+    - https://openbao.vegapunk.cloud/oidc/callback
+  description: Manage, store, and distribute sensitive data
+  name: OpenBao
