@@ -50,9 +50,7 @@
       };
 
       templates.externalSecret.pocket-id = {
-        keys = [
-          { sourceKey = "pocket-id"; sourceProperty = "encryption-key"; }
-        ];
+        data.encryption-key.sourceKey = "pocket-id";
       };
 
       templates.postgres.pocket-id-db = {

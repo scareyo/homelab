@@ -2,15 +2,9 @@
   flake.modules.templates.externalSecret = { lib, ... }: {
     templates.externalSecret = {
       options = {
-        keys = lib.mkOption {
-          type = lib.types.listOf (lib.types.submodule {
+        data = lib.mkOption {
+          type = lib.types.attrsOf (lib.types.submodule ({ name, ... }: {
             options = {
-              type = lib.mkOption {
-                type = lib.types.enum [ "password" "provider" ];
-                default = "provider";
-                description = "Secret type";
-              };
-
               sourceKey = lib.mkOption {
                 type = lib.types.str;
                 description = "Source key on the secret provider";
@@ -18,22 +12,27 @@
 
               sourceProperty = lib.mkOption {
                 type = lib.types.str;
+                default = name;
                 description = "Source property on the secret provider";
               };
+            };
+          }));
+          default = {};
+          description = "Secrets fetched from the secret provider, keyed by destination key on the generated Secret";
+        };
 
+        passwords = lib.mkOption {
+          type = lib.types.attrsOf (lib.types.submodule {
+            options = {
               length = lib.mkOption {
                 type = lib.types.int;
+                default = 32;
                 description = "Password length";
-              };
-
-              dest = lib.mkOption {
-                type = lib.types.nullOr lib.types.str;
-                default = null;
-                description = "Destination key on the generated Secret";
               };
             };
           });
-          description = "A list of secrets to include in the generated Secret";
+          default = {};
+          description = "Generated passwords, keyed by destination key on the generated Secret";
         };
 
         merge = lib.mkOption {
@@ -44,16 +43,15 @@
 
         templates = lib.mkOption {
           type = lib.types.nullOr (lib.types.attrsOf lib.types.str);
-          description = "Templated secrets";
           default = null;
+          description = "Templated secrets";
         };
       };
 
-      output = { name, config, ...  }: let
+      output = { name, config, ... }: let
         cfg = config;
 
-        providerKeys = builtins.filter(x: x.type == "provider") cfg.keys;
-        passwordKeys = builtins.filter(x: x.type == "password") cfg.keys;
+        generatorName = dest: "${name}-${dest}";
       in {
         externalSecrets.${name} = {
           spec = {
@@ -66,48 +64,38 @@
               engineVersion = "v2";
               data = cfg.templates;
             };
-            data =
-              if builtins.length providerKeys == 0 then 
-                null 
-              else map (x: {
-                secretKey = lib.defaultTo x.sourceProperty x.dest;
-                remoteRef = {
-                  key = x.sourceKey;
-                  property = x.sourceProperty;
-                };
-              }) providerKeys;
-            dataFrom = 
-              if builtins.length passwordKeys == 0 then 
-                null 
-              else map (x: {
-                sourceRef.generatorRef = {
-                  apiVersion = "generators.external-secrets.io/v1alpha1";
-                  kind = "Password";
-                  name = x.dest;
-                };
-                rewrite = [
-                  {
-                    regexp = {
-                      source = "password";
-                      target = x.dest;
-                    };
-                  }
-                ];
-              }) passwordKeys;
+            data = lib.mkIf (cfg.data != {}) (lib.mapAttrsToList (dest: x: {
+              secretKey = dest;
+              remoteRef = {
+                key = x.sourceKey;
+                property = x.sourceProperty;
+              };
+            }) cfg.data);
+            dataFrom = lib.mkIf (cfg.passwords != {}) (lib.mapAttrsToList (dest: _: {
+              sourceRef.generatorRef = {
+                apiVersion = "generators.external-secrets.io/v1alpha1";
+                kind = "Password";
+                name = generatorName dest;
+              };
+              rewrite = [
+                {
+                  regexp = {
+                    source = "password";
+                    target = dest;
+                  };
+                }
+              ];
+            }) cfg.passwords);
           };
         };
 
-        passwords = builtins.listToAttrs (map (x: {
-          name = x.dest;
-          value = {
-            metadata.name = x.dest;
-            spec = {
-              length = x.length;
-              allowRepeat = true;
-              noUpper = false;
-            };
+        passwords = lib.mapAttrs' (dest: x: lib.nameValuePair (generatorName dest) {
+          spec = {
+            inherit (x) length;
+            allowRepeat = true;
+            noUpper = false;
           };
-        }) (builtins.filter (x: x.type == "password") cfg.keys));
+        }) cfg.passwords;
       };
     };
   };

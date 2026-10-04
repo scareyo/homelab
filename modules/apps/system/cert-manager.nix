@@ -42,9 +42,7 @@
       };
 
       templates.externalSecret.cloudflare = {
-        keys = [
-          { sourceKey = "cloudflare"; sourceProperty = "api-token"; }
-        ];
+        data.api-token.sourceKey = "cloudflare";
       };
 
       resources.clusterIssuers = {
