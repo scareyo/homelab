@@ -42,9 +42,9 @@
                 auth_url = "$__file{/etc/secrets/oauth/authorization_url}";
                 token_url = "$__file{/etc/secrets/oauth/token_url}";
                 role_attribute_path = lib.concatStrings [
-                  "contains(groups, 'grafana_admin') && 'Admin' || "
-                  "contains(groups, 'grafana_editor') && 'Editor' || "
-                  "contains(groups, 'grafana_viewer') && 'Viewer' "
+                  "contains(groups, 'grafana-admin') && 'Admin' || "
+                  "contains(groups, 'grafana-editor') && 'Editor' || "
+                  "contains(groups, 'grafana-viewer') && 'Viewer' "
                 ];
               };
             };
