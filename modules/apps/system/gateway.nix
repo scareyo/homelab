@@ -27,7 +27,7 @@
       resources.gateways.internal = {
         metadata = {
           annotations = {
-            "cert-manager.io/cluster-issuer" = "letsencrypt-staging";
+            "cert-manager.io/cluster-issuer" = "letsencrypt-production";
           };
         };
         spec = {
