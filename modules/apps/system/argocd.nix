@@ -18,6 +18,12 @@
 
       helm.releases.argocd = {
         inherit chart;
+        values = {
+          global.domain = "argocd.vegapunk.cloud";
+          configs = {
+            params."server.insecure" = true;
+          };
+        };
       };
 
       resources.appProjects = {
@@ -26,6 +32,10 @@
           destinations = [{ namespace = "*"; server = "*"; }];
           clusterResourceWhitelist = [{ group = "*"; kind = "*"; }];
         };
+      };
+
+      templates.app.argocd.route = {
+        serviceName = "argocd-server";
       };
     };
   };
