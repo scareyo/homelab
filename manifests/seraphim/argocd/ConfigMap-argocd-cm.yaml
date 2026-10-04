@@ -99,9 +99,9 @@ data:
       - UpdateRequest
   statusbadge.enabled: "false"
   timeout.hard.reconciliation: 0s
-  timeout.reconciliation: 120s
+  timeout.reconciliation: 10m
   timeout.reconciliation.jitter: 60s
-  url: https://argocd.example.com
+  url: https://argocd.vegapunk.cloud
 kind: ConfigMap
 metadata:
   labels:
