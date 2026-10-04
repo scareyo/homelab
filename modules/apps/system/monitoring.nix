@@ -75,6 +75,8 @@
 
       resources.pocketIDOIDCClients.grafana = {
         spec = {
+          name = "Grafana"; 
+          description = "Observability and data visualization";
           callbackUrls = [ "https://grafana.vegapunk.cloud/login/generic_oauth" ];
         };
       };

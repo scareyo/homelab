@@ -6,6 +6,10 @@ metadata:
 spec:
   callbackUrls:
     - https://argocd.vegapunk.cloud/auth/callback
+  description: Declarative GitOps continuous deployment
+  logo:
+    nameOverride: argo-cd
+  name: Argo CD
   secret:
     additionalLabels:
       app.kubernetes.io/part-of: argocd
