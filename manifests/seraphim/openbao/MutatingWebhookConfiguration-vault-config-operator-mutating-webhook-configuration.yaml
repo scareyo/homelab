@@ -1,0 +1,1632 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  annotations:
+    cert-manager.io/inject-ca-from: ""
+    service.beta.openshift.io/inject-cabundle: "true"
+  name: vault-config-operator-mutating-webhook-configuration
+webhooks:
+  - admissionReviewVersions:
+      - v1
+      - v1beta1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-alicloudauthenginerole
+    failurePolicy: Fail
+    name: malicloudauthenginerole.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - alicloudauthengineroles
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+      - v1beta1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-approleauthenginerole
+    failurePolicy: Fail
+    name: mapproleauthenginerole.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - approleauthengineroles
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+      - v1beta1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-authenginemount
+    failurePolicy: Fail
+    name: mauthenginemount.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - authenginemounts
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-awsauthengineclientconfig
+    failurePolicy: Fail
+    name: mawsauthengineclientconfig.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - awsauthengineclientconfigs
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-awsauthengineidentityconfig
+    failurePolicy: Fail
+    name: mawsauthengineidentityconfig.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - awsauthengineidentityconfigs
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-awsauthenginerole
+    failurePolicy: Fail
+    name: mawsauthenginerole.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - awsauthengineroles
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+      - v1beta1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-awssecretengineconfig
+    failurePolicy: Fail
+    name: mawssecretengineconfig.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - awssecretengineconfigs
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+      - v1beta1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-awssecretenginerole
+    failurePolicy: Fail
+    name: mawssecretenginerole.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - awssecretengineroles
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-azureauthengineconfig
+    failurePolicy: Fail
+    name: mazureauthengineconfig.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - azureauthengineconfigs
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-azureauthenginerole
+    failurePolicy: Fail
+    name: mazureauthenginerole.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - azureauthengineroles
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-azuresecretengineconfig
+    failurePolicy: Fail
+    name: mazuresecretengineconfig.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - azuresecretengineconfigs
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-azuresecretenginerole
+    failurePolicy: Fail
+    name: mazuresecretenginerole.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - azuresecretengineroles
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-certauthengineconfig
+    failurePolicy: Fail
+    name: mcertauthengineconfig.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - certauthengineconfigs
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-certauthenginerole
+    failurePolicy: Fail
+    name: mcertauthenginerole.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - certauthengineroles
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-cfauthengineconfig
+    failurePolicy: Fail
+    name: mcfauthengineconfig.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - cfauthengineconfigs
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-cfauthenginerole
+    failurePolicy: Fail
+    name: mcfauthenginerole.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - cfauthengineroles
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+      - v1beta1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-consulsecretengineconfig
+    failurePolicy: Fail
+    name: mconsulsecretengineconfig.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - consulsecretengineconfigs
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+      - v1beta1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-consulsecretenginerole
+    failurePolicy: Fail
+    name: mconsulsecretenginerole.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - consulsecretengineroles
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+      - v1beta1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-databasesecretengineconfig
+    failurePolicy: Fail
+    name: mdatabasesecretengineconfig.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - databasesecretengineconfigs
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+      - v1beta1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-databasesecretenginerole
+    failurePolicy: Fail
+    name: mdatabasesecretenginerole.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - databasesecretengineroles
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-databasesecretenginestaticrole
+    failurePolicy: Fail
+    name: mdatabasesecretenginestaticrole.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - databasesecretenginestaticroles
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-gcpauthengineconfig
+    failurePolicy: Fail
+    name: mgcpauthengineconfig.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - gcpauthengineconfigs
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-gcpauthenginerole
+    failurePolicy: Fail
+    name: mgcpauthenginerole.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - gcpauthengineroles
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+      - v1beta1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-gcpsecretengineconfig
+    failurePolicy: Fail
+    name: mgcpsecretengineconfig.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - gcpsecretengineconfigs
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+      - v1beta1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-gcpsecretengineroleset
+    failurePolicy: Fail
+    name: mgcpsecretengineroleset.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - gcpsecretenginerolesets
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+      - v1beta1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-gcpsecretenginestaticaccount
+    failurePolicy: Fail
+    name: mgcpsecretenginestaticaccount.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - gcpsecretenginestaticaccounts
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-githubauthengineconfig
+    failurePolicy: Fail
+    name: mgithubauthengineconfig.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - githubauthengineconfigs
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-githubauthenginerusermap
+    failurePolicy: Fail
+    name: mgithubauthenginerusermap.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - githubauthengineusermaps
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-githubauthengineteammap
+    failurePolicy: Fail
+    name: mgithubauthengineteammap.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - githubauthengineteammaps
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-githubsecretengineconfig
+    failurePolicy: Fail
+    name: mgithubsecretengineconfig.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - githubsecretengineconfigs
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-githubsecretenginerole
+    failurePolicy: Fail
+    name: mgithubsecretenginerole.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - githubsecretengineroles
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-group
+    failurePolicy: Fail
+    name: mgroup.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - groups
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-groupalias
+    failurePolicy: Fail
+    name: mgroupalias.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - groupaliases
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-identityoidcassignment
+    failurePolicy: Fail
+    name: midentityoidcassignment.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - identityoidcassignments
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-identityoidcclient
+    failurePolicy: Fail
+    name: midentityoidcclient.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - identityoidcclients
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-identityoidcprovider
+    failurePolicy: Fail
+    name: midentityoidcprovider.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - identityoidcproviders
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-identityoidcscope
+    failurePolicy: Fail
+    name: midentityoidcscope.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - identityoidcscopes
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-identitytokenconfig
+    failurePolicy: Fail
+    name: midentitytokenconfig.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - identitytokenconfigs
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-identitytokenkey
+    failurePolicy: Fail
+    name: midentitytokenkey.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - identitytokenkeys
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-identitytokenrole
+    failurePolicy: Fail
+    name: midentitytokenrole.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - identitytokenroles
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-jwtoidcauthengineconfig
+    failurePolicy: Fail
+    name: mjwtoidcauthengineconfig.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - jwtoidcauthengineconfigs
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-jwtoidcauthenginerole
+    failurePolicy: Fail
+    name: mjwtoidcauthenginerole.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - jwtoidcauthengineroles
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-kerberosauthengineconfig
+    failurePolicy: Fail
+    name: mkerberosauthengineconfig.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - kerberosauthengineconfigs
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-kerberosauthenginegroup
+    failurePolicy: Fail
+    name: mkerberosauthenginegroup.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - kerberosauthenginegroups
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-kerberosauthengineldapconfig
+    failurePolicy: Fail
+    name: mkerberosauthengineldapconfig.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - kerberosauthengineldapconfigs
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+      - v1beta1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-kubernetesauthengineconfig
+    failurePolicy: Fail
+    name: mkubernetesauthengineconfig.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - kubernetesauthengineconfigs
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+      - v1beta1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-kubernetesauthenginerole
+    failurePolicy: Fail
+    name: mkubernetesauthenginerole.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - kubernetesauthengineroles
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-kubernetessecretengineconfig
+    failurePolicy: Fail
+    name: mkubernetessecretengineconfig.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - kubernetessecretengineconfigs
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-kubernetessecretenginerole
+    failurePolicy: Fail
+    name: mkubernetessecretenginerole.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - kubernetessecretengineroles
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-ldapauthengineconfig
+    failurePolicy: Fail
+    name: mldapauthengineconfig.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - ldapauthengineconfigs
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-ldapauthenginegroup
+    failurePolicy: Fail
+    name: mldapauthenginegroup.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - ldapauthenginegroups
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+      - v1beta1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-ldapsecretengineconfig
+    failurePolicy: Fail
+    name: mldapsecretengineconfig.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - ldapsecretengineconfigs
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+      - v1beta1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-ldapsecretenginedynamicrole
+    failurePolicy: Fail
+    name: mldapsecretenginedynamicrole.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - ldapsecretenginedynamicroles
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+      - v1beta1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-ldapsecretenginestaticrole
+    failurePolicy: Fail
+    name: mldapsecretenginestaticrole.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - ldapsecretenginestaticroles
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+      - v1beta1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-mongodbatlassecretengineconfig
+    failurePolicy: Fail
+    name: mmongodbatlassecretengineconfig.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - mongodbatlassecretengineconfigs
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+      - v1beta1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-mongodbatlassecretenginerole
+    failurePolicy: Fail
+    name: mmongodbatlassecretenginerole.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - mongodbatlassecretengineroles
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-namespace
+    failurePolicy: Fail
+    name: mnamespace.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - namespaces
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+      - v1beta1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-nomadsecretengineconfig
+    failurePolicy: Fail
+    name: mnomadsecretengineconfig.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - nomadsecretengineconfigs
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+      - v1beta1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-nomadsecretenginerole
+    failurePolicy: Fail
+    name: mnomadsecretenginerole.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - nomadsecretengineroles
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-ociauthengineconfig
+    failurePolicy: Fail
+    name: mociauthengineconfig.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - ociauthengineconfigs
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-ociauthenginerole
+    failurePolicy: Fail
+    name: mociauthenginerole.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - ociauthengineroles
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-oktaauthengineconfig
+    failurePolicy: Fail
+    name: moktaauthengineconfig.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - oktaauthengineconfigs
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-oktaauthenginegroup
+    failurePolicy: Fail
+    name: moktaauthenginegroup.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - oktaauthenginegroups
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+      - v1beta1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-passwordpolicy
+    failurePolicy: Fail
+    name: mpasswordpolicy.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - passwordpolicies
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+      - v1beta1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-pkisecretengineconfig
+    failurePolicy: Fail
+    name: mpkisecretengineconfig.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - pkisecretengineconfigs
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+      - v1beta1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-pkisecretenginerole
+    failurePolicy: Fail
+    name: mpkisecretenginerole.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - pkisecretengineroles
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+      - v1beta1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-policy
+    failurePolicy: Fail
+    name: mpolicy.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - policies
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-quaysecretengineconfig
+    failurePolicy: Fail
+    name: mquaysecretengineconfig.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - quaysecretengineconfigs
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-quaysecretenginerole
+    failurePolicy: Fail
+    name: mquaysecretenginerole.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - quaysecretengineroles
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-quaysecretenginestaticrole
+    failurePolicy: Fail
+    name: mquaysecretenginestaticrole.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - quaysecretenginestaticroles
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+      - v1beta1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-rabbitmqsecretenginerole
+    failurePolicy: Fail
+    name: mrabbitmqsecretenginerole.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - rabbitmqsecretengineroles
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-radiusauthengineconfig
+    failurePolicy: Fail
+    name: mradiusauthengineconfig.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - radiusauthengineconfigs
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-radiusauthengineuser
+    failurePolicy: Fail
+    name: mradiusauthengineuser.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - radiusauthengineusers
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+      - v1beta1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-randomsecret
+    failurePolicy: Fail
+    name: mrandomsecret.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - randomsecrets
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+      - v1beta1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-secretenginemount
+    failurePolicy: Fail
+    name: msecretenginemount.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - secretenginemounts
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-sshsecretengineconfig
+    failurePolicy: Fail
+    name: msshsecretengineconfig.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - sshsecretengineconfigs
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-sshsecretenginerole
+    failurePolicy: Fail
+    name: msshsecretenginerole.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - sshsecretengineroles
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+      - v1beta1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-terraformcloudsecretengineconfig
+    failurePolicy: Fail
+    name: mterraformcloudsecretengineconfig.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - terraformcloudsecretengineconfigs
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+      - v1beta1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-terraformcloudsecretenginerole
+    failurePolicy: Fail
+    name: mterraformcloudsecretenginerole.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - terraformcloudsecretengineroles
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+      - v1beta1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-totpsecretenginekey
+    failurePolicy: Fail
+    name: mtotpsecretenginekey.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - totpsecretenginekeys
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+      - v1beta1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-transitsecretenginekey
+    failurePolicy: Fail
+    name: mtransitsecretenginekey.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - transitsecretenginekeys
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-userpassauthengineuser
+    failurePolicy: Fail
+    name: muserpassauthengineuser.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+        resources:
+          - userpassauthengineusers
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+      - v1beta1
+    clientConfig:
+      service:
+        name: vault-config-operator-webhook-service
+        namespace: openbao
+        path: /mutate-redhatcop-redhat-io-v1alpha1-vaultsecret
+    failurePolicy: Fail
+    name: mvaultsecret.kb.io
+    rules:
+      - apiGroups:
+          - redhatcop.redhat.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - vaultsecrets
+    sideEffects: None

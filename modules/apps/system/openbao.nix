@@ -2,11 +2,17 @@
   flake.modules.apps.openbao = { lib, ... }: let
     namespace = "openbao";
     project = "system";
-    chart = lib.helm.downloadHelmChart {
+    chart.openbao = lib.helm.downloadHelmChart {
       repo = "https://openbao.github.io/openbao-helm";
       chart = "openbao";
       version = "0.30.0";
       chartHash = "sha256-R6qWSFTtsbpdlu3mDLZCJfk1qLKUTidYOmM+QVxyRoY=";
+    };
+    chart.vault-config-operator = lib.helm.downloadHelmChart {
+      repo = "https://redhat-cop.github.io/vault-config-operator";
+      chart = "vault-config-operator";
+      version = "v1.0.3";
+      chartHash = "sha256-M5LyOFR2RSy+IGe7n3VPP+jEFvYnp6O0UBHUEVS07ic=";
     };
   in {
     applications.openbao = {
@@ -15,7 +21,7 @@
       createNamespace = true;
 
       helm.releases.openbao = {
-        inherit chart;
+        chart = chart.openbao;
         values = {
           server = {
             ha = {
@@ -51,6 +57,10 @@
             ];
           };
         };
+      };
+
+      helm.releases.vault-config-operator = {
+        chart = chart.vault-config-operator;
       };
 
       templates.app.openbao.route = {
