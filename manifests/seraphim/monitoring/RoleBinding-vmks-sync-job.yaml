@@ -1,0 +1,20 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  labels:
+    app.kubernetes.io/component: syncJob
+    app.kubernetes.io/instance: vmks
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: vmks
+    app.kubernetes.io/version: v0.0.17
+    helm.sh/chart: victoria-metrics-k8s-stack-0.95.0
+  name: vmks-sync-job
+  namespace: monitoring
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: vmks-sync-job
+subjects:
+  - kind: ServiceAccount
+    name: vmks-sync-job
+    namespace: monitoring

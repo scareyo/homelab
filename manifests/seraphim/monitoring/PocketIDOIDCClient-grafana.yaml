@@ -1,0 +1,8 @@
+apiVersion: pocketid.internal/v1alpha1
+kind: PocketIDOIDCClient
+metadata:
+  name: grafana
+  namespace: monitoring
+spec:
+  callbackUrls:
+    - https://grafana.vegapunk.cloud/login/generic_oauth
