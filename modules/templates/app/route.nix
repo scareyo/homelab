@@ -34,48 +34,15 @@
               description = "Duration before requests timeout";
             };
 
+            # TODO: move to a separate auth module
             auth = lib.mkOption {
               type = lib.types.submodule {
                 options = {
                   enable = lib.mkEnableOption "Enable OAuth2-Proxy";
-
-                  banner = lib.mkOption {
-                    type = lib.types.str;
-                    default = "OAuth2-Proxy";
-                    description = "OAuth2-Proxy application banner";
-                  };
-
-                  logo = lib.mkOption {
-                    type = lib.types.str;
-                    default = "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/oauth2-proxy.svg";
-                    description = "OAuth2-Proxy application icon";
-                  };
-
-                  skipAuthRoutes = lib.mkOption {
-                    type = lib.types.listOf lib.types.str;
-                    default = [];
-                    description = "List of path regex that will bypass authentication";
-                  };
                 };
               };
               default = {};
               description = "Auth settings";
-            };
-
-            anubis = lib.mkOption {
-              type = lib.types.submodule {
-                options = {
-                  enable = lib.mkEnableOption "Enable Anubis";
-
-                  secret = lib.mkOption {
-                    type = lib.types.str;
-                    default = "anubis";
-                    description = "Secret containing Anubis signing key";
-                  };
-                };
-              };
-              default = {};
-              description = "Anubis settings";
             };
           };
         });
@@ -83,8 +50,6 @@
       output = { name, config, ...  }: {
         httpRoutes."${name}" = {
           metadata = {
-            #inherit labels;
-
             annotations = {
               "argocd.argoproj.io/sync-wave" = "10";
             };

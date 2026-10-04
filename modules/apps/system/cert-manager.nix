@@ -42,7 +42,7 @@
 
       templates.externalSecret.cloudflare = {
         keys = [
-          { source-key = "cloudflare"; source-property = "api-token"; dest = "api-token"; }
+          { sourceKey = "cloudflare"; sourceProperty = "api-token"; }
         ];
       };
 

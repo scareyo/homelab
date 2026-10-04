@@ -50,7 +50,7 @@
 
       templates.externalSecret.pocket-id = {
         keys = [
-          { source-key = "pocket-id"; source-property = "encryption-key"; }
+          { sourceKey = "pocket-id"; sourceProperty = "encryption-key"; }
         ];
       };
 

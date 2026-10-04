@@ -1,5 +1,5 @@
 {
-  flake.modules.templates.externalsecret = { lib, ... }: {
+  flake.modules.templates.externalSecret = { lib, ... }: {
     templates.externalSecret = {
       options = {
         keys = lib.mkOption {
@@ -11,12 +11,12 @@
                 description = "Secret type";
               };
 
-              source-key = lib.mkOption {
+              sourceKey = lib.mkOption {
                 type = lib.types.str;
                 description = "Source key on the secret provider";
               };
 
-              source-property = lib.mkOption {
+              sourceProperty = lib.mkOption {
                 type = lib.types.str;
                 description = "Source property on the secret provider";
               };
@@ -56,9 +56,6 @@
         passwordKeys = builtins.filter(x: x.type == "password") cfg.keys;
       in {
         externalSecrets.${name} = {
-          metadata = {
-            name = "${name}";
-          };
           spec = {
             secretStoreRef = {
               kind = "ClusterSecretStore";
@@ -73,10 +70,10 @@
               if builtins.length providerKeys == 0 then 
                 null 
               else map (x: {
-                secretKey = lib.defaultTo x.source-property x.dest;
+                secretKey = lib.defaultTo x.sourceProperty x.dest;
                 remoteRef = {
-                  key = "${x.source-key}";
-                  property = "${x.source-property}";
+                  key = x.sourceKey;
+                  property = x.sourceProperty;
                 };
               }) providerKeys;
             dataFrom = 
@@ -86,13 +83,13 @@
                 sourceRef.generatorRef = {
                   apiVersion = "generators.external-secrets.io/v1alpha1";
                   kind = "Password";
-                  name = "${x.dest}";
+                  name = x.dest;
                 };
                 rewrite = [
                   {
                     regexp = {
                       source = "password";
-                      target = "${x.dest}";
+                      target = x.dest;
                     };
                   }
                 ];

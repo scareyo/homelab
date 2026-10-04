@@ -1,5 +1,5 @@
 {
-  flake.modules.apps.external-dns = { generators, lib, ... }: let
+  flake.modules.apps.external-dns = { lib, ... }: let
     namespace = "external-dns";
     project = "system";
     chart = lib.helm.downloadHelmChart {
@@ -67,7 +67,7 @@
 
       templates.externalSecret.unifi = {
         keys = [
-          { source-key = "external-dns"; source-property = "unifi-api-key"; dest = "api-key"; }
+          { sourceKey = "external-dns"; sourceProperty = "unifi-api-key"; dest = "api-key"; }
         ];
       };
     };

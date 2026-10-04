@@ -1,5 +1,5 @@
 {
-  flake.modules.apps.agentgateway = { generators, lib, ... }: let
+  flake.modules.apps.agentgateway = { lib, ... }: let
     namespace = "agentgateway-system";
     project = "system";
     chart.agentgateway = lib.helm.downloadHelmChart {

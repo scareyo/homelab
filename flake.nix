@@ -5,8 +5,6 @@
   inputs.flake-parts.url = "github:hercules-ci/flake-parts";
   inputs.import-tree.url = "github:vic/import-tree";
 
-  inputs.amtcli.url = "github:scareyo/amtcli";
-
   inputs.nixidy = {
     url = "github:arnarg/nixidy";
     inputs.nixpkgs.follows = "nixpkgs";
