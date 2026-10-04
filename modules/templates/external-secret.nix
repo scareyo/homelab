@@ -27,7 +27,8 @@
               };
 
               dest = lib.mkOption {
-                type = lib.types.str;
+                type = lib.types.nullOr lib.types.str;
+                default = null;
                 description = "Destination key on the generated Secret";
               };
             };
@@ -72,7 +73,7 @@
               if builtins.length providerKeys == 0 then 
                 null 
               else map (x: {
-                secretKey = "${x.dest}";
+                secretKey = lib.defaultTo x.source-property x.dest;
                 remoteRef = {
                   key = "${x.source-key}";
                   property = "${x.source-property}";

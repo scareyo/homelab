@@ -1,0 +1,28 @@
+apiVersion: pocketid.internal/v1alpha1
+kind: PocketIDInstance
+metadata:
+  labels:
+    app.kubernetes.io/component: instance
+    app.kubernetes.io/instance: pocket-id-operator
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: pocket-id
+    app.kubernetes.io/part-of: pocket-id
+    app.kubernetes.io/version: v0.15.0
+    helm.sh/chart: pocket-id-instance-0.15.0
+    pocketid.internal/instance: pocket-id
+  name: pocket-id
+  namespace: pocket-id
+spec:
+  appUrl: https://id.vegapunk.cloud
+  databaseUrl:
+    valueFrom:
+      secretKeyRef:
+        key: uri
+        name: pocket-id-db-app
+  encryptionKey:
+    valueFrom:
+      secretKeyRef:
+        key: encryption-key
+        name: pocket-id
+  ui:
+    appName: id.vegapunk.cloud
