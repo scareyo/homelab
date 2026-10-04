@@ -9,6 +9,14 @@
       chartHash = "sha256-YjNpcT2OLVCO2KdnDH9FhhWqva4SWbuiV7oN+RCTvUc=";
     };
   in {
+    nixidy.applicationImports = [
+      (generators.fromChartCRDModule {
+        inherit chart;
+        name = "pocket-id-operator";
+        kindFilter = [ "PocketIDOIDCClient" "PocketIDUserGroup" ];
+      })
+    ];
+
     applications.pocket-id = {
       inherit namespace project;
 

@@ -1,0 +1,11 @@
+apiVersion: pocketid.internal/v1alpha1
+kind: PocketIDOIDCClient
+metadata:
+  name: argocd
+  namespace: argocd
+spec:
+  callbackUrls:
+    - https://argocd.vegapunk.cloud/auth/callback
+  secret:
+    additionalLabels:
+      app.kubernetes.io/part-of: argocd

@@ -22,6 +22,28 @@
           global.domain = "argocd.vegapunk.cloud";
           configs = {
             params."server.insecure" = true;
+            cm = {
+              "oidc.config" = ''
+                name: SSO
+                issuer: $argocd-oidc-credentials:issuer_url
+                clientID: $argocd-oidc-credentials:client_id
+                clientSecret: $argocd-oidc-credentials:client_secret
+                requestedScopes: ["openid", "profile", "email", "groups"]
+              '';
+              "resource.exclusions" = ''
+                - apiGroups:
+                  - "velero.io"
+                  kinds:
+                  - Backup
+                  clusters:
+                  - "*"
+              '';
+              "accounts.readonly" = "apiKey";
+            };
+            rbac."policy.csv" = ''
+              g, argocd-admin, role:admin
+              g, argocd-viewer, role:readonly
+            '';
           };
         };
       };
@@ -37,6 +59,16 @@
       templates.app.argocd.route = {
         serviceName = "argocd-server";
       };
+
+      resources.pocketIDOIDCClients.argocd = {
+        spec = {
+          callbackUrls = [ "https://argocd.vegapunk.cloud/auth/callback" ];
+          secret.additionalLabels."app.kubernetes.io/part-of" = "argocd";
+        };
+      };
+
+      resources.pocketIDUserGroups.argocd-admin = {};
+      resources.pocketIDUserGroups.argocd-viewer = {};
     };
   };
 }
