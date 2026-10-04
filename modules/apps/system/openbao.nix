@@ -53,6 +53,10 @@
         };
       };
 
+      templates.app.openbao.route = {
+        servicePort = 8200;
+      };
+
       templates.postgres.openbao-db = {};
     };
   };

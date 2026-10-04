@@ -103,10 +103,10 @@
         };
       };
 
-      #templates.app.ceph.route = {
-      #  serviceName = "rook-ceph-mgr-dashboard";
-      #  servicePort = 7000;
-      #};
+      templates.app.ceph.route = {
+        serviceName = "rook-ceph-mgr-dashboard";
+        servicePort = 7000;
+      };
 
       templates.privileged.rook-ceph = {};
     };
