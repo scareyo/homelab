@@ -45,9 +45,6 @@
         cfg = config;
       in {
         clusters.${name} = {
-          metadata = {
-            name = name;
-          };
           spec = {
             instances = cfg.instances;
             storage.size = cfg.size;
@@ -58,9 +55,6 @@
           };
         };
         databases.${name} = lib.mkIf (cfg.database != null) {
-          metadata = {
-            name = name;
-          };
           spec = {
             name = "app";
             owner = "app";

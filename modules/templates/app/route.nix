@@ -38,7 +38,7 @@
             auth = lib.mkOption {
               type = lib.types.submodule {
                 options = {
-                  enable = lib.mkEnableOption "Enable OAuth2-Proxy";
+                  enable = lib.mkEnableOption "OAuth2-Proxy";
                 };
               };
               default = {};
@@ -84,7 +84,7 @@
                     port = config.route.servicePort;
                     weight = 1;
                   } // lib.optionalAttrs (config.route.serviceName == null) {
-                    name = name;
+                    inherit name;
                   } // lib.optionalAttrs config.route.auth.enable {
                     name = "oauth2-proxy";
                     port = 80;

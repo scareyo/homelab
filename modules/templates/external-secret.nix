@@ -6,7 +6,7 @@
           type = lib.types.listOf (lib.types.submodule {
             options = {
               type = lib.mkOption {
-                type = lib.types.str;
+                type = lib.types.enum [ "password" "provider" ];
                 default = "provider";
                 description = "Secret type";
               };
