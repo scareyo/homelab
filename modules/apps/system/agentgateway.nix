@@ -2,18 +2,19 @@
   flake.modules.apps.agentgateway = { lib, ... }: let
     namespace = "agentgateway-system";
     project = "system";
-    chart.agentgateway = lib.helm.downloadHelmChart {
+    charts.agentgateway = {
       repo = "oci://cr.agentgateway.dev/charts";
       chart = "agentgateway";
       version = "1.5.0";
       chartHash = "sha256-2qVtdYgaVn7JQIJkbuXkePfUsyjlLE8PZFIMmc2SC+A=";
     };
-    chart.agentgateway-crds = lib.helm.downloadHelmChart {
+    charts.agentgateway-crds = {
       repo = "oci://cr.agentgateway.dev/charts";
       chart = "agentgateway-crds";
       version = "1.5.0";
       chartHash = "sha256-9ftxoqzikHFhIXESiBQlrQgGmzamqb4HnSl7cVuD3AI=";
     };
+    chart = lib.mapAttrs (_: lib.helm.downloadHelmChart) charts;
   in {
     applications.agentgateway = {
       inherit namespace project;

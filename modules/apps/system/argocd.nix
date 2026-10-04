@@ -2,12 +2,13 @@
   flake.modules.apps.argocd = { lib, ... }: let
     namespace = "argocd";
     project = "system";
-    chart = lib.helm.downloadHelmChart {
+    charts.argocd = {
       repo = "https://argoproj.github.io/argo-helm";
       chart = "argo-cd";
       version = "10.9.2";
       chartHash = "sha256-OA7qeOnu6I8q7p1WL5XA0jXdZ+RMb9xQgyvzpJAuDQ0=";
     };
+    chart = lib.mapAttrs (_: lib.helm.downloadHelmChart) charts;
   in {
     applications.argocd = {
       inherit namespace project;
@@ -17,7 +18,7 @@
       syncPolicy.syncOptions.serverSideApply = true;
 
       helm.releases.argocd = {
-        inherit chart;
+        chart = chart.argocd;
         values = {
           global.domain = "argocd.vegapunk.cloud";
           configs = {

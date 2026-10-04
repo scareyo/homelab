@@ -2,16 +2,17 @@
   flake.modules.apps.pocket-id = { generators, lib, ... }: let
     namespace = "pocket-id";
     project = "system";
-    chart = lib.helm.downloadHelmChart {
+    charts.pocket-id-operator = {
       repo = "oci://ghcr.io/aclerici38/charts";
       chart = "pocket-id-operator";
       version = "0.15.0";
       chartHash = "sha256-YjNpcT2OLVCO2KdnDH9FhhWqva4SWbuiV7oN+RCTvUc=";
     };
+    chart = lib.mapAttrs (_: lib.helm.downloadHelmChart) charts;
   in {
     nixidy.applicationImports = [
       (generators.fromChartCRDModule {
-        inherit chart;
+        chart = chart.pocket-id-operator;
         name = "pocket-id-operator";
         kindFilter = [ "PocketIDOIDCClient" "PocketIDUserGroup" ];
       })
@@ -23,7 +24,7 @@
       createNamespace = true;
 
       helm.releases.pocket-id-operator = {
-        inherit chart;
+        chart = chart.pocket-id-operator;
         values = {
           pocket-id-instance.instance = {
             enabled = true;

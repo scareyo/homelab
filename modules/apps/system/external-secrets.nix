@@ -2,16 +2,17 @@
   flake.modules.apps.external-secrets = { generators, lib, ... }: let
     namespace = "external-secrets";
     project = "system";
-    chart = lib.helm.downloadHelmChart {
+    charts.external-secrets = {
       repo = "https://external-secrets.io";
       chart = "external-secrets";
       version = "2.3.0";
       chartHash = "sha256-T5URYFJr3BY3eNZYPAhbEzc2cs9rZRoG8sruETguwiQ=";
     };
+    chart = lib.mapAttrs (_: lib.helm.downloadHelmChart) charts;
   in {
     nixidy.applicationImports = [
       (generators.fromChartCRDModule {
-        inherit chart;
+        chart = chart.external-secrets;
         name = "external-secrets";
         kindFilter = [ "ClusterSecretStore" "ExternalSecret" "Password" ];
       })
@@ -25,7 +26,7 @@
       syncPolicy.syncOptions.serverSideApply = true;
 
       helm.releases.external-secrets = {
-        inherit chart;
+        chart = chart.external-secrets;
         values = {
           serviceMonitor.enabled = true;
         };

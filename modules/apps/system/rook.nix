@@ -2,24 +2,25 @@
   flake.modules.apps.rook = { generators, lib, ... }: let
     namespace = "rook-ceph";
     project = "system";
-    chart.rook-ceph = lib.helm.downloadHelmChart {
+    charts.rook-ceph = {
       repo = "https://charts.rook.io/release";
       chart = "rook-ceph";
       version = "v1.20.8";
       chartHash = "sha256-FjYMB9/J7F9/z9+qIrPo709ED49J/PyDWIkEO1pBh+M=";
     };
-    chart.rook-ceph-cluster = lib.helm.downloadHelmChart {
+    charts.rook-ceph-cluster = {
       repo = "https://charts.rook.io/release";
       chart = "rook-ceph-cluster";
       version = "v1.20.8";
       chartHash = "sha256-55Qf/20zr/CtzkOK2fm/KupZKyw/vZNagWMz/n84/8w=";
     };
-    chart.ceph-csi-drivers = lib.helm.downloadHelmChart {
+    charts.ceph-csi-drivers = {
       repo = "https://ceph.github.io/ceph-csi-operator";
       chart = "ceph-csi-drivers";
       version = "1.0.5";
       chartHash = "sha256-p1rN64p2U4CFDQLmt08N6rFXluy8b0Bq4UothoeH5F8=";
     };
+    chart = lib.mapAttrs (_: lib.helm.downloadHelmChart) charts;
   in {
     nixidy.applicationImports = [
       (generators.fromChartCRDModule {

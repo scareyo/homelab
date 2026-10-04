@@ -2,18 +2,19 @@
   flake.modules.apps.monitoring = { lib, ... }: let
     namespace = "monitoring";
     project = "system";
-    chart.vmks = lib.helm.downloadHelmChart {
+    charts.vmks = {
       repo = "oci://ghcr.io/victoriametrics/helm-charts";
       chart = "victoria-metrics-k8s-stack";
       version = "0.95.0";
       chartHash = "sha256-Jj2EZjuHw7VkbdGFRKnC9OexepUnjIqpT88yzL9plG8=";
     };
-    chart.prometheus-operator-crds = lib.helm.downloadHelmChart {
+    charts.prometheus-operator-crds = {
       repo = "oci://ghcr.io/prometheus-community/charts";
       chart = "prometheus-operator-crds";
       version = "32.0.1";
       chartHash = "sha256-k6MVCgL3DYvQPYvuG2fmtyTKI0Bb/CWHIXi2hcsAqwI=";
     };
+    chart = lib.mapAttrs (_: lib.helm.downloadHelmChart) charts;
   in {
     applications.monitoring = {
       inherit namespace project;

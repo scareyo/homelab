@@ -2,21 +2,24 @@
   flake.modules.apps.cilium = { generators, lib, pkgs, ... }: let
     namespace = "kube-system";
     project = "system";
-    chart = lib.helm.downloadHelmChart {
+    charts.cilium = {
       repo = "https://helm.cilium.io";
       chart = "cilium";
       version = "1.20.2";
       chartHash = "sha256-B6yOW8FluRJEF+/bvVvsobW6zUhE2WYE1lprZI/s95U=";
     };
+    chart = lib.mapAttrs (_: lib.helm.downloadHelmChart) charts;
   in {
     nixidy.applicationImports = [
       (generators.fromCRDModule {
         name = "cilium";
+        # Versioned name forces a refetch (and hash mismatch) when the chart is bumped
         src = pkgs.fetchFromGitHub {
+          name = "cilium-crds-${charts.cilium.version}";
           owner = "cilium";
           repo = "cilium";
-          rev = "v1.20.0";
-          hash = "sha256-iL41chnyFQIH1i6xHUdtkpwzJxDutw3of+8fvEd4B64=";
+          rev = "v${charts.cilium.version}";
+          hash = "sha256-F8zFd3jsvgn64WnYgzGQPUIt6b8l4/yUlncTyVLCQCc=";
         };
         crdFiles = [
           "pkg/k8s/apis/cilium.io/client/crds/v2/ciliumbgpadvertisements.yaml"
@@ -31,7 +34,7 @@
       inherit namespace project;
 
       helm.releases.cilium = {
-        inherit chart;
+        chart = chart.cilium;
 
         values = {
           ipam.mode = "kubernetes";

@@ -2,16 +2,17 @@
   flake.modules.apps.cert-manager = { generators, lib, ... }: let
     namespace = "cert-manager";
     project = "system";
-    chart = lib.helm.downloadHelmChart {
+    charts.cert-manager = {
       repo = "oci://quay.io/jetstack/charts";
       chart = "cert-manager";
       version = "1.21.2";
       chartHash = "sha256-AsbUc4Q9aVfTmENGPPmjOwC6V6v3MpTN1cKIl8csi10=";
     };
+    chart = lib.mapAttrs (_: lib.helm.downloadHelmChart) charts;
   in {
     nixidy.applicationImports = [
       (generators.fromChartCRDModule {
-        inherit chart;
+        chart = chart.cert-manager;
         name = "cert-manager";
         kindFilter = [ "ClusterIssuer" "Issuer" ];
         extraOpts = [ "--set" "crds.enabled=true"];
@@ -24,7 +25,7 @@
       createNamespace = true;
 
       helm.releases.cert-manager = {
-        inherit chart;
+        chart = chart.cert-manager;
         values = {
           crds.enabled = true;
 

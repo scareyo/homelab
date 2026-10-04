@@ -2,12 +2,13 @@
   flake.modules.apps.openebs = { lib, ... }: let
     namespace = "openebs";
     project = "system";
-    chart = lib.helm.downloadHelmChart {
+    charts.openebs = {
       repo = "https://openebs.github.io/openebs";
       chart = "openebs";
       version = "4.6.1";
       chartHash = "sha256-cHd2Vz4eqX40Uhuxoum1F+JQF8T8m2tsskJUzlhhpLo=";
     };
+    chart = lib.mapAttrs (_: lib.helm.downloadHelmChart) charts;
   in {
     applications.openebs = {
       inherit namespace project;
@@ -15,7 +16,7 @@
       createNamespace = true;
 
       helm.releases.openebs = {
-        inherit chart;
+        chart = chart.openebs;
 
         values = {
           alloy.enabled = false;

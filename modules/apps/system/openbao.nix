@@ -2,18 +2,19 @@
   flake.modules.apps.openbao = { lib, ... }: let
     namespace = "openbao";
     project = "system";
-    chart.openbao = lib.helm.downloadHelmChart {
+    charts.openbao = {
       repo = "https://openbao.github.io/openbao-helm";
       chart = "openbao";
       version = "0.30.0";
       chartHash = "sha256-R6qWSFTtsbpdlu3mDLZCJfk1qLKUTidYOmM+QVxyRoY=";
     };
-    chart.vault-config-operator = lib.helm.downloadHelmChart {
+    charts.vault-config-operator = {
       repo = "https://redhat-cop.github.io/vault-config-operator";
       chart = "vault-config-operator";
       version = "v1.0.3";
       chartHash = "sha256-M5LyOFR2RSy+IGe7n3VPP+jEFvYnp6O0UBHUEVS07ic=";
     };
+    chart = lib.mapAttrs (_: lib.helm.downloadHelmChart) charts;
   in {
     applications.openbao = {
       inherit namespace project;
