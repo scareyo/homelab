@@ -106,6 +106,8 @@ spec:
               mountPropagation: Bidirectional
               name: pods-mount-dir
       hostNetwork: true
+      nodeSelector:
+        kubernetes.io/hostname: s-flamingo
       priorityClassName: openebs-zfs-csi-node-critical
       serviceAccountName: openebs-zfs-node-sa
       volumes:

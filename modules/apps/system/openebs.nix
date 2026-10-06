@@ -25,7 +25,10 @@
             local.lvm.enabled = false;
             replicated.mayastor.enabled = false;
           };
-          zfs-localpv.zfsNode.encrKeysDir = "/var/openebs/keys";
+          zfs-localpv.zfsNode = {
+            encrKeysDir = "/var/openebs/keys";
+            nodeSelector."kubernetes.io/hostname" = "s-flamingo";
+          };
         };
       };
 
