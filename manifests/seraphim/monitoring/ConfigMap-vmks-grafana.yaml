@@ -1,6 +1,7 @@
 apiVersion: v1
 data:
   grafana.ini: "[analytics]\ncheck_for_updates = true\n[auth.generic_oauth]\nauth_url = $__file{/etc/secrets/oauth/authorization_url}\nclient_id = $__file{/etc/secrets/oauth/client_id}\nclient_secret = $__file{/etc/secrets/oauth/client_secret}\nenabled = true\nrole_attribute_path = contains(groups, 'grafana-admin') && 'Admin' || contains(groups, 'grafana-editor') && 'Editor' || contains(groups, 'grafana-viewer') && 'Viewer' \nscopes = openid email profile groups\ntoken_url = $__file{/etc/secrets/oauth/token_url}\n[log]\nmode = console\n[paths]\ndata = /var/lib/grafana/\nlogs = /var/log/grafana\nplugins = /var/lib/grafana/plugins\nprovisioning = /etc/grafana/provisioning\n[plugins]\npreinstall_auto_update = false\n[server]\ndomain = ''\nroot_url = https://grafana.vegapunk.cloud\n[unified_storage]\nindex_path = /var/lib/grafana-search/bleve\n"
+  plugins: victoriametrics-logs-datasource
 kind: ConfigMap
 metadata:
   labels:

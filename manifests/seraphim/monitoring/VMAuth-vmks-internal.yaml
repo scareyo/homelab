@@ -1,0 +1,24 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMAuth
+metadata:
+  labels:
+    app.kubernetes.io/component: vmauth
+    app.kubernetes.io/instance: vmks
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: vmks
+    app.kubernetes.io/version: v1.153.0
+    helm.sh/chart: victoria-metrics-k8s-stack-0.95.0
+  name: vmks-internal
+  namespace: monitoring
+spec:
+  port: "8427"
+  unauthorizedUserAccessSpec:
+    url_map:
+      - src_paths:
+          - /select/logsql/.*
+        url_prefix:
+          - http://vlsingle-vmks.monitoring.svc.cluster.local.:9428/
+      - src_paths:
+          - /.*
+        url_prefix:
+          - http://vmsingle-vmks.monitoring.svc.cluster.local.:8428/

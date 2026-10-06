@@ -1,0 +1,26 @@
+apiVersion: operator.victoriametrics.com/v1
+kind: VLSingle
+metadata:
+  labels:
+    app.kubernetes.io/component: vlsingle
+    app.kubernetes.io/instance: vmks
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: vmks
+    app.kubernetes.io/version: v1.52.0
+    helm.sh/chart: victoria-metrics-k8s-stack-0.95.0
+  name: vmks
+  namespace: monitoring
+spec:
+  extraArgs:
+    vmalert.proxyURL: http://vmalert-vmks.monitoring.svc.cluster.local.:8080
+  image:
+    tag: v1.52.0
+  port: "9428"
+  replicaCount: 1
+  retentionPeriod: 30d
+  storage:
+    accessModes:
+      - ReadWriteOnce
+    resources:
+      requests:
+        storage: 128Gi

@@ -57,10 +57,21 @@
                 readOnly = true;
               }
             ];
+            plugins = [
+              "victoriametrics-logs-datasource"
+            ];
             sidecar.dashboards.searchNamespace = "ALL";
           };
           victoria-metrics-operator = {
             admissionWebhooks.certManager.enabled = true;
+          };
+          vlagent.enabled = true;
+          vlsingle = {
+            enabled = true;
+            spec = {
+              retentionPeriod = "30d";
+              storage.resources.requests.storage = "128Gi";
+            };
           };
         };
       };

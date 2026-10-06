@@ -20,7 +20,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config: 9bc6883e15f7ab1ff431d9c785c38568a3b9b7b4def6a9bedff1567a51d47e1a
+        checksum/config: c44f33cd2014f53917e8efa1a2651921ad41e53f338253828f416a47577d819c
         checksum/sc-dashboard-provider-config: 89ec8c9c059a6a61286174130a15d183be69b7a486acc8437afbaf5d790a0ddd
         kubectl.kubernetes.io/default-container: grafana
       labels:
@@ -96,6 +96,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            - name: GF_PLUGINS_PREINSTALL_SYNC
+              valueFrom:
+                configMapKeyRef:
+                  key: plugins
+                  name: vmks-grafana
             - name: GF_PATHS_DATA
               value: /var/lib/grafana/
             - name: GF_PATHS_LOGS
