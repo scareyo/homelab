@@ -57,6 +57,7 @@
                 readOnly = true;
               }
             ];
+            sidecar.dashboards.searchNamespace = "ALL";
           };
           victoria-metrics-operator = {
             admissionWebhooks.certManager.enabled = true;
