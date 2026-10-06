@@ -32,6 +32,7 @@
       helm.releases.openbao = {
         chart = chart.openbao;
         values = {
+          injector.enabled = false;
           server = {
             ha = {
               enabled = true;
