@@ -28,12 +28,12 @@
       helm.releases.cnpg = {
         chart = chart.cnpg;
         values = {
-          #monitoring = {
-          #  podMonitorEnabled = true;
-          #  grafanaDashboard = {
-          #    create = true;
-          #  };
-          #};
+          monitoring = {
+            podMonitorEnabled = true;
+            grafanaDashboard = {
+              create = true;
+            };
+          };
         };
       };
     };
