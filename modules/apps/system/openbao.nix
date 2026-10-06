@@ -61,6 +61,12 @@
 
       templates.postgres.openbao-db = {};
 
+      templates.backup.daily = {
+        restore = true;
+        schedule = "0 6 * * *"; # Daily at 04:00
+        ttl = "360h";           # 15 days
+      };
+
       templates.externalSecret.oidc.data.client_secret = {
         sourceKey = "openbao";
       };
