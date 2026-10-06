@@ -31,4 +31,4 @@ spec:
     serviceAccountName: rook-ceph-rbd-csi-ceph-com-nodeplugin-sa
     tolerations: []
     volumes: []
-  snapshotPolicy: none
+  snapshotPolicy: volumeSnapshot

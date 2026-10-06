@@ -96,7 +96,10 @@
         chart = chart.ceph-csi-drivers;
         values = {
           drivers = {
-            rbd.name = "${namespace}.rbd.csi.ceph.com";
+            rbd = {
+              name = "${namespace}.rbd.csi.ceph.com";
+              snapshotPolicy = "volumeSnapshot";
+            };
             cephfs.name = "${namespace}.cephfs.csi.ceph.com";
             nvmeof.enabled = false;
             nfs.enabled = false;
