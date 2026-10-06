@@ -8,22 +8,8 @@
       version = "0.30.0";
       chartHash = "sha256-R6qWSFTtsbpdlu3mDLZCJfk1qLKUTidYOmM+QVxyRoY=";
     };
-    charts.vault-config-operator = {
-      repo = "https://redhat-cop.github.io/vault-config-operator";
-      chart = "vault-config-operator";
-      version = "v1.0.3";
-      chartHash = "sha256-M5LyOFR2RSy+IGe7n3VPP+jEFvYnp6O0UBHUEVS07ic=";
-    };
     chart = lib.mapAttrs (_: lib.helm.downloadHelmChart) charts;
   in {
-    nixidy.applicationImports = [
-      (generators.fromChartCRDModule {
-        chart = chart.vault-config-operator;
-        name = "vault-config-operator";
-        kindFilter = [ "JWTOIDCAuthEngineConfig" ];
-      })
-    ];
-
     applications.openbao = {
       inherit namespace project;
 
@@ -69,36 +55,30 @@
         };
       };
 
-      helm.releases.vault-config-operator = {
-        chart = chart.vault-config-operator;
-        values = {
-          enableCertManager = true;
-        };
-      };
-
       templates.app.openbao.route = {
         servicePort = 8200;
       };
 
       templates.postgres.openbao-db = {};
 
+      templates.externalSecret.oidc.data.client_secret = {
+        sourceKey = "openbao";
+      };
+
       resources.pocketIDOIDCClients.openbao = {
         spec = {
           name = "OpenBao"; 
           description = "Manage, store, and distribute sensitive data";
-          callbackUrls = [ "https://openbao.vegapunk.cloud/oidc/callback" ];
+          callbackUrls = [ "https://openbao.vegapunk.cloud/ui/vault/auth/oidc/oidc/callback" ];
+          clientID = "88f36e70-0c62-4d5e-8777-b3bbebae50db";
+          clientSecretRef = {
+            name = "oidc";
+            key = "client_secret";
+          };
         };
       };
 
-      resources.jwtoidcAuthEngineConfigs.oidc.spec = {
-        path = "oidc";
-        OIDCDiscoveryURL = "https://id.vegapunk.cloud";
-        OIDCCredentials = {
-          secret.name = "openbao-oidc-credentials";
-          usernameKey = "client_id";
-          passwordKey = "client_secret";
-        };
-      };
+      resources.pocketIDUserGroups.openbao-admin = {};
     };
   };
 }
