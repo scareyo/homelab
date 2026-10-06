@@ -21,6 +21,8 @@
         values = {
           alloy.enabled = false;
           loki.enabled = false;
+          # Snapshot CRDs are owned by the external-snapshotter app
+          openebs-crds.csi.volumeSnapshots.enabled = false;
           engines = {
             local.lvm.enabled = false;
             replicated.mayastor.enabled = false;
