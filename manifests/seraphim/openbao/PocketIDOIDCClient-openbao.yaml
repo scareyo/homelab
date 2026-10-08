@@ -11,4 +11,5 @@ spec:
     key: client_secret
     name: oidc
   description: Manage, store, and distribute sensitive data
+  launchUrl: https://openbao.vegapunk.cloud
   name: OpenBao

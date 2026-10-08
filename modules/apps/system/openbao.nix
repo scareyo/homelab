@@ -75,6 +75,7 @@
         spec = {
           name = "OpenBao"; 
           description = "Manage, store, and distribute sensitive data";
+          launchUrl = "https://openbao.vegapunk.cloud";
           callbackUrls = [ "https://openbao.vegapunk.cloud/ui/vault/auth/oidc/oidc/callback" ];
           clientID = "88f36e70-0c62-4d5e-8777-b3bbebae50db";
           clientSecretRef = {

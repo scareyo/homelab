@@ -7,6 +7,7 @@ spec:
   callbackUrls:
     - https://argocd.vegapunk.cloud/auth/callback
   description: Declarative GitOps continuous deployment
+  launchUrl: https://argocd.vegapunk.cloud
   logo:
     nameOverride: argo-cd
   name: Argo CD

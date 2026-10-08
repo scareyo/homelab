@@ -7,4 +7,5 @@ spec:
   callbackUrls:
     - https://grafana.vegapunk.cloud/login/generic_oauth
   description: Observability and data visualization
+  launchUrl: https://grafana.vegapunk.cloud
   name: Grafana

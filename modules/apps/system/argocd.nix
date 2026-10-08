@@ -66,6 +66,7 @@
           name = "Argo CD"; 
           logo.nameOverride = "argo-cd";
           description = "Declarative GitOps continuous deployment";
+          launchUrl = "https://argocd.vegapunk.cloud";
           callbackUrls = [ "https://argocd.vegapunk.cloud/auth/callback" ];
           secret.additionalLabels."app.kubernetes.io/part-of" = "argocd";
         };

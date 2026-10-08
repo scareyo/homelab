@@ -90,6 +90,7 @@
         spec = {
           name = "Grafana"; 
           description = "Observability and data visualization";
+          launchUrl = "https://grafana.vegapunk.cloud";
           callbackUrls = [ "https://grafana.vegapunk.cloud/login/generic_oauth" ];
         };
       };
