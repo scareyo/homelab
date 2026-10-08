@@ -31,6 +31,7 @@
             spec = {
               appUrl = "https://id.vegapunk.cloud";
               ui.appName = "id.vegapunk.cloud";
+              fileBackend = "database";
               encryptionKey.valueFrom.secretKeyRef = {
                 name = "pocket-id";
                 key = "encryption-key";

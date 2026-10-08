@@ -24,5 +24,6 @@ spec:
       secretKeyRef:
         key: encryption-key
         name: pocket-id
+  fileBackend: database
   ui:
     appName: id.vegapunk.cloud
