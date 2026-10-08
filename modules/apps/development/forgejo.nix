@@ -21,9 +21,9 @@
           gitea = {
             admin.existingSecret = "admin";
             config = {
-              server.ROOT_URL = "https://dev.vegapunk.cloud";
-              server.DOMAIN = "dev.vegapunk.cloud";
-              server.SSH_DOMAIN = "dev.vegapunk.cloud";
+              server.ROOT_URL = "https://scarey.dev";
+              server.DOMAIN = "scarey.dev";
+              server.SSH_DOMAIN = "scarey.dev";
               service.DISABLE_REGISTRATION = true;
 
               oauth2_client.ENABLE_AUTO_REGISTRATION = true;
@@ -82,7 +82,7 @@
       };
 
       templates.app.forgejo.route = {
-        hostname = "dev.vegapunk.cloud";
+        hostname = "scarey.dev";
         serviceName = "forgejo-http";
         servicePort = 3000;
       };
@@ -101,8 +101,8 @@
         spec = {
           name = "Forgejo";
           description = "A self-hosted lightweight software forge";
-          launchUrl = "https://dev.vegapunk.cloud";
-          callbackUrls = [ "https://dev.vegapunk.cloud/user/oauth2/Pocket%20ID/callback" ];
+          launchUrl = "https://scarey.dev";
+          callbackUrls = [ "https://scarey.dev/user/oauth2/Pocket%20ID/callback" ];
           secret = {
             keys.clientID = "key";
             keys.clientSecret = "secret";

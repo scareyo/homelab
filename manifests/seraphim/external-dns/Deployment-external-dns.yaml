@@ -32,6 +32,7 @@ spec:
             - --source=gateway-httproute
             - --policy=sync
             - --registry=txt
+            - --domain-filter=scarey.dev
             - --domain-filter=vegapunk.cloud
             - --provider=webhook
             - --gateway-name=internal

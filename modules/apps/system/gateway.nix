@@ -54,6 +54,26 @@
                 ];
               };
             }
+            {
+              protocol = "HTTPS";
+              port = 443;
+              name = "dev-scarey-https";
+              hostname = "scarey.dev";
+              allowedRoutes = {
+                namespaces.from = "All";
+                kinds = [
+                  { kind = "HTTPRoute"; }
+                ];
+              };
+              tls = {
+                mode = "Terminate";
+                certificateRefs = [
+                  {
+                    name = "dev-scarey-tls";
+                  }
+                ];
+              };
+            }
           ];
         };
       };

@@ -5,9 +5,9 @@ metadata:
   namespace: forgejo
 spec:
   callbackUrls:
-    - https://dev.vegapunk.cloud/user/oauth2/Pocket%20ID/callback
+    - https://scarey.dev/user/oauth2/Pocket%20ID/callback
   description: A self-hosted lightweight software forge
-  launchUrl: https://dev.vegapunk.cloud
+  launchUrl: https://scarey.dev
   name: Forgejo
   secret:
     keys:

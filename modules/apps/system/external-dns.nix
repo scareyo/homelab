@@ -62,7 +62,7 @@
           ];
           policy = "sync";
           sources = ["gateway-httproute"];
-          domainFilters = ["vegapunk.cloud"];
+          domainFilters = ["scarey.dev" "vegapunk.cloud"];
         };
       };
 
