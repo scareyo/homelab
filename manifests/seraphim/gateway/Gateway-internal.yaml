@@ -37,3 +37,11 @@ spec:
         certificateRefs:
           - name: dev-scarey-tls
         mode: Terminate
+    - allowedRoutes:
+        kinds:
+          - kind: TCPRoute
+        namespaces:
+          from: All
+      name: dev-scarey-tcp
+      port: 22
+      protocol: TCP

@@ -109,6 +109,25 @@
           };
         };
       };
+
+      resources.tcpRoutes.forgejo-ssh = {
+        spec = {
+          parentRefs = [
+            {
+              name = "internal";
+              namespace = "gateway";
+              sectionName = "dev-scarey-tcp";
+            }
+          ];
+          rules = [
+            {
+              backendRefs = [
+                { group = ""; kind = "Service"; name = "forgejo-ssh"; port = 22; }
+              ];
+            }
+          ];
+        };
+      };
     };
   };
 }
