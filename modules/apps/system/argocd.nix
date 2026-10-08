@@ -50,6 +50,11 @@
       };
 
       resources.appProjects = {
+        development.spec = {
+          sourceRepos = [ "*" ];
+          destinations = [{ namespace = "*"; server = "*"; }];
+          clusterResourceWhitelist = [{ group = "*"; kind = "*"; }];
+        };
         system.spec = {
           sourceRepos = [ "*" ];
           destinations = [{ namespace = "*"; server = "*"; }];

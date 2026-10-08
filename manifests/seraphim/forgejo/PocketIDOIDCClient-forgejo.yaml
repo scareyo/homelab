@@ -1,0 +1,15 @@
+apiVersion: pocketid.internal/v1alpha1
+kind: PocketIDOIDCClient
+metadata:
+  name: forgejo
+  namespace: forgejo
+spec:
+  callbackUrls:
+    - https://dev.vegapunk.cloud/user/oauth2/Pocket%20ID/callback
+  description: A self-hosted lightweight software forge
+  launchUrl: https://dev.vegapunk.cloud
+  name: Forgejo
+  secret:
+    keys:
+      clientID: key
+      clientSecret: secret
