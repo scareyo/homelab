@@ -1,0 +1,35 @@
+{
+  "customManagers": [
+    {
+      "customType": "regex",
+      "datasourceTemplate": "helm",
+      "managerFilePatterns": ["**/modules/apps/**/*.nix"],
+      "matchStrings": [
+        "charts\\.[\\w-]+\\s*=\\s*\\{\\s*repo\\s*=\\s*\"(?<registryUrl>https://[^\"]+)\";\\s*chart\\s*=\\s*\"(?<depName>[^\"]+)\";\\s*version\\s*=\\s*\"(?<currentValue>[^\"]+)\";"
+      ]
+    },
+    {
+      "customType": "regex",
+      "datasourceTemplate": "docker",
+      "managerFilePatterns": ["**/modules/apps/**/*.nix"],
+      "matchStrings": [
+        "charts\\.[\\w-]+\\s*=\\s*\\{\\s*repo\\s*=\\s*\"oci://(?<registry>[^\"]+)\";\\s*chart\\s*=\\s*\"(?<depName>[^\"]+)\";\\s*version\\s*=\\s*\"(?<currentValue>[^\"]+)\";"
+      ],
+      "packageNameTemplate": "{{registry}}/{{depName}}"
+    }
+  ],
+  "packageRules": [
+    {
+      "matchManagers": ["regex"],
+      "matchFileNames": ["**/modules/apps/**/*.nix"],
+      "postUpgradeTasks": {
+        "commands": [
+          "nix run github:scareyo/homelab#update-hash {{{packageFile}}}",
+          "nix run github:scareyo/homelab#generate-manifests"
+        ],
+        "executionMode": "update"
+      }
+    }
+  ],
+  "prHourlyLimit": 16
+}

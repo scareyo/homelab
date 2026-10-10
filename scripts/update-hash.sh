@@ -6,6 +6,11 @@ log () {
   echo "[update-hash] $1"
 }
 
+# Prints the string value of an attribute within the current chart spec block
+field () {
+  sed -n "${start},${end}s/^[[:space:]]*$1[[:space:]]*=[[:space:]]*\"\([^\"]*\)\".*/\1/p" "$file"
+}
+
 set -e
 
 file=$1
@@ -21,7 +26,9 @@ for line in "${hashes[@]}"; do
   start=$(awk -v l="$line" 'NR < l && /\{[[:space:]]*$/ { s = NR } NR == l { print s; exit }' "$file")
   end=$(awk -v l="$line" 'NR > l && /};/ { print NR; exit }' "$file")
 
-  eval "$(sed -n "${start},${end}{s/^[[:space:]]*\(repo\|chart\|version\)[[:space:]]*=[[:space:]]*\"\([^\"]*\)\".*/\1=\2/p}" "$file")"
+  repo=$(field repo)
+  chart=$(field chart)
+  version=$(field version)
 
   log "getting hash for $chart $version from $repo"
 

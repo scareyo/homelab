@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 # Generate Kubernetes manifests using Nixidy and scan for secrets
 

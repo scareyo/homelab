@@ -1,0 +1,21 @@
+apiVersion: v1
+data:
+  config.json: |-
+    {
+      "platform": "forgejo",
+      "endpoint": "https://scarey.dev",
+      "autodiscover": true,
+      "allowedCommands": [
+        "nix"
+      ]
+    }
+kind: ConfigMap
+metadata:
+  labels:
+    app.kubernetes.io/instance: renovate
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: renovate
+    app.kubernetes.io/version: 44.149.2
+    helm.sh/chart: renovate-46.352.2
+  name: renovate-config
+  namespace: renovate
