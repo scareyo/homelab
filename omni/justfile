@@ -3,9 +3,19 @@ default:
 
 sync:
   mkdir -p manifests
+  curl -fL -o manifests/gateway-api.yaml https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.6.1/standard-install.yaml
+  yq eval-all '.' $(find ../manifests/seraphim -name "CustomResourceDefinition-*") > manifests/crds.yaml
   yq eval-all '.' $(ls ../manifests/seraphim/argocd/*.yaml) > manifests/argocd.yaml
-  yq eval-all '.' $(ls ../manifests/seraphim/cilium/*.yaml | grep -v '/Cilium') > manifests/cilium.yaml
+  yq eval-all '.' $(ls ../manifests/seraphim/cilium/*.yaml) > manifests/cilium.yaml
   omnictl cluster template sync -f cluster.yaml
+
+bootstrap:
+  nixidy bootstrap .#seraphim | kubectl apply -f -
+  kubectl create ns external-secrets
+  infisical run --path external-secrets -c \
+    'kubectl -n external-secrets create secret generic infisical \
+      --from-literal=client-id=$INFISICAL_CLIENT_ID \
+      --from-literal=client-secret=$INFISICAL_CLIENT_SECRET'
 
 kubeconfig:
   omnictl kubeconfig ../.kube/config -f -m=false -c seraphim

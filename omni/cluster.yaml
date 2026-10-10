@@ -2,15 +2,21 @@
 kind: Cluster
 name: seraphim
 talos:
-  version: v1.14.1
+  version: v1.14.2
 kubernetes:
-  version: v1.37.0
+  version: v1.37.1
   manifests:
-    - name: argocd
-      file: manifests/argocd.yaml
+    - name: crds
+      file: manifests/crds.yaml
+      mode: one-time
+    - name: gateway-api
+      file: manifests/gateway-api.yaml
       mode: one-time
     - name: cilium
       file: manifests/cilium.yaml
+      mode: one-time
+    - name: argocd
+      file: manifests/argocd.yaml
       mode: one-time
 patches:
   - name: disable-default-cni
@@ -52,6 +58,13 @@ systemExtensions:
   - siderolabs/i915
   - siderolabs/intel-ucode
   - siderolabs/mei
+patches:
+  - name: set-hostname
+    inline:
+      apiVersion: v1alpha1
+      kind: HostnameConfig
+      hostname: s-snake
+      auto: off
 ---
 kind: Machine
 name: 0bfc3d80-65de-11ef-a60b-c244053fa300
@@ -59,6 +72,13 @@ systemExtensions:
   - siderolabs/i915
   - siderolabs/intel-ucode
   - siderolabs/mei
+patches:
+  - name: set-hostname
+    inline:
+      apiVersion: v1alpha1
+      kind: HostnameConfig
+      hostname: s-hawk
+      auto: off
 ---
 kind: Machine
 name: c9bc1600-6648-11ef-809d-08f808ecb600
@@ -66,6 +86,13 @@ systemExtensions:
   - siderolabs/i915
   - siderolabs/intel-ucode
   - siderolabs/mei
+patches:
+  - name: set-hostname
+    inline:
+      apiVersion: v1alpha1
+      kind: HostnameConfig
+      hostname: s-bear
+      auto: off
 ---
 kind: Machine
 name: 37e3e700-660f-11ef-b0c5-9568df4bde00
@@ -73,6 +100,13 @@ systemExtensions:
   - siderolabs/i915
   - siderolabs/intel-ucode
   - siderolabs/mei
+patches:
+  - name: set-hostname
+    inline:
+      apiVersion: v1alpha1
+      kind: HostnameConfig
+      hostname: s-shark
+      auto: off
 ---
 kind: Machine
 name: 152ea05a-a20e-43f0-8c04-9c6b00b10389
@@ -81,3 +115,10 @@ systemExtensions:
   - siderolabs/mei
   - siderolabs/xe
   - siderolabs/zfs
+patches:
+  - name: set-hostname
+    inline:
+      apiVersion: v1alpha1
+      kind: HostnameConfig
+      hostname: s-flamingo
+      auto: off
