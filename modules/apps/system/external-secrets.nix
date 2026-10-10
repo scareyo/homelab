@@ -32,26 +32,32 @@
         };
       };
 
-      resources.clusterSecretStores.openbao = {
-        spec = {
-          provider.vault = {
-            server = "http://openbao.openbao.svc.cluster.local:8200";
-            namespace = "seraphim";
-            path = "kv";
-            version = "v2";
-            auth.kubernetes = {
-              mountPath = "kubernetes";
-              role = "external-secrets";
-              serviceAccountRef = {
-                name = "openbao";
-                namespace = "external-secrets";
+      resources = {
+        clusterSecretStores.infisical = {
+          spec = {
+            provider.infisical = {
+              auth = {
+                universalAuthCredentials = {
+                  clientId = {
+                    key = "client-id";
+                    namespace = "external-secrets";
+                    name = "infisical";
+                  };
+                  clientSecret = {
+                    key = "client-secret";
+                    namespace = "external-secrets";
+                    name = "infisical";
+                  };
+                };
+              };
+              secretsScope = {
+                projectSlug = "homelab";
+                environmentSlug = "prod";
               };
             };
           };
         };
       };
-
-      resources.serviceAccounts.openbao = {};
     };
   };
 }

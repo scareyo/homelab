@@ -6,6 +6,7 @@
       packages = with pkgs; [
         claude-code
         gitleaks
+        infisical
         just
         pre-commit
         trufflehog

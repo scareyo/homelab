@@ -66,15 +66,9 @@
       };
 
       templates.externalSecret.backblaze = {
-        data = {
-          key_id = {
-            sourceKey = "velero";
-            sourceProperty = "backblaze-key-id";
-          };
-          application_key = {
-            sourceKey = "velero";
-            sourceProperty = "backblaze-application-key";
-          };
+        secrets = {
+          key_id.key = "/velero/BACKBLAZE_KEY_ID";
+          application_key.key = "/velero/BACKBLAZE_APPLICATION_KEY";
         };
         templates.api-key = ''
           [default]

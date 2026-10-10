@@ -92,9 +92,9 @@
         size = "256Gi";
       };
 
-      templates.externalSecret.admin.data = {
-        username.sourceKey = "forgejo";
-        password.sourceKey = "forgejo";
+      templates.externalSecret.admin.secrets = {
+        username.key = "/forgejo/ADMIN_USERNAME";
+        password.key = "/forgejo/ADMIN_PASSWORD";
       };
 
       resources.pocketIDOIDCClients.forgejo = {

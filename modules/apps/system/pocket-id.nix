@@ -50,8 +50,8 @@
         servicePort = 1411;
       };
 
-      templates.externalSecret.pocket-id = {
-        data.encryption-key.sourceKey = "pocket-id";
+      templates.externalSecret.pocket-id.secrets = {
+        encryption-key.key = "/pocket-id/ENCRYPTION_KEY";
       };
 
       templates.postgres.pocket-id-db = {

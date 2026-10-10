@@ -41,8 +41,8 @@
         };
       };
 
-      templates.externalSecret.cloudflare = {
-        data.api-token.sourceKey = "cloudflare";
+      templates.externalSecret.cloudflare.secrets = {
+        api-token.key = "/cert-manager/CLOUDFLARE_API_TOKEN";
       };
 
       resources.clusterIssuers = {

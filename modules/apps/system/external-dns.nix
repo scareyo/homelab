@@ -66,11 +66,8 @@
         };
       };
 
-      templates.externalSecret.unifi = {
-        data.api-key = {
-          sourceKey = "external-dns";
-          sourceProperty = "unifi-api-key";
-        };
+      templates.externalSecret.unifi.secrets = {
+        api-key.key = "/external-dns/UNIFI_API_KEY";
       };
     };
   };

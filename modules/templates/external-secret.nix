@@ -2,18 +2,24 @@
   flake.modules.templates.externalSecret = { lib, ... }: {
     templates.externalSecret = {
       options = {
-        data = lib.mkOption {
+        provider = lib.mkOption {
+          type = lib.types.nullOr (lib.types.enum [ "infisical" ]);
+          default = "infisical";
+          description = "External Secrets ClusterSecretStore to use";
+        };
+
+        secrets = lib.mkOption {
           type = lib.types.attrsOf (lib.types.submodule ({ name, ... }: {
             options = {
-              sourceKey = lib.mkOption {
+              key = lib.mkOption {
                 type = lib.types.str;
-                description = "Source key on the secret provider";
+                description = "Remote key on the secret provider";
               };
 
-              sourceProperty = lib.mkOption {
-                type = lib.types.str;
-                default = name;
-                description = "Source property on the secret provider";
+              property = lib.mkOption {
+                type = lib.types.nullOr lib.types.str;
+                default = null;
+                description = "Remote property on the secret provider";
               };
             };
           }));
@@ -57,20 +63,20 @@
           spec = {
             secretStoreRef = {
               kind = "ClusterSecretStore";
-              name = "openbao";
+              name = cfg.provider;
             };
             target.creationPolicy = lib.mkIf cfg.merge "Merge";
             target.template = lib.mkIf (cfg.templates != null) {
               engineVersion = "v2";
               data = cfg.templates;
             };
-            data = lib.mkIf (cfg.data != {}) (lib.mapAttrsToList (dest: x: {
+            data = lib.mkIf (cfg.secrets != {}) (lib.mapAttrsToList (dest: x: {
               secretKey = dest;
               remoteRef = {
-                key = x.sourceKey;
-                property = x.sourceProperty;
+                key = x.key;
+                property = x.property;
               };
-            }) cfg.data);
+            }) cfg.secrets);
             dataFrom = lib.mkIf (cfg.passwords != {}) (lib.mapAttrsToList (dest: _: {
               sourceRef.generatorRef = {
                 apiVersion = "generators.external-secrets.io/v1alpha1";
