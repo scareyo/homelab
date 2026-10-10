@@ -25,6 +25,13 @@
 
       createNamespace = true;
 
+      templates.backup.weekly = {
+        restore = true;
+        schedule = "0 6 * * 1"; # At 06:00 on Monday
+        ttl = "360h";           # 15 days
+        additionalResources = [ "certificate" ];
+      };
+
       resources.gateways.internal = {
         metadata = {
           annotations = {

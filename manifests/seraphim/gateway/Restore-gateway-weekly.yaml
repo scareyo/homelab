@@ -1,0 +1,13 @@
+apiVersion: velero.io/v1
+kind: Restore
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "-10"
+  name: gateway-weekly
+  namespace: velero
+spec:
+  includedResources:
+    - pvc
+    - certificate
+  restorePVs: true
+  scheduleName: gateway-weekly

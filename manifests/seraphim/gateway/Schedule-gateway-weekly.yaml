@@ -1,0 +1,18 @@
+apiVersion: velero.io/v1
+kind: Schedule
+metadata:
+  name: gateway-weekly
+  namespace: velero
+spec:
+  schedule: 0 6 * * 1
+  template:
+    includedNamespaces:
+      - gateway
+    includedResources:
+      - pv
+      - pvc
+      - certificate
+    snapshotMoveData: true
+    snapshotVolumes: true
+    storageLocation: default
+    ttl: 360h

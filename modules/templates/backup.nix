@@ -28,8 +28,14 @@
 
         location = lib.mkOption {
           type = lib.types.str;
-          description = "Location to store backups";
           default = "default";
+          description = "Location to store backups";
+        };
+
+        additionalResources = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
+          default = [];
+          description = "Additional resources to backup";
         };
       };
       output = { name, config, options, ...  }: {
@@ -48,7 +54,7 @@
               includedResources = [
                 "pv"
                 "pvc"
-              ];
+              ] ++ config.additionalResources;
               snapshotVolumes = true;
               snapshotMoveData = true;
 
@@ -69,7 +75,7 @@
             restorePVs = true;
             includedResources = [
               "pvc"
-            ];
+            ] ++ config.additionalResources;
           };
         };
       };
