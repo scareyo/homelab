@@ -92,6 +92,12 @@
         size = "256Gi";
       };
 
+      templates.backup.daily = {
+        restore = true;
+        schedule = "0 6 * * *"; # At 06:00 daily
+        ttl = "360h";           # 15 days
+      };
+
       templates.externalSecret.admin.secrets = {
         username.key = "/forgejo/ADMIN_USERNAME";
         password.key = "/forgejo/ADMIN_PASSWORD";
