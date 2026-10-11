@@ -5,8 +5,8 @@
     charts.external-secrets = {
       repo = "https://external-secrets.io";
       chart = "external-secrets";
-      version = "2.3.0";
-      chartHash = "sha256-T5URYFJr3BY3eNZYPAhbEzc2cs9rZRoG8sruETguwiQ=";
+      version = "2.12.0";
+      chartHash = "sha256-vB6zZiQhbLNjYRlw13nOja5hXOhXLnzwL9WCF5Rz3lQ=";
     };
     chart = lib.mapAttrs (_: lib.helm.downloadHelmChart) charts;
   in {
