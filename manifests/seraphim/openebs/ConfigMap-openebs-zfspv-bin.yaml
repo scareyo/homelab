@@ -13,11 +13,11 @@ kind: ConfigMap
 metadata:
   labels:
     app: openebs-zfs-node
-    chart: zfs-localpv-2.11.1
+    chart: zfs-localpv-2.11.2
     heritage: Helm
     name: openebs-zfs-node
     openebs.io/component-name: openebs-zfs-node
-    openebs.io/version: 2.11.1
+    openebs.io/version: 2.11.2
     release: openebs
     role: openebs-zfs
   name: openebs-zfspv-bin

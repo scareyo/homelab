@@ -3,11 +3,11 @@ kind: ClusterRole
 metadata:
   labels:
     app: openebs-zfs-controller
-    chart: zfs-localpv-2.11.1
+    chart: zfs-localpv-2.11.2
     component: openebs-zfs-controller
     heritage: Helm
     openebs.io/component-name: openebs-zfs-controller
-    openebs.io/version: 2.11.1
+    openebs.io/version: 2.11.2
     release: openebs
     role: openebs-zfs
   name: openebs-zfs-snapshotter-role

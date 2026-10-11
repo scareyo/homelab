@@ -3,11 +3,11 @@ kind: DaemonSet
 metadata:
   labels:
     app: openebs-zfs-node
-    chart: zfs-localpv-2.11.1
+    chart: zfs-localpv-2.11.2
     heritage: Helm
     name: openebs-zfs-node
     openebs.io/component-name: openebs-zfs-node
-    openebs.io/version: 2.11.1
+    openebs.io/version: 2.11.2
     release: openebs
     role: openebs-zfs
   name: openebs-zfs-localpv-node
@@ -21,12 +21,12 @@ spec:
     metadata:
       labels:
         app: openebs-zfs-node
-        chart: zfs-localpv-2.11.1
+        chart: zfs-localpv-2.11.2
         heritage: Helm
         name: openebs-zfs-node
         openebs.io/component-name: openebs-zfs-node
         openebs.io/logging: "true"
-        openebs.io/version: 2.11.1
+        openebs.io/version: 2.11.2
         release: openebs
         role: openebs-zfs
     spec:
@@ -81,7 +81,7 @@ spec:
                   fieldPath: metadata.namespace
             - name: ALLOWED_TOPOLOGIES
               value: All
-          image: docker.io/openebs/zfs-driver:2.11.1
+          image: docker.io/openebs/zfs-driver:2.11.2
           imagePullPolicy: IfNotPresent
           name: openebs-zfs-plugin
           resources: {}

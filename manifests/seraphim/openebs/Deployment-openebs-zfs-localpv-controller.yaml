@@ -3,11 +3,11 @@ kind: Deployment
 metadata:
   labels:
     app: openebs-zfs-controller
-    chart: zfs-localpv-2.11.1
+    chart: zfs-localpv-2.11.2
     component: openebs-zfs-controller
     heritage: Helm
     openebs.io/component-name: openebs-zfs-controller
-    openebs.io/version: 2.11.1
+    openebs.io/version: 2.11.2
     release: openebs
     role: openebs-zfs
   name: openebs-zfs-localpv-controller
@@ -23,13 +23,13 @@ spec:
     metadata:
       labels:
         app: openebs-zfs-controller
-        chart: zfs-localpv-2.11.1
+        chart: zfs-localpv-2.11.2
         component: openebs-zfs-controller
         heritage: Helm
         name: openebs-zfs-controller
         openebs.io/component-name: openebs-zfs-controller
         openebs.io/logging: "true"
-        openebs.io/version: 2.11.1
+        openebs.io/version: 2.11.2
         release: openebs
         role: openebs-zfs
     spec:
@@ -109,7 +109,7 @@ spec:
               value: "true"
             - name: OPENEBS_IO_ENABLE_BACKUP_GC
               value: "false"
-          image: docker.io/openebs/zfs-driver:2.11.1
+          image: docker.io/openebs/zfs-driver:2.11.2
           imagePullPolicy: IfNotPresent
           name: openebs-zfs-plugin
           resources: {}

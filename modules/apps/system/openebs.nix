@@ -5,8 +5,8 @@
     charts.openebs = {
       repo = "https://openebs.github.io/openebs";
       chart = "openebs";
-      version = "4.6.1";
-      chartHash = "sha256-cHd2Vz4eqX40Uhuxoum1F+JQF8T8m2tsskJUzlhhpLo=";
+      version = "4.6.2";
+      chartHash = "sha256-bBI964kD5e+r8QbRMvbwWD2FriUAmHtEjo1LxrCNEVo=";
     };
     chart = lib.mapAttrs (_: lib.helm.downloadHelmChart) charts;
   in {
