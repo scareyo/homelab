@@ -17,8 +17,8 @@
     charts.ceph-csi-drivers = {
       repo = "https://ceph.github.io/ceph-csi-operator";
       chart = "ceph-csi-drivers";
-      version = "1.0.5";
-      chartHash = "sha256-p1rN64p2U4CFDQLmt08N6rFXluy8b0Bq4UothoeH5F8=";
+      version = "1.1.0";
+      chartHash = "sha256-7zQzYpHrkj8KJpbkBCo5+bTXYsapt30lrujqfFSve6c=";
     };
     chart = lib.mapAttrs (_: lib.helm.downloadHelmChart) charts;
   in {
