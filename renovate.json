@@ -29,6 +29,11 @@
         ],
         "executionMode": "update"
       }
+    },
+    {
+      "description": "v2.2.x predates the v1.0.0 version reset",
+      "matchDepNames": ["agentgateway", "agentgateway-crds"],
+      "allowedVersions": "<2"
     }
   ],
   "prHourlyLimit": 16
