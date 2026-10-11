@@ -5,8 +5,8 @@
     charts.velero = {
       repo = "https://vmware-tanzu.github.io/helm-charts";
       chart = "velero";
-      version = "12.2.0";
-      chartHash = "sha256-4BBNaNc8QFjeIUdCtJdqzWTFeEfX76PwkS2w1BGh6j4=";
+      version = "12.2.1";
+      chartHash = "sha256-c5y2K2wjJ/7/aXeD+qJS5JE3qdt+thSJsUJZ/kDaogA=";
     };
     chart = lib.mapAttrs (_: lib.helm.downloadHelmChart) charts;
   in {
