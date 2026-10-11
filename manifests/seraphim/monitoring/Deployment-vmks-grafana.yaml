@@ -4,8 +4,8 @@ metadata:
   labels:
     app.kubernetes.io/instance: vmks
     app.kubernetes.io/name: grafana
-    app.kubernetes.io/version: 13.2.2
-    helm.sh/chart: grafana-13.2.6
+    app.kubernetes.io/version: 13.2.3
+    helm.sh/chart: grafana-13.2.7
   name: vmks-grafana
   namespace: monitoring
 spec:
@@ -26,8 +26,8 @@ spec:
       labels:
         app.kubernetes.io/instance: vmks
         app.kubernetes.io/name: grafana
-        app.kubernetes.io/version: 13.2.2
-        helm.sh/chart: grafana-13.2.6
+        app.kubernetes.io/version: 13.2.3
+        helm.sh/chart: grafana-13.2.7
     spec:
       automountServiceAccountToken: true
       containers:
@@ -113,7 +113,7 @@ spec:
               value: /var/lib/grafana-search/bleve
             - name: GF_SECURITY_DISABLE_INITIAL_ADMIN_CREATION
               value: "true"
-          image: docker.io/grafana/grafana:13.2.2-distroless
+          image: docker.io/grafana/grafana:13.2.3-distroless
           imagePullPolicy: IfNotPresent
           livenessProbe:
             failureThreshold: 10
