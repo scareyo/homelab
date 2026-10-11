@@ -10,6 +10,6 @@ spec:
   project: system
   source:
     path: ./manifests/seraphim/cert-manager
-    repoURL: https://knot1.tangled.sh/did:plc:jkfcue6cc7extm56pyw4lgoc
+    repoURL: https://github.com/scareyo/homelab
     targetRevision: main
   syncPolicy: {}
