@@ -11,8 +11,8 @@
     charts.agentgateway-crds = {
       repo = "oci://cr.agentgateway.dev/charts";
       chart = "agentgateway-crds";
-      version = "1.5.0";
-      chartHash = "sha256-9ftxoqzikHFhIXESiBQlrQgGmzamqb4HnSl7cVuD3AI=";
+      version = "v1.6.0";
+      chartHash = "sha256-SdC857K31mJ0dw9yyhn3XAVmG4ZyLQgsGzmH5WPG79c=";
     };
     chart = lib.mapAttrs (_: lib.helm.downloadHelmChart) charts;
   in {
