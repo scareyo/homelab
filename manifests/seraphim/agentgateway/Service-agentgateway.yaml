@@ -6,8 +6,8 @@ metadata:
     app.kubernetes.io/instance: agentgateway
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: agentgateway
-    app.kubernetes.io/version: 1.5.0
-    helm.sh/chart: agentgateway-1.5.0
+    app.kubernetes.io/version: v1.6.0
+    helm.sh/chart: agentgateway-v1.6.0
   name: agentgateway
   namespace: agentgateway-system
 spec:

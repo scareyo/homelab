@@ -5,8 +5,8 @@
     charts.agentgateway = {
       repo = "oci://cr.agentgateway.dev/charts";
       chart = "agentgateway";
-      version = "1.5.0";
-      chartHash = "sha256-2qVtdYgaVn7JQIJkbuXkePfUsyjlLE8PZFIMmc2SC+A=";
+      version = "v1.6.0";
+      chartHash = "sha256-kQ3uxnCYD46z5JyWmIbn36McyZhG4yKijaUzDEen9Y0=";
     };
     charts.agentgateway-crds = {
       repo = "oci://cr.agentgateway.dev/charts";

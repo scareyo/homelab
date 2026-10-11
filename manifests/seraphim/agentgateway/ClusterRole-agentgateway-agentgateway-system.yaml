@@ -103,7 +103,6 @@ rules:
   - apiGroups:
       - networking.istio.io
     resources:
-      - destinationrules
       - serviceentries
       - workloadentries
     verbs:
