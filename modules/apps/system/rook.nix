@@ -5,8 +5,8 @@
     charts.rook-ceph = {
       repo = "https://charts.rook.io/release";
       chart = "rook-ceph";
-      version = "v1.20.8";
-      chartHash = "sha256-FjYMB9/J7F9/z9+qIrPo709ED49J/PyDWIkEO1pBh+M=";
+      version = "v1.21.0";
+      chartHash = "sha256-IEpexd64Jk6BYkaZDLWz+eeT+7W3nevUOfR6RpwrUGY=";
     };
     charts.rook-ceph-cluster = {
       repo = "https://charts.rook.io/release";
@@ -39,6 +39,8 @@
 
       helm.releases.rook-ceph = {
         chart = chart.rook-ceph;
+        # FIXME: Chart v1.21.0 templates this without a default, rendering null
+        values.csi.createCsiOperatorResources = true;
       };
 
       helm.releases.rook-ceph-cluster = {
