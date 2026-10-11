@@ -84,7 +84,7 @@ spec:
         enabled: false
       encryption:
         enabled: false
-      requireMsgr2: false
+      requireMsgr2: true
   priorityClassNames:
     mgr: system-cluster-critical
     mon: system-node-critical

@@ -11,8 +11,8 @@
     charts.rook-ceph-cluster = {
       repo = "https://charts.rook.io/release";
       chart = "rook-ceph-cluster";
-      version = "v1.20.8";
-      chartHash = "sha256-55Qf/20zr/CtzkOK2fm/KupZKyw/vZNagWMz/n84/8w=";
+      version = "v1.21.0";
+      chartHash = "sha256-fRfCoyYU620uAquE/XjjCDtWvZkobYbTmV8uyJq72Dc=";
     };
     charts.ceph-csi-drivers = {
       repo = "https://ceph.github.io/ceph-csi-operator";
