@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/component: main
+    app.kubernetes.io/instance: boxmon
+    app.kubernetes.io/name: boxmon
+    app.kubernetes.io/part-of: boxmon
+    app.kubernetes.io/version: f9c300b
+  name: boxmon
+  namespace: boxmon
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: boxmon
+      app.kubernetes.io/name: boxmon
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: main
+        app.kubernetes.io/instance: boxmon
+        app.kubernetes.io/name: boxmon
+        app.kubernetes.io/part-of: boxmon
+        app.kubernetes.io/version: f9c300b
+    spec:
+      containers:
+        - env:
+            - name: CATEGORIES
+              value: movies,tv
+            - name: LANG
+              value: C.UTF-8
+            - name: PHX_HOST
+              value: boxmon.vegapunk.cloud
+            - name: PHX_PORT
+              value: "443"
+            - name: PHX_SERVER
+              value: "true"
+            - name: RELEASE_DISTRIBUTION
+              value: none
+          envFrom:
+            - secretRef:
+                name: boxmon
+          image: scarey.dev/scarey/boxmon:f9c300b
+          name: boxmon
+          ports:
+            - containerPort: 4000
+              name: http
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+      securityContext:
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 1000
+        runAsUser: 1000

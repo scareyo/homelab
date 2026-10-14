@@ -1,5 +1,5 @@
 {
-  flake.modules.apps.agentgateway = { lib, ... }: let
+  flake.modules.apps.agentgateway = { generators, lib, ... }: let
     namespace = "agentgateway-system";
     project = "system";
     charts.agentgateway = {
@@ -16,6 +16,14 @@
     };
     chart = lib.mapAttrs (_: lib.helm.downloadHelmChart) charts;
   in {
+    nixidy.applicationImports = [
+      (generators.fromChartCRDModule {
+        chart = chart.agentgateway-crds;
+        name = "agentgateway";
+        kindFilter = [ "AgentgatewayPolicy" ];
+      })
+    ];
+
     applications.agentgateway = {
       inherit namespace project;
 

@@ -1,0 +1,32 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "10"
+  labels:
+    app.kubernetes.io/component: main
+    app.kubernetes.io/instance: boxmon
+    app.kubernetes.io/name: boxmon
+    app.kubernetes.io/part-of: boxmon
+    app.kubernetes.io/version: f9c300b
+  name: boxmon
+  namespace: boxmon
+spec:
+  hostnames:
+    - boxmon.vegapunk.cloud
+  parentRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: internal
+      namespace: gateway
+  rules:
+    - backendRefs:
+        - group: ""
+          kind: Service
+          name: boxmon
+          port: 80
+          weight: 1
+      matches:
+        - path:
+            type: PathPrefix
+            value: /

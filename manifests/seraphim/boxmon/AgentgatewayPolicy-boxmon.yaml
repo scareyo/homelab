@@ -1,0 +1,16 @@
+apiVersion: agentgateway.dev/v1alpha1
+kind: AgentgatewayPolicy
+metadata:
+  name: boxmon
+  namespace: boxmon
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: boxmon
+  traffic:
+    transformation:
+      request:
+        set:
+          - name: x-forwarded-proto
+            value: request.scheme

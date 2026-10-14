@@ -57,7 +57,7 @@
       output = { name, config, ... }: let
         cfg = config;
 
-        generatorName = dest: "${name}-${dest}";
+        generatorName = dest: lib.toLower (builtins.replaceStrings [ "_" ] [ "-" ] "${name}-${dest}");
       in {
         externalSecrets.${name} = {
           spec = {

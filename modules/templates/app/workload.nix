@@ -47,6 +47,12 @@
               description = "Workload container env";
             };
 
+            envSecret = lib.mkOption {
+              type = lib.types.nullOr lib.types.str;
+              default = null;
+              description = "Secret to load as workload container env";
+            };
+
             schedule = lib.mkOption {
               type = lib.types.str;
               default = "0 0 * * *";
@@ -79,6 +85,10 @@
                   value = lib.mkIf (lib.isString v) v;
                   valueFrom = lib.mkIf (lib.isAttrs v) v;
                 }) config.workload.env;
+
+              envFrom = lib.mkIf (config.workload.envSecret != null) [
+                { secretRef.name = config.workload.envSecret; }
+              ];
 
               ports.http = lib.mkIf (config.workload.port != null) {
                 containerPort = config.workload.port;
