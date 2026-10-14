@@ -5,8 +5,8 @@
     charts.renovate = {
       repo = "oci://ghcr.io/renovatebot/charts";
       chart = "renovate";
-      version = "46.352.2";
-      chartHash = "sha256-kVQD/cwN6R0D42sX9LjAvVxx4E/OBIhTDGarYaqKj7U=";
+      version = "46.357.1";
+      chartHash = "sha256-zGgAUtlHWxMYE0Bf0dgYr5zRhhks7AkuzfN8ui9vrB0=";
     };
     chart = lib.mapAttrs (_: lib.helm.downloadHelmChart) charts;
   in {
