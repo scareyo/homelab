@@ -6,8 +6,8 @@ metadata:
     app.kubernetes.io/instance: vmks
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: vmks
-    app.kubernetes.io/version: v1.153.0
-    helm.sh/chart: victoria-metrics-k8s-stack-0.95.2
+    app.kubernetes.io/version: v1.154.0
+    helm.sh/chart: victoria-metrics-k8s-stack-0.96.0
   name: vmks
   namespace: monitoring
 spec:
@@ -15,7 +15,7 @@ spec:
   extraArgs:
     promscrape.streamParse: "true"
   image:
-    tag: v1.153.0
+    tag: v1.154.0
   port: "8429"
   remoteWrite:
     - url: http://vmsingle-vmks.monitoring.svc.cluster.local.:8428/api/v1/write

@@ -10,7 +10,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: vmks
     app.kubernetes.io/version: v0.0.17
-    helm.sh/chart: victoria-metrics-k8s-stack-0.95.2
+    helm.sh/chart: victoria-metrics-k8s-stack-0.96.0
   name: vmks-sync-job
   namespace: monitoring
 spec:
@@ -23,7 +23,7 @@ spec:
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: vmks
         app.kubernetes.io/version: v0.0.17
-        helm.sh/chart: victoria-metrics-k8s-stack-0.95.2
+        helm.sh/chart: victoria-metrics-k8s-stack-0.96.0
     spec:
       containers:
         - env:

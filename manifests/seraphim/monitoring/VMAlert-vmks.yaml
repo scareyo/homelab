@@ -6,8 +6,8 @@ metadata:
     app.kubernetes.io/instance: vmks
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: vmks
-    app.kubernetes.io/version: v1.153.0
-    helm.sh/chart: victoria-metrics-k8s-stack-0.95.2
+    app.kubernetes.io/version: v1.154.0
+    helm.sh/chart: victoria-metrics-k8s-stack-0.96.0
   name: vmks
   namespace: monitoring
 spec:
@@ -22,7 +22,7 @@ spec:
     http.pathPrefix: /
     remoteWrite.disablePathAppend: "true"
   image:
-    tag: v1.153.0
+    tag: v1.154.0
   notifiers:
     - url: http://vmalertmanager-vmks-0.vmalertmanager-vmks.monitoring.svc.cluster.local.:9093
   port: "8080"

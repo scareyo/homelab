@@ -5,8 +5,8 @@ metadata:
     app.kubernetes.io/instance: vmks
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: vmks
-    app.kubernetes.io/version: v1.153.0
-    helm.sh/chart: victoria-metrics-k8s-stack-0.95.2
+    app.kubernetes.io/version: v1.154.0
+    helm.sh/chart: victoria-metrics-k8s-stack-0.96.0
   name: vmks-core-dns
   namespace: monitoring
 spec:
