@@ -46,10 +46,14 @@
             };
           };
         });
+        default = null;
       };
-      output = { name, config, ...  }: {
-        httpRoutes."${name}" = {
+      output = { name, config, options, ...  }: let
+        labels = import ./_labels.nix { inherit lib name config options; };
+      in {
+        httpRoutes."${name}" = lib.mkIf (config.route != null) {
           metadata = {
+            inherit labels;
             annotations = {
               "argocd.argoproj.io/sync-wave" = "10";
             };
