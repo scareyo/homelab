@@ -105,9 +105,9 @@
             };
 
             volumes = lib.mkIf (config.persistence != {})
-              (lib.mapAttrsToList (name: volume: {
-                inherit name;
-              } // volume.volume) config.persistence);
+              (lib.mapAttrsToList (vol: p: {
+                name = vol;
+              } // p.volume name) config.persistence);
           } // lib.optionalAttrs (config.workload.type == "cronjob") {
             restartPolicy = "OnFailure";
           };

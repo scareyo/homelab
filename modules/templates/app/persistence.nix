@@ -65,17 +65,17 @@
             };
 
             volume = lib.mkOption {
-              type = lib.types.attrs;
+              type = lib.types.functionTo lib.types.attrs;
               internal = true;
               readOnly = true;
-              description = "Pod volume source";
+              description = "Pod volume source, given the app name";
             };
           };
 
-          config.volume = {
-            cm.configMap.name = name;
+          config.volume = app: {
+            cm.configMap.name = "${app}-${name}";
             emptyDir.emptyDir = {};
-            pvc.persistentVolumeClaim.claimName = name;
+            pvc.persistentVolumeClaim.claimName = "${app}-${name}";
           }.${config.type};
         }));
         default = {};
@@ -83,12 +83,12 @@
       output = { name, config, options, ...  }: let
         labels = import ./_labels.nix { inherit lib name config options; };
       in {
-        configMaps = lib.mapAttrs (vol: p: lib.mkIf (p.type == "cm") {
+        configMaps = lib.mapAttrs' (vol: p: lib.nameValuePair "${name}-${vol}" (lib.mkIf (p.type == "cm") {
           metadata = { inherit labels; };
           data = p.config.data;
-        }) config.persistence;
+        })) config.persistence;
 
-        persistentVolumeClaims = lib.mapAttrs (vol: p: lib.mkIf (p.type == "pvc") {
+        persistentVolumeClaims = lib.mapAttrs' (vol: p: lib.nameValuePair "${name}-${vol}" (lib.mkIf (p.type == "pvc") {
           metadata = { inherit labels; };
           spec = {
             accessModes = p.config.accessModes;
@@ -97,7 +97,7 @@
           // lib.optionalAttrs (p.config.storageClass != null) {
             storageClassName = p.config.storageClass;
           };
-        }) config.persistence;
+        })) config.persistence;
       };
     };
   };
