@@ -1,6 +1,6 @@
 {
   flake.modules.apps.boxmon = { generators, lib, ... }: let
-    namespace = "boxmon";
+    namespace = "media";
     project = "media";
   in {
     applications.boxmon = {
@@ -22,6 +22,14 @@
             RELEASE_DISTRIBUTION = "none";
           };
           envSecret = "boxmon";
+        };
+        persistence.media = {
+          type = "pvc";
+          path = "/media";
+          config = {
+            storageClass = "s-flamingo";
+            size = "2Ti";
+          };
         };
         route = {};
       };

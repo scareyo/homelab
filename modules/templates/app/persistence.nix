@@ -33,6 +33,12 @@
             default = null;
             description = "Persistence PVC storage class";
           };
+
+          claimName = lib.mkOption {
+            type = lib.types.nullOr lib.types.str;
+            default = null;
+            description = "Mount an existing PVC instead of creating one";
+          };
         };
       };
     in {
@@ -80,6 +86,7 @@
         }));
         default = {};
       };
+
       output = { name, config, options, ...  }: let
         labels = import ./_labels.nix { inherit lib name config options; };
       in {
@@ -96,6 +103,9 @@
           }
           // lib.optionalAttrs (p.config.storageClass != null) {
             storageClassName = p.config.storageClass;
+          }
+          // lib.optionalAttrs (p.config.claimName != null) {
+            claimName = p.config.claimName;
           };
         })) config.persistence;
       };

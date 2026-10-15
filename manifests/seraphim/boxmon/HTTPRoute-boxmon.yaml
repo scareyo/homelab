@@ -7,10 +7,10 @@ metadata:
     app.kubernetes.io/component: main
     app.kubernetes.io/instance: boxmon
     app.kubernetes.io/name: boxmon
-    app.kubernetes.io/part-of: boxmon
+    app.kubernetes.io/part-of: media
     app.kubernetes.io/version: f9c300b
   name: boxmon
-  namespace: boxmon
+  namespace: media
 spec:
   hostnames:
     - boxmon.vegapunk.cloud
