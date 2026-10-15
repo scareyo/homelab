@@ -36,5 +36,6 @@
       "allowedVersions": "<2"
     }
   ],
-  "prHourlyLimit": 16
+  "prHourlyLimit": 16,
+  "dependencyDashboard": true
 }
