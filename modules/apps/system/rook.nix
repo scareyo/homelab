@@ -6,13 +6,13 @@
       repo = "https://charts.rook.io/release";
       chart = "rook-ceph";
       version = "v1.21.0";
-      chartHash = "sha256-IEpexd64Jk6BYkaZDLWz+eeT+7W3nevUOfR6RpwrUGY=";
+      chartHash = "sha256-MrJabHk/3Cd9BERqwmy/ZljUqc9OPKp2cfvMA1XjQeU=";
     };
     charts.rook-ceph-cluster = {
       repo = "https://charts.rook.io/release";
       chart = "rook-ceph-cluster";
       version = "v1.21.0";
-      chartHash = "sha256-fRfCoyYU620uAquE/XjjCDtWvZkobYbTmV8uyJq72Dc=";
+      chartHash = "sha256-gfQvd7jac1lnEWe3VNDuEmKqSwECuRF9KX1n6IAYnW0=";
     };
     charts.ceph-csi-drivers = {
       repo = "https://ceph.github.io/ceph-csi-operator";
