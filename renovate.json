@@ -20,7 +20,7 @@
   ],
   "packageRules": [
     {
-      "matchManagers": ["regex"],
+      "matchManagers": ["custom.regex"],
       "matchFileNames": ["**/modules/apps/**/*.nix"],
       "postUpgradeTasks": {
         "commands": [
