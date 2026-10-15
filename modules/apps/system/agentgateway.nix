@@ -5,14 +5,14 @@
     charts.agentgateway = {
       repo = "oci://cr.agentgateway.dev/charts";
       chart = "agentgateway";
-      version = "v1.6.0";
-      chartHash = "sha256-kQ3uxnCYD46z5JyWmIbn36McyZhG4yKijaUzDEen9Y0=";
+      version = "1.6.0";
+      chartHash = "sha256-QdsAlP9l6RZFaIAxXy9dJSiS+eOSTmQjaHBWNfHfcTE=";
     };
     charts.agentgateway-crds = {
       repo = "oci://cr.agentgateway.dev/charts";
       chart = "agentgateway-crds";
-      version = "v1.6.0";
-      chartHash = "sha256-SdC857K31mJ0dw9yyhn3XAVmG4ZyLQgsGzmH5WPG79c=";
+      version = "1.6.0";
+      chartHash = "sha256-NBblrhGXioOJH9knsVD6ItZtJzXe2tcIwGFpHbAGy34=";
     };
     chart = lib.mapAttrs (_: lib.helm.downloadHelmChart) charts;
   in {

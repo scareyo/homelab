@@ -3,7 +3,7 @@
     namespace = "openebs";
     project = "system";
     charts.openebs = {
-      repo = "https://openebs.github.io/openebs";
+      repo = "oci://ghcr.io/openebs/charts";
       chart = "openebs";
       version = "4.6.2";
       chartHash = "sha256-bBI964kD5e+r8QbRMvbwWD2FriUAmHtEjo1LxrCNEVo=";

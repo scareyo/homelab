@@ -3,7 +3,7 @@
     namespace = "argocd";
     project = "system";
     charts.argocd = {
-      repo = "https://argoproj.github.io/argo-helm";
+      repo = "oci://ghcr.io/argoproj/argo-helm";
       chart = "argo-cd";
       version = "10.10.3";
       chartHash = "sha256-EDznXwB3sIl86sl7vRAOOZOUDrEkKrfvMjaK0t3erDw=";

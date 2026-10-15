@@ -3,15 +3,15 @@
     namespace = "rook-ceph";
     project = "system";
     charts.rook-ceph = {
-      repo = "https://charts.rook.io/release";
+      repo = "oci://ghcr.io/rook";
       chart = "rook-ceph";
-      version = "v1.21.0";
+      version = "1.21.0";
       chartHash = "sha256-MrJabHk/3Cd9BERqwmy/ZljUqc9OPKp2cfvMA1XjQeU=";
     };
     charts.rook-ceph-cluster = {
-      repo = "https://charts.rook.io/release";
+      repo = "oci://ghcr.io/rook";
       chart = "rook-ceph-cluster";
-      version = "v1.21.0";
+      version = "1.21.0";
       chartHash = "sha256-gfQvd7jac1lnEWe3VNDuEmKqSwECuRF9KX1n6IAYnW0=";
     };
     charts.ceph-csi-drivers = {
