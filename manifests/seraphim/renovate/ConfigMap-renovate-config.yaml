@@ -15,7 +15,7 @@ metadata:
     app.kubernetes.io/instance: renovate
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: renovate
-    app.kubernetes.io/version: 44.155.9
-    helm.sh/chart: renovate-46.357.9
+    app.kubernetes.io/version: 44.161.1
+    helm.sh/chart: renovate-46.363.1
   name: renovate-config
   namespace: renovate
