@@ -1,4 +1,11 @@
-{
+let
+  images = {
+    sonarr = {
+      image = "ghcr.io/home-operations/sonarr";
+      version = "5.0.0.2635";
+    };
+  };
+in {
   flake.modules.apps.sonarr = { generators, lib, ... }: let
     namespace = "media";
     project = "media";
@@ -8,8 +15,7 @@
 
       templates.app.sonarr = {
         workload = {
-          image = "ghcr.io/home-operations/sonarr";
-          version = "5.0.0.2635";
+          inherit (images.sonarr) image version;
           port = 8989;
           env = {
             SONARR__AUTH__METHOD = "External";
