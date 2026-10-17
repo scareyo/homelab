@@ -5,14 +5,12 @@ metadata:
   namespace: media
 spec:
   callbackUrls:
-    - https://sonarr.vegapunk.cloud/signin-oidc
+    - https://sonarr.vegapunk.cloud/oauth2/callback
   description: Monitor TV shows
   launchUrl: https://sonarr.vegapunk.cloud
-  logoutCallbackUrls:
-    - https://sonarr.vegapunk.cloud/signout-callback-oidc
   name: Sonarr
   secret:
     keys:
-      clientID: SONARR__AUTH__OIDCCLIENTID
-      clientSecret: SONARR__AUTH__OIDCCLIENTSECRET
-      issuerUrl: SONARR__AUTH__OIDCAUTHORITY
+      clientID: OAUTH2_PROXY_CLIENT_ID
+      clientSecret: OAUTH2_PROXY_CLIENT_SECRET
+      issuerUrl: OAUTH2_PROXY_OIDC_ISSUER_URL

@@ -23,7 +23,7 @@ spec:
     - backendRefs:
         - group: ""
           kind: Service
-          name: sonarr
+          name: sonarr-oauth2-proxy
           port: 80
           weight: 1
       matches:

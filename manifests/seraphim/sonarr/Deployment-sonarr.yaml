@@ -27,14 +27,7 @@ spec:
       containers:
         - env:
             - name: SONARR__AUTH__METHOD
-              value: Oidc
-            - name: SONARR__AUTH__OIDCUSERIDENTIFIER
-              value: sam@scarey.me
-            - name: SONARR__SERVER__TRUSTEDNETWORKS
-              value: 10.244.0.0/16
-          envFrom:
-            - secretRef:
-                name: sonarr-oidc-credentials
+              value: External
           image: ghcr.io/home-operations/sonarr:5.0.0.2635
           name: sonarr
           ports:

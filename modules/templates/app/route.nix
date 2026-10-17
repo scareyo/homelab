@@ -33,17 +33,6 @@
               default = null;
               description = "Duration before requests timeout";
             };
-
-            # TODO: move to a separate auth module
-            auth = lib.mkOption {
-              type = lib.types.submodule {
-                options = {
-                  enable = lib.mkEnableOption "OAuth2-Proxy";
-                };
-              };
-              default = {};
-              description = "Auth settings";
-            };
           };
         });
         default = null;
@@ -89,8 +78,8 @@
                     weight = 1;
                   } // lib.optionalAttrs (config.route.serviceName == null) {
                     inherit name;
-                  } // lib.optionalAttrs config.route.auth.enable {
-                    name = "oauth2-proxy";
+                  } // lib.optionalAttrs (config.auth != null) {
+                    name = "${name}-oauth2-proxy";
                     port = 80;
                   })
                 ];
