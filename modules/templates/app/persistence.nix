@@ -24,8 +24,9 @@
           };
 
           size = lib.mkOption {
-            type = lib.types.str;
-            description = "Persistence PVC storage size";
+            type = lib.types.nullOr lib.types.str;
+            default = null;
+            description = "Persistence PVC storage size, required unless existingClaim is set";
           };
 
           storageClass = lib.mkOption {
@@ -34,7 +35,7 @@
             description = "Persistence PVC storage class";
           };
 
-          claimName = lib.mkOption {
+          existingClaim = lib.mkOption {
             type = lib.types.nullOr lib.types.str;
             default = null;
             description = "Mount an existing PVC instead of creating one";
@@ -81,7 +82,8 @@
           config.volume = app: {
             cm.configMap.name = "${app}-${name}";
             emptyDir.emptyDir = {};
-            pvc.persistentVolumeClaim.claimName = "${app}-${name}";
+            pvc.persistentVolumeClaim.claimName =
+              if config.config.existingClaim != null then config.config.existingClaim else "${app}-${name}";
           }.${config.type};
         }));
         default = {};
@@ -95,17 +97,16 @@
           data = p.config.data;
         })) config.persistence;
 
-        persistentVolumeClaims = lib.mapAttrs' (vol: p: lib.nameValuePair "${name}-${vol}" (lib.mkIf (p.type == "pvc") {
+        persistentVolumeClaims = lib.mapAttrs' (vol: p: lib.nameValuePair "${name}-${vol}" (lib.mkIf (p.type == "pvc" && p.config.existingClaim == null) {
           metadata = { inherit labels; };
           spec = {
             accessModes = p.config.accessModes;
-            resources.requests.storage = p.config.size;
+            resources.requests.storage =
+              if p.config.size != null then p.config.size
+              else throw "persistence.${vol}: size is required unless existingClaim is set";
           }
           // lib.optionalAttrs (p.config.storageClass != null) {
             storageClassName = p.config.storageClass;
-          }
-          // lib.optionalAttrs (p.config.claimName != null) {
-            claimName = p.config.claimName;
           };
         })) config.persistence;
       };

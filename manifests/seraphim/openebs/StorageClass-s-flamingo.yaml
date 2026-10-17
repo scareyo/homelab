@@ -13,4 +13,5 @@ parameters:
   fstype: zfs
   poolname: s-flamingo
   recordsize: 128k
+  shared: "yes"
 provisioner: zfs.csi.openebs.io

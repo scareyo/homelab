@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/component: main
+    app.kubernetes.io/instance: sonarr
+    app.kubernetes.io/name: sonarr
+    app.kubernetes.io/part-of: media
+    app.kubernetes.io/version: 5.0.0.2635
+  name: sonarr
+  namespace: media
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: sonarr
+      app.kubernetes.io/name: sonarr
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: main
+        app.kubernetes.io/instance: sonarr
+        app.kubernetes.io/name: sonarr
+        app.kubernetes.io/part-of: media
+        app.kubernetes.io/version: 5.0.0.2635
+    spec:
+      containers:
+        - env:
+            - name: SONARR__AUTH__METHOD
+              value: Oidc
+            - name: SONARR__AUTH__OIDCUSERIDENTIFIER
+              value: sam@scarey.me
+            - name: SONARR__SERVER__TRUSTEDNETWORKS
+              value: 10.244.0.0/16
+          envFrom:
+            - secretRef:
+                name: sonarr-oidc-credentials
+          image: ghcr.io/home-operations/sonarr:5.0.0.2635
+          name: sonarr
+          ports:
+            - containerPort: 8989
+              name: http
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+          volumeMounts:
+            - mountPath: /config
+              name: config
+            - mountPath: /media
+              name: media
+            - mountPath: /tmp
+              name: tmp
+      securityContext:
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 1000
+        runAsUser: 1000
+      volumes:
+        - emptyDir: {}
+          name: config
+        - name: media
+          persistentVolumeClaim:
+            claimName: boxmon-media
+        - emptyDir: {}
+          name: tmp

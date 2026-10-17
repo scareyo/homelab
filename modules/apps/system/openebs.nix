@@ -41,6 +41,7 @@
           dedup = "off";
           fstype = "zfs";
           poolname = "s-flamingo";
+          shared = "yes";
         };
         provisioner = "zfs.csi.openebs.io";
         allowedTopologies = [
