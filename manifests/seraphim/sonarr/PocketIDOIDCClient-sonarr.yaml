@@ -4,6 +4,8 @@ metadata:
   name: sonarr
   namespace: media
 spec:
+  allowedUserGroups:
+    - name: sonarr-user
   callbackUrls:
     - https://sonarr.vegapunk.cloud/oauth2/callback
   description: Monitor TV shows

@@ -158,6 +158,7 @@ in {
             description = config.auth.description;
             launchUrl = "https://${hostname}";
             callbackUrls = [ "https://${hostname}/oauth2/callback" ];
+            allowedUserGroups = [ { name = "${name}-user"; } ];
             secret = {
               keys.issuerUrl = "OAUTH2_PROXY_OIDC_ISSUER_URL";
               keys.clientID = "OAUTH2_PROXY_CLIENT_ID";
@@ -165,6 +166,8 @@ in {
             };
           };
         };
+
+        pocketIDUserGroups."${name}-user" = lib.mkIf (config.auth != null) {};
       };
     };
   };
