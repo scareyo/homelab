@@ -13,7 +13,6 @@
     nixidy.applicationImports = [
       (generators.fromCRDModule {
         name = "cilium";
-        # Versioned name forces a refetch (and hash mismatch) when the chart is bumped
         src = pkgs.fetchFromGitHub {
           name = "cilium-crds-${charts.cilium.version}";
           owner = "cilium";
