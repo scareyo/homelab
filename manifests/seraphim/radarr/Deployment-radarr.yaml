@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/component: main
+    app.kubernetes.io/instance: radarr
+    app.kubernetes.io/name: radarr
+    app.kubernetes.io/part-of: media
+    app.kubernetes.io/version: 6.4.4.10685
+  name: radarr
+  namespace: media
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: radarr
+      app.kubernetes.io/name: radarr
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: main
+        app.kubernetes.io/instance: radarr
+        app.kubernetes.io/name: radarr
+        app.kubernetes.io/part-of: media
+        app.kubernetes.io/version: 6.4.4.10685
+    spec:
+      containers:
+        - env:
+            - name: RADARR__AUTH__METHOD
+              value: External
+          image: ghcr.io/home-operations/radarr:6.4.4.10685
+          name: radarr
+          ports:
+            - containerPort: 7878
+              name: http
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+          volumeMounts:
+            - mountPath: /config
+              name: config
+            - mountPath: /media
+              name: media
+            - mountPath: /tmp
+              name: tmp
+      securityContext:
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 1000
+        runAsUser: 1000
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: radarr-config
+        - name: media
+          persistentVolumeClaim:
+            claimName: boxmon-media
+        - emptyDir: {}
+          name: tmp

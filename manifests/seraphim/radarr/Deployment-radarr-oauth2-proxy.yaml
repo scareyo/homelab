@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/component: authentication-proxy
+    app.kubernetes.io/instance: oauth2-proxy-radarr
+    app.kubernetes.io/name: oauth2-proxy
+    app.kubernetes.io/part-of: media
+    app.kubernetes.io/version: v7.15.5
+  name: radarr-oauth2-proxy
+  namespace: media
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: oauth2-proxy-radarr
+      app.kubernetes.io/name: oauth2-proxy
+  template:
+    metadata:
+      annotations:
+        checksum/config: b0f504bb243a75713535aa0e6fe678130dd4ef836079198b43deb7d98a176660
+      labels:
+        app.kubernetes.io/component: authentication-proxy
+        app.kubernetes.io/instance: oauth2-proxy-radarr
+        app.kubernetes.io/name: oauth2-proxy
+        app.kubernetes.io/part-of: media
+        app.kubernetes.io/version: v7.15.5
+    spec:
+      containers:
+        - args:
+            - --http-address=0.0.0.0:8080
+            - --metrics-address=0.0.0.0:8081
+            - --config=/etc/oauth2_proxy/oauth2_proxy.cfg
+          envFrom:
+            - secretRef:
+                name: radarr-oauth2-proxy
+            - secretRef:
+                name: radarr-oauth2-proxy-oidc-credentials
+          image: quay.io/oauth2-proxy/oauth2-proxy:v7.15.5
+          name: oauth2-proxy
+          ports:
+            - containerPort: 8080
+              name: http
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+          volumeMounts:
+            - mountPath: /etc/oauth2_proxy
+              name: config
+      securityContext:
+        runAsGroup: 1000
+        runAsUser: 1000
+      volumes:
+        - configMap:
+            name: radarr-oauth2-proxy
+          name: config

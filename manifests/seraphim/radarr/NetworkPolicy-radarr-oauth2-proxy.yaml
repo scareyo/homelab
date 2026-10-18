@@ -1,0 +1,27 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  labels:
+    app.kubernetes.io/component: authentication-proxy
+    app.kubernetes.io/instance: oauth2-proxy-radarr
+    app.kubernetes.io/name: oauth2-proxy
+    app.kubernetes.io/part-of: media
+    app.kubernetes.io/version: v7.15.5
+  name: radarr-oauth2-proxy
+  namespace: media
+spec:
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/instance: oauth2-proxy-radarr
+              app.kubernetes.io/name: oauth2-proxy
+      ports:
+        - port: 7878
+          protocol: TCP
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/instance: radarr
+      app.kubernetes.io/name: radarr
+  policyTypes:
+    - Ingress
