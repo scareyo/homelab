@@ -11,15 +11,17 @@
       templates.app.boxmon = {
         workload = {
           image = "scarey.dev/scarey/boxmon";
-          version = "f9c300b";
+          version = "de3c860";
           port = 4000;
           env = {
-            CATEGORIES = "movies,tv";
+            CATEGORIES = "radarr,sonarr";
             LANG = "C.UTF-8";
             PHX_HOST = "boxmon.vegapunk.cloud";
             PHX_PORT = "443";
             PHX_SERVER = "true";
             RELEASE_DISTRIBUTION = "none";
+            REMOTE_ROOT = "~/downloads";
+            DOWNLOAD_DIR = "/media/downloads";
           };
           envSecret = "boxmon";
         };

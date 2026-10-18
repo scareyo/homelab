@@ -6,7 +6,7 @@ metadata:
     app.kubernetes.io/instance: boxmon
     app.kubernetes.io/name: boxmon
     app.kubernetes.io/part-of: media
-    app.kubernetes.io/version: f9c300b
+    app.kubernetes.io/version: de3c860
   name: boxmon
   namespace: media
 spec:
@@ -22,12 +22,14 @@ spec:
         app.kubernetes.io/instance: boxmon
         app.kubernetes.io/name: boxmon
         app.kubernetes.io/part-of: media
-        app.kubernetes.io/version: f9c300b
+        app.kubernetes.io/version: de3c860
     spec:
       containers:
         - env:
             - name: CATEGORIES
-              value: movies,tv
+              value: radarr,sonarr
+            - name: DOWNLOAD_DIR
+              value: /media/downloads
             - name: LANG
               value: C.UTF-8
             - name: PHX_HOST
@@ -38,10 +40,12 @@ spec:
               value: "true"
             - name: RELEASE_DISTRIBUTION
               value: none
+            - name: REMOTE_ROOT
+              value: ~/downloads
           envFrom:
             - secretRef:
                 name: boxmon
-          image: scarey.dev/scarey/boxmon:f9c300b
+          image: scarey.dev/scarey/boxmon:de3c860
           name: boxmon
           ports:
             - containerPort: 4000
