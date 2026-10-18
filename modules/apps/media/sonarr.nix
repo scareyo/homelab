@@ -46,6 +46,7 @@ in {
           name = "Sonarr";
           description = "Monitor TV shows";
           logo = "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/webp/sonarr.webp";
+          allowFrom = [ "prowlarr" "recyclarr" ];
         };
       };
 

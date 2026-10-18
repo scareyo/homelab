@@ -42,6 +42,7 @@ in {
           name = "Radarr";
           description = "Monitor movies";
           logo = "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/webp/radarr.webp";
+          allowFrom = [ "prowlarr" "recyclarr" ];
         };
       };
 

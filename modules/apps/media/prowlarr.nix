@@ -35,6 +35,7 @@ in {
           name = "Prowlarr";
           description = "Indexer manager";
           logo = "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/webp/prowlarr.webp";
+          allowFrom = [ "sonarr" "radarr" ];
         };
       };
 

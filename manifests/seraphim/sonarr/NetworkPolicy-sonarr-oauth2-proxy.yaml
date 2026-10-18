@@ -16,6 +16,12 @@ spec:
             matchLabels:
               app.kubernetes.io/instance: oauth2-proxy-sonarr
               app.kubernetes.io/name: oauth2-proxy
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/instance: prowlarr
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/instance: recyclarr
       ports:
         - port: 8989
           protocol: TCP

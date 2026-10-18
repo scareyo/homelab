@@ -26,6 +26,12 @@ in {
               default = "";
               description = "OAuth2-Proxy application logo";
             };
+
+            allowFrom = lib.mkOption {
+              type = lib.types.listOf lib.types.str;
+              default = [];
+              description = "Apps in the same namespace allowed to reach this app directly, bypassing OAuth2-Proxy";
+            };
           };
         });
         default = null;
@@ -183,7 +189,9 @@ in {
                   {
                     podSelector.matchLabels = selector;
                   }
-                ];
+                ] ++ map (app: {
+                  podSelector.matchLabels."app.kubernetes.io/instance" = app;
+                }) config.auth.allowFrom;
                 ports = [ { protocol = "TCP"; port = config.workload.port; } ];
               }
             ];
