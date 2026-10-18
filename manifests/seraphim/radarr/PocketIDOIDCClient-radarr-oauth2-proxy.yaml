@@ -10,6 +10,8 @@ spec:
     - https://radarr.vegapunk.cloud/oauth2/callback
   description: Monitor movies
   launchUrl: https://radarr.vegapunk.cloud
+  logo:
+    nameOverride: radarr
   name: Radarr
   secret:
     keys:

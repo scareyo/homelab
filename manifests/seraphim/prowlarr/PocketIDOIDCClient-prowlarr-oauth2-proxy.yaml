@@ -10,6 +10,8 @@ spec:
     - https://prowlarr.vegapunk.cloud/oauth2/callback
   description: Indexer manager
   launchUrl: https://prowlarr.vegapunk.cloud
+  logo:
+    nameOverride: prowlarr
   name: Prowlarr
   secret:
     keys:

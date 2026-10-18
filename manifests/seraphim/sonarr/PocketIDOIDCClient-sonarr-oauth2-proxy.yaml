@@ -10,6 +10,8 @@ spec:
     - https://sonarr.vegapunk.cloud/oauth2/callback
   description: Monitor TV shows
   launchUrl: https://sonarr.vegapunk.cloud
+  logo:
+    nameOverride: sonarr
   name: Sonarr
   secret:
     keys:

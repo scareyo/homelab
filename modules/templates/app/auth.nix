@@ -158,6 +158,7 @@ in {
             launchUrl = "https://${hostname}";
             callbackUrls = [ "https://${hostname}/oauth2/callback" ];
             allowedUserGroups = [ { name = "${name}-user"; } ];
+            logo.nameOverride = name;
             secret = {
               keys.issuerUrl = "OAUTH2_PROXY_OIDC_ISSUER_URL";
               keys.clientID = "OAUTH2_PROXY_CLIENT_ID";
