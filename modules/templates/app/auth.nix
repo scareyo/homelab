@@ -47,9 +47,11 @@ in {
           banner="${config.auth.name}"
           insecure_oidc_allow_unverified_email="true"
         '';
-        labels = {
+        selector = {
           "app.kubernetes.io/name" = "oauth2-proxy";
           "app.kubernetes.io/instance" = "oauth2-proxy-${name}";
+        };
+        labels = selector // {
           "app.kubernetes.io/version" = images.oauth2-proxy.version;
           "app.kubernetes.io/component" = "authentication-proxy";
           "app.kubernetes.io/part-of" = options.namespace.value;
@@ -64,10 +66,7 @@ in {
           spec = {
             replicas = 1;
             selector = {
-              matchLabels = {
-                "app.kubernetes.io/name" = "oauth2-proxy";
-                "app.kubernetes.io/instance" = "oauth2-proxy-${name}";
-              };
+              matchLabels = selector;
             };
             template = {
               metadata = {
@@ -104,8 +103,6 @@ in {
                 securityContext = {
                   runAsUser = 1000;
                   runAsGroup = 1000;
-                  fsGroup = 1000;
-                  fsGroupChangePolicy = "OnRootMismatch";
                 };
 
                 volumes = [
@@ -119,10 +116,7 @@ in {
         services."${name}-oauth2-proxy" = lib.mkIf enabled {
           metadata = { inherit labels; };
           spec = {
-            selector = {
-              "app.kubernetes.io/name" = "oauth2-proxy";
-              "app.kubernetes.io/instance" = "oauth2-proxy-${name}";
-            };
+            inherit selector;
             ports = [
               {
                 protocol = "TCP";
@@ -180,17 +174,13 @@ in {
             podSelector.matchLabels = {
               "app.kubernetes.io/name" = name;
               "app.kubernetes.io/instance" = name;
-              "app.kubernetes.io/component" = "main";
             };
             policyTypes = [ "Ingress" ];
             ingress = [
               {
                 from = [
                   {
-                    podSelector.matchLabels = {
-                      "app.kubernetes.io/name" = "oauth2-proxy";
-                      "app.kubernetes.io/instance" = "oauth2-proxy-${name}";
-                    };
+                    podSelector.matchLabels = selector;
                   }
                 ];
                 ports = [ { protocol = "TCP"; port = config.workload.port; } ];

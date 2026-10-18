@@ -21,7 +21,6 @@ spec:
           protocol: TCP
   podSelector:
     matchLabels:
-      app.kubernetes.io/component: main
       app.kubernetes.io/instance: sonarr
       app.kubernetes.io/name: sonarr
   policyTypes:
