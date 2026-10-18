@@ -168,6 +168,31 @@ in {
         };
 
         pocketIDUserGroups."${name}-user" = lib.mkIf (config.auth != null) {};
+
+        networkPolicies."${name}-oauth2-proxy" = lib.mkIf (config.auth != null) {
+          metadata = { inherit labels; };
+          spec = {
+            podSelector.matchLabels = {
+              "app.kubernetes.io/name" = name;
+              "app.kubernetes.io/instance" = name;
+              "app.kubernetes.io/component" = "main";
+            };
+            policyTypes = [ "Ingress" ];
+            ingress = [
+              {
+                from = [
+                  {
+                    podSelector.matchLabels = {
+                      "app.kubernetes.io/name" = "oauth2-proxy";
+                      "app.kubernetes.io/instance" = "oauth2-proxy-${name}";
+                    };
+                  }
+                ];
+                ports = [ { protocol = "TCP"; port = config.workload.port; } ];
+              }
+            ];
+          };
+        };
       };
     };
   };
