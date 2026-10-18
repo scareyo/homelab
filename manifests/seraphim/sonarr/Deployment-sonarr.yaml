@@ -52,8 +52,9 @@ spec:
         runAsGroup: 1000
         runAsUser: 1000
       volumes:
-        - emptyDir: {}
-          name: config
+        - name: config
+          persistentVolumeClaim:
+            claimName: sonarr-config
         - name: media
           persistentVolumeClaim:
             claimName: boxmon-media

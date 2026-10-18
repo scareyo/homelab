@@ -23,8 +23,11 @@ in {
         };
         persistence = {
           config = {
-            type = "emptyDir";
+            type = "pvc";
             path = "/config";
+            config = {
+              size = "2Gi";
+            };
           };
           tmp = {
             type = "emptyDir";
