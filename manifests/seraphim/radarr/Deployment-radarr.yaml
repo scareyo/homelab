@@ -44,8 +44,6 @@ spec:
               name: config
             - mountPath: /media
               name: media
-            - mountPath: /tmp
-              name: tmp
       securityContext:
         fsGroup: 1000
         fsGroupChangePolicy: OnRootMismatch
@@ -58,5 +56,3 @@ spec:
         - name: media
           persistentVolumeClaim:
             claimName: boxmon-media
-        - emptyDir: {}
-          name: tmp

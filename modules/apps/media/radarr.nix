@@ -29,10 +29,6 @@ in {
               size = "2Gi";
             };
           };
-          tmp = {
-            type = "emptyDir";
-            path = "/tmp";
-          };
           media = {
             type = "pvc";
             path = "/media";
