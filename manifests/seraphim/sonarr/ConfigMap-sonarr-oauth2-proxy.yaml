@@ -1,7 +1,7 @@
 apiVersion: v1
 data:
   oauth2_proxy.cfg: |
-    upstreams="http://sonarr.media.svc.cluster.local"
+    upstreams="http://sonarr.media.svc.cluster.local:80"
     email_domains="*"
     redirect_url="https://sonarr.vegapunk.cloud/oauth2/callback"
     provider="oidc"

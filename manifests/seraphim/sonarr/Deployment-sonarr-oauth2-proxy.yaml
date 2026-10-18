@@ -17,6 +17,8 @@ spec:
       app.kubernetes.io/name: oauth2-proxy
   template:
     metadata:
+      annotations:
+        checksum/config: 5f17d47a7dff47f511f60a68754a5958385c2034227a16705c6ec6b6d176c63d
       labels:
         app.kubernetes.io/component: authentication-proxy
         app.kubernetes.io/instance: oauth2-proxy-sonarr
@@ -33,7 +35,7 @@ spec:
             - secretRef:
                 name: sonarr-oauth2-proxy
             - secretRef:
-                name: sonarr-oidc-credentials
+                name: sonarr-oauth2-proxy-oidc-credentials
           image: quay.io/oauth2-proxy/oauth2-proxy:v7.15.5
           name: oauth2-proxy
           ports:

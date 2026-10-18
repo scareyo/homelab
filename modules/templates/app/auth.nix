@@ -32,7 +32,21 @@ in {
       };
 
       output = { name, config, options, ...  }: let
+        enabled = config.auth != null && lib.assertMsg (config.route != null && config.workload != null)
+          "templates.app.${name}: auth requires route and workload to be set";
         hostname = (if config.route.hostname == null then "${name}.vegapunk.cloud" else config.route.hostname);
+        upstream = if config.route.serviceName == null then name else config.route.serviceName;
+        proxyConfig = ''
+          upstreams="http://${upstream}.${options.namespace.value}.svc.cluster.local:${toString config.route.servicePort}"
+          email_domains="*"
+          redirect_url="https://${hostname}/oauth2/callback"
+          provider="oidc"
+          scope="openid email profile groups"
+          provider_display_name="Pocket ID"
+          custom_sign_in_logo="${config.auth.logo}"
+          banner="${config.auth.name}"
+          insecure_oidc_allow_unverified_email="true"
+        '';
         labels = {
           "app.kubernetes.io/name" = "oauth2-proxy";
           "app.kubernetes.io/instance" = "oauth2-proxy-${name}";
@@ -41,23 +55,11 @@ in {
           "app.kubernetes.io/part-of" = options.namespace.value;
         };
       in {
-        configMaps."${name}-oauth2-proxy" = lib.mkIf (config.auth != null) {
-          data = {
-            "oauth2_proxy.cfg" = ''
-              upstreams="http://${name}.${options.namespace.value}.svc.cluster.local"
-              email_domains="*"
-              redirect_url="https://${hostname}/oauth2/callback"
-              provider="oidc"
-              scope="openid email profile groups"
-              provider_display_name="Pocket ID"
-              custom_sign_in_logo="${config.auth.logo}"
-              banner="${config.auth.name}"
-              insecure_oidc_allow_unverified_email="true"
-            '';
-          };
+        configMaps."${name}-oauth2-proxy" = lib.mkIf enabled {
+          data."oauth2_proxy.cfg" = proxyConfig;
         };
 
-        deployments."${name}-oauth2-proxy" = lib.mkIf (config.auth != null) {
+        deployments."${name}-oauth2-proxy" = lib.mkIf enabled {
           metadata = { inherit labels; };
           spec = {
             replicas = 1;
@@ -68,7 +70,10 @@ in {
               };
             };
             template = {
-              metadata = { inherit labels; };
+              metadata = {
+                inherit labels;
+                annotations."checksum/config" = builtins.hashString "sha256" proxyConfig;
+              };
               spec = {
                 containers.oauth2-proxy = {
                   image = "${images.oauth2-proxy.image}:${images.oauth2-proxy.version}";
@@ -80,7 +85,7 @@ in {
 
                   envFrom = [
                     { secretRef.name = "${name}-oauth2-proxy"; }
-                    { secretRef.name = "${name}-oidc-credentials"; }
+                    { secretRef.name = "${name}-oauth2-proxy-oidc-credentials"; }
                   ];
 
                   ports.http.containerPort = 8080;
@@ -111,7 +116,7 @@ in {
           };
         };
 
-        services."${name}-oauth2-proxy" = lib.mkIf (config.auth != null) {
+        services."${name}-oauth2-proxy" = lib.mkIf enabled {
           metadata = { inherit labels; };
           spec = {
             selector = {
@@ -128,7 +133,7 @@ in {
           };
         };
 
-        passwords."${name}-oauth2-proxy" = lib.mkIf (config.auth != null) {
+        passwords."${name}-oauth2-proxy" = lib.mkIf enabled {
           spec = {
             length = 32;
             noUpper = false;
@@ -137,7 +142,7 @@ in {
           };
         };
 
-        externalSecrets."${name}-oauth2-proxy" = lib.mkIf (config.auth != null) {
+        externalSecrets."${name}-oauth2-proxy" = lib.mkIf enabled {
           spec = {
             target.name = "${name}-oauth2-proxy";
             dataFrom = [
@@ -152,9 +157,9 @@ in {
           };
         };
 
-        pocketIDOIDCClients.${name} = lib.mkIf (config.auth != null) {
+        pocketIDOIDCClients."${name}-oauth2-proxy" = lib.mkIf enabled {
           spec = {
-            name = config.auth.name; 
+            name = config.auth.name;
             description = config.auth.description;
             launchUrl = "https://${hostname}";
             callbackUrls = [ "https://${hostname}/oauth2/callback" ];
@@ -167,9 +172,9 @@ in {
           };
         };
 
-        pocketIDUserGroups."${name}-user" = lib.mkIf (config.auth != null) {};
+        pocketIDUserGroups."${name}-user" = lib.mkIf enabled {};
 
-        networkPolicies."${name}-oauth2-proxy" = lib.mkIf (config.auth != null) {
+        networkPolicies."${name}-oauth2-proxy" = lib.mkIf enabled {
           metadata = { inherit labels; };
           spec = {
             podSelector.matchLabels = {
