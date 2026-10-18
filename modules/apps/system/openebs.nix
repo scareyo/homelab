@@ -1,5 +1,5 @@
 {
-  flake.modules.apps.openebs = { lib, ... }: let
+  flake.modules.apps.openebs = { lib, pkgs, ... }: let
     namespace = "openebs";
     project = "system";
     charts.openebs = {
@@ -9,6 +9,12 @@
       chartHash = "sha256-bBI964kD5e+r8QbRMvbwWD2FriUAmHtEjo1LxrCNEVo=";
     };
     chart = lib.mapAttrs (_: lib.helm.downloadHelmChart) charts;
+    monitoring = pkgs.fetchFromGitHub {
+      owner = "openebs";
+      repo = "monitoring";
+      rev = "openebs-monitoring-0.4.13";
+      hash = "sha256-YMiVKmKfbidcteyrOxtdllAys0QSIhymLtYyTrahOk0=";
+    };
   in {
     applications.openebs = {
       inherit namespace project;
@@ -54,6 +60,12 @@
             ];
           }
         ];
+      };
+
+      resources.configMaps.openebs-zfslocalpv-dashboard = {
+        metadata.labels.grafana_dashboard = "1";
+        data."zfslocalpv.json" = builtins.readFile
+          "${monitoring}/deploy/charts/dashboards/zfsLocalPV/zfslocalpv.json";
       };
 
       templates.privileged.openebs = {};
