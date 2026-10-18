@@ -1,0 +1,15 @@
+apiVersion: velero.io/v1
+kind: Restore
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "-10"
+  name: media-radarr-daily
+  namespace: velero
+spec:
+  includedResources:
+    - pvc
+  labelSelector:
+    matchLabels:
+      app.kubernetes.io/instance: radarr
+  restorePVs: true
+  scheduleName: media-radarr-daily

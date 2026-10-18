@@ -48,6 +48,13 @@ in {
           logo = "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/webp/sonarr.webp";
         };
       };
+
+      templates.backup.sonarr-daily = {
+        restore = true;
+        schedule = "0 6 * * *"; # At 06:00 daily
+        ttl = "360h";           # 15 days
+        selector."app.kubernetes.io/instance" = "sonarr";
+      };
     };
   };
 }

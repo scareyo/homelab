@@ -37,6 +37,13 @@
           default = [];
           description = "Additional resources to backup";
         };
+
+        selector = lib.mkOption {
+          type = lib.types.nullOr (lib.types.attrsOf lib.types.str);
+          default = null;
+          description = "Only backup and restore resources matching these labels";
+          example = { "app.kubernetes.io/instance" = "sonarr"; };
+        };
       };
       output = { name, config, options, ...  }: {
         schedules.${name} = {
@@ -59,6 +66,8 @@
               snapshotMoveData = true;
 
               storageLocation = config.location;
+            } // lib.optionalAttrs (config.selector != null) {
+              labelSelector.matchLabels = config.selector;
             };
           };
         };
@@ -76,6 +85,8 @@
             includedResources = [
               "pvc"
             ] ++ config.additionalResources;
+          } // lib.optionalAttrs (config.selector != null) {
+            labelSelector.matchLabels = config.selector;
           };
         };
       };
