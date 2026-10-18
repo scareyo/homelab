@@ -1,0 +1,18 @@
+apiVersion: pocketid.internal/v1alpha1
+kind: PocketIDOIDCClient
+metadata:
+  name: prowlarr-oauth2-proxy
+  namespace: media
+spec:
+  allowedUserGroups:
+    - name: prowlarr-user
+  callbackUrls:
+    - https://prowlarr.vegapunk.cloud/oauth2/callback
+  description: Indexer manager
+  launchUrl: https://prowlarr.vegapunk.cloud
+  name: Prowlarr
+  secret:
+    keys:
+      clientID: OAUTH2_PROXY_CLIENT_ID
+      clientSecret: OAUTH2_PROXY_CLIENT_SECRET
+      issuerUrl: OAUTH2_PROXY_OIDC_ISSUER_URL

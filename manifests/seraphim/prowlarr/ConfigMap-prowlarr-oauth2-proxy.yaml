@@ -1,0 +1,16 @@
+apiVersion: v1
+data:
+  oauth2_proxy.cfg: |
+    upstreams="http://prowlarr.media.svc.cluster.local:80"
+    email_domains="*"
+    redirect_url="https://prowlarr.vegapunk.cloud/oauth2/callback"
+    provider="oidc"
+    scope="openid email profile groups"
+    provider_display_name="Pocket ID"
+    custom_sign_in_logo="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/webp/prowlarr.webp"
+    banner="Prowlarr"
+    insecure_oidc_allow_unverified_email="true"
+kind: ConfigMap
+metadata:
+  name: prowlarr-oauth2-proxy
+  namespace: media

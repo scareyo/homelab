@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/component: main
+    app.kubernetes.io/instance: prowlarr
+    app.kubernetes.io/name: prowlarr
+    app.kubernetes.io/part-of: media
+    app.kubernetes.io/version: 2.6.5.5623
+  name: prowlarr
+  namespace: media
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: prowlarr
+      app.kubernetes.io/name: prowlarr
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: main
+        app.kubernetes.io/instance: prowlarr
+        app.kubernetes.io/name: prowlarr
+        app.kubernetes.io/part-of: media
+        app.kubernetes.io/version: 2.6.5.5623
+    spec:
+      containers:
+        - env:
+            - name: PROWLARR__AUTH__METHOD
+              value: External
+          image: ghcr.io/home-operations/prowlarr:2.6.5.5623
+          name: prowlarr
+          ports:
+            - containerPort: 9696
+              name: http
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+          volumeMounts:
+            - mountPath: /config
+              name: config
+      securityContext:
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 1000
+        runAsUser: 1000
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: prowlarr-config

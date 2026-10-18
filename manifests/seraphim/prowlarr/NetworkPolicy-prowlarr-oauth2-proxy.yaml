@@ -1,0 +1,27 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  labels:
+    app.kubernetes.io/component: authentication-proxy
+    app.kubernetes.io/instance: oauth2-proxy-prowlarr
+    app.kubernetes.io/name: oauth2-proxy
+    app.kubernetes.io/part-of: media
+    app.kubernetes.io/version: v7.15.5
+  name: prowlarr-oauth2-proxy
+  namespace: media
+spec:
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/instance: oauth2-proxy-prowlarr
+              app.kubernetes.io/name: oauth2-proxy
+      ports:
+        - port: 9696
+          protocol: TCP
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/instance: prowlarr
+      app.kubernetes.io/name: prowlarr
+  policyTypes:
+    - Ingress
