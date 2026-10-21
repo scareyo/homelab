@@ -22,6 +22,14 @@
             DOWNLOAD_DIR = "/media/downloads";
           };
           envSecret = "boxmon";
+          initContainers = [
+            {
+              name = "init-directories";
+              image = "docker.io/library/busybox";
+              version = "1.38.0";
+              command = [ "mkdir" "-p" "/media/downloads" "/media/shows" "/media/movies" ];
+            }
+          ];
         };
         persistence.media = {
           type = "pvc";

@@ -59,6 +59,25 @@ spec:
           volumeMounts:
             - mountPath: /media
               name: media
+      initContainers:
+        - command:
+            - mkdir
+            - -p
+            - /media/downloads
+            - /media/shows
+            - /media/movies
+          env: []
+          image: docker.io/library/busybox:1.38.0
+          name: init-directories
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+          volumeMounts:
+            - mountPath: /media
+              name: media
       securityContext:
         fsGroup: 1000
         fsGroupChangePolicy: OnRootMismatch
