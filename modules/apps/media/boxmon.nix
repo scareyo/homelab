@@ -8,8 +8,8 @@
 
       templates.app.boxmon = {
         workload = {
-          image = "scarey.dev/scarey/boxmon";
-          version = "de3c860";
+          image = "ghcr.io/scareyo/boxmon";
+          version = "8c1b6db";
           port = 4000;
           env = {
             CATEGORIES = "radarr,sonarr";

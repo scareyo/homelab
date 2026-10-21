@@ -8,7 +8,7 @@ metadata:
     app.kubernetes.io/instance: boxmon
     app.kubernetes.io/name: boxmon
     app.kubernetes.io/part-of: media
-    app.kubernetes.io/version: de3c860
+    app.kubernetes.io/version: 8c1b6db
   name: boxmon
   namespace: media
 spec:
