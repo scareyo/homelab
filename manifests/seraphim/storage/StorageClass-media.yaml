@@ -6,12 +6,13 @@ allowedTopologies:
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: s-flamingo
+  name: media
 parameters:
   compression: "off"
   dedup: "off"
   fstype: zfs
-  poolname: s-flamingo
+  poolname: media
   recordsize: 128k
   shared: "yes"
 provisioner: zfs.csi.openebs.io
+reclaimPolicy: Retain

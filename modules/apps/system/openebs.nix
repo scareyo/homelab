@@ -40,28 +40,6 @@
         };
       };
 
-      resources.storageClasses.s-flamingo = {
-        parameters = {
-          recordsize = "128k";
-          compression = "off";
-          dedup = "off";
-          fstype = "zfs";
-          poolname = "s-flamingo";
-          shared = "yes";
-        };
-        provisioner = "zfs.csi.openebs.io";
-        allowedTopologies = [
-          {
-            matchLabelExpressions = [
-              {
-                key = "kubernetes.io/hostname";
-                values = [ "s-flamingo" ];
-              }
-            ];
-          }
-        ];
-      };
-
       resources.configMaps.openebs-zfslocalpv-dashboard = {
         metadata.labels.grafana_dashboard = "1";
         data."zfslocalpv.json" = builtins.readFile

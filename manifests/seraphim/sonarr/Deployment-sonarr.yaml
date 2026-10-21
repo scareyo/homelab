@@ -57,6 +57,6 @@ spec:
             claimName: sonarr-config
         - name: media
           persistentVolumeClaim:
-            claimName: boxmon-media
+            claimName: media
         - emptyDir: {}
           name: tmp

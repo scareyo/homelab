@@ -55,4 +55,4 @@ spec:
             claimName: radarr-config
         - name: media
           persistentVolumeClaim:
-            claimName: boxmon-media
+            claimName: media

@@ -6,8 +6,6 @@
     applications.boxmon = {
       inherit namespace project;
 
-      createNamespace = true;
-
       templates.app.boxmon = {
         workload = {
           image = "scarey.dev/scarey/boxmon";
@@ -29,8 +27,7 @@
           type = "pvc";
           path = "/media";
           config = {
-            storageClass = "s-flamingo";
-            size = "2Ti";
+            existingClaim = "media";
           };
         };
         route = {};

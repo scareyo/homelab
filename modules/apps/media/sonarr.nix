@@ -37,7 +37,7 @@ in {
             type = "pvc";
             path = "/media";
             config = {
-              existingClaim = "boxmon-media";
+              existingClaim = "media";
             };
           };
         };
