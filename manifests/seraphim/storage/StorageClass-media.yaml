@@ -11,7 +11,7 @@ parameters:
   compression: "off"
   dedup: "off"
   fstype: zfs
-  poolname: media
+  poolname: s-flamingo
   recordsize: 128k
   shared: "yes"
 provisioner: zfs.csi.openebs.io

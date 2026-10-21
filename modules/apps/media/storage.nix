@@ -14,7 +14,7 @@
           compression = "off";
           dedup = "off";
           fstype = "zfs";
-          poolname = "media";
+          poolname = "s-flamingo";
           shared = "yes";
         };
         provisioner = "zfs.csi.openebs.io";
