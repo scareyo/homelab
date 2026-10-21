@@ -18,7 +18,6 @@
             PHX_PORT = "443";
             PHX_SERVER = "true";
             RELEASE_DISTRIBUTION = "none";
-            REMOTE_ROOT = "~/downloads";
             DOWNLOAD_DIR = "/media/downloads";
           };
           envSecret = "boxmon";
@@ -47,6 +46,7 @@
         secrets.HTTP_URL.key = "/boxmon/HTTP_URL";
         secrets.HTTP_USER.key = "/boxmon/HTTP_USER";
         secrets.HTTP_PASS.key = "/boxmon/HTTP_PASS";
+        secrets.REMOTE_ROOT.key = "/boxmon/REMOTE_ROOT";
         passwords.RELEASE_COOKIE = {};
         passwords.SECRET_KEY_BASE = { length = 64; };
       };

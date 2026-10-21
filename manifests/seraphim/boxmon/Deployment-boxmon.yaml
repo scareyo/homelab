@@ -40,8 +40,6 @@ spec:
               value: "true"
             - name: RELEASE_DISTRIBUTION
               value: none
-            - name: REMOTE_ROOT
-              value: ~/downloads
           envFrom:
             - secretRef:
                 name: boxmon
