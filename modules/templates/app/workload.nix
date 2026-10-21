@@ -1,9 +1,45 @@
 {
-  flake.modules.templates.app = { lib, ... }: {
+  flake.modules.templates.app = { lib, ... }: let
+    containerOptions = {
+      image = lib.mkOption {
+        type = lib.types.str;
+        description = "Container image";
+      };
+
+      version = lib.mkOption {
+        type = lib.types.str;
+        description = "Container image version";
+      };
+
+      command = lib.mkOption {
+        type = lib.types.nullOr (lib.types.listOf lib.types.str);
+        default = null;
+        description = "Container command";
+      };
+
+      args = lib.mkOption {
+        type = lib.types.nullOr (lib.types.listOf lib.types.str);
+        default = null;
+        description = "Container args";
+      };
+
+      env = lib.mkOption {
+        type = lib.types.attrsOf (lib.types.oneOf [lib.types.str lib.types.attrs]);
+        default = {};
+        description = "Container env";
+      };
+
+      envSecret = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = null;
+        description = "Secret to load as container env";
+      };
+    };
+  in {
     templates.app = {
       options.workload = lib.mkOption {
         type = lib.types.nullOr (lib.types.submodule {
-          options = {
+          options = containerOptions // {
             type = lib.mkOption {
               type = lib.types.enum [
                 "cronjob"
@@ -13,44 +49,10 @@
               description = "Workload type";
             };
 
-            image = lib.mkOption {
-              type = lib.types.str;
-              description = "Workload container image";
-            };
-
-            version = lib.mkOption {
-              type = lib.types.str;
-              description = "Workload container image version";
-            };
-
             port = lib.mkOption {
               type = lib.types.nullOr lib.types.int;
               default = null;
               description = "Workload container port";
-            };
-
-            command = lib.mkOption {
-              type = lib.types.nullOr (lib.types.listOf lib.types.str);
-              default = null;
-              description = "Workload container command";
-            };
-
-            args = lib.mkOption {
-              type = lib.types.nullOr (lib.types.listOf lib.types.str);
-              default = null;
-              description = "Workload container args";
-            };
-
-            env = lib.mkOption {
-              type = lib.types.attrsOf (lib.types.oneOf [lib.types.str lib.types.attrs]);
-              default = {};
-              description = "Workload container env";
-            };
-
-            envSecret = lib.mkOption {
-              type = lib.types.nullOr lib.types.str;
-              default = null;
-              description = "Secret to load as workload container env";
             };
 
             schedule = lib.mkOption {
@@ -64,6 +66,19 @@
               default = null;
               description = "Workload Deployment strategy";
             };
+
+            initContainers = lib.mkOption {
+              type = lib.types.listOf (lib.types.submodule {
+                options = containerOptions // {
+                  name = lib.mkOption {
+                    type = lib.types.str;
+                    description = "Init container name";
+                  };
+                };
+              });
+              default = [];
+              description = "Init containers, run in order before the workload container";
+            };
           };
         });
         default = null;
@@ -71,41 +86,45 @@
 
       output = { name, config, options, ...  }: let
         labels = import ./_labels.nix { inherit lib name config options; };
+        container = c: {
+          image = "${c.image}:${c.version}";
+
+          command = c.command;
+          args = c.args;
+
+          env = builtins.mapAttrs
+            (_: v: {
+              value = lib.mkIf (lib.isString v) v;
+              valueFrom = lib.mkIf (lib.isAttrs v) v;
+            }) c.env;
+
+          envFrom = lib.mkIf (c.envSecret != null) [
+            { secretRef.name = c.envSecret; }
+          ];
+
+          securityContext = {
+            allowPrivilegeEscalation = false;
+            capabilities.drop = [ "ALL" ];
+            readOnlyRootFilesystem = true;
+          };
+
+          volumeMounts = lib.mkIf (config.persistence != {})
+            (lib.mapAttrsToList (name: volume: {
+              name = name;
+              mountPath = volume.path;
+            }) config.persistence);
+        };
         template = {
           metadata = { inherit labels; };
           spec = {
-            containers.${name} = {
-              image = "${config.workload.image}:${config.workload.version}";
-
-              command = config.workload.command;
-              args = config.workload.args;
-
-              env = builtins.mapAttrs
-                (_: v: {
-                  value = lib.mkIf (lib.isString v) v;
-                  valueFrom = lib.mkIf (lib.isAttrs v) v;
-                }) config.workload.env;
-
-              envFrom = lib.mkIf (config.workload.envSecret != null) [
-                { secretRef.name = config.workload.envSecret; }
-              ];
-
+            containers.${name} = container config.workload // {
               ports.http = lib.mkIf (config.workload.port != null) {
                 containerPort = config.workload.port;
               };
-
-              securityContext = {
-                allowPrivilegeEscalation = false;
-                capabilities.drop = [ "ALL" ];
-                readOnlyRootFilesystem = true;
-              };
-
-              volumeMounts = lib.mkIf (config.persistence != {})
-                (lib.mapAttrsToList (name: volume: {
-                  name = name;
-                  mountPath = volume.path;
-                }) config.persistence);
             };
+
+            initContainers = lib.mkIf (config.workload.initContainers != [])
+              (map (c: container c // { inherit (c) name; }) config.workload.initContainers);
 
             securityContext = {
               runAsUser = 1000;
