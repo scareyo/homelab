@@ -12,7 +12,7 @@
     monitoring = pkgs.fetchFromGitHub {
       owner = "openebs";
       repo = "monitoring";
-      rev = "openebs-monitoring-0.4.13";
+      rev = "monitoring-4.1.1";
       hash = "sha256-YMiVKmKfbidcteyrOxtdllAys0QSIhymLtYyTrahOk0=";
     };
   in {
