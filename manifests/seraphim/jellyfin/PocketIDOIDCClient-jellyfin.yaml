@@ -1,0 +1,14 @@
+apiVersion: pocketid.internal/v1alpha1
+kind: PocketIDOIDCClient
+metadata:
+  name: jellyfin
+  namespace: media
+spec:
+  allowedUserGroups:
+    - name: jellyfin-user
+    - name: jellyfin-admin
+  callbackUrls:
+    - https://jellyfin.vegapunk.cloud/sso/OID/redirect/pocket-id
+  description: The free software media system
+  launchUrl: https://jellyfin.vegapunk.cloud
+  name: Jellyfin

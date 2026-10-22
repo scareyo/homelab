@@ -4,6 +4,10 @@ let
       image = "ghcr.io/jellyfin/jellyfin";
       version = "12.2";
     };
+    python = {
+      image = "docker.io/library/python";
+      version = "3.14-alpine";
+    };
   };
 in {
   flake.modules.apps.jellyfin = { generators, lib, ... }: let
@@ -17,6 +21,14 @@ in {
         workload = {
           inherit (images.jellyfin) image version;
           port = 8096;
+          initContainers = [
+            {
+              name = "configure-sso";
+              inherit (images.python) image version;
+              command = [ "python3" "-c" (builtins.readFile ./jellyfin/configure-sso.py) ];
+              envSecret = "jellyfin-oidc-credentials";
+            }
+          ];
         };
         persistence = {
           config = {
@@ -40,6 +52,19 @@ in {
         };
         route = {};
       };
+
+      resources.pocketIDOIDCClients.jellyfin = {
+        spec = {
+          name = "Jellyfin";
+          description = "The free software media system";
+          launchUrl = "https://jellyfin.vegapunk.cloud";
+          callbackUrls = [ "https://jellyfin.vegapunk.cloud/sso/OID/redirect/pocket-id" ];
+          allowedUserGroups = [ { name = "jellyfin-user"; } { name = "jellyfin-admin"; } ];
+        };
+      };
+
+      resources.pocketIDUserGroups.jellyfin-user = {};
+      resources.pocketIDUserGroups.jellyfin-admin = {};
 
       templates.backup.jellyfin-daily = {
         restore = true;
