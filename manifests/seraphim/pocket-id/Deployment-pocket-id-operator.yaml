@@ -5,9 +5,9 @@ metadata:
     app.kubernetes.io/instance: pocket-id-operator
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: pocket-id-operator
-    app.kubernetes.io/version: v0.15.0
+    app.kubernetes.io/version: v0.16.1
     control-plane: controller-manager
-    helm.sh/chart: pocket-id-operator-0.15.0
+    helm.sh/chart: pocket-id-operator-0.16.1
   name: pocket-id-operator
   namespace: pocket-id
 spec:
@@ -53,7 +53,7 @@ spec:
               value: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/webp/{{name}}.webp
             - name: DEFAULT_DARK_LOGO_URL
               value: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/webp/{{name}}-light.webp
-          image: ghcr.io/aclerici38/pocket-id-operator:v0.15.0@sha256:e1f94e349df106bdd95b81f96d74756c89b1bcba10c942a5409f8df5f97fb7e0
+          image: ghcr.io/aclerici38/pocket-id-operator:v0.16.1@sha256:6e426e781003bcb3e039016ca83c3f1d771029bc9594dff9c698eec80d6c0794
           imagePullPolicy: IfNotPresent
           livenessProbe:
             httpGet:
