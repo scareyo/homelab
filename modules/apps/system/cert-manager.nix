@@ -5,8 +5,8 @@
     charts.cert-manager = {
       repo = "oci://quay.io/jetstack/charts";
       chart = "cert-manager";
-      version = "1.21.2";
-      chartHash = "sha256-AsbUc4Q9aVfTmENGPPmjOwC6V6v3MpTN1cKIl8csi10=";
+      version = "v1.21.3";
+      chartHash = "sha256-kjGAYWkePhiNrUUdpesTcGa9jlpFk1/gZs8sztLElRw=";
     };
     chart = lib.mapAttrs (_: lib.helm.downloadHelmChart) charts;
   in {
