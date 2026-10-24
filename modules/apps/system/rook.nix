@@ -2,7 +2,7 @@ let
   images = {
     ceph = {
       image = "quay.io/ceph/ceph";
-      version = "v20.2.4";
+      version = "v21.1.2";
     };
   };
 in {
