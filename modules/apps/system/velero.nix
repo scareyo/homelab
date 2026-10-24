@@ -1,4 +1,11 @@
-{
+let
+  images = {
+    velero-plugin-for-aws = {
+      image = "velero/velero-plugin-for-aws";
+      version = "v1.12.0";
+    };
+  };
+in {
   flake.modules.apps.velero = { generators, lib, ... }: let
     namespace = "velero";
     project = "system";
@@ -29,7 +36,7 @@
           initContainers = [
             {
               name = "velero-plugin-for-aws";
-              image = "velero/velero-plugin-for-aws:v1.12.0";
+              image = "${images.velero-plugin-for-aws.image}:${images.velero-plugin-for-aws.version}";
               imagePullPolicy = "IfNotPresent";
               volumeMounts = [
                 {

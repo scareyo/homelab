@@ -1,4 +1,15 @@
-{
+let
+  images = {
+    boxmon = {
+      image = "ghcr.io/scareyo/boxmon";
+      version = "8c1b6db";
+    };
+    busybox = {
+      image = "docker.io/library/busybox";
+      version = "1.38.0";
+    };
+  };
+in {
   flake.modules.apps.boxmon = { generators, lib, ... }: let
     namespace = "media";
     project = "media";
@@ -8,8 +19,7 @@
 
       templates.app.boxmon = {
         workload = {
-          image = "ghcr.io/scareyo/boxmon";
-          version = "8c1b6db";
+          inherit (images.boxmon) image version;
           port = 4000;
           env = {
             CATEGORIES = "radarr,sonarr";
@@ -24,8 +34,7 @@
           initContainers = [
             {
               name = "init-directories";
-              image = "docker.io/library/busybox";
-              version = "1.38.0";
+              inherit (images.busybox) image version;
               command = [ "mkdir" "-p" "/media/downloads" "/media/shows" "/media/movies" ];
             }
           ];

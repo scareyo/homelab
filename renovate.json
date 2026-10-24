@@ -3,6 +3,7 @@
     {
       "customType": "regex",
       "datasourceTemplate": "helm",
+      "depTypeTemplate": "chart",
       "managerFilePatterns": ["**/modules/apps/**/*.nix"],
       "matchStrings": [
         "charts\\.[\\w-]+\\s*=\\s*\\{\\s*repo\\s*=\\s*\"(?<registryUrl>https://[^\"]+)\";\\s*chart\\s*=\\s*\"(?<depName>[^\"]+)\";\\s*version\\s*=\\s*\"(?<currentValue>[^\"]+)\";"
@@ -11,20 +12,42 @@
     {
       "customType": "regex",
       "datasourceTemplate": "docker",
+      "depTypeTemplate": "chart",
       "managerFilePatterns": ["**/modules/apps/**/*.nix"],
       "matchStrings": [
         "charts\\.[\\w-]+\\s*=\\s*\\{\\s*repo\\s*=\\s*\"oci://(?<registry>[^\"]+)\";\\s*chart\\s*=\\s*\"(?<depName>[^\"]+)\";\\s*version\\s*=\\s*\"(?<currentValue>[^\"]+)\";"
       ],
       "packageNameTemplate": "{{registry}}/{{depName}}"
+    },
+    {
+      "customType": "regex",
+      "datasourceTemplate": "docker",
+      "depTypeTemplate": "image",
+      "managerFilePatterns": ["**/modules/apps/**/*.nix", "**/modules/templates/**/*.nix"],
+      "matchStrings": [
+        "[\\w-]+\\s*=\\s*\\{\\s*image\\s*=\\s*\"(?<depName>[^\"]+)\";\\s*version\\s*=\\s*\"(?<currentValue>[^\"]+)\";"
+      ]
     }
   ],
   "packageRules": [
     {
       "matchManagers": ["custom.regex"],
+      "matchDepTypes": ["chart"],
       "matchFileNames": ["**/modules/apps/**/*.nix"],
       "postUpgradeTasks": {
         "commands": [
           "nix run github:scareyo/homelab#update-hash {{{packageFile}}}",
+          "nix run github:scareyo/homelab#generate-manifests"
+        ],
+        "executionMode": "update"
+      }
+    },
+    {
+      "description": "Image-only files have no chart hashes for update-hash to refresh",
+      "matchManagers": ["custom.regex"],
+      "matchDepTypes": ["image"],
+      "postUpgradeTasks": {
+        "commands": [
           "nix run github:scareyo/homelab#generate-manifests"
         ],
         "executionMode": "update"

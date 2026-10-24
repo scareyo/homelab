@@ -1,4 +1,11 @@
-{
+let
+  images = {
+    ceph = {
+      image = "quay.io/ceph/ceph";
+      version = "v20.2.4";
+    };
+  };
+in {
   flake.modules.apps.rook = { generators, lib, ... }: let
     namespace = "rook-ceph";
     project = "system";
@@ -47,8 +54,8 @@
         chart = chart.rook-ceph-cluster;
         values = {
           cephImage = {
-            repository = "quay.io/ceph/ceph";
-            tag = "v20.2.4";
+            repository = images.ceph.image;
+            tag = images.ceph.version;
             imagePullPolicy = "IfNotPresent";
           };
           cephClusterSpec = {

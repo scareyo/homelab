@@ -1,4 +1,11 @@
-{
+let
+  images = {
+    external-dns-unifi-webhook = {
+      image = "ghcr.io/home-operations/external-dns-unifi-webhook";
+      version = "0.10.12";
+    };
+  };
+in {
   flake.modules.apps.external-dns = { lib, ... }: let
     namespace = "external-dns";
     project = "system";
@@ -22,8 +29,8 @@
             name = "webhook";
             webhook = {
               image = {
-                repository = "ghcr.io/home-operations/external-dns-unifi-webhook";
-                tag = "0.10.12";
+                repository = images.external-dns-unifi-webhook.image;
+                tag = images.external-dns-unifi-webhook.version;
               };
               env = [
                 {
