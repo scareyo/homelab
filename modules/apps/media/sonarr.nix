@@ -2,7 +2,7 @@ let
   images = {
     sonarr = {
       image = "ghcr.io/home-operations/sonarr";
-      version = "5.0.0.2635";
+      version = "5.0.0.2742";
     };
   };
 in {

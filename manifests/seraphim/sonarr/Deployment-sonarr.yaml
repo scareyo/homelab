@@ -6,7 +6,7 @@ metadata:
     app.kubernetes.io/instance: sonarr
     app.kubernetes.io/name: sonarr
     app.kubernetes.io/part-of: media
-    app.kubernetes.io/version: 5.0.0.2635
+    app.kubernetes.io/version: 5.0.0.2742
   name: sonarr
   namespace: media
 spec:
@@ -22,13 +22,13 @@ spec:
         app.kubernetes.io/instance: sonarr
         app.kubernetes.io/name: sonarr
         app.kubernetes.io/part-of: media
-        app.kubernetes.io/version: 5.0.0.2635
+        app.kubernetes.io/version: 5.0.0.2742
     spec:
       containers:
         - env:
             - name: SONARR__AUTH__METHOD
               value: External
-          image: ghcr.io/home-operations/sonarr:5.0.0.2635
+          image: ghcr.io/home-operations/sonarr:5.0.0.2742
           name: sonarr
           ports:
             - containerPort: 8989
