@@ -80,7 +80,7 @@ spec:
                 secretKeyRef:
                   key: api-key
                   name: unifi
-          image: ghcr.io/home-operations/external-dns-unifi-webhook:0.10.12
+          image: ghcr.io/home-operations/external-dns-unifi-webhook:0.10.14
           imagePullPolicy: IfNotPresent
           livenessProbe:
             failureThreshold: 2

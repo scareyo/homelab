@@ -2,7 +2,7 @@ let
   images = {
     external-dns-unifi-webhook = {
       image = "ghcr.io/home-operations/external-dns-unifi-webhook";
-      version = "0.10.12";
+      version = "0.10.14";
     };
   };
 in {
