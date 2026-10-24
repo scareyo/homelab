@@ -33,6 +33,7 @@
     {
       "matchManagers": ["custom.regex"],
       "matchDepTypes": ["chart"],
+      "commitMessageTopic": "chart {{depName}}",
       "matchFileNames": ["**/modules/apps/**/*.nix"],
       "postUpgradeTasks": {
         "commands": [
@@ -46,6 +47,7 @@
       "description": "Image-only files have no chart hashes for update-hash to refresh",
       "matchManagers": ["custom.regex"],
       "matchDepTypes": ["image"],
+      "commitMessageTopic": "image {{depName}}",
       "postUpgradeTasks": {
         "commands": [
           "nix run github:scareyo/homelab#generate-manifests"
