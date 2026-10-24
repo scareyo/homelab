@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/component: operator
+    app.kubernetes.io/instance: redis-operator
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: redis-operator
+    app.kubernetes.io/part-of: redis-operator
+    app.kubernetes.io/version: 0.27.0
+    helm.sh/chart: redis-operator-0.27.0
+  name: redis-operator
+  namespace: redis-operator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: redis-operator
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        name: redis-operator
+    spec:
+      automountServiceAccountToken: true
+      containers:
+        - args:
+            - --leader-elect
+            - --metrics-bind-address=:8080
+            - --kube-client-timeout=60s
+            - --max-concurrent-reconciles=3
+          command:
+            - /operator
+            - manager
+          env:
+            - name: INIT_CONTAINER_IMAGE
+              value: quay.io/opstree/redis-operator:v0.27.0
+            - name: ENABLE_WEBHOOKS
+              value: "false"
+            - name: SERVICE_DNS_DOMAIN
+              value: cluster.local
+          image: quay.io/opstree/redis-operator:v0.27.0
+          imagePullPolicy: Always
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: probe
+          name: redis-operator
+          ports:
+            - containerPort: 8081
+              name: probe
+              protocol: TCP
+            - containerPort: 8080
+              name: metrics
+              protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: probe
+          resources:
+            limits:
+              cpu: 500m
+              memory: 500Mi
+            requests:
+              cpu: 500m
+              memory: 500Mi
+          securityContext: {}
+      securityContext: {}
+      serviceAccount: redis-operator
+      serviceAccountName: redis-operator

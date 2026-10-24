@@ -1,0 +1,17 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: redis-operator
+  namespace: argocd
+spec:
+  destination:
+    namespace: redis-operator
+    server: https://kubernetes.default.svc
+  project: system
+  source:
+    path: ./manifests/seraphim/redis-operator
+    repoURL: https://github.com/scareyo/homelab
+    targetRevision: main
+  syncPolicy:
+    syncOptions:
+      - ServerSideApply=true

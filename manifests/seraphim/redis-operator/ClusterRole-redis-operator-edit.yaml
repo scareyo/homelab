@@ -1,0 +1,28 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/component: role
+    app.kubernetes.io/instance: redis-operator
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: redis-operator
+    app.kubernetes.io/part-of: redis-operator
+    app.kubernetes.io/version: 0.27.0
+    helm.sh/chart: redis-operator-0.27.0
+    rbac.authorization.k8s.io/aggregate-to-admin: "true"
+    rbac.authorization.k8s.io/aggregate-to-edit: "true"
+  name: redis-operator-edit
+rules:
+  - apiGroups:
+      - redis.redis.opstreelabs.in
+    resources:
+      - redis
+      - redisclusters
+      - redisreplications
+      - redissentinels
+    verbs:
+      - create
+      - delete
+      - deletecollection
+      - patch
+      - update
