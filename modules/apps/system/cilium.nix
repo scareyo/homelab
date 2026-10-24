@@ -5,8 +5,8 @@
     charts.cilium = {
       repo = "oci://quay.io/cilium/charts";
       chart = "cilium";
-      version = "1.20.3";
-      chartHash = "sha256-Z2McaGxaJnEw+jyI/bljUOj7f5Cg3XDbiFkVqcCWzkQ=";
+      version = "1.20.4";
+      chartHash = "sha256-KYp707isjg+hw4j3Kx+2Oked6D8zwQMG6PDZmRX1FsI=";
     };
     chart = lib.mapAttrs (_: lib.helm.downloadHelmChart) charts;
   in {
@@ -18,7 +18,7 @@
           owner = "cilium";
           repo = "cilium";
           rev = "v${charts.cilium.version}";
-          hash = "sha256-3pGgJjCYmN6tC7emy7inlxl+6ydV3LhFO+FtQ7HCUnQ=";
+          hash = "sha256-VA9b7KuLlyVsI1gON6oXm0s/JTKED9wHGGJ1cMeOVJI=";
         };
         crdFiles = [
           "pkg/k8s/apis/cilium.io/client/crds/v2/ciliumbgpadvertisements.yaml"
