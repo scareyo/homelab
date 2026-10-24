@@ -21,21 +21,24 @@
           gitea = {
             admin.existingSecret = "admin";
             config = {
-              server.ROOT_URL = "https://scarey.dev";
-              server.DOMAIN = "scarey.dev";
-              server.SSH_DOMAIN = "scarey.dev";
+              server = {
+                ROOT_URL = "https://scarey.dev";
+                DOMAIN = "scarey.dev";
+                SSH_DOMAIN = "scarey.dev";
+              };
+
               service.DISABLE_REGISTRATION = true;
 
-              oauth2_client.ENABLE_AUTO_REGISTRATION = true;
-              oauth2_client.UPDATE_AVATAR = true;
+              oauth2_client = {
+                ENABLE_AUTO_REGISTRATION = true;
+                UPDATE_AVATAR = true;
+              };
 
               database = {
                 DB_TYPE = "postgres";
               };
 
-              webhook.ALLOWED_HOST_LIST = "ci.vegapunk.cloud";
-
-              actions.ENABLED = false;
+              actions.ENABLED = true;
             };
             oauth = [
               {
