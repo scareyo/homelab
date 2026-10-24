@@ -2,7 +2,7 @@ let
   images = {
     velero-plugin-for-aws = {
       image = "velero/velero-plugin-for-aws";
-      version = "v1.12.0";
+      version = "v1.14.4";
     };
   };
 in {
