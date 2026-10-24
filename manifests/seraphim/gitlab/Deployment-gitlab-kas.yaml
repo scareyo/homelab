@@ -1,0 +1,167 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: kas
+    app.kubernetes.io/name: gitlab
+    app.kubernetes.io/version: v19.5.1
+    chart: kas-10.5.1
+    heritage: Helm
+    release: gitlab
+  name: gitlab-kas
+  namespace: gitlab
+spec:
+  selector:
+    matchLabels:
+      app: kas
+      release: gitlab
+  template:
+    metadata:
+      annotations:
+        checksum/config: 076e893fab4eb77d9fe75f74a56560f4563a09c5f0d26c1aaa8d70af1618f69b
+        cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
+        gitlab.com/prometheus_path: /metrics
+        gitlab.com/prometheus_port: "8151"
+        gitlab.com/prometheus_scrape: "true"
+        prometheus.io/path: /metrics
+        prometheus.io/port: "8151"
+        prometheus.io/scrape: "true"
+      labels:
+        app: kas
+        app.kubernetes.io/name: gitlab
+        app.kubernetes.io/version: v19.5.1
+        chart: kas-10.5.1
+        heritage: Helm
+        release: gitlab
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app: kas
+                    release: gitlab
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+      automountServiceAccountToken: false
+      containers:
+        - args:
+            - --configuration-file=/etc/kas/config.yaml
+          env:
+            - name: OWN_PRIVATE_API_HOST
+              value: gitlab-kas.gitlab.svc
+            - name: GODEBUG
+              value: tlsmlkem=0
+            - name: TZ
+              value: UTC
+          image: registry.gitlab.com/gitlab-org/build/cng/gitlab-kas:v19.5.1
+          livenessProbe:
+            httpGet:
+              path: /liveness
+              port: 8151
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          name: kas
+          ports:
+            - containerPort: 8150
+              name: kas
+            - containerPort: 8154
+              name: kas-k8s-api
+            - containerPort: 8155
+              name: kas-private-api
+            - containerPort: 8151
+              name: http-metrics
+          readinessProbe:
+            httpGet:
+              path: /readiness
+              port: 8151
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            runAsNonRoot: true
+            runAsUser: 65532
+          volumeMounts:
+            - mountPath: /etc/kas
+              name: init-etc-kas
+              readOnly: true
+            - mountPath: /etc/ssl/certs/
+              name: etc-ssl-certs
+              readOnly: true
+            - mountPath: /etc/pki/ca-trust/extracted/pem
+              name: etc-pki-ca-trust-extracted-pem
+              readOnly: true
+      initContainers:
+        - env:
+            - name: TZ
+              value: UTC
+          image: registry.gitlab.com/gitlab-org/build/cng/certificates:v19.5.1
+          name: certificates
+          resources:
+            requests:
+              cpu: 50m
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            runAsNonRoot: true
+          volumeMounts:
+            - mountPath: /etc/ssl/certs
+              name: etc-ssl-certs
+              readOnly: false
+            - mountPath: /etc/pki/ca-trust/extracted/pem
+              name: etc-pki-ca-trust-extracted-pem
+              readOnly: false
+            - mountPath: /usr/local/share/ca-certificates
+              name: custom-ca-certificates
+              readOnly: true
+      securityContext:
+        fsGroup: 65532
+        runAsGroup: 65532
+        runAsUser: 65532
+        seccompProfile:
+          type: RuntimeDefault
+      terminationGracePeriodSeconds: 300
+      volumes:
+        - emptyDir:
+            medium: Memory
+          name: etc-ssl-certs
+        - emptyDir:
+            medium: Memory
+          name: etc-pki-ca-trust-extracted-pem
+        - name: custom-ca-certificates
+          projected:
+            defaultMode: 288
+            sources:
+              - secret:
+                  name: gitlab-wildcard-tls-ca
+        - name: init-etc-kas
+          projected:
+            defaultMode: 288
+            sources:
+              - configMap:
+                  name: gitlab-kas
+              - secret:
+                  items:
+                    - key: kas_shared_secret
+                      path: .gitlab_kas_secret
+                  name: gitlab-gitlab-kas-secret
+              - secret:
+                  items:
+                    - key: kas_private_api_secret
+                      path: .gitlab_kas_private_api_secret
+                  name: gitlab-kas-private-api
+              - secret:
+                  items:
+                    - key: kas_websocket_token_secret
+                      path: .gitlab_kas_websocket_token_secret
+                  name: gitlab-kas-websocket-token

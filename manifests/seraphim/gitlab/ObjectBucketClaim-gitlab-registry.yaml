@@ -1,0 +1,8 @@
+apiVersion: objectbucket.io/v1alpha1
+kind: ObjectBucketClaim
+metadata:
+  name: gitlab-registry
+  namespace: gitlab
+spec:
+  bucketName: gitlab-registry
+  storageClassName: ceph-bucket

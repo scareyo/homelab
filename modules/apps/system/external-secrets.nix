@@ -14,7 +14,7 @@
       (generators.fromChartCRDModule {
         chart = chart.external-secrets;
         name = "external-secrets";
-        kindFilter = [ "ClusterSecretStore" "ExternalSecret" "Password" ];
+        kindFilter = [ "ClusterSecretStore" "ExternalSecret" "Password" "PushSecret" ];
       })
     ];
 

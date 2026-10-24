@@ -14,7 +14,7 @@
       (generators.fromChartCRDModule {
         chart = chart.redis-operator;
         name = "redis-operator";
-        kindFilter = [ "RedisCluster" ];
+        kindFilter = [ "Redis" ];
       })
     ];
 
