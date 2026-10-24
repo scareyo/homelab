@@ -5,8 +5,8 @@
     charts.argocd = {
       repo = "oci://ghcr.io/argoproj/argo-helm";
       chart = "argo-cd";
-      version = "10.10.5";
-      chartHash = "sha256-BFjotkybHUV1eprA5E8DY9olMmEiQ/gJBjAzR01Qh94=";
+      version = "10.11.1";
+      chartHash = "sha256-dSEcIMLUjGCuh9ojIaws/dmKPxOGYNFThYaJ7QsSoKY=";
     };
     chart = lib.mapAttrs (_: lib.helm.downloadHelmChart) charts;
   in {
