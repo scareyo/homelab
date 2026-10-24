@@ -6,7 +6,7 @@ metadata:
     app.kubernetes.io/instance: jellyfin
     app.kubernetes.io/name: jellyfin
     app.kubernetes.io/part-of: media
-    app.kubernetes.io/version: "12.2"
+    app.kubernetes.io/version: "12.3"
   name: jellyfin
   namespace: media
 spec:
@@ -22,11 +22,11 @@ spec:
         app.kubernetes.io/instance: jellyfin
         app.kubernetes.io/name: jellyfin
         app.kubernetes.io/part-of: media
-        app.kubernetes.io/version: "12.2"
+        app.kubernetes.io/version: "12.3"
     spec:
       containers:
         - env: []
-          image: ghcr.io/jellyfin/jellyfin:12.2
+          image: ghcr.io/jellyfin/jellyfin:12.3
           name: jellyfin
           ports:
             - containerPort: 8096

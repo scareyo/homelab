@@ -2,7 +2,7 @@ let
   images = {
     jellyfin = {
       image = "ghcr.io/jellyfin/jellyfin";
-      version = "12.2";
+      version = "12.3";
     };
     python = {
       image = "docker.io/library/python";

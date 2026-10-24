@@ -6,7 +6,7 @@ metadata:
     app.kubernetes.io/instance: jellyfin
     app.kubernetes.io/name: jellyfin
     app.kubernetes.io/part-of: media
-    app.kubernetes.io/version: "12.2"
+    app.kubernetes.io/version: "12.3"
   name: jellyfin-config
   namespace: media
 spec:
