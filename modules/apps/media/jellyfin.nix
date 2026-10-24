@@ -6,7 +6,7 @@ let
     };
     python = {
       image = "docker.io/library/python";
-      version = "3.14-alpine";
+      version = "3.15-alpine";
     };
   };
 in {

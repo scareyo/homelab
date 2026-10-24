@@ -134,7 +134,7 @@ spec:
           envFrom:
             - secretRef:
                 name: jellyfin-oidc-credentials
-          image: docker.io/library/python:3.14-alpine
+          image: docker.io/library/python:3.15-alpine
           name: configure-sso
           securityContext:
             allowPrivilegeEscalation: false
