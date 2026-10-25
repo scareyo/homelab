@@ -1,0 +1,115 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    reloader.stakater.com/auto: "true"
+  labels:
+    app.kubernetes.io/instance: forgejo-runner
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: forgejo-runner
+    app.kubernetes.io/version: 13.2.1
+    helm.sh/chart: forgejo-runner-13.2.1
+  name: forgejo-runner
+  namespace: forgejo-runner
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: forgejo-runner
+      app.kubernetes.io/name: forgejo-runner
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/instance: forgejo-runner
+        app.kubernetes.io/name: forgejo-runner
+    spec:
+      automountServiceAccountToken: true
+      containers:
+        - command:
+            - sh
+            - -ec
+            - |
+              exec /bin/forgejo-runner daemon \
+                --config /config/runner.yaml \
+                --url "http://forgejo-http.forgejo:3000" \
+                --uuid "$(cat /etc/forgejo-runner-secret/uuid)" \
+                --token-url file:///etc/forgejo-runner-secret/token
+          image: data.forgejo.org/forgejo/runner:13.2.0
+          imagePullPolicy: IfNotPresent
+          name: runner
+          resources:
+            limits:
+              memory: 1Gi
+            requests:
+              cpu: 5m
+              memory: 256Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+          volumeMounts:
+            - mountPath: /config
+              name: config
+            - mountPath: /etc/forgejo-runner-secret
+              name: runner-secret
+              readOnly: true
+            - mountPath: /plugin
+              name: plugin
+            - mountPath: /data
+              name: data
+            - mountPath: /tmp
+              name: tmp
+      initContainers:
+        - args:
+            - --listen
+            - unix:///plugin/forgejo-runner-k8s.sock
+          image: git.erwanleboucher.dev/eleboucher/runner-k8s-plugin:13.2.1
+          imagePullPolicy: IfNotPresent
+          name: k8s-plugin
+          resources:
+            limits:
+              memory: 128Mi
+            requests:
+              cpu: 5m
+              memory: 32Mi
+          restartPolicy: Always
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+          volumeMounts:
+            - mountPath: /config
+              name: config
+              readOnly: true
+            - mountPath: /data
+              name: data
+              readOnly: true
+            - mountPath: /tmp
+              name: tmp
+            - mountPath: /plugin
+              name: plugin
+      securityContext:
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 1000
+        runAsNonRoot: true
+        runAsUser: 1000
+      serviceAccountName: forgejo-runner
+      terminationGracePeriodSeconds: 300
+      volumes:
+        - configMap:
+            name: forgejo-runner-config
+          name: config
+        - name: runner-secret
+          secret:
+            secretName: forgejo-runner
+        - emptyDir: {}
+          name: plugin
+        - emptyDir: {}
+          name: data
+        - emptyDir: {}
+          name: tmp

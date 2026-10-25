@@ -1,0 +1,15 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: forgejo-runner
+  namespace: argocd
+spec:
+  destination:
+    namespace: forgejo-runner
+    server: https://kubernetes.default.svc
+  project: development
+  source:
+    path: ./manifests/seraphim/forgejo-runner
+    repoURL: https://github.com/scareyo/homelab
+    targetRevision: main
+  syncPolicy: {}
