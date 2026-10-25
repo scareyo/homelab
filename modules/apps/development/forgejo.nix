@@ -21,6 +21,7 @@
           gitea = {
             admin.existingSecret = "admin";
             config = {
+              APP_NAME = "scarey.dev";
               server = {
                 ROOT_URL = "https://scarey.dev";
                 DOMAIN = "scarey.dev";
@@ -39,6 +40,11 @@
               };
 
               actions.ENABLED = true;
+
+              ui = {
+                THEMES = "scarey,forgejo-auto,forgejo-light,forgejo-dark";
+                DEFAULT_THEME = "scarey";
+              };
             };
             oauth = [
               {
@@ -82,6 +88,15 @@
             ];
           };
 
+          extraVolumes = [ { name = "theme"; configMap.name = "forgejo-theme"; } ];
+          extraContainerVolumeMounts = [
+            {
+              name = "theme";
+              mountPath = "/data/gitea/public/assets/css/theme-scarey.css";
+              subPath = "theme-scarey.css";
+            }
+          ];
+
           httpRoute = {
             enabled = true;
             hostnames = [ "scarey.dev" ];
@@ -105,6 +120,9 @@
         username.key = "/forgejo/ADMIN_USERNAME";
         password.key = "/forgejo/ADMIN_PASSWORD";
       };
+
+      resources.configMaps.forgejo-theme.data."theme-scarey.css" =
+        builtins.readFile ./forgejo/theme-scarey.css;
 
       resources.pocketIDOIDCClients.forgejo = {
         spec = {

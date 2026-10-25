@@ -22,7 +22,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config: f1c5dd936bcbd19b0ae75b5f194eb12d614042710f48804712cbfed5b19df861
+        checksum/config: 6ffe5e4f7aa3da7be3245f3e46218c7c17aa595a09e29d8149a2d139e9914019
         checksum/oauth_0: 40fecb26106a6b900992d42df645058e9c3744957508e0c6398130e51294b5c7
       labels:
         app: forgejo
@@ -83,6 +83,9 @@ spec:
               name: temp
             - mountPath: /data
               name: data
+            - mountPath: /data/gitea/public/assets/css/theme-scarey.css
+              name: theme
+              subPath: theme-scarey.css
       initContainers:
         - command:
             - /usr/sbin/init_directory_structure.sh
@@ -224,6 +227,9 @@ spec:
           secret:
             defaultMode: 110
             secretName: forgejo
+        - configMap:
+            name: forgejo-theme
+          name: theme
         - name: inline-config-sources
           secret:
             secretName: forgejo-inline-config
