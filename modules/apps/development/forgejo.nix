@@ -81,13 +81,13 @@
               }
             ];
           };
-        };
-      };
 
-      templates.app.forgejo.route = {
-        hostname = "scarey.dev";
-        serviceName = "forgejo-http";
-        servicePort = 3000;
+          httpRoute = {
+            enabled = true;
+            hostnames = [ "scarey.dev" ];
+            parentRefs = [ { name = "internal"; namespace = "gateway"; } ];
+          };
+        };
       };
 
       templates.postgres.forgejo-db = {
