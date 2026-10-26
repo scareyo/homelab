@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/component: main
+    app.kubernetes.io/instance: changedetection
+    app.kubernetes.io/name: changedetection
+    app.kubernetes.io/part-of: changedetection
+    app.kubernetes.io/version: 0.60.9
+  name: changedetection
+  namespace: changedetection
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: changedetection
+      app.kubernetes.io/name: changedetection
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: main
+        app.kubernetes.io/instance: changedetection
+        app.kubernetes.io/name: changedetection
+        app.kubernetes.io/part-of: changedetection
+        app.kubernetes.io/version: 0.60.9
+    spec:
+      containers:
+        - env:
+            - name: BASE_URL
+              value: https://changedetection.vegapunk.cloud
+            - name: PLAYWRIGHT_DRIVER_URL
+              value: ws://browser
+          image: ghcr.io/dgtlmoon/changedetection.io:0.60.9
+          name: changedetection
+          ports:
+            - containerPort: 5000
+              name: http
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+          volumeMounts:
+            - mountPath: /datastore
+              name: datastore
+            - mountPath: /tmp
+              name: tmp
+      securityContext:
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 1000
+        runAsUser: 1000
+      volumes:
+        - name: datastore
+          persistentVolumeClaim:
+            claimName: changedetection-datastore
+        - emptyDir: {}
+          name: tmp

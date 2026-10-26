@@ -1,0 +1,20 @@
+apiVersion: pocketid.internal/v1alpha1
+kind: PocketIDOIDCClient
+metadata:
+  name: changedetection-oauth2-proxy
+  namespace: changedetection
+spec:
+  allowedUserGroups:
+    - name: changedetection-user
+  callbackUrls:
+    - https://changedetection.vegapunk.cloud/oauth2/callback
+  description: Website change detection and monitoring
+  launchUrl: https://changedetection.vegapunk.cloud
+  logo:
+    nameOverride: changedetection
+  name: changedetection.io
+  secret:
+    keys:
+      clientID: OAUTH2_PROXY_CLIENT_ID
+      clientSecret: OAUTH2_PROXY_CLIENT_SECRET
+      issuerUrl: OAUTH2_PROXY_OIDC_ISSUER_URL

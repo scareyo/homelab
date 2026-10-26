@@ -1,0 +1,15 @@
+apiVersion: velero.io/v1
+kind: Restore
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "-10"
+  name: changedetection-changedetection-daily
+  namespace: velero
+spec:
+  includedResources:
+    - pvc
+  labelSelector:
+    matchLabels:
+      app.kubernetes.io/instance: changedetection
+  restorePVs: true
+  scheduleName: changedetection-changedetection-daily

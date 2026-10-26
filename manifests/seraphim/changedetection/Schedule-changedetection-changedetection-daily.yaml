@@ -1,0 +1,20 @@
+apiVersion: velero.io/v1
+kind: Schedule
+metadata:
+  name: changedetection-changedetection-daily
+  namespace: velero
+spec:
+  schedule: 0 6 * * *
+  template:
+    includedNamespaces:
+      - changedetection
+    includedResources:
+      - pv
+      - pvc
+    labelSelector:
+      matchLabels:
+        app.kubernetes.io/instance: changedetection
+    snapshotMoveData: true
+    snapshotVolumes: true
+    storageLocation: default
+    ttl: 360h

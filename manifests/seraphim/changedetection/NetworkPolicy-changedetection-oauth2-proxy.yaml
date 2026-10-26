@@ -1,0 +1,27 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  labels:
+    app.kubernetes.io/component: authentication-proxy
+    app.kubernetes.io/instance: oauth2-proxy-changedetection
+    app.kubernetes.io/name: oauth2-proxy
+    app.kubernetes.io/part-of: changedetection
+    app.kubernetes.io/version: v7.15.5
+  name: changedetection-oauth2-proxy
+  namespace: changedetection
+spec:
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/instance: oauth2-proxy-changedetection
+              app.kubernetes.io/name: oauth2-proxy
+      ports:
+        - port: 5000
+          protocol: TCP
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/instance: changedetection
+      app.kubernetes.io/name: changedetection
+  policyTypes:
+    - Ingress

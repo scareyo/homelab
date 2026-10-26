@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/component: main
+    app.kubernetes.io/instance: browser
+    app.kubernetes.io/name: browser
+    app.kubernetes.io/part-of: changedetection
+    app.kubernetes.io/version: latest
+  name: browser
+  namespace: changedetection
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: browser
+      app.kubernetes.io/name: browser
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: main
+        app.kubernetes.io/instance: browser
+        app.kubernetes.io/name: browser
+        app.kubernetes.io/part-of: changedetection
+        app.kubernetes.io/version: latest
+    spec:
+      containers:
+        - env: []
+          image: docker.io/dgtlmoon/sockpuppetbrowser:latest@sha256:1d8f72d2ce2085faed4232e5ae1e65c02efe5b831a18e127829b267c260b4fb2
+          name: browser
+          ports:
+            - containerPort: 3000
+              name: http
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+          volumeMounts:
+            - mountPath: /home/chrome
+              name: home
+            - mountPath: /tmp
+              name: tmp
+      securityContext:
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 1000
+        runAsUser: 1000
+      volumes:
+        - emptyDir: {}
+          name: home
+        - emptyDir: {}
+          name: tmp
