@@ -1,4 +1,11 @@
-{
+{ inputs, ... }:
+
+let
+  images.runner-ubuntu = {
+    image = "ghcr.io/bjw-s-labs/forgejo-runner";
+    version = "sha-895024298569d750c0ecd1cad0a7c63145d766bc";
+  };
+in {
   flake.modules.apps.forgejo-runner = { lib, ... }: let
     namespace = "forgejo-runner";
     project = "development";
@@ -51,28 +58,27 @@
             runner:
               capacity: 3
               labels:
-                - ubuntu-latest:k8s:///config/podspec-default.yaml
-                - default:k8s:///config/podspec-default.yaml
+                - default:k8s:///config/podspec-nix.yaml
+                - nix:k8s:///config/podspec-nix.yaml
               timeout: 3h
               shutdown_timeout: 3m
           '';
-          podSpecs."podspec-default.yaml" = ''
-            containers:
-              - name: main
-                image: ghcr.io/bjw-s-labs/forgejo-runner:ubuntu-24.04
-                imagePullPolicy: IfNotPresent
-                env:
-                  - name: DEBIAN_FRONTEND
-                    value: noninteractive
-                resources:
-                  requests:
-                    cpu: 100m
-                    memory: 1Gi
-                  limits:
-                    cpu: 500m
-                    memory: 4Gi
-            restartPolicy: Never
-          '';
+          podSpecs = {
+            "podspec-nix.yaml" = ''
+              containers:
+                - name: main
+                  image: scarey.dev/scarey/forgejo-runner:${inputs.nixpkgs.shortRev}
+                  imagePullPolicy: IfNotPresent
+                  resources:
+                    requests:
+                      cpu: 1
+                      memory: 2Gi
+                    limits:
+                      cpu: 4
+                      memory: 8Gi
+              restartPolicy: Never
+            '';
+          };
         };
       };
 

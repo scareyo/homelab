@@ -4,6 +4,7 @@
   inputs.nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
   inputs.flake-parts.url = "github:hercules-ci/flake-parts";
   inputs.import-tree.url = "github:vic/import-tree";
+  inputs.nix2container.url = "github:nlewo/nix2container";
 
   inputs.nixidy = {
     url = "github:arnarg/nixidy";
