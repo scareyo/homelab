@@ -65,6 +65,7 @@
               kind = "ClusterSecretStore";
               name = cfg.provider;
             };
+            refreshPolicy = lib.mkIf (cfg.passwords != {}) "CreatedOnce";
             target.creationPolicy = lib.mkIf cfg.merge "Merge";
             target.template = lib.mkIf (cfg.templates != null) {
               engineVersion = "v2";

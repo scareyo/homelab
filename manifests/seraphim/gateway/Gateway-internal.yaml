@@ -39,6 +39,19 @@ spec:
         mode: Terminate
     - allowedRoutes:
         kinds:
+          - kind: HTTPRoute
+        namespaces:
+          from: All
+      hostname: '*.scarey.dev'
+      name: dev-scarey-apps-https
+      port: 443
+      protocol: HTTPS
+      tls:
+        certificateRefs:
+          - name: dev-scarey-apps-tls
+        mode: Terminate
+    - allowedRoutes:
+        kinds:
           - kind: TCPRoute
         namespaces:
           from: All

@@ -1,6 +1,17 @@
 apiVersion: v1
 data:
   podspec-nix.yaml: |-
+    initContainers:
+      - name: attic-use
+        image: scarey.dev/scarey/forgejo-runner:419fe0f
+        imagePullPolicy: IfNotPresent
+        command: [ "attic", "use", "forgejo-runner" ]
+        volumeMounts:
+          - name: attic
+            mountPath: /run/secrets/attic
+            readOnly: true
+          - name: nix-config
+            mountPath: /home/user/.config/nix
     containers:
       - name: main
         image: scarey.dev/scarey/forgejo-runner:419fe0f
@@ -12,6 +23,18 @@ data:
           limits:
             cpu: 4
             memory: 8Gi
+        volumeMounts:
+          - name: attic
+            mountPath: /run/secrets/attic
+            readOnly: true
+          - name: nix-config
+            mountPath: /home/user/.config/nix
+    volumes:
+      - name: attic
+        secret:
+          secretName: attic
+      - name: nix-config
+        emptyDir: {}
     restartPolicy: Never
   runner.yaml: |-
     cache:

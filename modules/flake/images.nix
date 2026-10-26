@@ -28,7 +28,17 @@
       touch $out/etc/login.defs
     '';
 
-    mkHome = pkgs.runCommand "mkHome" { } "mkdir -p $out/home/${user} $out/tmp $out/run";
+    mkHome = pkgs.runCommand "mkHome" { } ''
+      mkdir -p $out/home/${user}/.config/attic $out/tmp $out/run
+
+      cat > $out/home/${user}/.config/attic/config.toml <<EOF
+      default-server = "scarey-dev"
+
+      [servers.scarey-dev]
+      endpoint = "https://attic.scarey.dev"
+      token-file = "/run/secrets/attic/ATTIC_TOKEN"
+      EOF
+    '';
 
     entrypoint = pkgs.writeShellApplication {
       name = "entrypoint";
@@ -37,6 +47,17 @@
       '';
     };
   in {
+    packages.attic = nix2container.buildImage {
+      name = "scarey.dev/scarey/attic";
+      tag = pkgs.attic-server.version;
+      copyToRoot = pkgs.buildEnv {
+        name = "root";
+        paths = [ pkgs.attic-server pkgs.bashInteractive pkgs.coreutils ];
+      };
+      config.Entrypoint = [ "/bin/atticd" ];
+      config.Env = [ "PATH=/bin" "XDG_CONFIG_HOME=/etc" ];
+    };
+
     packages.renovate = nix2container.buildImage {
       name = "scarey.dev/scarey/renovate";
       tag = pkgs.renovate.version;
@@ -120,7 +141,7 @@
 
       config = {
         Entrypoint = [ "${entrypoint}/bin/entrypoint" ];
-        User = "user";
+        User = "${uid}:${gid}";
         WorkingDir = "/home/user";
         Env = [
           "HOME=/home/user"

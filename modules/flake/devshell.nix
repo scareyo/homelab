@@ -4,6 +4,7 @@
   perSystem = { pkgs, system, ... }: {
     devShells.default = pkgs.mkShell {
       packages = with pkgs; [
+        attic-client
         claude-code
         gitleaks
         infisical

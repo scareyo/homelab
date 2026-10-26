@@ -65,6 +65,17 @@ in {
           '';
           podSpecs = {
             "podspec-nix.yaml" = ''
+              initContainers:
+                - name: attic-use
+                  image: scarey.dev/scarey/forgejo-runner:${inputs.nixpkgs.shortRev}
+                  imagePullPolicy: IfNotPresent
+                  command: [ "attic", "use", "forgejo-runner" ]
+                  volumeMounts:
+                    - name: attic
+                      mountPath: /run/secrets/attic
+                      readOnly: true
+                    - name: nix-config
+                      mountPath: /home/user/.config/nix
               containers:
                 - name: main
                   image: scarey.dev/scarey/forgejo-runner:${inputs.nixpkgs.shortRev}
@@ -76,6 +87,18 @@ in {
                     limits:
                       cpu: 4
                       memory: 8Gi
+                  volumeMounts:
+                    - name: attic
+                      mountPath: /run/secrets/attic
+                      readOnly: true
+                    - name: nix-config
+                      mountPath: /home/user/.config/nix
+              volumes:
+                - name: attic
+                  secret:
+                    secretName: attic
+                - name: nix-config
+                  emptyDir: {}
               restartPolicy: Never
             '';
           };
@@ -85,6 +108,10 @@ in {
       templates.externalSecret.forgejo-runner.secrets = {
         uuid.key = "/forgejo-runner/RUNNER_UUID";
         token.key = "/forgejo-runner/RUNNER_TOKEN";
+      };
+
+      templates.externalSecret.attic.secrets = {
+        ATTIC_TOKEN.key = "/forgejo-runner/ATTIC_TOKEN";
       };
     };
   };
