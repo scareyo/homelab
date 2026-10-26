@@ -1,0 +1,32 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "10"
+  labels:
+    app.kubernetes.io/component: main
+    app.kubernetes.io/instance: ntfy
+    app.kubernetes.io/name: ntfy
+    app.kubernetes.io/part-of: ntfy
+    app.kubernetes.io/version: v2.34.0
+  name: ntfy
+  namespace: ntfy
+spec:
+  hostnames:
+    - ntfy.vegapunk.cloud
+  parentRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: internal
+      namespace: gateway
+  rules:
+    - backendRefs:
+        - group: ""
+          kind: Service
+          name: ntfy
+          port: 80
+          weight: 1
+      matches:
+        - path:
+            type: PathPrefix
+            value: /
