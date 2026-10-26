@@ -1,11 +1,6 @@
 { inputs, ... }:
 
-let
-  images.runner-ubuntu = {
-    image = "ghcr.io/bjw-s-labs/forgejo-runner";
-    version = "sha-895024298569d750c0ecd1cad0a7c63145d766bc";
-  };
-in {
+{
   flake.modules.apps.forgejo-runner = { lib, ... }: let
     namespace = "forgejo-runner";
     project = "development";
