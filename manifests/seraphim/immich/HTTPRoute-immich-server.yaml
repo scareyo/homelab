@@ -1,0 +1,27 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  labels:
+    app.kubernetes.io/instance: immich
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: server
+    app.kubernetes.io/version: v3.2.0
+    helm.sh/chart: immich-0.13.4
+  name: immich-server
+  namespace: immich
+spec:
+  hostnames:
+    - photos.vegapunk.cloud
+  parentRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: internal
+      namespace: gateway
+  rules:
+    - backendRefs:
+        - group: ""
+          kind: Service
+          name: immich-server
+          namespace: immich
+          port: 2283
+          weight: 1

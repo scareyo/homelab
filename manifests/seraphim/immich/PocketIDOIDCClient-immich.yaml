@@ -1,0 +1,13 @@
+apiVersion: pocketid.internal/v1alpha1
+kind: PocketIDOIDCClient
+metadata:
+  name: immich
+  namespace: immich
+spec:
+  callbackUrls:
+    - app.immich:///oauth-callback
+    - https://photos.vegapunk.cloud/auth/login
+    - https://photos.vegapunk.cloud/user-settings
+  description: Photo and video management
+  launchUrl: https://photos.vegapunk.cloud
+  name: Immich

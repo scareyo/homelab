@@ -1,0 +1,9 @@
+apiVersion: pocketid.internal/v1alpha1
+kind: PocketIDUserGroup
+metadata:
+  name: immich-admin
+  namespace: immich
+spec:
+  customClaims:
+    - key: immich_role
+      value: admin
