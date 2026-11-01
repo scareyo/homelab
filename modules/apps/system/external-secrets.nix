@@ -14,7 +14,7 @@
       (generators.fromChartCRDModule {
         chart = chart.external-secrets;
         name = "external-secrets";
-        kindFilter = [ "ClusterSecretStore" "ExternalSecret" "Password" "PushSecret" ];
+        kindFilter = [ "ClusterSecretStore" "ExternalSecret" "Password" "PushSecret" "SecretStore" ];
       })
     ];
 
@@ -33,6 +33,22 @@
       };
 
       resources = {
+        # Bound per namespace by the externalSecret template's kubernetes provider
+        clusterRoles.external-secrets-kubernetes = {
+          rules = [
+            {
+              apiGroups = [ "" ];
+              resources = [ "secrets" ];
+              verbs = [ "get" "list" "watch" ];
+            }
+            {
+              apiGroups = [ "authorization.k8s.io" ];
+              resources = [ "selfsubjectrulesreviews" ];
+              verbs = [ "create" ];
+            }
+          ];
+        };
+
         clusterSecretStores.infisical = {
           spec = {
             provider.infisical = {

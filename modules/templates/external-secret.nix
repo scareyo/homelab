@@ -2,15 +2,15 @@
   flake.modules.templates.externalSecret = { lib, ... }: {
     templates.externalSecret = {
       options = {
-        provider = lib.mkOption {
-          type = lib.types.nullOr (lib.types.enum [ "infisical" ]);
-          default = "infisical";
-          description = "External Secrets ClusterSecretStore to use";
-        };
-
         secrets = lib.mkOption {
           type = lib.types.attrsOf (lib.types.submodule ({ name, ... }: {
             options = {
+              provider = lib.mkOption {
+                type = lib.types.enum [ "infisical" "kubernetes" ];
+                default = "infisical";
+                description = "Secret provider to use. kubernetes reads existing Secrets in the same namespace (key = Secret name, property = Secret key)";
+              };
+
               key = lib.mkOption {
                 type = lib.types.str;
                 description = "Remote key on the secret provider";
@@ -54,17 +54,16 @@
         };
       };
 
-      output = { name, config, ... }: let
+      output = { name, config, options, ... }: let
         cfg = config;
+        namespace = options.namespace.value;
+        kubernetes = lib.any (x: x.provider == "kubernetes") (lib.attrValues cfg.secrets);
+        kubernetesName = "external-secrets-kubernetes";
 
         generatorName = dest: lib.toLower (builtins.replaceStrings [ "_" ] [ "-" ] "${name}-${dest}");
       in {
         externalSecrets.${name} = {
           spec = {
-            secretStoreRef = {
-              kind = "ClusterSecretStore";
-              name = cfg.provider;
-            };
             refreshPolicy = lib.mkIf (cfg.passwords != {}) "CreatedOnce";
             target.creationPolicy = lib.mkIf cfg.merge "Merge";
             target.template = lib.mkIf (cfg.templates != null) {
@@ -76,6 +75,13 @@
               remoteRef = {
                 key = x.key;
                 property = x.property;
+              };
+              sourceRef.storeRef = if x.provider == "kubernetes" then {
+                kind = "SecretStore";
+                name = kubernetesName;
+              } else {
+                kind = "ClusterSecretStore";
+                name = x.provider;
               };
             }) cfg.secrets);
             dataFrom = lib.mkIf (cfg.passwords != {}) (lib.mapAttrsToList (dest: _: {
@@ -94,6 +100,35 @@
               ];
             }) cfg.passwords);
           };
+        };
+
+        secretStores.${kubernetesName} = lib.mkIf kubernetes {
+          spec.provider.kubernetes = {
+            remoteNamespace = namespace;
+            server.caProvider = {
+              type = "ConfigMap";
+              name = "kube-root-ca.crt";
+              key = "ca.crt";
+            };
+            auth.serviceAccount.name = kubernetesName;
+          };
+        };
+
+        serviceAccounts.${kubernetesName} = lib.mkIf kubernetes {};
+
+        roleBindings.${kubernetesName} = lib.mkIf kubernetes {
+          roleRef = {
+            apiGroup = "rbac.authorization.k8s.io";
+            kind = "ClusterRole";
+            name = kubernetesName;
+          };
+          subjects = [
+            {
+              kind = "ServiceAccount";
+              name = kubernetesName;
+              inherit namespace;
+            }
+          ];
         };
 
         passwords = lib.mapAttrs' (dest: x: lib.nameValuePair (generatorName dest) {
