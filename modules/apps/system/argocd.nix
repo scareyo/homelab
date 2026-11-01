@@ -55,6 +55,11 @@
           destinations = [{ namespace = "*"; server = "*"; }];
           clusterResourceWhitelist = [{ group = "*"; kind = "*"; }];
         };
+        general.spec = {
+          sourceRepos = [ "*" ];
+          destinations = [{ namespace = "*"; server = "*"; }];
+          clusterResourceWhitelist = [{ group = "*"; kind = "*"; }];
+        };
         media.spec = {
           sourceRepos = [ "*" ];
           destinations = [{ namespace = "*"; server = "*"; }];
