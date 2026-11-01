@@ -1,0 +1,19 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  labels:
+    app.kubernetes.io/instance: attic
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: attic
+    app.kubernetes.io/part-of: helmforge
+    app.kubernetes.io/version: 0.1.0
+    helm.sh/chart: attic-1.1.0
+  name: attic
+  namespace: attic
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: api
+      app.kubernetes.io/instance: attic
+      app.kubernetes.io/name: attic

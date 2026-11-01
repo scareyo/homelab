@@ -35,6 +35,12 @@
                 default = 32;
                 description = "Password length";
               };
+
+              encoding = lib.mkOption {
+                type = lib.types.enum [ "raw" "base64" "base64url" "base32" "hex" ];
+                default = "raw";
+                description = "Password encoding";
+              };
             };
           });
           default = {};
@@ -133,7 +139,7 @@
 
         passwords = lib.mapAttrs' (dest: x: lib.nameValuePair (generatorName dest) {
           spec = {
-            inherit (x) length;
+            inherit (x) length encoding;
             allowRepeat = true;
             noUpper = false;
           };

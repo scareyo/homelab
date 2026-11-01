@@ -3,12 +3,6 @@ kind: HTTPRoute
 metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "10"
-  labels:
-    app.kubernetes.io/component: main
-    app.kubernetes.io/instance: attic
-    app.kubernetes.io/name: attic
-    app.kubernetes.io/part-of: attic
-    app.kubernetes.io/version: 0-unstable-2026-07-06
   name: attic
   namespace: attic
 spec:

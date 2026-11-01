@@ -2,56 +2,173 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app.kubernetes.io/component: main
     app.kubernetes.io/instance: attic
+    app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: attic
-    app.kubernetes.io/part-of: attic
-    app.kubernetes.io/version: 0-unstable-2026-07-06
+    app.kubernetes.io/part-of: helmforge
+    app.kubernetes.io/version: 0.1.0
+    helm.sh/chart: attic-1.1.0
   name: attic
   namespace: attic
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
+      app.kubernetes.io/component: api
       app.kubernetes.io/instance: attic
       app.kubernetes.io/name: attic
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
   template:
     metadata:
       labels:
-        app.kubernetes.io/component: main
+        app.kubernetes.io/component: api
         app.kubernetes.io/instance: attic
         app.kubernetes.io/name: attic
-        app.kubernetes.io/part-of: attic
-        app.kubernetes.io/version: 0-unstable-2026-07-06
     spec:
+      automountServiceAccountToken: false
       containers:
         - args:
             - -f
-            - /etc/attic/server.toml
+            - /config/server.toml
+            - --mode
+            - api-server
           env:
+            - name: HOME
+              value: /tmp
+            - name: RUST_LOG
+              value: attic_server=info
+            - name: ATTIC_SERVER_TOKEN_HS256_SECRET_BASE64
+              valueFrom:
+                secretKeyRef:
+                  key: token-hs256-secret-base64
+                  name: attic
+                  optional: true
+            - name: ATTIC_SERVER_TOKEN_RS256_SECRET_BASE64
+              valueFrom:
+                secretKeyRef:
+                  key: token-rs256-secret-base64
+                  name: attic
+                  optional: true
+            - name: ATTIC_SERVER_TOKEN_RS256_PUBKEY_BASE64
+              valueFrom:
+                secretKeyRef:
+                  key: token-rs256-pubkey-base64
+                  name: attic
+                  optional: true
             - name: ATTIC_SERVER_DATABASE_URL
               valueFrom:
                 secretKeyRef:
-                  key: uri
-                  name: attic-db-app
+                  key: database-url
+                  name: attic
             - name: AWS_ACCESS_KEY_ID
               valueFrom:
                 secretKeyRef:
-                  key: AWS_ACCESS_KEY_ID
-                  name: attic-obc
+                  key: aws-access-key-id
+                  name: attic
+                  optional: true
             - name: AWS_SECRET_ACCESS_KEY
               valueFrom:
                 secretKeyRef:
-                  key: AWS_SECRET_ACCESS_KEY
-                  name: attic-obc
-          envFrom:
-            - secretRef:
-                name: attic
-          image: scarey.dev/scarey/attic:0-unstable-2026-07-06
+                  key: aws-secret-access-key
+                  name: attic
+                  optional: true
+          image: ghcr.io/zhaofengli/attic:9eda345a743f50999de04f59a170806c3e029eea
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 3
+            periodSeconds: 30
+            tcpSocket:
+              port: http
+            timeoutSeconds: 5
           name: attic
           ports:
             - containerPort: 8080
               name: http
+              protocol: TCP
+          readinessProbe:
+            failureThreshold: 6
+            periodSeconds: 10
+            tcpSocket:
+              port: http
+            timeoutSeconds: 5
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 1Gi
+            requests:
+              cpu: 100m
+              memory: 256Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+          startupProbe:
+            failureThreshold: 30
+            periodSeconds: 5
+            tcpSocket:
+              port: http
+            timeoutSeconds: 3
+          volumeMounts:
+            - mountPath: /config
+              name: config
+              readOnly: true
+            - mountPath: /tmp
+              name: tmp
+      initContainers:
+        - args:
+            - -f
+            - /config/server.toml
+            - --mode
+            - check-config
+          env:
+            - name: HOME
+              value: /tmp
+            - name: RUST_LOG
+              value: attic_server=info
+            - name: ATTIC_SERVER_TOKEN_HS256_SECRET_BASE64
+              valueFrom:
+                secretKeyRef:
+                  key: token-hs256-secret-base64
+                  name: attic
+                  optional: true
+            - name: ATTIC_SERVER_TOKEN_RS256_SECRET_BASE64
+              valueFrom:
+                secretKeyRef:
+                  key: token-rs256-secret-base64
+                  name: attic
+                  optional: true
+            - name: ATTIC_SERVER_TOKEN_RS256_PUBKEY_BASE64
+              valueFrom:
+                secretKeyRef:
+                  key: token-rs256-pubkey-base64
+                  name: attic
+                  optional: true
+            - name: ATTIC_SERVER_DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  key: database-url
+                  name: attic
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  key: aws-access-key-id
+                  name: attic
+                  optional: true
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: aws-secret-access-key
+                  name: attic
+                  optional: true
+          image: ghcr.io/zhaofengli/attic:9eda345a743f50999de04f59a170806c3e029eea
+          imagePullPolicy: IfNotPresent
+          name: check-config
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
@@ -59,14 +176,23 @@ spec:
                 - ALL
             readOnlyRootFilesystem: true
           volumeMounts:
-            - mountPath: /etc/attic
+            - mountPath: /config
               name: config
+              readOnly: true
+            - mountPath: /tmp
+              name: tmp
       securityContext:
-        fsGroup: 1000
-        fsGroupChangePolicy: OnRootMismatch
-        runAsGroup: 1000
-        runAsUser: 1000
+        fsGroup: 10001
+        runAsGroup: 10001
+        runAsNonRoot: true
+        runAsUser: 10001
+        seccompProfile:
+          type: RuntimeDefault
+      serviceAccountName: attic
+      terminationGracePeriodSeconds: 60
       volumes:
         - configMap:
-            name: attic-config
+            name: attic
           name: config
+        - emptyDir: {}
+          name: tmp

@@ -2,73 +2,56 @@
   flake.modules.apps.attic = { lib, pkgs, ... }: let
     namespace = "attic";
     project = "development";
+    charts.attic = {
+      repo = "oci://ghcr.io/helmforgedev/helm";
+      chart = "attic";
+      version = "1.1.0";
+      chartHash = "sha256-IynyrcmRNcvUjW/6QLXfmbAdRnLy/IzgzXvjC0NdSio=";
+    };
+    chart = lib.mapAttrs (_: lib.helm.downloadHelmChart) charts;
   in {
     applications.attic = {
       inherit namespace project;
 
       createNamespace = true;
 
-      templates.app.attic = {
-        workload = {
-          image = "scarey.dev/scarey/attic";
-          version = pkgs.attic-server.version;
-          args = [ "-f" "/etc/attic/server.toml" ];
-          port = 8080;
-          env = {
-            ATTIC_SERVER_DATABASE_URL = {
-              secretKeyRef = {
-                key = "uri";
-                name = "attic-db-app";
-              };
-            };
-            AWS_ACCESS_KEY_ID = {
-              secretKeyRef = {
-                key = "AWS_ACCESS_KEY_ID";
-                name = "attic-obc";
-              };
-            };
-            AWS_SECRET_ACCESS_KEY = {
-              secretKeyRef = {
-                key = "AWS_SECRET_ACCESS_KEY";
-                name = "attic-obc";
-              };
-            };
-          };
-          envSecret = "attic";
-        };
+      helm.releases.attic = {
+        chart = chart.attic;
+        values = {
+          mode = "distributed";
+          replicaCount = 3;
 
-        persistence = {
           config = {
-            type = "cm";
-            path = "/etc/attic";
-            config.data."server.toml" = ''
-              listen = "[::]:8080"
-              allowed-hosts = ["attic.scarey.dev"]
-              api-endpoint = "https://attic.scarey.dev/"
+            apiEndpoint = "https://attic.scarey.dev/";
+            allowedHosts = [
+              "attic.scarey.dev"
+            ];
+          };
 
-              [database]
+          database.type = "postgresql";
 
-              [storage]
-              type = "s3"
-              region = ""
-              bucket = "attic"
-              endpoint = "http://rook-ceph-rgw-ceph-objectstore.rook-ceph.svc"
+          storage = {
+            type = "s3";
+            s3 = {
+              region = "default";
+              bucket = "attic";
+              endpoint = "http://rook-ceph-rgw-ceph-objectstore.rook-ceph.svc";
+            };
+          };
 
-              [chunking]
-              nar-size-threshold = 65536  # chunk files that are 64 KiB or larger
-              min-size = 16384            # 16 KiB
-              avg-size = 65536            # 64 KiB
-              max-size = 262144           # 256 KiB
+          auth = {
+            generate = false;
+            existingSecret = "attic";
+          };
 
-              [compression]
-              type = "zstd"
-
-              [garbage-collection]
-              interval = "12 hours"
-            '';
+          pdb = {
+            enabled = true;
+            minAvailable = 2;
           };
         };
+      };
 
+      templates.app.attic = {
         route.hostname = "attic.scarey.dev";
       };
 
@@ -78,8 +61,12 @@
       };
 
       templates.externalSecret.attic = {
-        passwords.secret = { length = 64; };
-        templates.ATTIC_SERVER_TOKEN_HS256_SECRET_BASE64 = "{{ .secret | b64enc }}";
+        secrets = {
+          aws-access-key-id = { provider = "kubernetes"; key = "attic-obc"; property = "AWS_ACCESS_KEY_ID"; };
+          aws-secret-access-key = { provider = "kubernetes"; key = "attic-obc"; property = "AWS_SECRET_ACCESS_KEY"; };
+          database-url = { provider = "kubernetes"; key = "attic-db-app"; property = "uri"; };
+        };
+        passwords.token-hs256-secret-base64 = { length = 64; encoding = "base64"; };
       };
 
       resources.objectBucketClaims.attic-obc = {

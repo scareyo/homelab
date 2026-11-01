@@ -4,33 +4,41 @@ data:
     listen = "[::]:8080"
     allowed-hosts = ["attic.scarey.dev"]
     api-endpoint = "https://attic.scarey.dev/"
+    max-nar-info-size = 1048576
+    soft-delete-caches = false
+    require-proof-of-possession = true
 
     [database]
+    heartbeat = true
 
     [storage]
     type = "s3"
-    region = ""
+    region = "default"
     bucket = "attic"
     endpoint = "http://rook-ceph-rgw-ceph-objectstore.rook-ceph.svc"
 
     [chunking]
-    nar-size-threshold = 65536  # chunk files that are 64 KiB or larger
-    min-size = 16384            # 16 KiB
-    avg-size = 65536            # 64 KiB
-    max-size = 262144           # 256 KiB
+    nar-size-threshold = 65536
+    min-size = 16384
+    avg-size = 65536
+    max-size = 262144
 
     [compression]
     type = "zstd"
 
     [garbage-collection]
     interval = "12 hours"
+    default-retention-period = "0s"
+
+    [jwt]
 kind: ConfigMap
 metadata:
   labels:
-    app.kubernetes.io/component: main
     app.kubernetes.io/instance: attic
+    app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: attic
-    app.kubernetes.io/part-of: attic
-    app.kubernetes.io/version: 0-unstable-2026-07-06
-  name: attic-config
+    app.kubernetes.io/part-of: helmforge
+    app.kubernetes.io/version: 0.1.0
+    helm.sh/chart: attic-1.1.0
+  name: attic
   namespace: attic

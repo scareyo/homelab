@@ -1,0 +1,113 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/component: garbage-collector
+    app.kubernetes.io/instance: attic
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: attic
+    app.kubernetes.io/part-of: helmforge
+    app.kubernetes.io/version: 0.1.0
+    helm.sh/chart: attic-1.1.0
+  name: attic-gc
+  namespace: attic
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: garbage-collector
+      app.kubernetes.io/instance: attic
+      app.kubernetes.io/name: attic
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: garbage-collector
+        app.kubernetes.io/instance: attic
+        app.kubernetes.io/name: attic
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - args:
+            - -f
+            - /config/server.toml
+            - --mode
+            - garbage-collector
+          env:
+            - name: HOME
+              value: /tmp
+            - name: RUST_LOG
+              value: attic_server=info
+            - name: ATTIC_SERVER_TOKEN_HS256_SECRET_BASE64
+              valueFrom:
+                secretKeyRef:
+                  key: token-hs256-secret-base64
+                  name: attic
+                  optional: true
+            - name: ATTIC_SERVER_TOKEN_RS256_SECRET_BASE64
+              valueFrom:
+                secretKeyRef:
+                  key: token-rs256-secret-base64
+                  name: attic
+                  optional: true
+            - name: ATTIC_SERVER_TOKEN_RS256_PUBKEY_BASE64
+              valueFrom:
+                secretKeyRef:
+                  key: token-rs256-pubkey-base64
+                  name: attic
+                  optional: true
+            - name: ATTIC_SERVER_DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  key: database-url
+                  name: attic
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  key: aws-access-key-id
+                  name: attic
+                  optional: true
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: aws-secret-access-key
+                  name: attic
+                  optional: true
+          image: ghcr.io/zhaofengli/attic:9eda345a743f50999de04f59a170806c3e029eea
+          imagePullPolicy: IfNotPresent
+          name: garbage-collector
+          resources:
+            limits:
+              cpu: 500m
+              memory: 512Mi
+            requests:
+              cpu: 50m
+              memory: 128Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+          volumeMounts:
+            - mountPath: /config
+              name: config
+              readOnly: true
+            - mountPath: /tmp
+              name: tmp
+      securityContext:
+        fsGroup: 10001
+        runAsGroup: 10001
+        runAsNonRoot: true
+        runAsUser: 10001
+        seccompProfile:
+          type: RuntimeDefault
+      serviceAccountName: attic
+      terminationGracePeriodSeconds: 60
+      volumes:
+        - configMap:
+            name: attic
+          name: config
+        - emptyDir: {}
+          name: tmp

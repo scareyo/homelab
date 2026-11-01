@@ -1,0 +1,104 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  annotations:
+    helm.sh/hook: pre-install,pre-upgrade
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+    helm.sh/hook-weight: "0"
+  labels:
+    app.kubernetes.io/component: migration
+    app.kubernetes.io/instance: attic
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: attic
+    app.kubernetes.io/part-of: helmforge
+    app.kubernetes.io/version: 0.1.0
+    helm.sh/chart: attic-1.1.0
+  name: attic-migrate
+  namespace: attic
+spec:
+  backoffLimit: 3
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: migration
+        app.kubernetes.io/instance: attic
+        app.kubernetes.io/name: attic
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - args:
+            - --mode
+            - db-migrations
+          env:
+            - name: ATTIC_SERVER_CONFIG_BASE64
+              value: bGlzdGVuID0gIls6Ol06ODA4MCIKYWxsb3dlZC1ob3N0cyA9IFsiYXR0aWMuc2NhcmV5LmRldiJdCmFwaS1lbmRwb2ludCA9ICJodHRwczovL2F0dGljLnNjYXJleS5kZXYvIgptYXgtbmFyLWluZm8tc2l6ZSA9IDEwNDg1NzYKc29mdC1kZWxldGUtY2FjaGVzID0gZmFsc2UKcmVxdWlyZS1wcm9vZi1vZi1wb3NzZXNzaW9uID0gdHJ1ZQoKW2RhdGFiYXNlXQpoZWFydGJlYXQgPSB0cnVlCgpbc3RvcmFnZV0KdHlwZSA9ICJzMyIKcmVnaW9uID0gImRlZmF1bHQiCmJ1Y2tldCA9ICJhdHRpYyIKZW5kcG9pbnQgPSAiaHR0cDovL3Jvb2stY2VwaC1yZ3ctY2VwaC1vYmplY3RzdG9yZS5yb29rLWNlcGguc3ZjIgoKW2NodW5raW5nXQpuYXItc2l6ZS10aHJlc2hvbGQgPSA2NTUzNgptaW4tc2l6ZSA9IDE2Mzg0CmF2Zy1zaXplID0gNjU1MzYKbWF4LXNpemUgPSAyNjIxNDQKCltjb21wcmVzc2lvbl0KdHlwZSA9ICJ6c3RkIgoKW2dhcmJhZ2UtY29sbGVjdGlvbl0KaW50ZXJ2YWwgPSAiMTIgaG91cnMiCmRlZmF1bHQtcmV0ZW50aW9uLXBlcmlvZCA9ICIwcyIKCltqd3Rd
+            - name: HOME
+              value: /tmp
+            - name: RUST_LOG
+              value: attic_server=info
+            - name: ATTIC_SERVER_TOKEN_HS256_SECRET_BASE64
+              valueFrom:
+                secretKeyRef:
+                  key: token-hs256-secret-base64
+                  name: attic
+                  optional: true
+            - name: ATTIC_SERVER_TOKEN_RS256_SECRET_BASE64
+              valueFrom:
+                secretKeyRef:
+                  key: token-rs256-secret-base64
+                  name: attic
+                  optional: true
+            - name: ATTIC_SERVER_TOKEN_RS256_PUBKEY_BASE64
+              valueFrom:
+                secretKeyRef:
+                  key: token-rs256-pubkey-base64
+                  name: attic
+                  optional: true
+            - name: ATTIC_SERVER_DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  key: database-url
+                  name: attic
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  key: aws-access-key-id
+                  name: attic
+                  optional: true
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: aws-secret-access-key
+                  name: attic
+                  optional: true
+          image: ghcr.io/zhaofengli/attic:9eda345a743f50999de04f59a170806c3e029eea
+          imagePullPolicy: IfNotPresent
+          name: migrate
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 1Gi
+            requests:
+              cpu: 100m
+              memory: 256Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+          volumeMounts:
+            - mountPath: /tmp
+              name: tmp
+      restartPolicy: OnFailure
+      securityContext:
+        fsGroup: 10001
+        runAsGroup: 10001
+        runAsNonRoot: true
+        runAsUser: 10001
+        seccompProfile:
+          type: RuntimeDefault
+      volumes:
+        - emptyDir: {}
+          name: tmp
+  ttlSecondsAfterFinished: 300
