@@ -1,0 +1,89 @@
+apiVersion: v1
+data:
+  config.yaml: |
+    auth:
+      admin:
+        enabled: false
+        existingSecret:
+          key: admin-password
+          name: ""
+        username: admin
+      metrics_public: false
+      oidc:
+        admin_role: admin
+        admin_roles: []
+        client_id: garage-ui
+        cookie_http_only: true
+        cookie_name: garage_session
+        cookie_same_site: lax
+        cookie_secure: true
+        email_attribute: email
+        enabled: false
+        existingSecret:
+          key: client-secret
+          name: ""
+        issuer_url: https://keycloak.example.com/realms/master
+        name_attribute: name
+        post_logout_redirect_url: ""
+        provider_name: Keycloak
+        role_attribute_path: resource_access.garage-ui.roles
+        scopes:
+        - openid
+        - email
+        - profile
+        session_max_age: 86400
+        skip_expiry_check: false
+        skip_issuer_check: false
+        team_attribute_path: ""
+        tls_skip_verify: false
+        username_attribute: preferred_username
+    cors:
+      allow_credentials: false
+      allowed_headers:
+      - Origin
+      - Content-Type
+      - Accept
+      - Authorization
+      allowed_methods:
+      - GET
+      - POST
+      - PUT
+      - DELETE
+      - OPTIONS
+      allowed_origins:
+      - '*'
+      enabled: true
+      max_age: 3600
+    garage:
+      admin_endpoint: http://garage:3903
+      adminEndpoint: http://garage-admin:3903
+      endpoint: http://garage:3900
+      existingSecret:
+        key: adminToken
+        name: garage
+      region: garage
+    logging:
+      format: json
+      level: info
+    server:
+      base_path: ""
+      domain: garage-ui.example.com
+      environment: production
+      host: '::'
+      max_body_size: 314572800
+      max_header_size: 32768
+      port: 8080
+      protocol: http
+      read_buffer_size: 32768
+      root_url: https://garage-ui.example.com
+      write_buffer_size: 4096
+kind: ConfigMap
+metadata:
+  labels:
+    app.kubernetes.io/instance: garage-ui
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: garage-ui
+    app.kubernetes.io/version: v0.14.0
+    helm.sh/chart: garage-ui-0.14.0
+  name: garage-ui-config
+  namespace: garage

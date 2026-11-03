@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/instance: garage
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: garage
+    app.kubernetes.io/version: v2.5.0
+    helm.sh/chart: garage-0.10.4
+  name: garage-admin
+  namespace: garage
+spec:
+  ports:
+    - name: admin
+      port: 3903
+      protocol: TCP
+      targetPort: 3903
+  selector:
+    app.kubernetes.io/instance: garage
+    app.kubernetes.io/name: garage
+  type: ClusterIP
