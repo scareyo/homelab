@@ -1,0 +1,27 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    app.kubernetes.io/instance: garage
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: garage
+    app.kubernetes.io/version: v2.5.0
+    helm.sh/chart: garage-0.10.4
+  name: garage
+  namespace: garage
+spec:
+  endpoints:
+    - honorLabels: true
+      interval: 15s
+      path: /metrics
+      port: metrics
+      scheme: http
+      scrapeTimeout: 10s
+  jobLabel: garage
+  namespaceSelector:
+    matchNames:
+      - garage
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: garage
+      app.kubernetes.io/name: garage

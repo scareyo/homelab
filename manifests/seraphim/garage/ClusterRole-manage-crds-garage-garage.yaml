@@ -1,0 +1,23 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/instance: garage
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: garage
+    app.kubernetes.io/version: v2.5.0
+    helm.sh/chart: garage-0.10.4
+  name: manage-crds-garage-garage
+rules:
+  - apiGroups:
+      - deuxfleurs.fr
+    resources:
+      - garagenodes
+    verbs:
+      - get
+      - list
+      - watch
+      - create
+      - update
+      - patch
+      - delete
