@@ -30,6 +30,7 @@
           # Snapshot CRDs are owned by the external-snapshotter app
           openebs-crds.csi.volumeSnapshots.enabled = false;
           engines = {
+            local.hostpath.enabled = false;
             local.lvm.enabled = false;
             replicated.mayastor.enabled = false;
           };
@@ -38,6 +39,30 @@
             nodeSelector."kubernetes.io/hostname" = "s-flamingo";
           };
         };
+      };
+
+      resources.storageClasses.openebs-zfs-dataset = {
+        parameters = {
+          recordsize = "128k";
+          compression = "on";
+          dedup = "off";
+          fstype = "zfs";
+          poolname = "s-flamingo";
+          shared = "yes";
+        };
+        provisioner = "zfs.csi.openebs.io";
+        allowVolumeExpansion = true;
+        reclaimPolicy = "Retain";
+        allowedTopologies = [
+          {
+            matchLabelExpressions = [
+              {
+                key = "kubernetes.io/hostname";
+                values = [ "s-flamingo" ];
+              }
+            ];
+          }
+        ];
       };
 
       resources.configMaps.openebs-zfslocalpv-dashboard = {
