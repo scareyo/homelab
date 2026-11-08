@@ -63,6 +63,20 @@ in {
                   checksumAlgorithm = "";
                 };
               }
+              {
+                name = "garage";
+                provider = "aws";
+                bucket = "seraphim-velero";
+                credential = {
+                  name = "garage";
+                  key = "api-key";
+                };
+                config = {
+                  region = "garage";
+                  s3Url = "http://garage.garage:3900";
+                  checksumAlgorithm = "";
+                };
+              }
             ];
             features = "EnableCSI";
             volumeSnapshotLocation = [];
@@ -76,6 +90,18 @@ in {
         secrets = {
           key_id.key = "/velero/BACKBLAZE_KEY_ID";
           application_key.key = "/velero/BACKBLAZE_APPLICATION_KEY";
+        };
+        templates.api-key = ''
+          [default]
+          aws_access_key_id={{ .key_id }}
+          aws_secret_access_key={{ .application_key }}
+        '';
+      };
+
+      templates.externalSecret.garage = {
+        secrets = {
+          key_id.key = "/velero/GARAGE_KEY_ID";
+          application_key.key = "/velero/GARAGE_APPLICATION_KEY";
         };
         templates.api-key = ''
           [default]
