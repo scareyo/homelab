@@ -5,8 +5,8 @@
     charts.forgejo = {
       repo = "oci://code.forgejo.org/forgejo-helm";
       chart = "forgejo";
-      version = "17.3.1";
-      chartHash = "sha256-wDB8GZtXVQ0gbM+PvViQ42FdEpvRBfNJn3vd67qMC4o=";
+      version = "17.3.2";
+      chartHash = "sha256-3UYORBH25vb1MI8XsDFDOqB+79wi9HNXKHH6ZpEQus4=";
     };
     chart = lib.mapAttrs (_: lib.helm.downloadHelmChart) charts;
   in {
