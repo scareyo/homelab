@@ -18,7 +18,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config: 5d04c824c16e03eea242aff11f50f78e18fb24c426e829a22cea0b9d56f80680
+        checksum/config: 23714affcc3b48d2ebb18f6b6b91b7bc065800a667dcd01185e7e629a7942cae
       labels:
         app.kubernetes.io/instance: garage-ui
         app.kubernetes.io/name: garage-ui
@@ -35,6 +35,21 @@ spec:
                 secretKeyRef:
                   key: jwtSecret
                   name: garage
+            - name: GARAGE_UI_AUTH_OIDC_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  key: client_secret
+                  name: garage-oidc-credentials
+            - name: GARAGE_UI_AUTH_OIDC_ISSUER_URL
+              valueFrom:
+                secretKeyRef:
+                  key: issuer_url
+                  name: garage-oidc-credentials
+            - name: GARAGE_UI_AUTH_OIDC_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  key: client_id
+                  name: garage-oidc-credentials
           image: noooste/garage-ui:v0.14.0
           imagePullPolicy: IfNotPresent
           livenessProbe:

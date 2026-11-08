@@ -28,7 +28,7 @@
           garage = {
             dbEngine = "sqlite";
             singleNode = true;
-            compressionLevel = "none";
+            compressionLevel = ''"none"'';
             existingRpcSecret = "garage";
             kubernetesSkipCrd = true;
 
@@ -39,6 +39,13 @@
           };
 
           service.admin.enabled = true;
+
+          environment = [
+            {
+              name = "GARAGE_ADMIN_TOKEN";
+              valueFrom.secretKeyRef = { name = "garage"; key = "adminToken"; };
+            }
+          ];
 
           nodeSelector."kubernetes.io/hostname" = "s-flamingo";
 
@@ -64,9 +71,12 @@
         chart = chart.garage-ui;
         values = {
           config = {
+            server = {
+              root_url = "https://garage.vegapunk.cloud";
+            };
             garage = {
               endpoint = "http://garage:3900";
-              adminEndpoint = "http://garage-admin:3903";
+              admin_endpoint = "http://garage-admin:3903";
               existingSecret = {
                 name = "garage";
                 key = "adminToken";
@@ -78,20 +88,59 @@
                 key = "jwtSecret";
               };
               admin.enabled = false;
-              #oidc = {
-              #  enabled = true;
-              #  provider_name = "Pocket ID";
-              #};
+              oidc = {
+                enabled = true;
+                provider_name = "Pocket ID";
+                scopes = [ "openid" "email" "profile" "groups" ];
+                role_attribute_path = "groups";
+                admin_role = "garage-admin";
+                existingSecret = {
+                  name = "garage-oidc-credentials";
+                  key = "client_secret";
+                };
+              };
             };
           };
+          extraEnvs = [
+            {
+              name = "GARAGE_UI_AUTH_OIDC_ISSUER_URL";
+              valueFrom.secretKeyRef.name = "garage-oidc-credentials";
+              valueFrom.secretKeyRef.key = "issuer_url";
+            }
+            {
+              name = "GARAGE_UI_AUTH_OIDC_CLIENT_ID";
+              valueFrom.secretKeyRef.name = "garage-oidc-credentials";
+              valueFrom.secretKeyRef.key = "client_id";
+            }
+          ];
         };
+      };
+
+      templates.app.garage.route = {
+        serviceName = "garage-ui";
       };
 
       templates.externalSecret.garage = {
         passwords.adminToken = { length = 32; encoding = "base64"; };
         passwords.rpcSecret = { length = 32; encoding = "hex"; };
-        templates.jwtSecret = ''{{ genPrivateKey "ed25519" }}'';
+        templates = {
+          adminToken = "{{ .adminToken }}";
+          rpcSecret = "{{ .rpcSecret }}";
+          jwtSecret = ''{{ genPrivateKey "ed25519" }}'';
+        };
       };
+
+      resources.pocketIDOIDCClients.garage = {
+        spec = {
+          name = "Garage"; 
+          logo.nameOverride = "garage";
+          description = "Object storage";
+          launchUrl = "https://garage.vegapunk.cloud";
+          callbackUrls = [ "https://garage.vegapunk.cloud/auth/oidc/callback" ];
+        };
+      };
+
+      resources.pocketIDUserGroups.garage-admin = {};
     };
   };
 }

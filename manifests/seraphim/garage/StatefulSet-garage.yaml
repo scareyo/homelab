@@ -20,7 +20,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config: a7c03ba88909ddce003709b2b55814eb2354efe3fba0f1e1433bd99ef6e75a06
+        checksum/config: 2c7c07239c8cd2ce8082de87a59f23a048de93e86e33fca27badf81f6fe46cac
       labels:
         app.kubernetes.io/instance: garage
         app.kubernetes.io/managed-by: Helm
@@ -34,6 +34,12 @@ spec:
             - --single-node
           command:
             - /garage
+          env:
+            - name: GARAGE_ADMIN_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: adminToken
+                  name: garage
           image: dxflrs/amd64_garage:v2.5.0
           imagePullPolicy: IfNotPresent
           name: garage

@@ -1,0 +1,13 @@
+apiVersion: pocketid.internal/v1alpha1
+kind: PocketIDOIDCClient
+metadata:
+  name: garage
+  namespace: garage
+spec:
+  callbackUrls:
+    - https://garage.vegapunk.cloud/auth/oidc/callback
+  description: Object storage
+  launchUrl: https://garage.vegapunk.cloud
+  logo:
+    nameOverride: garage
+  name: Garage
