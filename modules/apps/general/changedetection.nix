@@ -2,7 +2,7 @@ let
   images = {
     changedetection = {
       image = "ghcr.io/dgtlmoon/changedetection.io";
-      version = "0.60.9";
+      version = "0.70.2";
     };
     sockpuppetbrowser = {
       image = "docker.io/dgtlmoon/sockpuppetbrowser";
