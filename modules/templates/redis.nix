@@ -2,7 +2,7 @@ let
   images = {
     redis = {
       image = "quay.io/opstree/redis";
-      version = "v7.4.11";
+      version = "v8.10.1";
     };
   };
 in {
