@@ -12,8 +12,8 @@ in {
     charts.rook-ceph = {
       repo = "oci://ghcr.io/rook";
       chart = "rook-ceph";
-      version = "1.21.0";
-      chartHash = "sha256-MrJabHk/3Cd9BERqwmy/ZljUqc9OPKp2cfvMA1XjQeU=";
+      version = "1.21.2";
+      chartHash = "sha256-RsHA50oFUNHP/OCLIe1V4IRlDZnRIg1TdVMR/PrSetQ=";
     };
     charts.rook-ceph-cluster = {
       repo = "oci://ghcr.io/rook";
