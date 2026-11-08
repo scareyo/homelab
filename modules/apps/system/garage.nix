@@ -120,6 +120,11 @@
         serviceName = "garage-ui";
       };
 
+      templates.app.s3.route = {
+        serviceName = "garage";
+        servicePort = 3900;
+      };
+
       templates.externalSecret.garage = {
         passwords.adminToken = { length = 32; encoding = "base64"; };
         passwords.rpcSecret = { length = 32; encoding = "hex"; };

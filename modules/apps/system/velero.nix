@@ -74,6 +74,7 @@ in {
                 config = {
                   region = "garage";
                   s3Url = "http://garage.garage:3900";
+                  publicUrl = "https://s3.vegapunk.cloud";
                   s3ForcePathStyle = "true";
                   checksumAlgorithm = "";
                 };

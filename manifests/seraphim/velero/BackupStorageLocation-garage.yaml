@@ -13,6 +13,7 @@ spec:
   accessMode: ReadWrite
   config:
     checksumAlgorithm: ""
+    publicUrl: https://s3.vegapunk.cloud
     region: garage
     s3ForcePathStyle: "true"
     s3Url: http://garage.garage:3900
