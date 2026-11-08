@@ -28,6 +28,10 @@ in {
 
       helm.releases.immich = {
         chart = chart.immich;
+        extraOpts = [
+          "--api-versions gateway.networking.k8s.io/v1/HTTPRoute"
+          "--skip-schema-validation"
+        ];
         values = {
           immich = {
             configurationKind = "Secret";
