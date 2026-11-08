@@ -113,6 +113,13 @@ in {
         };
       };
 
+      templates.backup.daily = {
+        restore = true;
+        location = "garage";
+        schedule = "0 6 * * *"; # At 06:00 daily
+        ttl = "48h";           # 15 days
+      };
+
       resources.pocketIDOIDCClients.immich = {
         spec = {
           name = "Immich";
@@ -135,7 +142,7 @@ in {
         spec = {
           accessModes = [ "ReadWriteOnce" ];
           resources.requests.storage = "2Ti";
-          storageClassName = "media";
+          storageClassName = "ceph-block";
         };
       };
     };

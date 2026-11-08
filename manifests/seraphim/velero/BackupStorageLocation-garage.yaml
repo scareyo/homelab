@@ -14,6 +14,7 @@ spec:
   config:
     checksumAlgorithm: ""
     region: garage
+    s3ForcePathStyle: "true"
     s3Url: http://garage.garage:3900
   credential:
     key: api-key

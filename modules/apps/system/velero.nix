@@ -74,6 +74,7 @@ in {
                 config = {
                   region = "garage";
                   s3Url = "http://garage.garage:3900";
+                  s3ForcePathStyle = "true";
                   checksumAlgorithm = "";
                 };
               }

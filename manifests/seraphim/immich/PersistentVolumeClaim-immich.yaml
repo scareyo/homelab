@@ -11,4 +11,4 @@ spec:
   resources:
     requests:
       storage: 2Ti
-  storageClassName: media
+  storageClassName: ceph-block
