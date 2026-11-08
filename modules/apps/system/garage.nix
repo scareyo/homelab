@@ -33,8 +33,7 @@
             kubernetesSkipCrd = true;
 
             s3 = {
-              api.rootDomain = ".garage.vegapunk.cloud";
-              web.rootDomain = ".web.vegapunk.cloud";
+              api.rootDomain = ".s3.vegapunk.cloud";
             };
           };
 
@@ -133,6 +132,12 @@
           rpcSecret = "{{ .rpcSecret }}";
           jwtSecret = ''{{ genPrivateKey "ed25519" }}'';
         };
+      };
+
+      templates.backup.daily = {
+        resourcePolicy = "ignore-openebs-zfs-dataset";
+        schedule = "0 6 * * *"; # At 06:00 daily
+        ttl = "360h";           # 15 days
       };
 
       resources.pocketIDOIDCClients.garage = {

@@ -117,7 +117,7 @@ in {
         restore = true;
         location = "garage";
         schedule = "0 6 * * *"; # At 06:00 daily
-        ttl = "48h";           # 15 days
+        ttl = "48h";            # 2 days
       };
 
       resources.pocketIDOIDCClients.immich = {

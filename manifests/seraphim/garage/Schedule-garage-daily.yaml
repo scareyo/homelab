@@ -1,0 +1,20 @@
+apiVersion: velero.io/v1
+kind: Schedule
+metadata:
+  name: garage-daily
+  namespace: velero
+spec:
+  schedule: 0 6 * * *
+  template:
+    includedNamespaces:
+      - garage
+    includedResources:
+      - pv
+      - pvc
+    resourcePolicy:
+      kind: configmap
+      name: ignore-openebs-zfs-dataset
+    snapshotMoveData: true
+    snapshotVolumes: true
+    storageLocation: default
+    ttl: 360h
