@@ -32,6 +32,13 @@
           description = "Location to store backups";
         };
 
+        resourcePolicy = lib.mkOption {
+          type = lib.types.nullOr lib.types.str;
+          default = null;
+          description = "Name of the resource policy ConfigMap in the Velero namespace";
+          example = "ignore-openebs-zfs-dataset";
+        };
+
         additionalResources = lib.mkOption {
           type = lib.types.listOf lib.types.str;
           default = [];
@@ -68,6 +75,8 @@
               storageLocation = config.location;
             } // lib.optionalAttrs (config.selector != null) {
               labelSelector.matchLabels = config.selector;
+            } // lib.optionalAttrs (config.resourcePolicy != null) {
+              resourcePolicy = { kind = "configmap"; name = config.resourcePolicy; };
             };
           };
         };

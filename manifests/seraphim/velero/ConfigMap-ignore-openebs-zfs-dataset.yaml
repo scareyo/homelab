@@ -1,0 +1,14 @@
+apiVersion: v1
+data:
+  policy.yaml: |
+    version: v1
+    volumePolicies:
+      - conditions:
+          storageClass:
+            - openebs-zfs-dataset
+        action:
+          type: skip
+kind: ConfigMap
+metadata:
+  name: ignore-openebs-zfs-dataset
+  namespace: velero

@@ -112,6 +112,16 @@ in {
         '';
       };
 
+      resources.configMaps.ignore-openebs-zfs-dataset.data."policy.yaml" = ''
+        version: v1
+        volumePolicies:
+          - conditions:
+              storageClass:
+                - openebs-zfs-dataset
+            action:
+              type: skip
+      '';
+
       templates.privileged.velero = {};
     };
   };
