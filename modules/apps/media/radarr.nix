@@ -2,7 +2,7 @@ let
   images = {
     radarr = {
       image = "ghcr.io/home-operations/radarr";
-      version = "6.4.4.10685";
+      version = "7.0.1.10859";
     };
   };
 in {
