@@ -5,8 +5,8 @@
     charts.vmks = {
       repo = "oci://ghcr.io/victoriametrics/helm-charts";
       chart = "victoria-metrics-k8s-stack";
-      version = "0.96.0";
-      chartHash = "sha256-wesVPJxkB50HIf9YzLi8zOEgfMmta0hJX4n9D9QMHjI=";
+      version = "0.97.1";
+      chartHash = "sha256-ISn3OVZxMgCJfBjm+JhB03ZDE3lriHlJJ89BDCsFqTs=";
     };
     charts.prometheus-operator-crds = {
       repo = "oci://ghcr.io/prometheus-community/charts";
