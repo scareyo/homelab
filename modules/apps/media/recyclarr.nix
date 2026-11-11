@@ -2,7 +2,7 @@ let
   images = {
     recyclarr = {
       image = "ghcr.io/recyclarr/recyclarr";
-      version = "8.8.0";
+      version = "8.8.1";
     };
   };
 in {
