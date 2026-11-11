@@ -6,7 +6,7 @@ metadata:
     app.kubernetes.io/instance: oauth2-proxy-radarr
     app.kubernetes.io/name: oauth2-proxy
     app.kubernetes.io/part-of: media
-    app.kubernetes.io/version: v7.15.5
+    app.kubernetes.io/version: v7.15.6
   name: radarr-oauth2-proxy
   namespace: media
 spec:

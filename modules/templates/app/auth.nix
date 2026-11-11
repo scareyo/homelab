@@ -2,7 +2,7 @@ let
   images = {
     oauth2-proxy = {
       image = "quay.io/oauth2-proxy/oauth2-proxy";
-      version = "v7.15.5";
+      version = "v7.15.6";
     };
   };
 in {
