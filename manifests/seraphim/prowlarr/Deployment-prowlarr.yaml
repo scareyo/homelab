@@ -6,7 +6,7 @@ metadata:
     app.kubernetes.io/instance: prowlarr
     app.kubernetes.io/name: prowlarr
     app.kubernetes.io/part-of: media
-    app.kubernetes.io/version: 2.6.5.5623
+    app.kubernetes.io/version: 2.7.0.5723
   name: prowlarr
   namespace: media
 spec:
@@ -22,13 +22,13 @@ spec:
         app.kubernetes.io/instance: prowlarr
         app.kubernetes.io/name: prowlarr
         app.kubernetes.io/part-of: media
-        app.kubernetes.io/version: 2.6.5.5623
+        app.kubernetes.io/version: 2.7.0.5723
     spec:
       containers:
         - env:
             - name: PROWLARR__AUTH__METHOD
               value: External
-          image: ghcr.io/home-operations/prowlarr:2.6.5.5623
+          image: ghcr.io/home-operations/prowlarr:2.7.0.5723
           name: prowlarr
           ports:
             - containerPort: 9696

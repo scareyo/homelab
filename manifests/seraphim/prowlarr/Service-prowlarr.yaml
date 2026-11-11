@@ -6,7 +6,7 @@ metadata:
     app.kubernetes.io/instance: prowlarr
     app.kubernetes.io/name: prowlarr
     app.kubernetes.io/part-of: media
-    app.kubernetes.io/version: 2.6.5.5623
+    app.kubernetes.io/version: 2.7.0.5723
   name: prowlarr
   namespace: media
 spec:
