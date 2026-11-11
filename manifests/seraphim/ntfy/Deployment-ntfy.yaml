@@ -6,7 +6,7 @@ metadata:
     app.kubernetes.io/instance: ntfy
     app.kubernetes.io/name: ntfy
     app.kubernetes.io/part-of: ntfy
-    app.kubernetes.io/version: v2.34.0
+    app.kubernetes.io/version: v2.37.2
   name: ntfy
   namespace: ntfy
 spec:
@@ -22,7 +22,7 @@ spec:
         app.kubernetes.io/instance: ntfy
         app.kubernetes.io/name: ntfy
         app.kubernetes.io/part-of: ntfy
-        app.kubernetes.io/version: v2.34.0
+        app.kubernetes.io/version: v2.37.2
     spec:
       containers:
         - args:
@@ -47,7 +47,7 @@ spec:
           envFrom:
             - secretRef:
                 name: ntfy
-          image: docker.io/binwiederhier/ntfy:v2.34.0
+          image: docker.io/binwiederhier/ntfy:v2.37.2
           name: ntfy
           ports:
             - containerPort: 8080
