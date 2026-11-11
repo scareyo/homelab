@@ -7,8 +7,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: pocket-id
     app.kubernetes.io/part-of: pocket-id
-    app.kubernetes.io/version: v0.16.1
-    helm.sh/chart: pocket-id-instance-0.16.1
+    app.kubernetes.io/version: v0.16.2
+    helm.sh/chart: pocket-id-instance-0.16.2
     pocketid.internal/instance: pocket-id
   name: pocket-id
   namespace: pocket-id
