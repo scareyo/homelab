@@ -6,7 +6,7 @@ metadata:
     app.kubernetes.io/instance: changedetection
     app.kubernetes.io/name: changedetection
     app.kubernetes.io/part-of: changedetection
-    app.kubernetes.io/version: 0.70.2
+    app.kubernetes.io/version: 0.70.3
   name: changedetection
   namespace: changedetection
 spec:
