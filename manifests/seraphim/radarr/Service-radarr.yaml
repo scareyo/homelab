@@ -6,7 +6,7 @@ metadata:
     app.kubernetes.io/instance: radarr
     app.kubernetes.io/name: radarr
     app.kubernetes.io/part-of: media
-    app.kubernetes.io/version: 7.0.2.10888
+    app.kubernetes.io/version: 7.0.3.10918
   name: radarr
   namespace: media
 spec:
