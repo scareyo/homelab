@@ -2,7 +2,7 @@ let
   images = {
     prowlarr = {
       image = "ghcr.io/home-operations/prowlarr";
-      version = "2.7.0.5723";
+      version = "3.0.2.5777";
     };
   };
 in {
