@@ -6,7 +6,7 @@ metadata:
     app.kubernetes.io/instance: ntfy
     app.kubernetes.io/name: ntfy
     app.kubernetes.io/part-of: ntfy
-    app.kubernetes.io/version: v2.37.2
+    app.kubernetes.io/version: v2.38.0
   name: ntfy-data
   namespace: ntfy
 spec:

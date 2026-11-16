@@ -2,7 +2,7 @@ let
   images = {
     ntfy = {
       image = "docker.io/binwiederhier/ntfy";
-      version = "v2.37.2";
+      version = "v2.38.0";
     };
   };
 in {
