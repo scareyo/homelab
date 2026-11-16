@@ -6,6 +6,9 @@ data:
         base_url: http://radarr
         api_key: !env_var RADARR_API_KEY
 
+        media_management:
+          propers_and_repacks: do_not_prefer
+
         media_naming:
           movie:
             rename: true
@@ -45,6 +48,9 @@ data:
       shows:
         base_url: http://sonarr
         api_key: !env_var SONARR_API_KEY
+
+        media_management:
+          propers_and_repacks: do_not_prefer
 
         media_naming:
           series: jellyfin-tvdb
