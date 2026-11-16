@@ -2,7 +2,7 @@ let
   images = {
     immich = {
       image = "ghcr.io/immich-app/immich-server";
-      version = "v3.4.0";
+      version = "v3.4.1";
     };
     pgsql = {
       image = "ghcr.io/tensorchord/cloudnative-vectorchord";
