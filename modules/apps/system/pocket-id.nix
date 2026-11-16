@@ -5,8 +5,8 @@
     charts.pocket-id-operator = {
       repo = "oci://ghcr.io/aclerici38/charts";
       chart = "pocket-id-operator";
-      version = "0.16.2";
-      chartHash = "sha256-6iG3czYJ8VdqFBDQ4zh/UgPD4i4sI1yqXkGMdcywCEU=";
+      version = "0.16.3";
+      chartHash = "sha256-q010D1WRW+Ulr96h088BqGlK6hg6/VG+czplTsPh0NY=";
     };
     chart = lib.mapAttrs (_: lib.helm.downloadHelmChart) charts;
   in {
